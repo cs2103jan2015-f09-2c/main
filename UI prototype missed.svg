@@ -14,7 +14,7 @@
    id="svg2999"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="UI prototype home.svg">
+   sodipodi:docname="UI prototype missed.svg">
   <defs
      id="defs3001" />
   <sodipodi:namedview
@@ -25,9 +25,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="596.09634"
-     inkscape:cy="524.04741"
-     inkscape:current-layer="layer1"
+     inkscape:cx="622.04512"
+     inkscape:cy="460.691"
+     inkscape:current-layer="g4072"
      inkscape:document-units="px"
      showgrid="false"
      showguides="true"
@@ -77,7 +77,7 @@
          sodipodi:role="line"
          id="tspan3838-7"
          x="158.81334"
-         y="94.655243">Next 7 Days</tspan></text>
+         y="94.655243">Missed Tasks</tspan></text>
     <rect
        style="fill:#003380;fill-opacity:1;stroke:none"
        id="rect4142"
@@ -179,7 +179,7 @@
            y="635.47015"
            x="116.71322"
            id="tspan3838-7-5"
-           sodipodi:role="line">Enter task:</tspan></text>
+           sodipodi:role="line">Enter action:</tspan></text>
     </g>
     <text
        xml:space="preserve"
@@ -199,7 +199,7 @@
          inkscape:connector-curvature="0"
          id="rect3885-82"
          d="m 349.01068,557.78436 c 24.51304,-0.11785 103.4263,-0.82496 129,0 25.5737,0.82496 23.09882,36.88215 0,37 -23.09882,0.11785 -100.59788,0.11785 -129,0 -28.40212,-0.11785 -24.51304,-36.88215 0,-37 z"
-         style="fill:#2a2aff;fill-opacity:1;stroke:none" />
+         style="fill:#003380;fill-opacity:1;stroke:none" />
       <text
          sodipodi:linespacing="92.000002%"
          id="text3836-1-4-5"
@@ -232,7 +232,7 @@
          inkscape:connector-curvature="0"
          id="rect3885"
          d="m 138.89949,557.70376 c 24.51304,-0.11785 103.4263,-0.82496 129,0 25.5737,0.82496 23.09882,36.88215 0,37 -23.09882,0.11785 -100.59788,0.11785 -129,0 -28.40212,-0.11785 -24.51304,-36.88215 0,-37 z"
-         style="fill:#003380;fill-opacity:1;stroke:none" />
+         style="fill:#2a2aff;fill-opacity:1;stroke:none" />
       <text
          sodipodi:linespacing="92.000002%"
          id="text3836-1-4-5-6"
@@ -322,47 +322,27 @@
          x="172.3801"
          y="147.9196"
          id="tspan4116"
-         style="font-weight:normal">9/2/2015</tspan><tspan
+         style="font-weight:normal">4/2/2015</tspan><tspan
          sodipodi:role="line"
          x="172.3801"
          y="168.14786"
-         id="tspan4122">1     The quick brown fox jumps over the lazy dog</tspan><tspan
+         id="tspan4124">1     <tspan
+   style="fill:#d40000;fill-opacity:1"
+   id="tspan3818">The quick brown fox jumps over the lazy dog</tspan></tspan><tspan
          sodipodi:role="line"
          x="172.3801"
          y="188.3761"
-         id="tspan4124">2     The cow jumps over the moon</tspan><tspan
-         sodipodi:role="line"
-         x="172.3801"
-         y="208.60435"
-         id="tspan4126" /><tspan
-         sodipodi:role="line"
-         x="172.3801"
-         y="228.8326"
-         id="tspan4128">10/2/2015</tspan><tspan
-         sodipodi:role="line"
-         x="172.3801"
-         y="249.06085"
-         id="tspan4132">3     The quick brown fox jumps over the lazy dog</tspan><tspan
-         sodipodi:role="line"
-         x="172.3801"
-         y="269.28909"
-         id="tspan3810">4     The cow jumps over the moon</tspan><tspan
-         sodipodi:role="line"
-         x="172.3801"
-         y="289.51736"
-         id="tspan4134">5     The cow jumps over the moon</tspan><tspan
-         sodipodi:role="line"
-         x="172.3801"
-         y="309.74561"
          id="tspan4136" /><tspan
          sodipodi:role="line"
          x="172.3801"
-         y="329.97385"
-         id="tspan4138">11/2/2015</tspan><tspan
+         y="208.60435"
+         id="tspan4138">7/2/2015</tspan><tspan
          sodipodi:role="line"
          x="172.3801"
-         y="350.20212"
-         id="tspan4140">6     Lorem Ipsum</tspan></text>
+         y="228.8326"
+         id="tspan4140">2     <tspan
+   style="fill:#d40000;fill-opacity:1"
+   id="tspan3837">Lorem Ipsum</tspan></tspan></text>
     <path
        style="fill:#cccccc;fill-opacity:1;stroke:none"
        d="m 861.87369,145.57504 c 0.005,-6.04121 18.10853,-6.0412 18.12368,0 0.0389,15.54143 0.12458,42.30462 0,64.54603 -0.0338,6.04114 -18.11944,6.04124 -18.12368,0 -0.0389,-55.52403 -0.0389,-16.44921 0,-64.54603 z"
@@ -379,13 +359,6 @@
          y="713.32953"
          x="159.83881"
          id="tspan3838-7-5-6"
-         sodipodi:role="line">Enter 'help' to open the help menu</tspan></text>
-    <rect
-       style="opacity:0.23893804;fill:#ff0909;fill-opacity:1;stroke:none"
-       id="rect3812"
-       width="82.282486"
-       height="21.292892"
-       x="171"
-       y="130" />
+         sodipodi:role="line">Enter 'delete' to delete entry</tspan></text>
   </g>
 </svg>
