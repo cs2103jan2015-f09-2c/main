@@ -4,7 +4,8 @@
 #include <iostream>
 #include <string>
 
-std::string initiateGUI();
+void runOperation(std::string);
+std::string initiateGUI(std::string);
 void processUserInput(std::string);
 std::string extractCommand(std::string&);
 void processCommand(std::string, std::string);
@@ -12,6 +13,7 @@ void processCommandAdd(std::string);
 void processCommandDelete(std::string);
 void processCommandEdit(std::string);
 void processCommandSearch(std::string);
+void processCommandChangeview(std::string);
 void processCommandClear();
 void processCommandExit();
 void processCommandHelp();
@@ -22,21 +24,29 @@ int main(int argc, char *argv[]){
 	//the user calls the program by double-clicking the shortcut
 	//argc is expected to be 1. Anything different is an error
 
-	//initiate GUI
-	std::string userInput = initiateGUI();
-	processUserInput(userInput);
+	std::string view = "next 7 days";
+	runOperation(view); 
 	return 0;
 }
 
-std::string initiateGUI(){
-	//call GUI to display the next 7 days event, a input textbox, relevant buttons and messages
+void runOperation(std::string view){
+	//run operation with the specified view
+	
+	//initiate GUI
+	std::string userInput = initiateGUI(view);
+	processUserInput(userInput);
+}
+
+std::string initiateGUI(std::string view){
+	//call GUI to display the next 7 days event, an input textbox, relevant buttons and messages
 	//GUI collects userInput from the input textbox and return the string input to caller
+	//when user changes view, initiateGUI will return the following string: "changeview upcoming" for example
 	std::string userInput;
 	return userInput;
 }
 
 void processUserInput(std::string userInput){
-	//identify and isolate the command word: delete, add, search, clear, edit, exit, help
+	//identify and isolate the command word: delete, add, search, clear, edit, exit, help, changeview
 	//the rest of the userInput is task detail
 	
 	while (continueOperation){
@@ -81,8 +91,18 @@ void processCommand(std::string command, std::string taskDetail){
 		processCommandHelp();
 	}
 
+
+	else
+	if (command == "changeview"){
+		processCommandChangeview(taskDetail);
+	}
+
 	else
 	if (command == "exit"){
 		processCommandExit();
 	}
+}
+
+void processCommandChangeview(std::string view){
+	runOperation(view);
 }
