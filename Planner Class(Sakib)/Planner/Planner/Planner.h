@@ -1,20 +1,20 @@
 #ifndef PLANNER_H
 #define PLANNER_H
 //include "Task.h" -->Karthik's Class
-//include "LinkedList.h --> Thu's Class
 
 #include <string>
-
+#include <list>
 using namespace std;
 
 class Planner{
 
 private:
-	//lList<Task> allTaskList
-	//lList<Task> next7DaysList
-	//lList<Task> upcomingList
-	//lList<Task> missedList
-	//lList<Task> searchList
+	list<Task> allTaskList;
+	list<Task> next7DaysList;
+	list<Task> upcomingList;
+	list<Task> missedList;
+	list<Task> searchList;
+	
 	//a data structure to store the last command and information
 	//maybe an array
 
@@ -36,6 +36,8 @@ public:
 	//other functions
 	Tdate getTodaysDate(void);
 	Ttime getCurrentTime(void);
+	Tdate convertDate(time_t t);
+	Ttime convertTime(time_t t);
 	int findIndexToSlotIn(Tdate, Tdate, Ttime, Ttime);
 	int fndIDNumber(int number);
 

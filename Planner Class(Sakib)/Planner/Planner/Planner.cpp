@@ -1,6 +1,7 @@
 #include "Planner.h"
-//#include "LinkedList.h"
 #include<string>
+#include<list>
+#include <ctime>
 
 using namespace std;
 
@@ -14,23 +15,37 @@ void Planner::addTask(task content){
 	//if no clash,
 	//enter in to the list
 	//generate next7daysList, upcomingList, missedList,
+	generate_next7DaysList();
+	generate_upcomingList();
+	generate_missedList();
 }
 
 void Planner::deleteTask(int number){
 	//find the ID number in the list
 	//delete that
 	//generate next7daysList, upcomingList, missedList,
+	generate_next7DaysList();
+	generate_upcomingList();
+	generate_missedList();
 }
 
 void Planner::undo(void){
 	//refer to the data structure containing command and info
 	//do that command with that info
 	//generate next7daysList, upcomingList, missedList,
+	generate_next7DaysList();
+	generate_upcomingList();
+	generate_missedList();
 }
 
 void Planner::clear(void){
 	//clear the list
+	allTaskList.clear();
 	//generate next7daysList, upcomingList, missedList,
+	generate_next7DaysList();
+	generate_upcomingList();
+	generate_missedList();
+	
 }
 
 bool Planner::checkForClash(Tdate, Tdate,Ttime,Ttime){
@@ -71,13 +86,17 @@ void Planner::generate_searchList(string target){
 //other functions
 Tdate Planner::getTodaysDate(void){
 	//use c++ to get current date
-	//convert to Tdate
+	time_t t = time(0);
+	//convert t to Tdate
+	return convertDate(t);
 	//return
 }
 
 Ttime Planner::getCurrentTime(void){
 	//use c++ to get current time
+	time_t t = time(0);
 	//convert to Ttime
+	return convertTime(t);
 	//return
 }
 
