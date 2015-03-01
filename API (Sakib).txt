@@ -1,0 +1,67 @@
+K5 Planner API
+
+User with TUI
+methods
+
+string getKeyWord(string command)
+
+string getDescription(string entry)
+string getStartDate(string entry)
+string getEndDate(string entry)
+string getStartTime(string entry)
+string getEndTime(string entry)
+bool isImpt(string entry)
+void addDescription(string description)
+void addStartDate(date startDate)//date is a defined type
+void addEndDate(date EndDate)
+void addStartTime(time startTime)//time is a defined type
+void addEndTime(time endTime)
+void addImpt()
+bool isClash()
+void notifyClash()
+
+bool noInfoEntered()
+int getEditLineNumber(int lineNumber)
+void editDescription(int lineNumber)
+void editStartDate(int lineNumber)
+void editEndDate(int lineNumber)
+void editStartTime(int lineNumber)
+void editEndTime(int lineNumber)
+void showEditableLine()
+
+
+
+void deleteEntry(int lineNumber)
+
+void clearEntry()
+
+void undoEntry()
+void showUndoText()
+
+list<"defined class"> search(string target)
+string getSearch()
+
+void showHelp()
+void showHelpText()
+
+clickMissed()
+void showMissed()
+bool isMissed()
+void assignSerialNumbers()
+
+clickHome()
+void showNext7Days()
+void showNoDate()
+void assignSerialNumbers()
+
+clickUpcoming()
+void showAll()
+void assignSerialNumbers()
+
+void saveLastAction()//for the undo function
+
+void saveFile()
+
+void showStatus()
+void showCompleted()
+void convertDate()
