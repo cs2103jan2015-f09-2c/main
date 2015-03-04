@@ -5,12 +5,6 @@
 
 using namespace std;
 
-struct taskTime{
-	int hour;
-	int min;
-	string timeOfDay;			//remove this, stick to 24hr format
-	};
-
 struct taskDate{
 	int day;
 	int month;

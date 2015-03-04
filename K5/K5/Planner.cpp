@@ -12,7 +12,26 @@ void Planner::addTask(Task newTask){
 	//create new task
 	int id = 1001; // use static to actually create id
 	newTask.storeIdNumber(id);
-	allTaskList.push_front(newTask);
+	
+	//check where to slot
+	list<Task>::iterator iter;
+	for (iter = allTaskList.begin(); iter != allTaskList.end(); ++iter){
+		if (newTask.getDateStart().year <= (*iter).getDateStart().year)
+			if (newTask.getDateStart().month < (*iter).getDateStart().month)
+				break;
+			else
+				if (newTask.getDateStart().month == (*iter).getDateStart().month)
+					if (newTask.getDateStart().day < (*iter).getDateStart().day)
+						break;
+					else
+						if (newTask.getDateStart().day == (*iter).getDateStart().day){
+							//need to check for timing here
+							break;
+						}
+	}
+	
+
+	allTaskList.insert(iter, newTask);
 
 	//add in the details
 	//newTask = content; // i dont know if this correct
