@@ -20,8 +20,10 @@ struct taskDate{
 class Task{
 private:
 	string _description;
-	taskTime _timeStart;
-	taskTime _timeEnd;
+//	taskTime _timeStart;
+//	taskTime _timeEnd;
+	int _timeStart;
+	int _timeEnd;
 	taskDate _dateStart;
 	taskDate _dateEnd;
 	bool _isImpt;
@@ -33,8 +35,8 @@ public:
 	void addDetails(string);
 	bool isSearchTargetPresent(string);
 	string getDescription();
-	taskTime getTimeStart();
-	taskTime getTimeEnd();
+	int getTimeStart();
+	int getTimeEnd();
 	taskDate getDateStart();
 	taskDate getDateEnd();
 	bool isImpt();

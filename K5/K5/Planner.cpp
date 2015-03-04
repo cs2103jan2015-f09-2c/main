@@ -82,12 +82,12 @@ string Planner::allTaskListToString(void){
 	for (it = allTaskList.begin(); it != allTaskList.end(); ++it){
 		out << (*it).getDescription() << " "; 
 		out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-		out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year;
-		//out << (*it).getTimeStart() << " to ";
-		//out << (*it).getTimeEnd();
+		out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year<< " ";
+		out << (*it).getTimeStart() << " to ";
+		out << (*it).getTimeEnd();
 		
 		if ((*it).isImpt()){
-			out << "#impt";
+			out << " #impt";
 			}
 		out << endl;
 	}

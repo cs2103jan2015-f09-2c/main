@@ -26,7 +26,6 @@ void Task::addDetails(string details){
 		}
 
 	noOfDelimiters = count(details.begin(), details.end(), ';');
-	cout << noOfDelimiters << endl;
 	switch (noOfDelimiters){
 		case 0:
 			_description = details;
@@ -74,8 +73,8 @@ void Task::processDate(string dateInfo){
 	index = dateInfo.find("to");			// locate the word to in string
 
 	if (index != string::npos){
-		dateStart = dateInfo.substr(0, index);
-		index = index + 2;
+		dateStart = dateInfo.substr(0, index-1);
+		index = index + 3;
 		dateEnd = dateInfo.substr(index, dateInfo.size() - index);
 		storeStartDate(dateStart);
 		storeEndDate(dateEnd);
@@ -85,6 +84,7 @@ void Task::processDate(string dateInfo){
 		}
 	}
 
+//Splits the start date string into individual components and stores them in the relevant variables
 void Task::storeStartDate(string dateStart){
 	string day, month, year;
 	day = dateStart.substr(0, 2);
@@ -96,6 +96,7 @@ void Task::storeStartDate(string dateStart){
 	_dateStart.year = stoi(year);
 	}
 
+//Splits the end date string into individual components and stores them in the relevant variables
 void Task::storeEndDate(string dateEnd){
 	string day, month, year;
 	day = dateEnd.substr(0, 2);
@@ -109,13 +110,25 @@ void Task::storeEndDate(string dateEnd){
 
 //Takes in time related information in a string and stores into the respective variables in Task object
 void Task::processTime(string timeInfo){
-	//need to confirm
-	_timeStart.hour = 15;
-	_timeStart.min = 30;
 
-	_timeEnd.hour = 16;
-	_timeEnd.min = 30;
+	int index;
+	string timeStart, timeEnd;
+
+	timeInfo.replace(0, 6, "");				//get rid of the word time at the start of the string
+
+	index = timeInfo.find("to");			// locate the word to in string
+
+	if (index != string::npos){
+		timeStart = timeInfo.substr(0, index - 1);
+		index = index + 3;
+		timeEnd = timeInfo.substr(index, timeInfo.size() - index);
+		_timeStart = stoi(timeStart);
+		_timeEnd = stoi(timeEnd);
 	}
+	else{
+		_timeStart = stoi(timeStart);
+	}
+}
 
 //Checks if the target word is present in the task description
 bool Task::isSearchTargetPresent(string target){
@@ -132,12 +145,12 @@ string Task::getDescription(){
 	}
 
 //Returns start time of task
-taskTime Task::getTimeStart(){
+int Task::getTimeStart(){
 	return _timeStart;
 	}
 
 //Returns end time of task
-taskTime Task::getTimeEnd(){
+int Task::getTimeEnd(){
 	return _timeEnd;
 	}
 
@@ -156,10 +169,12 @@ bool Task::isImpt(){
 	return _isImpt;
 	}
 
+//Stores a unique ID number that is created by the K5 planner class
 void Task::storeIdNumber(int num){
 	_idNumber = num;
 	}
 
+//Returns unique ID number
 int Task::getIdNumber(){
 	return _idNumber;
 	}
