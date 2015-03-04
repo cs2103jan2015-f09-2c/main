@@ -1,4 +1,5 @@
 #include "Planner.h"
+#include<iostream>
 #include<string>
 #include<list>
 #include <ctime>
@@ -36,19 +37,41 @@ void Planner::addTask(task content){
 	generate_next7DaysList();
 	generate_upcomingList();
 	generate_missedList();
+	//update the undoData, lastEntry Data Structure
 }
 
 void Planner::deleteTask(int number){
 	//find the ID number in the list
+	//if id number is 0 means it is an undo. delete the last ID generated
 	//delete that
 	//generate next7daysList, upcomingList, missedList,
 	generate_next7DaysList();
 	generate_upcomingList();
 	generate_missedList();
+	//update the undoData, lastEntry Data Structure
+}
+
+void Planner::editTask(int number, Task content){
+	//delete
+	//add
+	//update the undoData, lastEntry Data Structure
 }
 
 void Planner::undo(void){
-	//refer to the data structure containing command and info
+	//refer to the undoData
+	if (lastEntry.lastCommand == "add"){
+		deleteTask(0);
+		}
+	else if (lastEntry.lastCommand == "delete"){
+		addTask(lastEntry.lastTask);
+		}
+	else if (lastEntry.lastCommand == "edit"){
+		deleteTask(0);
+		addTask(lastEntry.lastTask);
+		}
+	else {
+		cout<< "There is nothing to undo." << endl;
+	}
 	//do that command with that info
 	//generate next7daysList, upcomingList, missedList,
 	generate_next7DaysList();

@@ -1,10 +1,14 @@
 #ifndef PLANNER_H
 #define PLANNER_H
-include "Task.h"
+include "Task.h";
 
 #include <string>
 #include <list>
 using namespace std;
+struct undoData{
+	string lastCommand; // should be add/delete/edit
+	Task lastTask;
+	};
 
 class Planner{
 
@@ -15,13 +19,13 @@ private:
 	list<Task> missedList;
 	list<Task> searchList;
 	
-	//a data structure to store the last command and information
-	//maybe an array
+	undoData lastEntry;
 
 public:
 	//Functions that edit the allTaskList ONLY
-	void addTask(task content);
+	void addTask(Task content);
 	void deleteTask(int number);
+	void editTask(int number, Task content);
 	void undo(void);
 	void clear(void);
 	bool checkForClash(Tdate, Tdate, Ttime, Ttime);
