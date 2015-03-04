@@ -1,6 +1,6 @@
 #ifndef PLANNER_H
 #define PLANNER_H
-//include "Task.h" -->Karthik's Class
+include "Task.h"
 
 #include <string>
 #include <list>
@@ -40,6 +40,7 @@ public:
 	Ttime convertTime(time_t t);
 	int findIndexToSlotIn(Tdate, Tdate, Ttime, Ttime);
 	int fndIDNumber(int number);
+	string toString(list<task>)
 
 };
 #endif // !PLANNER_H

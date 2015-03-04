@@ -7,13 +7,31 @@ using namespace std;
 
 //Functions that edit the allTaskList ONLY
 void Planner::addTask(task content){
-	//create new event
+	//create new task
+	Task newTask;
 	//add in the details
+	newTask = content; // i dont know if this correct
 	//check time and date
-	//find spot to enter
+	taskTime StartTime = newTask._timeStart;
+	taskTime EndTime = newTask._timeEnd;
+	taskDate StartDate = newTask._dateStart;
+	taskDate EndDate = newTask._dateEnd;
 	//check for clash
+	bool clash;
+	clash=checkForClash(StartTime, EndTime, StartDate, EndDate);
 	//if no clash,
+	//find spot to enter
+	int index;
+	if (!clash){
+		index = findIndexToSlotIn(StartTime, EndTime, StartDate, EndDate);
+	}
+	
 	//enter in to the list
+	list<Task>::iterator it = allTaskList.begin();
+	for (int i = 0; i < index; i++){
+		it++;
+	}
+	allTaskList.insert(it,newTask);
 	//generate next7daysList, upcomingList, missedList,
 	generate_next7DaysList();
 	generate_upcomingList();
@@ -107,4 +125,8 @@ int Planner::findIndexToSlotIn(Tdate, Tdate, Ttime, Ttime){
 
 int Planner::fndIDNumber(int number){
 	//return the ID number associated with the entry
+}
+
+string Planner::toString(list<task> List){
+	//convert the list to a string and return
 }
