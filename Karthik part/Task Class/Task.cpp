@@ -26,47 +26,85 @@ void Task::addDetails(string details){
 	}
 	
 	noOfDelimiters = count(details.begin(), details.end(), ';');
-
+	cout << noOfDelimiters << endl;
 	switch (noOfDelimiters){
 	case 0:
 		_description = details;
+		break;
 	case 1:
 		index = details.find_first_of(";");
 		_description = details.substr(0, index);
 		index = index + 1;
-		details = details.substr(index, details.size() - index);
-		delimiter = details.at(0);
-		if (delimiter == 'd'){
-			details = details.substr(1, details.size()-1);
+		details = details.substr(index, details.size() - index);			//cut out the description part to be left with the date or time part
+		
+		if (details.find("date") != string::npos){
 			processDate(details);
 		}
 		else{
-			details = details.substr(1, details.size() - 1);
 			processTime(details);
 		}
+		break;
 	case 2:
 		index = details.find_first_of(";");
 		_description = details.substr(0, index);
-		index = index + 2;
-		newIndex = details.find_first_of(";", index);
-		dateInfo = details.substr(index, newIndex - index);
+		index = index + 1;
+		details = details.substr(index, details.size() - index);			//cut out the description part to be left with the date or time part
+
+		index = details.find(';');
+		dateInfo = details.substr(0, index);								//extract out the date info
+		index = index + 1;
+		timeInfo = details.substr(index, details.size() - index);			//extract out the time info
+
 		processDate(dateInfo);
-		newIndex = newIndex + 2;
-		timeInfo = details.substr(newIndex, details.size() - newIndex);
+		
 		processTime(timeInfo);
+		break;
+	default:
+		cout << "fatal error!" << endl;
 	}
 }
 
 //Takes in date related information in a string and stores into the respective variables in Task object
 void Task::processDate(string dateInfo){
-	//need to confirm
-	_dateStart.day = 02;
-	_dateStart.month = 03;
-	_dateStart.year = 15;
+	int index;
+	string dateStart, dateEnd;
 
-	_dateEnd.day = 03;
-	_dateEnd.month = 03;
-	_dateEnd.year = 15;
+	dateInfo.replace(0, 6, "");				//get rid of the word date at the start of the string
+
+	index = dateInfo.find("to");			// locate the word to in string
+	
+	if (index != string::npos){
+		dateStart = dateInfo.substr(0, index);
+		index = index + 2;
+		dateEnd = dateInfo.substr(index, dateInfo.size() - index);
+		storeStartDate(dateStart);
+		storeEndDate(dateEnd);
+	}
+	else{
+		storeEndDate(dateInfo);
+	}
+}
+
+void Task::storeStartDate(string dateStart){
+	string day, month, year;
+	day = dateStart.substr(0, 2);
+	month = dateStart.substr(2, 2);
+	year = dateStart.substr(4, 2);
+	
+	_dateStart.day = stoi(day);
+	_dateStart.month = stoi(month);
+	_dateStart.year = stoi(year);
+}
+
+void Task::storeEndDate(string dateEnd){
+	string day, month, year;
+	day = dateEnd.substr(0, 2);
+	month = dateEnd.substr(2, 2);
+	year = dateEnd.substr(4, 2);
+
+	_dateEnd.day = stoi(day);
+	_dateEnd.month = stoi(month);
+	_dateEnd.year = stoi(year);
 }
 
 //Takes in time related information in a string and stores into the respective variables in Task object

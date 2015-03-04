@@ -37,5 +37,7 @@ public:
 	bool isImpt();
 	void processDate(string);
 	void processTime(string);
+	void storeStartDate(string);
+	void storeEndDate(string);
 };
 
