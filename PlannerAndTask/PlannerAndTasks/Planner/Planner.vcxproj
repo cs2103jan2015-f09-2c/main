@@ -45,7 +45,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\User\Desktop\CS2103 Project\PlannerAndTask\PlannerAndTasks\Task;C:\Users\User\Desktop\CS2103 Project\PlannerAndTask\PlannerAndTasks\PlannerAndTasks;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\PlannerAndTask\PlannerAndTasks\PlannerAndTasks;D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\PlannerAndTask\PlannerAndTasks\Planner;D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\PlannerAndTask\PlannerAndTasks\Task;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -67,6 +67,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PlannerAndTasks\PlannerAndTasks.vcxproj">
+      <Project>{8f88d12e-2a1b-492e-a502-4442e5eded11}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Task\Task.vcxproj">
+      <Project>{1c3909ae-6675-4937-a944-d611ef8d8bcf}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

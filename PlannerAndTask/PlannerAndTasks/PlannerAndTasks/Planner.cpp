@@ -1,4 +1,5 @@
 #include "Planner.h"
+#include "Task.h"
 #include<iostream>
 #include<string>
 #include<list>
