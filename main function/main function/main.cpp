@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+#include "Planner.h" //include Planner head file
+#include "Task.h"
 
 void runOperation(std::string);
 std::string initiateGUI(std::string);
@@ -30,13 +32,24 @@ int main(int argc, char *argv[]){
 }
 
 void runOperation(std::string view){
-	//run operation with the specified view
-
-	//initiate GUI
-	std::string userInput = initiateGUI(view);
-	processUserInput(userInput);
+	Planner myPlanner;
+	std::string display = myPlanner.toString(view);
+	std::string userInput = processUserInpu;
+	
+	while (continueOperation){
+		processUserInput(userInput);
+	}
 }
 
+/*void runOp(std::string userInput){
+	Planner myPlanner;
+	std::string display = myPlanner.toString(view);
+	std::string userInput = processUserInpu;
+
+	while (continueOperation){
+		processUserInput(userInput);
+	}
+} */
 std::string initiateGUI(std::string view){
 	//call GUI to display the next 7 days event, an input textbox, relevant buttons and messages
 	//GUI collects userInput from the input textbox and return the string input to caller
