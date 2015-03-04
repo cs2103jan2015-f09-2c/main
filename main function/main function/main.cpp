@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "Planner.h" //include Planner head file
+#include "Task.h"
 
 void runOperation(std::string);
 std::string initiateGUI(std::string);
