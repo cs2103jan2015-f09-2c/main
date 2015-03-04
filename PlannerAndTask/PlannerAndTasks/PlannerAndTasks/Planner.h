@@ -31,8 +31,8 @@ private:
 public:
 	//Functions that edit the allTaskList ONLY
 	
-	void addTask(Task content);
-	void deleteTask(int index);
+	//void addTask(Task content);
+	/*void deleteTask(int index);
 	int getIndexTodelete(int number, string nameOfList);
 	void editTask(int number, taskWithID content);
 	void undo(void);
@@ -60,6 +60,6 @@ public:
 	string upcomingListToString(void);
 	string missedListToString(void);
 	string searchListToString(void);
-
+	*/
 	};
 #endif // !PLANNER_H

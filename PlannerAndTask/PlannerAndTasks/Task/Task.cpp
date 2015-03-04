@@ -2,11 +2,13 @@
 #include <iostream>
 #include <string>
 
+
 using namespace std;
 
 //Constructor
 Task::Task(){
-	_isImpt = false;
+	//_isImpt = false;
+	cout << "hello" << endl;
 	}
 
 //Destrcutor

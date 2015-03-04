@@ -7,24 +7,24 @@
 using namespace std;
 
 //Functions that edit the allTaskList ONLY
-void Planner::addTask(Task content){
+//void Planner::addTask(Task content){
 	//create new task
-	taskWithID newTaskWithID;
-	Task newTask;
-	newTaskWithID.IDnumber = 0001;
+	///taskWithID newTaskWithID;
+	//Task newTask;
+	//newTaskWithID.IDnumber = 0001;
 	//add in the details
-	newTask = content; // i dont know if this correct
+	//newTask = content; // i dont know if this correct
 	//check time and date
 	//taskTime StartTime = newTask._timeStart;
 	//taskTime EndTime = newTask._timeEnd;
 	//taskDate StartDate = newTask._dateStart;
 	//taskDate EndDate = newTask._dateEnd;
 	//check for clash
-	bool clash = false;
+	//bool clash = false;
 	//clash=checkForClash(StartTime, EndTime, StartDate, EndDate);
 	//if no clash,
 	//find spot to enter
-	int index;
+	//int index;
 	//taskTime startTime, endTime;
 	//taskDate startDate, endDate;
 	//startTime = content.aTask.getTimeStart();
@@ -36,18 +36,18 @@ void Planner::addTask(Task content){
 		//}
 
 	//enter in to the list
-	list<taskWithID>::iterator it = allTaskList.begin();
-	for (int i = 0; i < index; i++){
-		it++;
-		}
-	allTaskList.insert(it, newTaskWithID);
+	//list<taskWithID>::iterator it = allTaskList.begin();
+	//for (int i = 0; i < index; i++){
+	//	it++;
+	//	}
+	//allTaskList.insert(allTaskList.begin(), newTaskWithID);
 	//generate next7daysList, upcomingList, missedList,
-	generate_next7DaysList();
-	generate_upcomingList();
-	generate_missedList();
+	//generate_next7DaysList();
+	//generate_upcomingList();
+	//generate_missedList();
 	//update the undoData, lastEntry Data Structure
-	}
-void Planner::deleteTask(int index){
+	//}
+/*void Planner::deleteTask(int index){
 	//find the index
 	list<taskWithID> ::iterator it = next7DaysList.begin();
 	for (int i = 0; i < index; i++){
