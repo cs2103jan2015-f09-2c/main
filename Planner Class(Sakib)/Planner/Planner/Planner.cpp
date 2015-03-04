@@ -13,18 +13,24 @@ void Planner::addTask(task content){
 	//add in the details
 	newTask = content; // i dont know if this correct
 	//check time and date
-	taskTime StartTime = newTask._timeStart;
-	taskTime EndTime = newTask._timeEnd;
-	taskDate StartDate = newTask._dateStart;
-	taskDate EndDate = newTask._dateEnd;
+	//taskTime StartTime = newTask._timeStart;
+	//taskTime EndTime = newTask._timeEnd;
+	//taskDate StartDate = newTask._dateStart;
+	//taskDate EndDate = newTask._dateEnd;
 	//check for clash
-	bool clash;
-	clash=checkForClash(StartTime, EndTime, StartDate, EndDate);
+	bool clash=false;
+	//clash=checkForClash(StartTime, EndTime, StartDate, EndDate);
 	//if no clash,
 	//find spot to enter
 	int index;
+	taskTime startTime, endTime;
+	taskDate startDate, endDate;
+	startTime = content.getTimeStart();
+	endTime = content.getTimeEnd();
+	startDate = content.getDateStart();
+	endDate = content.getDateEnd();
 	if (!clash){
-		index = findIndexToSlotIn(StartTime, EndTime, StartDate, EndDate);
+		index = findIndexToSlotIn(startTime,endTime,startDate,endDate);
 	}
 	
 	//enter in to the list
@@ -39,16 +45,48 @@ void Planner::addTask(task content){
 	generate_missedList();
 	//update the undoData, lastEntry Data Structure
 }
-
-void Planner::deleteTask(int number){
-	//find the ID number in the list
-	//if id number is 0 means it is an undo. delete the last ID generated
-	//delete that
+void Planner::deleteTask(int index){
+	//find the index
+	list<taskWithID> ::iterator it = next7DaysList.begin();
+	for (int i = 0; i < index; i++){
+		it++;
+	}
+	//update the undoData, lastEntry Data Structure
+	lastEntry.lastCommand == "delete";
+	lastEntry.lastTask = *it;
+	//erase the entry at the index
+	next7DaysList.erase(it);
 	//generate next7daysList, upcomingList, missedList,
 	generate_next7DaysList();
 	generate_upcomingList();
 	generate_missedList();
-	//update the undoData, lastEntry Data Structure
+}
+int Planner::getIndexTodelete(int number, string nameOfList){
+	//find the ID number in the list
+	int idNumber;
+	if (number != 0){
+		idNumber=findIDNumber(number, nameOfList);
+	} else {
+		idNumber = lastEntry.lastTask.idNumber;
+		}
+	//return the index
+	list<taskWithID> ::iterator it1;
+	list<taskWithID> ::iterator it2= next7DaysList.begin();
+	int index = 0;
+	for (it1 = next7DaysList.begin(); it1 != next7DaysList.end(); it1++){
+		if (*it2.IDnumber == number){
+			return index;
+			}
+		else { 
+			it2++;
+			index++;
+			}
+	}
+	//if  number is 0 means it is an undo. delete the last ID generated
+	//delete that
+	
+
+
 }
 
 void Planner::editTask(int number, Task content){
@@ -89,7 +127,7 @@ void Planner::clear(void){
 	
 }
 
-bool Planner::checkForClash(Tdate, Tdate,Ttime,Ttime){
+bool Planner::checkForClash(taskDate, taskDate, taskTime, taskTime){
 	//go to main list
 	//check for overlaps
 	//if overlap return true
@@ -141,15 +179,94 @@ Ttime Planner::getCurrentTime(void){
 	//return
 }
 
-int Planner::findIndexToSlotIn(Tdate, Tdate, Ttime, Ttime){
+int Planner::findIndexToSlotIn(taskDate startDate, taskDate endDate, taskTime startTime, taskTime endTime){
 	//run down the list
+	list<taskWithID> :: iterator it = allTaskList.begin();
+	int index=0;
+	//while (it != allTaskList.end()){
+		
+	//}
+	return index
 	//return the index to enter the item
 }
 
-int Planner::fndIDNumber(int number){
+int Planner::findIDNumber(int number, string nameofList){
+	list<taskWithID>::iterator it;
+	Task tempTask;
 	//return the ID number associated with the entry
+	if (nameofList == "allTaskList"){
+		it = allTaskList.begin();
+		for (int i = 0; i < number; i++){
+			it++;
+			}
+		return *it.IDnumber;
+
+		}
+	else if (nameofList == "next7DaysList"){
+		it = next7DaysList.begin();
+		for (int i = 0; i < number; i++){
+			it++;
+		}
+		return *it.IDnumber;
+		}
+	else if (nameofList == "upcomingList"){
+		it = upcomingList.begin();
+		for (int i = 0; i < number; i++){
+			it++;
+			}
+		return *it.IDnumber;
+		}
+	else if (nameofList == "missedList"){
+		it = missedList.begin();
+		for (int i = 0; i < number; i++){
+			it++;
+			}
+		return *it.IDnumber;
+		}
+	else if (nameofList == "searchList"){
+		it = searchList.begin();
+		for (int i = 0; i < number; i++){
+			it++;
+			}
+		return *it.IDnumber;
+		}
 }
 
-string Planner::toString(list<task> List){
+string Planner::toString(string nameOfList){
 	//convert the list to a string and return
+	string finalString;
+	if (nameOfList == "allTaskList"){
+		finalString = allTaskListToString();
+		return finalString;
+		}
+	else if (nameOfList == "next7DaysList"){
+		finalString = next7DaysListToString();
+		return finalString;
+		}
+	else if (nameOfList == "upcomingList"){
+		finalString = upcomingListToString();
+		return finalString;
+		}
+	else if (nameOfList == "missedList"){
+		finalString = missedListToString();
+		return finalString;
+		}
+	else if (nameOfList == "searchList"){
+		finalString = searchListToString();
+		return finalString;
+		}
+}
+string Planner::allTaskListToString(void){
+}
+
+string Planner::next7DaysListToString(void){
+}
+
+string Planner::upcomingListToString(void){
+}
+
+string Planner::missedListToString(void){
+}
+
+string Planner::searchListToString(void){
 }

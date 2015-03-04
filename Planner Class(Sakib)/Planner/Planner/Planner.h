@@ -5,30 +5,36 @@ include "Task.h";
 #include <string>
 #include <list>
 using namespace std;
+
 struct undoData{
 	string lastCommand; // should be add/delete/edit
 	Task lastTask;
 	};
 
+struct taskWithID{
+	Task aTask;
+	int IDnumber;
+	};
 class Planner{
 
 private:
-	list<Task> allTaskList;
-	list<Task> next7DaysList;
-	list<Task> upcomingList;
-	list<Task> missedList;
-	list<Task> searchList;
+	list<taskWithID> allTaskList;
+	list<taskWithID> next7DaysList;
+	list<taskWithID> upcomingList;
+	list<taskWithID> missedList;
+	list<taskWithID> searchList;
 	
 	undoData lastEntry;
 
 public:
 	//Functions that edit the allTaskList ONLY
 	void addTask(Task content);
-	void deleteTask(int number);
+	void deleteTask(int index);
+	int getIndexTodelete(int number, string nameOfList);
 	void editTask(int number, Task content);
 	void undo(void);
 	void clear(void);
-	bool checkForClash(Tdate, Tdate, Ttime, Ttime);
+	bool checkForClash(taskDate,taskDate,taskTime,taskTime);
 
 	//Functions that generate the next7daysList,
 	//upcomingList, missedList, searchList
@@ -43,8 +49,14 @@ public:
 	Tdate convertDate(time_t t);
 	Ttime convertTime(time_t t);
 	int findIndexToSlotIn(Tdate, Tdate, Ttime, Ttime);
-	int fndIDNumber(int number);
-	string toString(list<task>)
+	int findIDNumber(int number, string nameOfList);
+	//toSting functions
+	string toString(string nameOfList);
+	string allTaskListToString(void);
+	string next7DaysListToString(void);
+	string upcomingListToString(void);
+	string missedListToString(void);
+	string searchListToString(void);
 
 };
 #endif // !PLANNER_H
