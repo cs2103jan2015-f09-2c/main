@@ -145,20 +145,22 @@ namespace UI {
 	//switch window
 	private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		currentView = "Home";
-		String^ strHome = gcnew String(s->switchView("Home").c_str());
+		String^ strHome = gcnew String(s->switchView(currentView).c_str());
 		
 		displayWindow->Text = strHome;
 	}
 	//switch window
 	private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		String^ strUpcoming = gcnew String(s->switchView("Upcoming").c_str());
-		currentView = "Upcoming";
+		currentView = "Upcoming"; 
+		String^ strUpcoming = gcnew String(s->switchView(currentView).c_str());
+
 		displayWindow->Text = strUpcoming;
 	}
 	//switch window
 	private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		String^ strMissed = gcnew String(s->switchView("Missed").c_str());
 		currentView = "Missed";
+		String^ strMissed = gcnew String(s->switchView(currentView).c_str());
+		
 		displayWindow->Text = strMissed;
 	}
 	//takes in user input
@@ -171,7 +173,7 @@ namespace UI {
 			managedInput = userInput->Text;
 			string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
 		
-			strOutput = gcnew String(s->processUserInput(unmanagedInput /*,currentView*/).c_str());
+			strOutput = gcnew String(s->processUserInput(unmanagedInput).c_str());
 
 			//need to check if strouput is an edit. if yes, userInput->Text = (whatever edit content), then loop back to start. else, perform next two lines
 			displayWindow->Text = strOutput;

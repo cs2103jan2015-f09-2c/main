@@ -79,15 +79,15 @@ string Planner::toString(string nameOfList){
 		finalString = allTaskListToString();
 		return finalString;
 	}
-	else if (nameOfList == "next7DaysList"){
-		//finalString = next7DaysListToString();
+	else if (nameOfList == "Home"){
+		finalString = allTaskListToString();			//test
 		return finalString;
 	}
-	else if (nameOfList == "upcomingList"){
+	else if (nameOfList == "Upcoming"){
 		//finalString = upcomingListToString();
 		return finalString;
 	}
-	else if (nameOfList == "missedList"){
+	else if (nameOfList == "Missed"){
 		//finalString = missedListToString();
 		return finalString;
 	}
@@ -114,7 +114,7 @@ string Planner::allTaskListToString(void){
 			if ((*it).isImpt()){
 				out << " #impt";
 			}
-			out << endl;
+			out << "\r\n";
 			serialNumber++;
 		}
 	}

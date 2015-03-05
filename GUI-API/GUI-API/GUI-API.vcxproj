@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\GUI-API\GUI-API;D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\GUI-API\Planner;D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\GUI-API\Task;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\GUI-API\Planner;D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\GUI-API\Task;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,9 +73,19 @@
   <ItemGroup>
     <ProjectReference Include="..\Planner\Planner.vcxproj">
       <Project>{909ae648-141f-443d-be69-aeb764261d8e}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\Task\Task.vcxproj">
       <Project>{55bcd928-ffa3-4f4c-900b-b0baa807d4f3}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
