@@ -10,7 +10,7 @@ using namespace std;
 //Functions that edit the allTaskList ONLY
 void Planner::addTask(Task newTask){
 	//create new task
-	int id = 1001; // use static to actually create id
+	int id = getIdOfLastEntry() + 1; // use static to actually create id
 	newTask.storeIdNumber(id);
 	
 	//check where to slot
@@ -25,8 +25,8 @@ void Planner::addTask(Task newTask){
 						break;
 					else
 						if (newTask.getDateStart().day == (*iter).getDateStart().day){
-							//need to check for timing here
-							break;
+							if (newTask.getTimeStart() <= (*iter).getTimeStart())
+								break;
 						}
 	}
 	
@@ -69,6 +69,11 @@ void Planner::addTask(Task newTask){
 	//update the undoData, lastEntry Data Structure
 	}
 
+int Planner::getIdOfLastEntry(void){
+
+	return 1;
+}
+
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
@@ -104,6 +109,7 @@ string Planner::allTaskListToString(void){
 		out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year<< " ";
 		out << (*it).getTimeStart() << " to ";
 		out << (*it).getTimeEnd();
+		out << " " << (*it).getIdNumber();			//remember to remove
 		
 		if ((*it).isImpt()){
 			out << " #impt";

@@ -30,6 +30,7 @@ public:
 	void addTask(Task content);
 	string toString(string);
 	string allTaskListToString(void);
+	int getIdOfLastEntry(void);
 	//void deleteTask(int index);
 	//int getIndexTodelete(int number, string nameOfList);
 	//void editTask(int number, Task content);
