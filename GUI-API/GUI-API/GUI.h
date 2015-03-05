@@ -1,41 +1,41 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "Task.h"
-#include "Planner.h"
+// #include "Task.h"
+// #include "Planner.h" 
 
 using namespace std;
-string currentView;
+
 class GUI
 {
 public:
-	Planner myPlanner;
+	//Planner myPlanner;
 	GUI(){
 	}
 
 	~GUI(){
 	}
-	void processCommandAdd(std::string taskDetail){
-		Task currentTask;
-		currentTask.addDetails(taskDetail);
-		myPlanner.addTask(currentTask);
+	void processCommandAdd(string taskDetail){
+		//Task currentTask;
+		//currentTask.addDetails(taskDetail);
+		//myPlanner.addTask(currentTask);
 	}
 
-	void processCommandDelete(std::string taskIndex){
+	void processCommandDelete(string taskIndex){
 		int index = stoi(taskIndex);
-		myPlanner.getIndexToDelete(index, currentView);
+		//myPlanner.getIndexToDelete(index, currentView);
 	}
 
-	void processCommandEdit(std::string taskIndex){
+	void processCommandEdit(string taskIndex){
 		int index = stoi(taskIndex);
-		myPlanner.editTask(index);
+		//myPlanner.editTask(index);
 	}
 
 	void processCommandClear(){
-		myPlanner.clear();
+		//myPlanner.clear();
 	}
 
-	void processCommandSearch(std::string taskDetail){
+	void processCommandSearch(string taskDetail){
 
 	}
 
@@ -43,7 +43,7 @@ public:
 
 	}
 
-	std::string extractCommand(std::string& userInput){
+	string extractCommand(std::string& userInput){
 		//extract the first word to be the command and update userInput
 		std::string command;
 		return command;
@@ -97,15 +97,16 @@ public:
 		std::string command = extractCommand(userInput);
 		processCommand(command, userInput);
 
-		std::string display = myPlanner.toString(currentView);
-		return display;		//temporary for proof of text entered;
+//		std::string display = myPlanner.toString(currentView);
+		return "NIL";		//temporary for proof of text entered;
 	}
 
 
 
 	
 	string switchView(string viewType) {
-		std::string display = myPlanner.toString(viewType);
+		//std::string display = myPlanner.toString(viewType);
+		return "NIL";
 	}
 };
 
