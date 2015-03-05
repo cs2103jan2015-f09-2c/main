@@ -70,8 +70,15 @@ void Planner::addTask(Task newTask){
 	}
 
 int Planner::getIdOfLastEntry(void){
-
-	return 1;
+	
+	int n;
+	
+	static int idGeneratror;
+	if (allTaskList.empty()){
+		idGeneratror = 10001;
+		}
+	else idGeneratror++;
+	return idGeneratror;
 }
 
 string Planner::toString(string nameOfList){
