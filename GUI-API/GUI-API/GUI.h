@@ -54,13 +54,14 @@ public:
 
 	string extractCommand(std::string& userInput){
 		//extract the first word to be the command and update userInput
-		std::string command;
-		std::string taskDetails;
-		std::istringstream in(userInput);
+		string command;
+		string taskDetails;
+		istringstream in(userInput);
 		in >> command;
-		in >> taskDetails;
-		userInput = taskDetails;
-		return command;							//hardcoded
+		size_t pos = userInput.find_first_of(" ");
+		string newUserInput = userInput.substr(pos + 1, userInput.size() - pos);
+		userInput = newUserInput;
+		return command;						//hardcoded
 	}
 
 	void processCommand(std::string command, std::string taskDetail){
