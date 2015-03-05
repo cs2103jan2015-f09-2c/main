@@ -69,18 +69,6 @@ void Planner::addTask(Task newTask){
 	//update the undoData, lastEntry Data Structure
 	}
 
-int Planner::getIdOfLastEntry(void){
-	
-	int n;
-	
-	static int idGeneratror;
-	if (allTaskList.empty()){
-		idGeneratror = 10001;
-		}
-	else idGeneratror++;
-	return idGeneratror;
-}
-
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
@@ -110,8 +98,9 @@ string Planner::allTaskListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
 	it = allTaskList.begin();
+	int serialNumber = 1;
 	for (it = allTaskList.begin(); it != allTaskList.end(); ++it){
-		out << (*it).getDescription() << " "; 
+		out <<serialNumber<<". "<< (*it).getDescription() << " "; 
 		out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
 		out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year<< " ";
 		out << (*it).getTimeStart() << " to ";
@@ -122,10 +111,50 @@ string Planner::allTaskListToString(void){
 			out << " #impt";
 			}
 		out << endl;
+		serialNumber++;
 	}
 	
 	return out.str();
 	}
+
+int Planner::getIdOfLastEntry(void){
+	
+	int n;
+	
+	static int idGeneratror;
+	if (allTaskList.empty()){
+		idGeneratror = 10001;
+		}
+	else idGeneratror++;
+	return idGeneratror;
+}
+
+void Planner::deleteTask(int serialNumber, string nameOFList){
+	int idNumber;
+	list<Task> ::iterator iter;
+	iter = allTaskList.begin();
+	if (nameOFList == "allTaskList"){
+		for (int i = 1; i != serialNumber;i++){
+			iter++;
+			}
+		idNumber = (*iter).getIdNumber();
+		deleteIndex(idNumber);
+		}
+	else cout << "error! name of list is invalid" << endl;
+	
+	}
+void Planner:: deleteIndex(int idNumber){
+	list<Task> ::iterator iter1, iter2;
+	iter1 = allTaskList.begin();
+	for (iter1 = allTaskList.begin(); iter1 != allTaskList.end(); ++iter1){
+		if ((*iter1).getIdNumber() == idNumber){
+			iter2 = iter1;
+			}
+		}
+	allTaskList.erase(iter2);
+	}
+
+
 /*
 void Planner::deleteTask(int index){
 	//find the index

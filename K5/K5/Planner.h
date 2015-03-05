@@ -31,6 +31,8 @@ public:
 	string toString(string);
 	string allTaskListToString(void);
 	int getIdOfLastEntry(void);
+	void deleteTask(int serialNumber, string nameOFList);
+	void deleteIndex(int idNumber);
 	//void deleteTask(int index);
 	//int getIndexTodelete(int number, string nameOfList);
 	//void editTask(int number, Task content);

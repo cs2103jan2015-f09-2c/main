@@ -24,6 +24,10 @@ int main(){
 	P.addTask(T6);
 	P.addTask(T7);
 	cout<<P.toString("allTaskList");
+	cout << endl;
+	cout << "after deleting number 2: " << endl;
+	P.deleteTask(2,"allTaskList");
+	cout << P.toString("allTaskList");
 	system("pause");
 	return 0;
 	}
