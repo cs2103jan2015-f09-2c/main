@@ -33,8 +33,7 @@ public:
 	int getIdOfLastEntry(void);
 	void deleteTask(int serialNumber, string nameOFList);
 	void deleteIndex(int idNumber);
-	//void deleteTask(int index);
-	//int getIndexTodelete(int number, string nameOfList);
+	void undo(void);
 	//void editTask(int number, Task content);
 	//void undo(void);
 	//void clear(void);

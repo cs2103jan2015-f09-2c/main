@@ -10,7 +10,7 @@ using namespace std;
 //Functions that edit the allTaskList ONLY
 void Planner::addTask(Task newTask){
 	//create new task
-	int id = getIdOfLastEntry() + 1; // use static to actually create id
+	int id = getIdOfLastEntry(); // use static to actually create id
 	newTask.storeIdNumber(id);
 	
 	//check where to slot
@@ -32,6 +32,9 @@ void Planner::addTask(Task newTask){
 	
 
 	allTaskList.insert(iter, newTask);
+
+	lastEntry.lastCommand = "add";
+	lastEntry.lastTask = newTask;
 
 	//add in the details
 	//newTask = content; // i dont know if this correct
@@ -143,6 +146,7 @@ void Planner::deleteTask(int serialNumber, string nameOFList){
 	else cout << "error! name of list is invalid" << endl;
 	
 	}
+
 void Planner:: deleteIndex(int idNumber){
 	list<Task> ::iterator iter1, iter2;
 	iter1 = allTaskList.begin();
@@ -151,7 +155,20 @@ void Planner:: deleteIndex(int idNumber){
 			iter2 = iter1;
 			}
 		}
+	lastEntry.lastTask = *iter2;
+	lastEntry.lastCommand = "delete";
 	allTaskList.erase(iter2);
+	
+	}
+
+void Planner::undo(void){
+	if (lastEntry.lastCommand == "add"){
+		int lastEntryID = getIdOfLastEntry()-1;
+		deleteIndex(lastEntryID);
+		}
+	else if (lastEntry.lastCommand == "delete"){
+		addTask(lastEntry.lastTask);
+		}
 	}
 
 
