@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUI-API", "GUI-API\GUI-API.vcxproj", "{0944C843-F708-42BB-A354-4CCBD5851ED4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "UI\UI.vcxproj", "{C7BAD31A-E719-4F5A-979F-10A11BE318E9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Planner", "Planner\Planner.vcxproj", "{909AE648-141F-443D-BE69-AEB764261D8E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task", "Task\Task.vcxproj", "{55BCD928-FFA3-4F4C-900B-B0BAA807D4F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{C7BAD31A-E719-4F5A-979F-10A11BE318E9}.Debug|Win32.Build.0 = Debug|Win32
 		{C7BAD31A-E719-4F5A-979F-10A11BE318E9}.Release|Win32.ActiveCfg = Release|Win32
 		{C7BAD31A-E719-4F5A-979F-10A11BE318E9}.Release|Win32.Build.0 = Release|Win32
+		{909AE648-141F-443D-BE69-AEB764261D8E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{909AE648-141F-443D-BE69-AEB764261D8E}.Debug|Win32.Build.0 = Debug|Win32
+		{909AE648-141F-443D-BE69-AEB764261D8E}.Release|Win32.ActiveCfg = Release|Win32
+		{909AE648-141F-443D-BE69-AEB764261D8E}.Release|Win32.Build.0 = Release|Win32
+		{55BCD928-FFA3-4F4C-900B-B0BAA807D4F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{55BCD928-FFA3-4F4C-900B-B0BAA807D4F3}.Debug|Win32.Build.0 = Debug|Win32
+		{55BCD928-FFA3-4F4C-900B-B0BAA807D4F3}.Release|Win32.ActiveCfg = Release|Win32
+		{55BCD928-FFA3-4F4C-900B-B0BAA807D4F3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

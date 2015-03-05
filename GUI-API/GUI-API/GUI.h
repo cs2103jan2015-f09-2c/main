@@ -1,38 +1,46 @@
 #pragma once
+#include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
-// #include "Task.h"
-// #include "Planner.h" 
+#include "Task.h"
+#include "Planner.h" 
 
 using namespace std;
-
+string currentView;
 class GUI
 {
 public:
-	//Planner myPlanner;
+	Planner myPlanner;
 	GUI(){
 	}
 
 	~GUI(){
 	}
 	void processCommandAdd(string taskDetail){
-		//Task currentTask;
-		//currentTask.addDetails(taskDetail);
-		//myPlanner.addTask(currentTask);
+		Task currentTask;
+		currentTask.addDetails(taskDetail);
+		myPlanner.addTask(currentTask);
 	}
 
 	void processCommandDelete(string taskIndex){
 		int index = stoi(taskIndex);
-		//myPlanner.getIndexToDelete(index, currentView);
+		myPlanner.deleteTask(index, currentView);
 	}
 
-	void processCommandEdit(string taskIndex){
-		int index = stoi(taskIndex);
-		//myPlanner.editTask(index);
+	void processCommandEdit(string userInput){
+		char colon;
+		int taskIndex;
+		string taskDetails;
+		istringstream in (userInput);
+		in >> taskIndex;
+		in >> colon;
+		in >> taskDetails;
+		myPlanner.editTask(taskIndex, currentView, taskDetails );
 	}
 
 	void processCommandClear(){
-		//myPlanner.clear();
+		myPlanner.clear();
 	}
 
 	void processCommandSearch(string taskDetail){
