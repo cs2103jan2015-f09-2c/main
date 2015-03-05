@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\GUI-API\Planner;D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner%28main function%29\GUI-API\Task;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\pc1\Documents\main\GUI-API\Task;C:\Users\pc1\Documents\main\GUI-API\Planner;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
