@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-﻿Build started 6/3/2015 1:07:25 AM.
-     1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
-=======
-﻿Build started 3/6/2015 12:47:27 AM.
+﻿Build started 3/6/2015 1:24:54 AM.
      1>Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Rebuild target(s)).
->>>>>>> cf1aa07f9fbd6c19482c7ecb365cfc741ed7b9dd
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\pc1\Documents\main\GUI-API\Task" /I"C:\Users\pc1\Documents\main\GUI-API\Planner" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
          GUI.cpp
@@ -17,8 +12,4 @@
 
 Build succeeded.
 
-<<<<<<< HEAD
-Time Elapsed 00:00:02.90
-=======
-Time Elapsed 00:00:00.79
->>>>>>> cf1aa07f9fbd6c19482c7ecb365cfc741ed7b9dd
+Time Elapsed 00:00:00.81

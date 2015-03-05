@@ -139,7 +139,7 @@ void Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
 	list<Task> ::iterator iter;
 	iter = allTaskList.begin();
-	if (nameOfList == "allTaskList"){
+	if (nameOfList == "Home"){
 		for (int i = 1; i != serialNumber; i++){
 			iter++;
 		}
