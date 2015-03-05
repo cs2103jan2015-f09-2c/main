@@ -34,8 +34,8 @@ public:
 	void deleteTask(int serialNumber, string nameOFList);
 	void deleteIndex(int idNumber);
 	void undo(void);
+	void clear(void);
 	//void editTask(int number, Task content);
-	//void undo(void);
 	//void clear(void);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);
 	/*

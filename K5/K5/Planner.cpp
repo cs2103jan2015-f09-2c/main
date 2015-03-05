@@ -102,20 +102,23 @@ string Planner::allTaskListToString(void){
 	list<Task> ::iterator it;
 	it = allTaskList.begin();
 	int serialNumber = 1;
-	for (it = allTaskList.begin(); it != allTaskList.end(); ++it){
-		out <<serialNumber<<". "<< (*it).getDescription() << " "; 
-		out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-		out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year<< " ";
-		out << (*it).getTimeStart() << " to ";
-		out << (*it).getTimeEnd();
-		out << " " << (*it).getIdNumber();			//remember to remove
-		
-		if ((*it).isImpt()){
-			out << " #impt";
-			}
-		out << endl;
-		serialNumber++;
-	}
+	if (!allTaskList.empty()){
+		for (it = allTaskList.begin(); it != allTaskList.end(); ++it){
+			out << serialNumber << ". " << (*it).getDescription() << " ";
+			out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
+			out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
+			out << (*it).getTimeStart() << " to ";
+			out << (*it).getTimeEnd();
+			out << " " << (*it).getIdNumber();			//remember to remove
+
+			if ((*it).isImpt()){
+				out << " #impt";
+				}
+			out << endl;
+			serialNumber++;
+		}
+		}
+	else out << "The list is empty!" << endl;
 	
 	return out.str();
 	}
@@ -171,6 +174,9 @@ void Planner::undo(void){
 		}
 	}
 
+void Planner::clear(void){
+	allTaskList.clear();
+	}
 
 /*
 void Planner::deleteTask(int index){

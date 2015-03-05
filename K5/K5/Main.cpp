@@ -44,6 +44,11 @@ int main(){
 	cout << "after undoing add: " << endl;
 	cout << P.toString("allTaskList");
 
+	P.clear();
+	cout << endl;
+	cout << "After clearing the list: " << endl;
+	cout << P.toString("allTaskList");
+
 	system("pause");
 	return 0;
 	}
