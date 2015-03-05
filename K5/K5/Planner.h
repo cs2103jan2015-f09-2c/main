@@ -26,17 +26,19 @@ private:
 	undoData lastEntry;
 
 public:
-	//Functions that edit the allTaskList ONLY
+	
 	void addTask(Task content);
 	string toString(string);
 	string allTaskListToString(void);
 	int getIdOfLastEntry(void);
-	void deleteTask(int serialNumber, string nameOFList);
+	void deleteTask(int serialNumber, string nameOfList);
 	void deleteIndex(int idNumber);
 	void undo(void);
 	void clear(void);
+	void editTask(int serialNumber, string nameOfList, string input);
+
+
 	//void editTask(int number, Task content);
-	//void clear(void);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);
 	/*
 	//Functions that generate the next7daysList,
@@ -54,8 +56,6 @@ public:
 	int findIndexToSlotIn(Tdate, Tdate, Ttime, Ttime);
 	int findIDNumber(int number, string nameOfList);
 	//toSting functions
-	string toString(string nameOfList);
-	string allTaskListToString(void);
 	string next7DaysListToString(void);
 	string upcomingListToString(void);
 	string missedListToString(void);

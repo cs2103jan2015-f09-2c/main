@@ -135,11 +135,11 @@ int Planner::getIdOfLastEntry(void){
 	return idGeneratror;
 }
 
-void Planner::deleteTask(int serialNumber, string nameOFList){
+void Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
 	list<Task> ::iterator iter;
 	iter = allTaskList.begin();
-	if (nameOFList == "allTaskList"){
+	if (nameOfList == "allTaskList"){
 		for (int i = 1; i != serialNumber;i++){
 			iter++;
 			}
@@ -176,6 +176,13 @@ void Planner::undo(void){
 
 void Planner::clear(void){
 	allTaskList.clear();
+	}
+
+void Planner::editTask(int serialNumber, string nameOfList, string input){
+	Task newTask;
+	newTask.addDetails(input);
+	deleteTask(serialNumber, nameOfList);
+	addTask(newTask);
 	}
 
 /*

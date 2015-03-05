@@ -43,6 +43,10 @@ int main(){
 	cout << endl;
 	cout << "after undoing add: " << endl;
 	cout << P.toString("allTaskList");
+	P.editTask(5, "allTaskList", "meet girlfriend; date 230215 to 230215; time 1800 to 1930");
+	cout << endl;
+	cout << "Edit number 5 : friends to girlfriend: " << endl;
+	cout<<P.toString("allTaskList");
 
 	P.clear();
 	cout << endl;
