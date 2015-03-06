@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//Functions that edit the allTaskList ONLY
+//Functions that edit the HomeONLY
 void Planner::addTask(Task newTask){
 	//create new task
 	int id = getIdOfLastEntry(); // use static to actually create id
@@ -15,7 +15,7 @@ void Planner::addTask(Task newTask){
 
 	//check where to slot
 	list<Task>::iterator iter;
-	for (iter = allTaskList.begin(); iter != allTaskList.end(); ++iter){
+	for (iter = Home.begin(); iter != Home.end(); ++iter){
 		if (newTask.getDateStart().year <= (*iter).getDateStart().year)
 		if (newTask.getDateStart().month < (*iter).getDateStart().month)
 			break;
@@ -31,7 +31,7 @@ void Planner::addTask(Task newTask){
 	}
 
 
-	allTaskList.insert(iter, newTask);
+	Home.insert(iter, newTask);
 
 	lastEntry.lastCommand = "add";
 	lastEntry.lastTask = newTask;
@@ -75,12 +75,12 @@ void Planner::addTask(Task newTask){
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
-	if (nameOfList == "allTaskList"){
-		finalString = allTaskListToString();
+	if (nameOfList == "Home"){
+		finalString = HomeToString();
 		return finalString;
 	}
 	else if (nameOfList == "Home"){
-		finalString = allTaskListToString();			//test
+		finalString = HomeToString();			//test
 		return finalString;
 	}
 	else if (nameOfList == "Upcoming"){
@@ -97,13 +97,13 @@ string Planner::toString(string nameOfList){
 	}
 }
 
-string Planner::allTaskListToString(void){
+string Planner::HomeToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
-	it = allTaskList.begin();
+	it = Home.begin();
 	int serialNumber = 1;
-	if (!allTaskList.empty()){
-		for (it = allTaskList.begin(); it != allTaskList.end(); ++it){
+	if (!Home.empty()){
+		for (it = Home.begin(); it != Home.end(); ++it){
 			out << serialNumber << ". " << (*it).getDescription() << " ";
 			out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
 			out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
@@ -128,7 +128,7 @@ int Planner::getIdOfLastEntry(void){
 	int n;
 
 	static int idGeneratror;
-	if (allTaskList.empty()){
+	if (Home.empty()){
 		idGeneratror = 10001;
 	}
 	else idGeneratror++;
@@ -138,7 +138,7 @@ int Planner::getIdOfLastEntry(void){
 void Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
 	list<Task> ::iterator iter;
-	iter = allTaskList.begin();
+	iter = Home.begin();
 	if (nameOfList == "Home"){
 		for (int i = 1; i != serialNumber; i++){
 			iter++;
@@ -152,15 +152,15 @@ void Planner::deleteTask(int serialNumber, string nameOfList){
 
 void Planner::deleteIndex(int idNumber){
 	list<Task> ::iterator iter1, iter2;
-	iter1 = allTaskList.begin();
-	for (iter1 = allTaskList.begin(); iter1 != allTaskList.end(); ++iter1){
+	iter1 = Home.begin();
+	for (iter1 = Home.begin(); iter1 != Home.end(); ++iter1){
 		if ((*iter1).getIdNumber() == idNumber){
 			iter2 = iter1;
 		}
 	}
 	lastEntry.lastTask = *iter2;
 	lastEntry.lastCommand = "delete";
-	allTaskList.erase(iter2);
+	Home.erase(iter2);
 
 }
 
@@ -175,7 +175,7 @@ void Planner::undo(void){
 }
 
 void Planner::clear(void){
-	allTaskList.clear();
+	Home.clear();
 }
 
 void Planner::editTask(int serialNumber, string nameOfList, string input){

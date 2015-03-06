@@ -17,10 +17,10 @@ struct undoData{
 class Planner{
 
 private:
-	list<Task> allTaskList;
+	list<Task> Home; // allTaskList
 	list<Task> next7DaysList;
-	list<Task> upcomingList;
-	list<Task> missedList;
+	list<Task> UpcomingList;
+	list<Task> MissedList;
 	list<Task> searchList;
 
 	undoData lastEntry;
@@ -29,7 +29,7 @@ public:
 
 	void addTask(Task content);
 	string toString(string);
-	string allTaskListToString(void);
+	string HomeToString(void);
 	int getIdOfLastEntry(void);
 	void deleteTask(int serialNumber, string nameOfList);
 	void deleteIndex(int idNumber);
