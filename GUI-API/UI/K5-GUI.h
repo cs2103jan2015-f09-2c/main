@@ -170,10 +170,27 @@ namespace UI {
 		//if function detects enter keypress
 		if (e->KeyChar == (char)13) {
 			//convert String^ to std::string, pass to processUserInput and print result in displayWindow
-			managedInput = userInput->Text;
-			string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
-		
-			strOutput = gcnew String(s->processUserInput(unmanagedInput, currentView).c_str());
+			if (userInput->Text == "home") {
+				currentView = "Home";
+				strOutput = gcnew String(s->switchView(currentView).c_str());
+			}
+			else if (userInput->Text == "missed") {
+				currentView = "Missed";
+				strOutput = gcnew String(s->switchView(currentView).c_str());
+			}
+			else if (userInput->Text == "upcoming") {
+				currentView = "Upcoming";
+				strOutput = gcnew String(s->switchView(currentView).c_str());
+			}
+			else if (userInput->Text == "exit") {
+				Application::Exit();
+			}
+			else {
+				managedInput = userInput->Text;
+				string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
+
+				strOutput = gcnew String(s->processUserInput(unmanagedInput, currentView).c_str());
+			}
 
 			//need to check if strouput is an edit. if yes, userInput->Text = (whatever edit content), then loop back to start. else, perform next two lines
 			displayWindow->Text = strOutput;
