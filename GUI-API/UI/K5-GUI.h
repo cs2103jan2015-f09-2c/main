@@ -11,7 +11,7 @@ using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace std;
 
-string currentView;
+string currentView = "Home";
 
 namespace UI {
 	/// <summary>

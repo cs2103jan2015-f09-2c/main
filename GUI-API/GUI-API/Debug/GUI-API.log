@@ -1,4 +1,4 @@
-﻿Build started 3/9/2015 2:06:25 AM.
+﻿Build started 3/9/2015 2:08:43 AM.
      1>Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
      1>Lib:
          GUI-API.vcxproj -> C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib
@@ -6,4 +6,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.18
+Time Elapsed 00:00:00.14
