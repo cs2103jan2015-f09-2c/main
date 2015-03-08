@@ -99,6 +99,9 @@ public:
 		if (command == "exit"){
 			processCommandExit();
 		} */
+
+//save after each operation
+//		save(fileName);
 	}
 
 	
@@ -118,6 +121,10 @@ public:
 	string switchView(string viewType) {
 		std::string display = myPlanner.toString(viewType);
 		return display;
+	}
+
+	void save(string fileName){
+		myPlanner.save(fileName);
 	}
 };
 

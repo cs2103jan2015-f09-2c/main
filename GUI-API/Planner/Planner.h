@@ -1,7 +1,6 @@
 #ifndef PLANNER_H
 #define PLANNER_H
 #include "Task.h"
-
 #include <string>
 #include <list>
 using namespace std;
@@ -36,7 +35,7 @@ public:
 	void undo(void);
 	void clear(void);
 	void editTask(int serialNumber, string nameOfList, string input);
-
+	void save(string);
 
 	//void editTask(int number, Task content);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);

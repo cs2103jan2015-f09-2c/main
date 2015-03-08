@@ -4,6 +4,7 @@
 #include<list>
 #include <ctime>
 #include<sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -183,6 +184,14 @@ void Planner::editTask(int serialNumber, string nameOfList, string input){
 	newTask.addDetails(input);
 	deleteTask(serialNumber, nameOfList);
 	addTask(newTask);
+}
+
+void Planner::save(string fileName){
+	ofstream write(fileName);
+	string allTasks;
+//	allTasks = Planner::toString(); a toString function that returns a string of all tasks
+	write << allTasks;
+	write.close();
 }
 
 /*
