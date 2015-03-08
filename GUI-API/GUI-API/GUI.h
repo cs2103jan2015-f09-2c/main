@@ -36,12 +36,18 @@ public:
 		istringstream in (userInput);
 		in >> taskIndex;
 		in >> colon;
-		in >> taskDetails;
+		//in >> taskDetails;
+		int sizeToSubstr = userInput.size() - 2;
+		taskDetails = userInput.substr(2, sizeToSubstr);
 		myPlanner.editTask(taskIndex, currentView, taskDetails );
 	}
 
 	void processCommandClear(){
 		myPlanner.clear();
+	}
+
+	void processCommandUndo(){
+		myPlanner.undo();
 	}
 
 	void processCommandSearch(string taskDetail){
@@ -92,6 +98,10 @@ public:
 		else
 		if (command == "help"){
 			processCommandHelp();
+		}
+		else
+		if (command == "undo"){
+			processCommandUndo();
 		}
 
 
