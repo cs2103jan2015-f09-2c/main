@@ -11,7 +11,7 @@ using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace std;
 
-
+string currentView;
 
 namespace UI {
 	/// <summary>
@@ -173,7 +173,7 @@ namespace UI {
 			managedInput = userInput->Text;
 			string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
 		
-			strOutput = gcnew String(s->processUserInput(unmanagedInput).c_str());
+			strOutput = gcnew String(s->processUserInput(unmanagedInput, currentView).c_str());
 
 			//need to check if strouput is an edit. if yes, userInput->Text = (whatever edit content), then loop back to start. else, perform next two lines
 			displayWindow->Text = strOutput;
