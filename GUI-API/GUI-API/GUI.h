@@ -101,7 +101,8 @@ public:
 		} */
 
 //save after each operation
-//		save(fileName);
+		string fileName = "myFile";
+		save(fileName);
 	}
 
 	
