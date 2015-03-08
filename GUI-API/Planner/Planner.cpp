@@ -189,7 +189,7 @@ void Planner::editTask(int serialNumber, string nameOfList, string input){
 void Planner::save(string fileName){
 	ofstream write(fileName);
 	string allTasks;
-//	allTasks = Planner::toString(); a toString function that returns a string of all tasks
+    allTasks = Planner::toString("Home"); 
 	write << allTasks;
 	write.close();
 }

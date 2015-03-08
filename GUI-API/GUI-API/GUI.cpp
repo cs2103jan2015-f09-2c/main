@@ -71,7 +71,7 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	} */
 
 	//save after each operation
-	string fileName = "myFile";
+	string fileName = "myFile.txt";
 	save(fileName);
 }
 
