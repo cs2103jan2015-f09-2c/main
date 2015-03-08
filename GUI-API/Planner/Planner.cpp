@@ -1,9 +1,9 @@
 #include "Planner.h"
-#include<iostream>
-#include<string>
-#include<list>
+#include <iostream>
+#include <string>
+#include <list>
 #include <ctime>
-#include<sstream>
+#include <sstream>
 #include <fstream>
 
 using namespace std;

@@ -20,7 +20,6 @@ namespace UI {
 	public ref class K5GUI : public System::Windows::Forms::Form {
 	private: 
 		GUI* s;
-		
 
 	public:
 		
@@ -91,7 +90,9 @@ namespace UI {
 			// 
 			// missedButton
 			// 
-			this->missedButton->BackColor = System::Drawing::SystemColors::Control;
+			this->missedButton->BackColor = System::Drawing::Color::SteelBlue;
+			this->missedButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->missedButton->Location = System::Drawing::Point(10, 320);
 			this->missedButton->Name = L"missedButton";
 			this->missedButton->Size = System::Drawing::Size(109, 28);
@@ -102,22 +103,28 @@ namespace UI {
 			// 
 			// homeButton
 			// 
+			this->homeButton->BackColor = System::Drawing::Color::SteelBlue;
+			this->homeButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->homeButton->Location = System::Drawing::Point(125, 320);
 			this->homeButton->Name = L"homeButton";
 			this->homeButton->Size = System::Drawing::Size(109, 28);
 			this->homeButton->TabIndex = 3;
 			this->homeButton->Text = L"Home";
-			this->homeButton->UseVisualStyleBackColor = true;
+			this->homeButton->UseVisualStyleBackColor = false;
 			this->homeButton->Click += gcnew System::EventHandler(this, &K5GUI::homeButton_Click);
 			// 
 			// upcomingButton
 			// 
+			this->upcomingButton->BackColor = System::Drawing::Color::SteelBlue;
+			this->upcomingButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->upcomingButton->Location = System::Drawing::Point(240, 320);
 			this->upcomingButton->Name = L"upcomingButton";
 			this->upcomingButton->Size = System::Drawing::Size(109, 28);
 			this->upcomingButton->TabIndex = 4;
 			this->upcomingButton->Text = L"Upcoming";
-			this->upcomingButton->UseVisualStyleBackColor = true;
+			this->upcomingButton->UseVisualStyleBackColor = false;
 			this->upcomingButton->Click += gcnew System::EventHandler(this, &K5GUI::upcomingButton_Click);
 			// 
 			// K5GUI
@@ -142,10 +149,29 @@ namespace UI {
 	}
 	private: System::Void K5GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
 	}
+	private: System::Void colourSwitch() {
+		if (currentView == "Home") {
+			homeButton->BackColor = Color::LightSkyBlue;
+			missedButton->BackColor = Color::SteelBlue;
+			upcomingButton->BackColor = Color::SteelBlue;
+		}
+		else if (currentView == "Upcoming") {
+			upcomingButton->BackColor = Color::LightSkyBlue;
+			missedButton->BackColor = Color::SteelBlue;
+			homeButton->BackColor = Color::SteelBlue;
+		}
+		else if (currentView == "Missed") {
+			missedButton->BackColor = Color::LightSkyBlue;
+			upcomingButton->BackColor = Color::SteelBlue;
+			homeButton->BackColor = Color::SteelBlue;
+		}
+	}
 	//switch window
 	private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		currentView = "Home";
 		String^ strHome = gcnew String(s->switchView(currentView).c_str());
+
+		colourSwitch();
 		
 		displayWindow->Text = strHome;
 	}
@@ -154,12 +180,16 @@ namespace UI {
 		currentView = "Upcoming"; 
 		String^ strUpcoming = gcnew String(s->switchView(currentView).c_str());
 
+		colourSwitch();
+
 		displayWindow->Text = strUpcoming;
 	}
 	//switch window
 	private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		currentView = "Missed";
 		String^ strMissed = gcnew String(s->switchView(currentView).c_str());
+
+		colourSwitch();
 		
 		displayWindow->Text = strMissed;
 	}
@@ -167,20 +197,25 @@ namespace UI {
 	private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
 		String^ managedInput;
 		String^ strOutput;
-		//if function detects enter keypress
+
 		if (e->KeyChar == (char)13) {
-			//convert String^ to std::string, pass to processUserInput and print result in displayWindow
 			if (userInput->Text == "home") {
 				currentView = "Home";
 				strOutput = gcnew String(s->switchView(currentView).c_str());
+
+				colourSwitch();
 			}
 			else if (userInput->Text == "missed") {
 				currentView = "Missed";
 				strOutput = gcnew String(s->switchView(currentView).c_str());
+
+				colourSwitch();
 			}
 			else if (userInput->Text == "upcoming") {
 				currentView = "Upcoming";
 				strOutput = gcnew String(s->switchView(currentView).c_str());
+
+				colourSwitch();
 			}
 			else if (userInput->Text == "exit") {
 				Application::Exit();
@@ -192,7 +227,6 @@ namespace UI {
 				strOutput = gcnew String(s->processUserInput(unmanagedInput, currentView).c_str());
 			}
 
-			//need to check if strouput is an edit. if yes, userInput->Text = (whatever edit content), then loop back to start. else, perform next two lines
 			displayWindow->Text = strOutput;
 			userInput->Text = "";
 		}
