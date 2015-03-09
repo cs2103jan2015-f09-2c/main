@@ -31,6 +31,7 @@ public:
 	string next7DaystoString(void);
 	string upcomingListToString();
 	string missedListToString();
+	string searchListToString();
 	int getIdOfLastEntry(void);
 	void deleteTask(int serialNumber, string nameOfList);
 	void deleteIndex(int idNumber);
@@ -44,6 +45,8 @@ public:
 	void generateNext7DaysList(void);
 	void generateUpcomingList(void);
 	void generateMissedList(void);
+
+	void generateSearchList(string target);
 
 	//void editTask(int number, Task content);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);

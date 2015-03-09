@@ -1,3 +1,2 @@
-1. play -1/-1/-1 to -1/-1/-1 -1 to -1 10003
-2. school -1/-1/-1 to -1/-1/-1 -1 to -1 10002
-3. meeting -1/-1/-1 to -1/-1/-1 -1 to -1 10001
+1. date with girlfriend 6/3/15 to 6/3/15 1800 to 2100 10001
+2. appointment 9/3/15 to 9/3/15 1800 to 2100 10002
