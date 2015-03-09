@@ -63,6 +63,10 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	if (command == "undo"){
 		processCommandUndo();
 	}
+	else
+	if (command == "save") {
+		processCommandSave(taskDetail);
+	}
 
 	//save after each operation
 	string fileName = "myFile.txt";
@@ -72,6 +76,11 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 void GUI::processCommandLoad(string fileName){
 
 }
+
+void GUI::processCommandSave(string fileName) {
+	save(fileName);
+}
+
 void GUI::processCommandAdd(string taskDetail){
 	Task currentTask;
 	currentTask.addDetails(taskDetail);
@@ -105,10 +114,6 @@ void GUI::processCommandUndo(){
 }
 
 void GUI::processCommandSearch(string taskDetail){
-
-}
-
-void GUI::processCommandHelp(){
 
 }
 
