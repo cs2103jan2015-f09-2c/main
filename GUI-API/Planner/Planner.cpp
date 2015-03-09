@@ -102,10 +102,14 @@ string Planner::HomeToString(void){
 	if (!Home.empty()){
 		for (it = Home.begin(); it != Home.end(); ++it){
 			out << serialNumber << ". " << (*it).getDescription() << " ";
-			out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-			out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-			out << (*it).getTimeStart() << " to ";
-			out << (*it).getTimeEnd();
+//			if ((*it).getDateStart().day != -1) {
+				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
+				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
+//			}
+//			if ((*it).getTimeStart() != -1) {
+				out << (*it).getTimeStart() << " to ";
+				out << (*it).getTimeEnd();
+//			}
 			out << " " << (*it).getIdNumber();			//remember to remove
 
 			if ((*it).isImpt()){
