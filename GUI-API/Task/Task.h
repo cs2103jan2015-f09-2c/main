@@ -14,10 +14,8 @@ struct taskDate{
 class Task{
 private:
 	string _description;
-	//	taskTime _timeStart;
-	//	taskTime _timeEnd;
-	int _timeStart = -1;
-	int _timeEnd = -1;
+	int _timeStart;
+	int _timeEnd;
 	taskDate _dateStart;
 	taskDate _dateEnd;
 	bool _isImpt;

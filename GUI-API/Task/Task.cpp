@@ -6,6 +6,8 @@ using namespace std;
 
 //Constructor
 Task::Task(){
+	_timeStart = -1;
+	_timeEnd = -1;
 	_isImpt = false;
 }
 
