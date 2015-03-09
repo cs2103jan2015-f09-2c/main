@@ -5,13 +5,10 @@
 #include <list>
 using namespace std;
 
-
-
 struct undoData{
 	string lastCommand; // should be add/delete/edit
 	Task lastTask;
 };
-
 
 class Planner{
 
@@ -23,6 +20,8 @@ private:
 	list<Task> searchList;
 
 	undoData lastEntry;
+
+	taskDate currentDate;
 
 public:
 
@@ -38,6 +37,7 @@ public:
 	void clear(void);
 	void editTask(int serialNumber, string nameOfList, string input);
 	void save(string);
+	void setCurrentDate(taskDate);
 
 	//void editTask(int number, Task content);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);

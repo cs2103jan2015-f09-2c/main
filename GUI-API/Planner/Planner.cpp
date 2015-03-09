@@ -194,6 +194,22 @@ void Planner::save(string fileName){
 	write.close();
 }
 
+string Planner::upcomingListToString(void){
+	return "content from upcominglisttostring";
+}
+
+string Planner::missedListToString(void){
+	return "content from missedlisttostring";
+}
+
+void Planner::setCurrentDate(taskDate currentDate) {
+	time_t t = time(0);   // get time now
+	struct tm * now = localtime(&t);
+	currentDate.year = (now->tm_year - 100);
+	currentDate.month = (now->tm_mon + 1);
+	currentDate.day = (now->tm_mday);
+}
+
 /*
 void Planner::deleteTask(int index){
 //find the index
@@ -409,19 +425,6 @@ return finalString;
 }
 string Planner::allTaskListToString(void){
 }
-
-string Planner::next7DaysListToString(void){
-}
-
-
-
-
-
 string Planner::searchListToString(void){
 }*/
-string Planner::upcomingListToString(void){
-	return "content from upcominglisttostring";
-}
-string Planner::missedListToString(void){
-	return "content from missedlisttostring";
-}
+

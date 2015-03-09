@@ -33,6 +33,8 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	if (command == "load"){
 		processCommandLoad(taskDetail);
 	}
+
+	else
 	if (command == "add"){
 		processCommandAdd(taskDetail);
 	}
@@ -58,19 +60,9 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	}
 
 	else
-	if (command == "help"){
-		processCommandHelp();
-	}
-	else
 	if (command == "undo"){
 		processCommandUndo();
 	}
-
-
-	/*	else
-	if (command == "exit"){
-	processCommandExit();
-	} */
 
 	//save after each operation
 	string fileName = "myFile.txt";
