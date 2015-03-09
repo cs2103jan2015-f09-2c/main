@@ -12,8 +12,7 @@ string GUI::processUserInput(string userInput, string currentView) {
 	string command = extractCommand(userInput);
 	processCommand(command, userInput, currentView);
 
-	string display = myPlanner.toString(currentView);
-	return display;
+	return updateDisplay(currentView);
 }
 
 string GUI::extractCommand(string& userInput){
@@ -115,7 +114,7 @@ void GUI::processCommandHelp(){
 
 }
 
-string GUI::switchView(string viewType) {
+string GUI::updateDisplay(string viewType) {
 	std::string display = myPlanner.toString(viewType);
 	return display;
 }

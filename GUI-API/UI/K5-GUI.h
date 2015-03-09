@@ -11,37 +11,31 @@ using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace std;
 
-string currentView = "Home";
-
 namespace UI {
-	/// <summary>
 	/// Summary for K5GUI
-	/// </summary>
 	public ref class K5GUI : public System::Windows::Forms::Form {
 	private: 
 		GUI* s;
+		String^ currentView;
 
 	public:
-		
 		K5GUI(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			//Add the constructor code here
 			s = new GUI;
+			currentView = "Home";
 		}
 
 	protected:
-		/// <summary>
 		/// Clean up any resources being used.
-		/// </summary>
 		~K5GUI()
 		{
 			if (components)
 			{
 				delete components;
 				delete s;
+				delete currentView;
 			}
 		}
 	private: System::Windows::Forms::TextBox^  displayWindow;
@@ -51,16 +45,12 @@ namespace UI {
 	private: System::Windows::Forms::Button^  homeButton;
 
 	private:
-		/// <summary>
 		/// Required designer variable.
-		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
-		/// </summary>
 		void InitializeComponent(void)
 		{
 			this->displayWindow = (gcnew System::Windows::Forms::TextBox());
@@ -149,7 +139,7 @@ namespace UI {
 	}
 	private: System::Void K5GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
 	}
-	private: System::Void colourSwitch() {
+	private: System::Void colourSwitch(String^ currentView) {
 		if (currentView == "Home") {
 			homeButton->BackColor = Color::LightSkyBlue;
 			missedButton->BackColor = Color::SteelBlue;
@@ -166,65 +156,53 @@ namespace UI {
 			homeButton->BackColor = Color::SteelBlue;
 		}
 	}
+	private: System::Void switchView(String^ viewType) {
+		string unmanagedView = msclr::interop::marshal_as<std::string>(viewType);
+		displayWindow->Text = gcnew String(s->updateDisplay(unmanagedView).c_str());
+	}
 	//switch window
 	private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		currentView = "Home";
-		String^ strHome = gcnew String(s->switchView(currentView).c_str());
-
-		colourSwitch();
-		
-		displayWindow->Text = strHome;
+		switchView(currentView);
+		colourSwitch(currentView);
 	}
 	//switch window
-	private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		currentView = "Upcoming"; 
-		String^ strUpcoming = gcnew String(s->switchView(currentView).c_str());
-
-		colourSwitch();
-
-		displayWindow->Text = strUpcoming;
+	private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) { 
+		currentView = "Upcoming";
+		switchView(currentView);
+		colourSwitch(currentView);
 	}
 	//switch window
 	private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		currentView = "Missed";
-		String^ strMissed = gcnew String(s->switchView(currentView).c_str());
-
-		colourSwitch();
-		
-		displayWindow->Text = strMissed;
+		switchView(currentView);
+		colourSwitch(currentView);
 	}
 	//takes in user input
 	private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
-		String^ managedInput;
 		String^ strOutput;
 
 		if (e->KeyChar == (char)13) {
 			if (userInput->Text == "home") {
-				currentView = "Home";
-				strOutput = gcnew String(s->switchView(currentView).c_str());
-
-				colourSwitch();
+				homeButton_Click(sender, e);
 			}
 			else if (userInput->Text == "missed") {
-				currentView = "Missed";
-				strOutput = gcnew String(s->switchView(currentView).c_str());
-
-				colourSwitch();
+				missedButton_Click(sender, e);
 			}
 			else if (userInput->Text == "upcoming") {
-				currentView = "Upcoming";
-				strOutput = gcnew String(s->switchView(currentView).c_str());
-
-				colourSwitch();
+				upcomingButton_Click(sender, e);
 			}
 			else if (userInput->Text == "exit") {
 				Application::Exit();
 			}
 			else {
-				managedInput = userInput->Text;
+				String^ managedInput = userInput->Text;
 				string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
 
-				strOutput = gcnew String(s->processUserInput(unmanagedInput, currentView).c_str());
+				String^ managedView = currentView;
+				string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
+
+				strOutput = gcnew String(s->processUserInput(unmanagedInput, unmanagedView).c_str());
 			}
 
 			displayWindow->Text = strOutput;
