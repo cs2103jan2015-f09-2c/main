@@ -30,6 +30,9 @@ string GUI::extractCommand(string& userInput){
 }
 
 void GUI::processCommand(std::string command, std::string taskDetail, string currentView){
+	if (command == "load"){
+		processCommandLoad(taskDetail);
+	}
 	if (command == "add"){
 		processCommandAdd(taskDetail);
 	}
@@ -74,6 +77,9 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	save(fileName);
 }
 
+void GUI::processCommandLoad(string fileName){
+
+}
 void GUI::processCommandAdd(string taskDetail){
 	Task currentTask;
 	currentTask.addDetails(taskDetail);
@@ -121,4 +127,9 @@ string GUI::updateDisplay(string viewType) {
 
 void GUI::save(string fileName){
 	myPlanner.save(fileName);
+}
+
+string GUI::displayHelp() {
+
+	return "HELP HELP HELP";
 }

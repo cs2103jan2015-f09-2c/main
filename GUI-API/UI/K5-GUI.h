@@ -16,7 +16,9 @@ namespace UI {
 	public ref class K5GUI : public System::Windows::Forms::Form {
 	private: 
 		GUI* s;
-		String^ currentView;
+	private: System::Windows::Forms::Label^  prompt;
+
+			 String^ currentView;
 
 	public:
 		K5GUI(void)
@@ -58,6 +60,7 @@ namespace UI {
 			this->missedButton = (gcnew System::Windows::Forms::Button());
 			this->homeButton = (gcnew System::Windows::Forms::Button());
 			this->upcomingButton = (gcnew System::Windows::Forms::Button());
+			this->prompt = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// displayWindow
@@ -117,9 +120,19 @@ namespace UI {
 			this->upcomingButton->UseVisualStyleBackColor = false;
 			this->upcomingButton->Click += gcnew System::EventHandler(this, &K5GUI::upcomingButton_Click);
 			// 
+			// prompt
+			// 
+			this->prompt->AutoSize = true;
+			this->prompt->Location = System::Drawing::Point(7, 388);
+			this->prompt->Name = L"prompt";
+			this->prompt->Size = System::Drawing::Size(135, 13);
+			this->prompt->TabIndex = 5;
+			this->prompt->Text = L"Type \'help\' for the Help List";
+			// 
 			// K5GUI
 			// 
 			this->ClientSize = System::Drawing::Size(361, 410);
+			this->Controls->Add(this->prompt);
 			this->Controls->Add(this->upcomingButton);
 			this->Controls->Add(this->homeButton);
 			this->Controls->Add(this->missedButton);
@@ -152,6 +165,11 @@ namespace UI {
 		}
 		else if (currentView == "Missed") {
 			missedButton->BackColor = Color::LightSkyBlue;
+			upcomingButton->BackColor = Color::SteelBlue;
+			homeButton->BackColor = Color::SteelBlue;
+		}
+		else if (currentView == "Help") {
+			missedButton->BackColor = Color::SteelBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
 			homeButton->BackColor = Color::SteelBlue;
 		}
@@ -195,6 +213,11 @@ namespace UI {
 			else if (userInput->Text == "exit") {
 				Application::Exit();
 			}
+			else if (userInput->Text == "help") {
+				currentView = "Help";
+				displayWindow->Text = gcnew String(s->displayHelp().c_str());
+				colourSwitch(currentView);
+			}
 			else {
 				String^ managedInput = userInput->Text;
 				string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
@@ -203,9 +226,9 @@ namespace UI {
 				string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
 
 				strOutput = gcnew String(s->processUserInput(unmanagedInput, unmanagedView).c_str());
+				displayWindow->Text = strOutput;
 			}
-
-			displayWindow->Text = strOutput;
+			
 			userInput->Text = "";
 		}
 	}

@@ -25,7 +25,9 @@ public:
 	void processCommandUndo();
 	void processCommandSearch(string taskDetail);
 	void processCommandHelp();
+	void processCommandLoad(string fileName);
 	string updateDisplay(string viewType);
 	void save(string fileName);
+	string displayHelp();
 };
 
