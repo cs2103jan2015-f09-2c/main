@@ -6,9 +6,9 @@
 using namespace std;
 
 struct taskDate{
-	int day;
-	int month;
-	int year;					//2 digits only
+	int day = -1;
+	int month = -1;
+	int year = -1;					//2 digits only
 };
 
 class Task{
@@ -16,8 +16,8 @@ private:
 	string _description;
 	//	taskTime _timeStart;
 	//	taskTime _timeEnd;
-	int _timeStart;
-	int _timeEnd;
+	int _timeStart = -1;
+	int _timeEnd = -1;
 	taskDate _dateStart;
 	taskDate _dateEnd;
 	bool _isImpt;

@@ -80,16 +80,12 @@ string Planner::toString(string nameOfList){
 		finalString = HomeToString();
 		return finalString;
 	}
-	else if (nameOfList == "Home"){
-		finalString = HomeToString();			//test
-		return finalString;
-	}
 	else if (nameOfList == "Upcoming"){
-		//finalString = upcomingListToString();
+		finalString = upcomingListToString();
 		return finalString;
 	}
 	else if (nameOfList == "Missed"){
-		//finalString = missedListToString();
+		finalString = missedListToString();
 		return finalString;
 	}
 	else if (nameOfList == "searchList"){
@@ -413,11 +409,15 @@ string Planner::allTaskListToString(void){
 string Planner::next7DaysListToString(void){
 }
 
-string Planner::upcomingListToString(void){
-}
 
-string Planner::missedListToString(void){
-}
+
+
 
 string Planner::searchListToString(void){
 }*/
+string Planner::upcomingListToString(void){
+	return "content from upcominglisttostring";
+}
+string Planner::missedListToString(void){
+	return "content from missedlisttostring";
+}

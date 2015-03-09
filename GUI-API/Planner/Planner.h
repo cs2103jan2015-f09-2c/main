@@ -29,6 +29,8 @@ public:
 	void addTask(Task content);
 	string toString(string);
 	string HomeToString(void);
+	string upcomingListToString();
+	string missedListToString();
 	int getIdOfLastEntry(void);
 	void deleteTask(int serialNumber, string nameOfList);
 	void deleteIndex(int idNumber);
