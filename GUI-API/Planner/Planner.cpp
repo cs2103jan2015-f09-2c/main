@@ -190,6 +190,7 @@ string Planner::HomeToString(void){
 			case 0:
 				break;
 			case 1:
+				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
 				break;
 			case 2:
 				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
@@ -209,26 +210,7 @@ string Planner::HomeToString(void){
 				cout << "fatal error!";
 			}
 
-			/*
-//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
-				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-//			}
-
-			if ((*it).getTimeEnd() != -1) {						//when there's start and end time
-				out << (*it).getTimeStart() << " to ";
-				out << (*it).getTimeEnd();
-			}
-			else{
-				if ((*it).getTimeStart() != -1){				//when there's only start time
-					out << (*it).getTimeStart();
-				}
-			}
-			*/
-
-
 			out << " " << (*it).getIdNumber();			//remember to remove
-
 
 			if ((*it).isImpt()){
 				out << " #impt";
