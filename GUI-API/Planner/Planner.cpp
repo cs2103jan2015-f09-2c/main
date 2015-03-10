@@ -186,28 +186,38 @@ string Planner::HomeToString(void){
 		for (it = Home.begin(); it != Home.end(); ++it){
 			out << serialNumber << ". " << (*it).getDescription() << " ";
 			
-//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
+			switch ((*it).getNumOfDates()){
+			case 0:
+				break;
+			case 1:
+				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
+				break;
+			case 2:
 				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
 				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-//			}
-			// don't edit this part. its not finished. going to add more
+				break;
+			}
 
-			if ((*it).getTimeEnd() != -1) {
+			switch ((*it).getNumOfTimes()){
+			case 0:
+				break;
+			case 1:
+				out << (*it).getTimeStart();
+			case 2:
 				out << (*it).getTimeStart() << " to ";
 				out << (*it).getTimeEnd();
+			default:
+				cout << "fatal error!";
 			}
-			else{
-				if ((*it).getTimeStart() != -1){
-					out << (*it).getTimeStart();
-				}
-			}
+
 			out << " " << (*it).getIdNumber();			//remember to remove
 
 			if ((*it).isImpt()){
 				out << " #impt";
 				}
+
 			out << "\r\n";
-			serialNumber++;
+			serialNumber = serialNumber + 1;
 			}
 		}
 	else out << "The list is empty!" << endl;

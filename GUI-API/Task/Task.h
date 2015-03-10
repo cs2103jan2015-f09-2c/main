@@ -20,6 +20,8 @@ private:
 	taskDate _dateEnd;
 	bool _isImpt;
 	int _idNumber;
+	int _numOfDates;
+	int _numOfTimes;
 
 public:
 	Task();
@@ -38,6 +40,8 @@ public:
 	void storeEndDate(string);
 	void storeIdNumber(int);
 	int getIdNumber();
+	int getNumOfDates();
+	int getNumOfTimes();
 };
 #endif
 
