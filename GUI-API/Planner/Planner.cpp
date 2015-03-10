@@ -143,7 +143,7 @@ string Planner::saveDataToString(){
 			
 
 
-			if ((*it).isImpt()){
+			if ((*it).getImportance()){
 				out << " #impt";
 			}
 			out << "\r\n";
@@ -229,7 +229,7 @@ string Planner::addStatusToString(Task theTask){
 		}
 		out << " " << theTask.getIdNumber();			//remember to remove
 
-		if (theTask.isImpt()){
+		if (theTask.getImportance()){
 			out << " #impt";
 		}
 		out << "\r\n";
@@ -263,7 +263,7 @@ string Planner::deleteStatusToString(Task theTask){
 	}
 	out << " " << theTask.getIdNumber();			//remember to remove
 
-	if (theTask.isImpt()){
+	if (theTask.getImportance()){
 		out << " #impt";
 	}
 	out << "\r\n";
