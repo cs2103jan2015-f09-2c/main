@@ -150,7 +150,7 @@ void Task::processTime(string timeInfo){
 		_numOfTimes = 2;
 	}
 	else{
-		_timeStart = stoi(timeStart);
+		_timeStart = stoi(timeInfo);
 		_numOfTimes = 1;
 	}
 }

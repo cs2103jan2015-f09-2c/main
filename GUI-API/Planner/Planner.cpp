@@ -394,9 +394,11 @@ string Planner::HomeToString(void){
 				break;
 			case 1:
 				out << (*it).getTimeStart();
+				break;
 			case 2:
 				out << (*it).getTimeStart() << " to ";
 				out << (*it).getTimeEnd();
+				break;
 			default:
 				cout << "fatal error!";
 			}
