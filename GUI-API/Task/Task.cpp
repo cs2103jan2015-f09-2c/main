@@ -9,6 +9,8 @@ Task::Task(){
 	_timeStart = -1;
 	_timeEnd = -1;
 	_isImpt = false;
+	_numOfDates = 2;
+	_numOfTimes = 2;
 }
 
 //Destrcutor
@@ -179,4 +181,16 @@ void Task::storeIdNumber(int num){
 //Returns unique ID number
 int Task::getIdNumber(){
 	return _idNumber;
+}
+
+//Returns the number of dates user has input for the particular task. i.e. if user has input both start and end date then function 
+//will return 2
+int Task::getNumOfDates(){
+	return _numOfDates;
+}
+
+//Returns the number of timings user has input for the particular task. i.e. if user has input both start and end time then function 
+//will return 2
+int Task::getNumOfTimes(){
+	return _numOfTimes;
 }
