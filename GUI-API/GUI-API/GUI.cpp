@@ -114,7 +114,7 @@ void GUI::processCommandUndo(){
 }
 
 void GUI::processCommandSearch(string taskDetail){
-
+	myPlanner.generateSearchList(taskDetail);
 }
 
 string GUI::updateDisplay(string viewType) {

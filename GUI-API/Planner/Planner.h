@@ -28,8 +28,10 @@ public:
 	void addTask(Task content);
 	string toString(string);
 	string HomeToString(void);
+	string next7DaystoString(void);
 	string upcomingListToString();
 	string missedListToString();
+	string searchListToString();
 	int getIdOfLastEntry(void);
 	void deleteTask(int serialNumber, string nameOfList);
 	void deleteIndex(int idNumber);
@@ -38,6 +40,13 @@ public:
 	void editTask(int serialNumber, string nameOfList, string input);
 	void save(string);
 	void setCurrentDate(taskDate);
+
+	void generateAllOtherList(void);
+	void generateNext7DaysList(void);
+	void generateUpcomingList(void);
+	void generateMissedList(void);
+
+	void generateSearchList(string target);
 
 	//void editTask(int number, Task content);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);

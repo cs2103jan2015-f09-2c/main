@@ -69,12 +69,12 @@
     <ClInclude Include="Planner.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Planner.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Task\Task.vcxproj">
       <Project>{55bcd928-ffa3-4f4c-900b-b0baa807d4f3}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Planner.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
