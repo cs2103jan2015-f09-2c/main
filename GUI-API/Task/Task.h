@@ -33,7 +33,9 @@ public:
 	int getTimeEnd();
 	taskDate getDateStart();
 	taskDate getDateEnd();
-	bool isImpt();
+	bool getImportance();
+	string processImportance(string);
+	string processDescription(string);
 	void processDate(string);
 	void processTime(string);
 	void storeStartDate(string);
