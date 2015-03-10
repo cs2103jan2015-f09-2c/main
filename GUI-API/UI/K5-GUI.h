@@ -151,6 +151,7 @@ namespace UI {
 	private: System::Void K5GUI_Load(System::Object^  sender, System::EventArgs^  e) {
 	}
 	private: System::Void K5GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
+		homeButton_Click(sender, e);
 	}
 	private: System::Void colourSwitch(String^ currentView) {
 		if (currentView == "Home") {

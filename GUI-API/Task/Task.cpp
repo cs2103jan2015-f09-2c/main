@@ -19,27 +19,19 @@ Task::~Task(){
 
 //Function takes in user input and stores the task details
 void Task::addDetails(string details){
-	int index, newIndex, noOfDelimiters;
+	int index, noOfDelimiters;
 	string dateInfo, timeInfo;
-	char delimiter;
 
-	index = details.find("#");
-	if (index != string::npos){
-		_isImpt = true;
-		details = details.substr(0, index);
-	}
+	details = processImportance(details);
 
 	noOfDelimiters = count(details.begin(), details.end(), ';');
+	
 	switch (noOfDelimiters){
 	case 0:
 		_description = details;
 		break;
 	case 1:
-		index = details.find_first_of(";");
-		_description = details.substr(0, index);
-		index = index + 1;
-		details = details.substr(index, details.size() - index);			//cut out the description part to be left with the date or time part
-
+		details = processDescription(details);
 		if (details.find("date") != string::npos){
 			processDate(details);
 		}
@@ -48,23 +40,38 @@ void Task::addDetails(string details){
 		}
 		break;
 	case 2:
-		index = details.find_first_of(";");
-		_description = details.substr(0, index);
-		index = index + 1;
-		details = details.substr(index, details.size() - index);			//cut out the description part to be left with the date or time part
-
+		details = processDescription(details);
 		index = details.find(';');
 		dateInfo = details.substr(0, index);								//extract out the date info
 		index = index + 1;
 		timeInfo = details.substr(index, details.size() - index);			//extract out the time info
-
 		processDate(dateInfo);
-
 		processTime(timeInfo);
 		break;
 	default:
 		cout << "fatal error!" << endl;
 	}
+}
+
+//Checks if task is important and returns the remainder of user input
+string Task::processImportance(string details){
+	int index;
+	index = details.find("#");						//to check if task is labelled important
+	if (index != string::npos){
+		_isImpt = true;
+		details = details.substr(0, index);
+	}
+	return details;
+}
+
+//stores description into task object and returns the remainder of user input
+string Task::processDescription(string details){
+	int index;
+	index = details.find_first_of(";");
+	_description = details.substr(0, index);
+	index = index + 1;
+	details = details.substr(index, details.size() - index);				//cut out the description part to be left with the date and/or time part
+	return details;
 }
 
 //Takes in date related information in a string and stores into the respective variables in Task object
@@ -169,7 +176,7 @@ taskDate Task::getDateEnd(){
 }
 
 //Checks if task is marked as important by user
-bool Task::isImpt(){
+bool Task::getImportance(){
 	return _isImpt;
 }
 

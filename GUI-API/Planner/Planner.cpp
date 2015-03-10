@@ -143,7 +143,7 @@ string Planner::saveDataToString(){
 			
 
 
-			if ((*it).isImpt()){
+			if ((*it).getImportance()){
 				out << " #impt";
 			}
 			out << "\r\n";
@@ -229,7 +229,7 @@ string Planner::addStatusToString(Task theTask){
 		}
 		out << " " << theTask.getIdNumber();			//remember to remove
 
-		if (theTask.isImpt()){
+		if (theTask.getImportance()){
 			out << " #impt";
 		}
 		out << "\r\n";
@@ -263,7 +263,7 @@ string Planner::deleteStatusToString(Task theTask){
 	}
 	out << " " << theTask.getIdNumber();			//remember to remove
 
-	if (theTask.isImpt()){
+	if (theTask.getImportance()){
 		out << " #impt";
 	}
 	out << "\r\n";
@@ -403,7 +403,7 @@ string Planner::HomeToString(void){
 
 			out << " " << (*it).getIdNumber();			//remember to remove
 
-			if ((*it).isImpt()){
+			if ((*it).getImportance()){
 				out << " #impt";
 				}
 
@@ -434,7 +434,7 @@ string Planner::next7DaystoString(void){
 			//			}
 			out << " " << (*it).getIdNumber();			//remember to remove
 
-			if ((*it).isImpt()){
+			if ((*it).getImportance()){
 				out << " #impt";
 				}
 			out << "\r\n";
@@ -464,7 +464,7 @@ string Planner::upcomingListToString(void){
 			//			}
 			out << " " << (*it).getIdNumber();			//remember to remove
 
-			if ((*it).isImpt()){
+			if ((*it).getImportance()){
 				out << " #impt";
 				}
 			out << "\r\n";
@@ -494,7 +494,7 @@ string Planner::missedListToString(void){
 			//			}
 			out << " " << (*it).getIdNumber();			//remember to remove
 
-			if ((*it).isImpt()){
+			if ((*it).getImportance()){
 				out << " #impt";
 				}
 			out << "\r\n";
@@ -526,7 +526,7 @@ string Planner::searchListToString(void){
 			//			}
 			out << " " << (*it).getIdNumber();			//remember to remove
 
-			if ((*it).isImpt()){
+			if ((*it).getImportance()){
 				out << " #impt";
 				}
 			out << "\r\n";
