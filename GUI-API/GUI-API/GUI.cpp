@@ -70,7 +70,8 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	}
 	else
 	if (command == "help"){
-		processCommandHelp();
+		string helpMessage;
+		processCommandHelp(helpMessage);
 	}
 
 	//save after each operation
@@ -120,6 +121,10 @@ void GUI::processCommandUndo(){
 
 void GUI::processCommandSearch(string taskDetail){
 	myPlanner.generateSearchList(taskDetail);
+}
+
+void GUI::processCommandHelp(string& helpMessage){
+	helpMessage = "HELP HELP HELP";
 }
 
 string GUI::updateDisplay(string viewType) {
