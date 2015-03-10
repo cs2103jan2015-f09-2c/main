@@ -33,7 +33,7 @@ void Planner::addTask(Task newTask){
 
 
 	Home.insert(iter, newTask);
-
+	statusToString("add", newTask);
 	lastEntry.lastCommand = "add";
 	lastEntry.lastTask = newTask;
 
@@ -77,6 +77,85 @@ void Planner::addTask(Task newTask){
 	//update the undoData, lastEntry Data Structure
 	}
 
+string Planner::saveDataToString(){
+	ostringstream out;
+	list<Task> ::iterator it;
+	it = Home.begin();
+	
+	if (!Home.empty()){
+		for (it = Home.begin(); it != Home.end(); ++it){
+			out << (*it).getDescription() << "; ";
+
+			//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
+			if ((*it).getDateStart().day < 10){
+				out << "0" << (*it).getDateStart().day;
+			}
+			else out << (*it).getDateStart().day;
+
+			if ((*it).getDateStart().month < 10){
+				out << "0" << (*it).getDateStart().month;
+			}
+			else out << (*it).getDateStart().month;
+
+			if ((*it).getDateStart().year < 10){
+				out << "0" << (*it).getDateStart().year;
+			}
+			else out << (*it).getDateStart().year;
+
+			out<< " to ";
+
+			if ((*it).getDateEnd().day < 10){
+				out << "0" << (*it).getDateEnd().day;
+			}
+			else out << (*it).getDateEnd().day;
+
+			if ((*it).getDateEnd().month < 10){
+				out << "0" << (*it).getDateEnd().month;
+			}
+			else out << (*it).getDateEnd().month;
+
+			if ((*it).getDateEnd().year < 10){
+				out << "0" << (*it).getDateEnd().year;
+			}
+			else out << (*it).getDateEnd().year;
+
+			out << " ;";
+
+			
+			//			}
+			// don't edit this part. its not finished. going to add more
+
+			if ((*it).getTimeEnd() != -1) {
+				if ((*it).getTimeStart() < 1000){
+					out << "0" << (*it).getTimeStart();
+				}
+				else out << (*it).getTimeStart();
+
+				out << " to ";
+			}
+							
+				if ((*it).getTimeStart() != -1){
+					if ((*it).getTimeEnd() < 1000){
+						out << "0" << (*it).getTimeEnd();
+					}
+					out << (*it).getTimeEnd();
+				}
+			
+
+
+			if ((*it).isImpt()){
+				out << " #impt";
+			}
+			out << "\r\n";
+			
+		}
+	}
+	else out << "The list is empty!" << endl;
+
+	return out.str();
+
+}
+
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
@@ -97,6 +176,117 @@ string Planner::toString(string nameOfList){
 		return finalString;
 		}
 	}
+
+string Planner::statusToString(string command, Task theTask){
+	string finalString;
+	if (command == "add"){
+		finalString = addStatusToString(theTask);
+		return finalString;
+	}
+	else if (command == "delete"){
+		finalString = deleteStatusToString(theTask);
+		return finalString;
+	}
+	else if (command == "edit"){
+		finalString = editStatusToString();
+		return finalString;
+	}
+	else if (command == "undo"){
+		finalString = undoStatusToString();
+		return finalString;
+	}
+	else if (command == "clear"){
+		finalString=clearStatusToString();
+		return finalString;
+	}
+	else if (command == "save"){
+		finalString = saveStatusToString();
+		return finalString;
+	}
+}
+
+string Planner::addStatusToString(Task theTask){
+
+	ostringstream out;
+	out << "Task added :";
+	
+		out << theTask.getDescription() << " ";
+
+		//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
+		out <<theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
+		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
+		//			}
+		// don't edit this part. its not finished. going to add more
+
+		if (theTask.getTimeEnd() != -1) {
+			out << theTask.getTimeStart() << " to ";
+			out << theTask.getTimeEnd();
+		}
+		else{
+			if (theTask.getTimeStart() != -1){
+				out << theTask.getTimeStart();
+			}
+		}
+		out << " " << theTask.getIdNumber();			//remember to remove
+
+		if (theTask.isImpt()){
+			out << " #impt";
+		}
+		out << "\r\n";
+		
+
+		return out.str();
+	
+
+}
+
+string Planner::deleteStatusToString(Task theTask){
+	ostringstream out;
+	out << "Task deleted :";
+
+	out << theTask.getDescription() << " ";
+
+	//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
+	out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
+	out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
+	//			}
+	// don't edit this part. its not finished. going to add more
+
+	if (theTask.getTimeEnd() != -1) {
+		out << theTask.getTimeStart() << " to ";
+		out << theTask.getTimeEnd();
+	}
+	else{
+		if (theTask.getTimeStart() != -1){
+			out << theTask.getTimeStart();
+		}
+	}
+	out << " " << theTask.getIdNumber();			//remember to remove
+
+	if (theTask.isImpt()){
+		out << " #impt";
+	}
+	out << "\r\n";
+	
+
+	return out.str();
+}
+
+string Planner::editStatusToString(){
+	return "0";
+}
+
+string Planner::undoStatusToString(){
+	return "0";
+}
+
+string Planner::clearStatusToString(){
+	return "All content cleared. \r\n";
+}
+
+string Planner::saveStatusToString(){
+	return "File has been saved. \r\n";
+}
 
 int Planner::getIdOfLastEntry(void){
 
@@ -135,6 +325,7 @@ void Planner::deleteIndex(int idNumber){
 		}
 	lastEntry.lastTask = *iter2;
 	lastEntry.lastCommand = "delete";
+	statusToString("delete", *iter2);
 	Home.erase(iter2);
 
 	generateAllOtherList();
@@ -172,7 +363,7 @@ void Planner::editTask(int serialNumber, string nameOfList, string input){
 void Planner::save(string fileName){
 	ofstream write(fileName);
 	string allTasks;
-	allTasks = Planner::toString("Home");
+	allTasks = saveDataToString();
 	write << allTasks;
 	write.close();
 	}
