@@ -26,7 +26,15 @@ private:
 public:
 
 	void addTask(Task content);
-	string toString(string);
+	string toString(string nameOfList);
+	string statusToString(string command, Task theTask);
+	string addStatusToString(Task theTask);
+	string deleteStatusToString(Task theTask);
+	string editStatusToString();
+	string undoStatusToString();
+	string clearStatusToString();
+	string saveStatusToString();
+	string saveDataToString();
 	string HomeToString(void);
 	string next7DaystoString(void);
 	string upcomingListToString();

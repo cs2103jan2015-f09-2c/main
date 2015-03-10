@@ -66,7 +66,7 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	}
 	else
 	if (command == "save") {
-		processCommandSave(taskDetail);
+		//processCommandSave(taskDetail);
 	}
 	else
 	if (command == "help"){
