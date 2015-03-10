@@ -186,28 +186,56 @@ string Planner::HomeToString(void){
 		for (it = Home.begin(); it != Home.end(); ++it){
 			out << serialNumber << ". " << (*it).getDescription() << " ";
 			
+			switch ((*it).getNumOfDates()){
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
+				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
+				break;
+			}
+
+			switch ((*it).getNumOfTimes()){
+			case 0:
+				break;
+			case 1:
+				out << (*it).getTimeStart();
+			case 2:
+				out << (*it).getTimeStart() << " to ";
+				out << (*it).getTimeEnd();
+			default:
+				cout << "fatal error!";
+			}
+
+			/*
 //			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
 				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
 				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
 //			}
-			// don't edit this part. its not finished. going to add more
 
-			if ((*it).getTimeEnd() != -1) {
+			if ((*it).getTimeEnd() != -1) {						//when there's start and end time
 				out << (*it).getTimeStart() << " to ";
 				out << (*it).getTimeEnd();
 			}
 			else{
-				if ((*it).getTimeStart() != -1){
+				if ((*it).getTimeStart() != -1){				//when there's only start time
 					out << (*it).getTimeStart();
 				}
 			}
+			*/
+
+
 			out << " " << (*it).getIdNumber();			//remember to remove
+
 
 			if ((*it).isImpt()){
 				out << " #impt";
 				}
+
 			out << "\r\n";
-			serialNumber++;
+			serialNumber = serialNumber + 1;
 			}
 		}
 	else out << "The list is empty!" << endl;
