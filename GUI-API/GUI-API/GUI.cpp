@@ -12,7 +12,8 @@ string GUI::processUserInput(string userInput, string currentView) {
 	string command = extractCommand(userInput);
 	processCommand(command, userInput, currentView);
 
-	return updateDisplay(currentView);
+	string display = updateDisplay(currentView);
+	return display;
 }
 
 string GUI::extractCommand(string& userInput){
@@ -66,6 +67,10 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	else
 	if (command == "save") {
 		processCommandSave(taskDetail);
+	}
+	else
+	if (command == "help"){
+		processCommandHelp();
 	}
 
 	//save after each operation
