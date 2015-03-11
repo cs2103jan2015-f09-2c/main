@@ -491,7 +491,9 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	Task newTask;
 	newTask.addDetails(input);
 	deleteTask(serialNumber, nameOfList);
+	lastEdit.deletedTask = lastEntry.lastTask;
 	addTask(newTask);
+	lastEdit.addedTask = lastEntry.lastTask;
 	generateAllOtherList();
 	return editStatusToString();
 	}

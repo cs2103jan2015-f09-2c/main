@@ -10,6 +10,11 @@ struct undoData{
 	Task lastTask;
 };
 
+struct undoEditData{
+	Task deletedTask;
+	Task addedTask;
+};
+
 class Planner{
 
 private:
@@ -20,6 +25,7 @@ private:
 	list<Task> searchList;
 
 	undoData lastEntry;
+	undoEditData lastEdit;
 
 	taskDate currentDate;
 
