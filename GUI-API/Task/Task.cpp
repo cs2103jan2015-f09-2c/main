@@ -9,8 +9,8 @@ Task::Task(){
 	_timeStart = -1;
 	_timeEnd = -1;
 	_isImpt = false;
-	_numOfDates = 2;
-	_numOfTimes = 2;
+	_numOfDates = 0;
+	_numOfTimes = 0;
 }
 
 //Destrcutor
@@ -42,9 +42,19 @@ void Task::addDetails(string details){
 	case 2:
 		details = processDescription(details);
 		index = details.find(';');
-		dateInfo = details.substr(0, index);								//extract out the date info
+		if (details.substr(0, index).find("date") != string::npos){
+			dateInfo = details.substr(0, index);
+		}
+		else{
+			timeInfo = details.substr(0, index);
+		}
 		index = index + 1;
-		timeInfo = details.substr(index, details.size() - index);			//extract out the time info
+		if (timeInfo.empty()){
+			timeInfo = details.substr(index, details.size() - index);
+		}
+		else{
+			dateInfo = details.substr(index, details.size() - index);
+		}
 		processDate(dateInfo);
 		processTime(timeInfo);
 		break;
@@ -89,20 +99,22 @@ void Task::processDate(string dateInfo){
 		dateEnd = dateInfo.substr(index, dateInfo.size() - index);
 		storeStartDate(dateStart);
 		storeEndDate(dateEnd);
+		_numOfDates = 2;
 	}
 	else{
 		storeEndDate(dateInfo);
+		_numOfDates = 1;
 	}
 }
 
 //Splits the start date string into individual components and stores them in the relevant variables
 void Task::storeStartDate(string dateStart){
 	string day, month, year;
-	day = dateStart.substr(0, 2);
+	day = dateStart.substr(0, 2);					// These are all in string form
 	month = dateStart.substr(2, 2);
 	year = dateStart.substr(4, 2);
 
-	_dateStart.day = stoi(day);
+	_dateStart.day = stoi(day);						// To convert the strings to integer
 	_dateStart.month = stoi(month);
 	_dateStart.year = stoi(year);
 }
@@ -110,11 +122,11 @@ void Task::storeStartDate(string dateStart){
 //Splits the end date string into individual components and stores them in the relevant variables
 void Task::storeEndDate(string dateEnd){
 	string day, month, year;
-	day = dateEnd.substr(0, 2);
+	day = dateEnd.substr(0, 2);						// These are all in string form
 	month = dateEnd.substr(2, 2);
 	year = dateEnd.substr(4, 2);
 
-	_dateEnd.day = stoi(day);
+	_dateEnd.day = stoi(day);						// To convert the strings to integer
 	_dateEnd.month = stoi(month);
 	_dateEnd.year = stoi(year);
 }
@@ -135,9 +147,11 @@ void Task::processTime(string timeInfo){
 		timeEnd = timeInfo.substr(index, timeInfo.size() - index);
 		_timeStart = stoi(timeStart);
 		_timeEnd = stoi(timeEnd);
+		_numOfTimes = 2;
 	}
 	else{
-		_timeStart = stoi(timeStart);
+		_timeStart = stoi(timeInfo);
+		_numOfTimes = 1;
 	}
 }
 
