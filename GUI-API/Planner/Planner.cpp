@@ -9,7 +9,7 @@
 using namespace std;
 
 //Functions that edit the HomeONLY
-void Planner::addTask(Task newTask){
+string Planner::addTask(Task newTask){
 	//create new task
 	int id = getIdOfLastEntry(); // use static to actually create id
 	newTask.storeIdNumber(id);
@@ -33,12 +33,14 @@ void Planner::addTask(Task newTask){
 
 
 	Home.insert(iter, newTask);
-	statusToString("add", newTask);
+	string status;
+	status=statusToString("add", newTask);
 	lastEntry.lastCommand = "add";
 	lastEntry.lastTask = newTask;
 
 	generateAllOtherList();
 
+	return status;
 
 
 	//add in the details
@@ -300,7 +302,7 @@ int Planner::getIdOfLastEntry(void){
 	return idGeneratror;
 	}
 
-void Planner::deleteTask(int serialNumber, string nameOfList){
+string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
 	list<Task> ::iterator iter;
 	iter = Home.begin();
@@ -309,13 +311,14 @@ void Planner::deleteTask(int serialNumber, string nameOfList){
 			iter++;
 			}
 		idNumber = (*iter).getIdNumber();
-		deleteIndex(idNumber);
+		string status;
+		status=deleteIndex(idNumber);
 		}
 	else cout << "error! name of list is invalid" << endl;
 
 	}
 
-void Planner::deleteIndex(int idNumber){
+string Planner::deleteIndex(int idNumber){
 	list<Task> ::iterator iter1, iter2;
 	iter1 = Home.begin();
 	for (iter1 = Home.begin(); iter1 != Home.end(); ++iter1){
@@ -325,16 +328,17 @@ void Planner::deleteIndex(int idNumber){
 		}
 	lastEntry.lastTask = *iter2;
 	lastEntry.lastCommand = "delete";
-	statusToString("delete", *iter2);
+	string status;
+	status=statusToString("delete", *iter2);
 	Home.erase(iter2);
 
 	generateAllOtherList();
 
-
+	return status;
 
 	}
 
-void Planner::undo(void){
+string Planner::undo(void){
 	if (lastEntry.lastCommand == "add"){
 		int lastEntryID = getIdOfLastEntry() - 1;
 		deleteIndex(lastEntryID);
@@ -342,30 +346,34 @@ void Planner::undo(void){
 	else if (lastEntry.lastCommand == "delete"){
 		addTask(lastEntry.lastTask);
 		}
-
+	string status;
+	status = undoStatusToString();
 	generateAllOtherList();
 
 	}
 
-void Planner::clear(void){
+string Planner::clear(void){
 	Home.clear();
 	generateAllOtherList();
+	return clearStatusToString();
 	}
 
-void Planner::editTask(int serialNumber, string nameOfList, string input){
+string Planner::editTask(int serialNumber, string nameOfList, string input){
 	Task newTask;
 	newTask.addDetails(input);
 	deleteTask(serialNumber, nameOfList);
 	addTask(newTask);
 	generateAllOtherList();
+	return editStatusToString();
 	}
 
-void Planner::save(string fileName){
+string Planner::save(string fileName){
 	ofstream write(fileName);
 	string allTasks;
 	allTasks = saveDataToString();
 	write << allTasks;
 	write.close();
+	return saveStatusToString();
 	}
 
 string Planner::HomeToString(void){
