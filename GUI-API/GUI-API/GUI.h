@@ -29,10 +29,11 @@ public:
 	void processCommandSearch(string taskDetail);
 	void processCommandLoad(string fileName);
 	void processCommandSave(string fileName);
-	void processCommandHelp(string& helpMessage);
-	string updateDisplay(string viewType);
+	void processCommandHelp();
+	void updateDisplay(string viewType);
 	void save(string fileName);
 	string displayHelp();
 	string displayOutcome();
+	string displayContent();
 };
 

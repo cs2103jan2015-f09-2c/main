@@ -304,6 +304,7 @@ int Planner::getIdOfLastEntry(void){
 
 string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
+	string status;
 	list<Task> ::iterator iter;
 	iter = Home.begin();
 	if (nameOfList == "Home"){
@@ -311,11 +312,11 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 			iter++;
 			}
 		idNumber = (*iter).getIdNumber();
-		string status;
+		
 		status=deleteIndex(idNumber);
 		}
 	else cout << "error! name of list is invalid" << endl;
-
+	return status;
 	}
 
 string Planner::deleteIndex(int idNumber){
@@ -349,7 +350,7 @@ string Planner::undo(void){
 	string status;
 	status = undoStatusToString();
 	generateAllOtherList();
-
+	return status;
 	}
 
 string Planner::clear(void){

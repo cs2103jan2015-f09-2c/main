@@ -7,13 +7,12 @@ GUI::GUI(){
 GUI::~GUI(){
 }
 
-string GUI::processUserInput(string userInput, string currentView) {
+void GUI::processUserInput(string userInput, string currentView) {
 
 	string command = extractCommand(userInput);
-	/*string outcome =*/ processCommand(command, userInput, currentView);
+	processCommand(command, userInput, currentView);
 
-	string display = updateDisplay(currentView);
-	return display;
+	updateDisplay(currentView);
 }
 
 string GUI::extractCommand(string& userInput){
@@ -72,7 +71,7 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	else
 	if (command == "help"){
 		string helpMessage;
-		processCommandHelp(helpMessage);
+		processCommandHelp();
 	}
 
 	//save after each operation
@@ -121,16 +120,17 @@ void GUI::processCommandUndo(){
 }
 
 void GUI::processCommandSearch(string taskDetail){
-	outcome = myPlanner.generateSearchList(taskDetail);
+	myPlanner.generateSearchList(taskDetail);
+	display = myPlanner.toString("search");
 }
 
-void GUI::processCommandHelp(string& helpMessage){
-	helpMessage = "HELP HELP HELP";
+void GUI::processCommandHelp(){
+	string helpMessage = "HELP HELP HELP";
+	display = helpMessage;
 }
 
-string GUI::updateDisplay(string viewType) {
-	std::string display = myPlanner.toString(viewType);
-	return display;
+void GUI::updateDisplay(string viewType) {
+	display = myPlanner.toString(viewType);
 }
 
 void GUI::save(string fileName){
@@ -142,7 +142,10 @@ string GUI::displayHelp() {
 	return "HELP HELP HELP";
 }
 
-string displayOutcome(){
-
+string GUI::displayOutcome(){
 	return outcome;
+}
+
+string GUI::displayContent(){
+	return display;
 }
