@@ -1,5 +1,10 @@
+<<<<<<< .merge_file_a00184
 ﻿Build started 11/3/2015 7:26:45 PM.
      1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
+=======
+﻿Build started 3/11/2015 7:10:00 PM.
+     1>Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" on node 2 (Rebuild target(s)).
+>>>>>>> .merge_file_a06428
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib "K5-GUI.cpp"
          K5-GUI.cpp
@@ -24,4 +29,8 @@
 
 Build FAILED.
 
+<<<<<<< .merge_file_a00184
 Time Elapsed 00:00:07.98
+=======
+Time Elapsed 00:00:02.29
+>>>>>>> .merge_file_a06428
