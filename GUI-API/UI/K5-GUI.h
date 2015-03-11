@@ -131,7 +131,7 @@ namespace UI {
 			// 
 			// K5GUI
 			// 
-			this->ClientSize = System::Drawing::Size(361, 410);
+			this->ClientSize = System::Drawing::Size(371, 445);
 			this->Controls->Add(this->prompt);
 			this->Controls->Add(this->upcomingButton);
 			this->Controls->Add(this->homeButton);
