@@ -137,11 +137,6 @@ void GUI::save(string fileName){
 	myPlanner.save(fileName);
 }
 
-string GUI::displayHelp() {
-
-	return "HELP HELP HELP";
-}
-
 string GUI::displayOutcome(){
 	return outcome;
 }

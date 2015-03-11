@@ -18,7 +18,7 @@ public:
 	
 	GUI();
 	~GUI();
-	string processUserInput(string userInput, string currentView);
+	void processUserInput(string userInput, string currentView);
 	string extractCommand(std::string& userInput);
 	void processCommand(string command, string taskDetail, string currentView);
 	void processCommandAdd(string taskDetail);
@@ -32,7 +32,6 @@ public:
 	void processCommandHelp();
 	void updateDisplay(string viewType);
 	void save(string fileName);
-	string displayHelp();
 	string displayOutcome();
 	string displayContent();
 };
