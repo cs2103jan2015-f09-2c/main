@@ -31,6 +31,34 @@ string Planner::addTask(Task newTask){
 							}
 		}
 
+	/*
+	for (iter = Home.begin(); iter != Home.end(); ++iter){
+		if ((*iter).getTimeStart() > newTask.getTimeStart()){
+			break;
+		}
+		if ((*iter).getTimeStart() == newTask.getTimeStart()){
+			if ((*iter).getNumOfTimes() == 2 && newTask.getNumOfTimes() == 2){
+				if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+					break;
+				}
+			}
+
+			if (((*iter).getNumOfTimes() == 2 && newTask.getNumOfTimes() == 1)){
+				break;
+			}
+
+			if (((*iter).getNumOfTimes() == 1 && newTask.getNumOfTimes() == 2)){
+				iter++;
+				break;
+			}
+
+			if (((*iter).getNumOfTimes() == 1 && newTask.getNumOfTimes() == 1)){
+				if ((*iter).getIdNumber() > newTask.getIdNumber())
+					break;
+			}
+		}
+	}*/
+
 
 	Home.insert(iter, newTask);
 	string status;
