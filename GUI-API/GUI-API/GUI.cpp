@@ -10,7 +10,7 @@ GUI::~GUI(){
 string GUI::processUserInput(string userInput, string currentView) {
 
 	string command = extractCommand(userInput);
-	processCommand(command, userInput, currentView);
+	/*string outcome =*/ processCommand(command, userInput, currentView);
 
 	string display = updateDisplay(currentView);
 	return display;
@@ -31,7 +31,6 @@ string GUI::extractCommand(string& userInput){
 }
 
 void GUI::processCommand(std::string command, std::string taskDetail, string currentView){
-	string outcome;
 
 	if (command == "load"){
 		processCommandLoad(taskDetail);
@@ -39,22 +38,22 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 
 	else
 	if (command == "add"){
-		outcome = processCommandAdd(taskDetail);
+		processCommandAdd(taskDetail);
 	}
 
 	else
 	if (command == "delete"){
-		outcome = processCommandDelete(taskDetail, currentView);
+		processCommandDelete(taskDetail, currentView);
 	}
 
 	else
 	if (command == "edit"){
-		outcome = processCommandEdit(taskDetail, currentView);
+		processCommandEdit(taskDetail, currentView);
 	}
 
 	else
 	if (command == "clear"){
-		outcome = processCommandClear();
+		processCommandClear();
 	}
 
 	else
@@ -64,7 +63,7 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 
 	else
 	if (command == "undo"){
-		outcome = processCommandUndo();
+		processCommandUndo();
 	}
 	else
 	if (command == "save") {
@@ -89,20 +88,18 @@ void GUI::processCommandSave(string fileName) {
 	save(fileName);
 }
 
-string GUI::processCommandAdd(string taskDetail){
+void GUI::processCommandAdd(string taskDetail){
 	Task currentTask;
 	currentTask.addDetails(taskDetail);
-	string outcome = myPlanner.addTask(currentTask);
-	return outcome;
+	outcome = myPlanner.addTask(currentTask);
 }
 
-string GUI::processCommandDelete(string taskIndex, string currentView){
+void GUI::processCommandDelete(string taskIndex, string currentView){
 	int index = stoi(taskIndex);
-	string outcome = myPlanner.deleteTask(index, currentView);
-	return outcome;
+	outcome = myPlanner.deleteTask(index, currentView);
 }
 
-string GUI::processCommandEdit(string userInput, string currentView){
+void GUI::processCommandEdit(string userInput, string currentView){
 	char colon;
 	int taskIndex;
 	string taskDetails;
@@ -112,23 +109,19 @@ string GUI::processCommandEdit(string userInput, string currentView){
 	//in >> taskDetails;
 	int sizeToSubstr = userInput.size() - 2;
 	taskDetails = userInput.substr(2, sizeToSubstr);
-	string outcome = myPlanner.editTask(taskIndex, currentView, taskDetails);
-	return outcome;
+	outcome = myPlanner.editTask(taskIndex, currentView, taskDetails);
 }
 
-string GUI::processCommandClear(){
-	string outcome = myPlanner.clear();
-	return outcome;
+void GUI::processCommandClear(){
+	outcome = myPlanner.clear();
 }
 
-string GUI::processCommandUndo(){
-	string outcome = myPlanner.undo();
-	return outcome;
+void GUI::processCommandUndo(){
+	outcome = myPlanner.undo();
 }
 
-string GUI::processCommandSearch(string taskDetail){
-	string outcome = myPlanner.generateSearchList(taskDetail);
-	return outcome;
+void GUI::processCommandSearch(string taskDetail){
+	outcome = myPlanner.generateSearchList(taskDetail);
 }
 
 void GUI::processCommandHelp(string& helpMessage){
@@ -149,7 +142,7 @@ string GUI::displayHelp() {
 	return "HELP HELP HELP";
 }
 
-string displayContent(){
+string displayOutcome(){
 
 	return outcome;
 }

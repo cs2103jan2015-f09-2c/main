@@ -229,6 +229,7 @@ namespace UI {
 
 				strOutput = gcnew String(s->processUserInput(unmanagedInput, unmanagedView).c_str());
 				displayWindow->Text = strOutput;
+				prompt->Text = gcnew String(s->displayOutcome().c_str());
 			}
 			
 			userInput->Text = "";
