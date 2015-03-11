@@ -1,9 +1,14 @@
-﻿Build started 11/3/2015 19:55:35 PM.
+﻿Build started 11/3/2015 20:10:37 PM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
-     1>Lib:
-         GUI-API.vcxproj -> D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib
-     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
+     1>ClCompile:
+         C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I..\Planner /I..\Task /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
+         GUI.cpp
+     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(10): error C2556: 'void GUI::processUserInput(std::string,std::string)' : overloaded function differs only by return type from 'std::string GUI::processUserInput(std::string,std::string)'
+                 d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.h(21) : see declaration of 'GUI::processUserInput'
+     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(10): error C2371: 'GUI::processUserInput' : redefinition; different basic types
+                 d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.h(21) : see declaration of 'GUI::processUserInput'
+     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.25
+Time Elapsed 00:00:01.13
