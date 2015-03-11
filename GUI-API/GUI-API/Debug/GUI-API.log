@@ -1,7 +1,7 @@
-﻿Build started 3/10/2015 5:20:11 PM.
+﻿Build started 3/11/2015 6:38:19 PM.
      1>Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Planner /I..\Task /I"C:\Users\pc1\Documents\main\GUI-API\Task" /I"C:\Users\pc1\Documents\main\GUI-API\Planner" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Planner /I..\Task /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
          GUI.cpp
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
@@ -12,4 +12,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.79
+Time Elapsed 00:00:00.78

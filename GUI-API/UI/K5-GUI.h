@@ -156,6 +156,7 @@ namespace UI {
 	private: System::Void colourSwitch(String^ currentView) {
 		if (currentView == "Home") {
 			homeButton->BackColor = Color::LightSkyBlue;
+			//
 			missedButton->BackColor = Color::SteelBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
 		}
