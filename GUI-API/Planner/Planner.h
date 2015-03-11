@@ -25,7 +25,7 @@ private:
 
 public:
 
-	void addTask(Task content);
+	string addTask(Task content);
 	string toString(string nameOfList);
 	string statusToString(string command, Task theTask);
 	string addStatusToString(Task theTask);
@@ -41,12 +41,12 @@ public:
 	string missedListToString();
 	string searchListToString();
 	int getIdOfLastEntry(void);
-	void deleteTask(int serialNumber, string nameOfList);
-	void deleteIndex(int idNumber);
-	void undo(void);
-	void clear(void);
-	void editTask(int serialNumber, string nameOfList, string input);
-	void save(string);
+	string deleteTask(int serialNumber, string nameOfList);
+	string deleteIndex(int idNumber);
+	string undo(void);
+	string clear(void);
+	string editTask(int serialNumber, string nameOfList, string input);
+	string save(string);
 	void setCurrentDate(taskDate);
 
 	void generateAllOtherList(void);

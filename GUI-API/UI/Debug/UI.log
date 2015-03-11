@@ -1,9 +1,20 @@
+<<<<<<< HEAD
 ﻿Build started 11/3/2015 19:00:33 PM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
+=======
+<<<<<<< .merge_file_a00184
+﻿Build started 11/3/2015 7:26:45 PM.
+     1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
+=======
+﻿Build started 3/11/2015 7:10:00 PM.
+     1>Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" on node 2 (Rebuild target(s)).
+>>>>>>> .merge_file_a06428
+>>>>>>> 2066f69eae943700b67c88afeb4a0f86cc386f2d
      1>ClCompile:
          C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /AI"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /TP /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib "K5-GUI.cpp"
          K5-GUI.cpp
      1>K5-GUI.cpp(8): warning C4829: Possibly incorrect parameters to function main. Consider 'int main(Platform::Array<Platform::String^>^ argv)'
+<<<<<<< HEAD
          C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /TP /analyze- /errorReport:prompt "C:\Users\Admin\AppData\Local\Temp\.NETFramework,Version=v4.5.AssemblyAttributes.cpp"
          .NETFramework,Version=v4.5.AssemblyAttributes.cpp
        Link:
@@ -15,7 +26,34 @@
      1>Task.lib(Task.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
          UI.vcxproj -> D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\UI.exe
      1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" (Build target(s)).
+=======
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /TP /analyze- /errorReport:prompt "C:\Users\User\AppData\Local\Temp\.NETFramework,Version=v4.5.AssemblyAttributes.cpp"
+         .NETFramework,Version=v4.5.AssemblyAttributes.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
+         "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Task.lib"
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Planner.lib"
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib"
+     1>Task.lib(Task.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+     1>GUI-API.lib(GUI.obj) : error LNK2019: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Planner::addTask(class Task)" (?addTask@Planner@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VTask@@@Z) referenced in function "public: void __thiscall GUI::processCommandAdd(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?processCommandAdd@GUI@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+     1>GUI-API.lib(GUI.obj) : error LNK2019: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Planner::deleteTask(int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?deleteTask@Planner@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@HV23@@Z) referenced in function "public: void __thiscall GUI::processCommandDelete(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?processCommandDelete@GUI@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z)
+     1>GUI-API.lib(GUI.obj) : error LNK2019: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Planner::undo(void)" (?undo@Planner@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ) referenced in function "public: void __thiscall GUI::processCommandUndo(void)" (?processCommandUndo@GUI@@QAEXXZ)
+     1>GUI-API.lib(GUI.obj) : error LNK2019: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Planner::clear(void)" (?clear@Planner@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ) referenced in function "public: void __thiscall GUI::processCommandClear(void)" (?processCommandClear@GUI@@QAEXXZ)
+     1>GUI-API.lib(GUI.obj) : error LNK2019: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Planner::editTask(int,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?editTask@Planner@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@HV23@0@Z) referenced in function "public: void __thiscall GUI::processCommandEdit(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?processCommandEdit@GUI@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z)
+     1>GUI-API.lib(GUI.obj) : error LNK2019: unresolved external symbol "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Planner::save(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?save@Planner@@QAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@@Z) referenced in function "public: void __thiscall GUI::save(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?save@GUI@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+     1>C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.exe : fatal error LNK1120: 6 unresolved externals
+     1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" (Build target(s)) -- FAILED.
+>>>>>>> 2066f69eae943700b67c88afeb4a0f86cc386f2d
 
-Build succeeded.
+Build FAILED.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:08.59
+=======
+<<<<<<< .merge_file_a00184
+Time Elapsed 00:00:07.98
+=======
+Time Elapsed 00:00:02.29
+>>>>>>> .merge_file_a06428
+>>>>>>> 2066f69eae943700b67c88afeb4a0f86cc386f2d
