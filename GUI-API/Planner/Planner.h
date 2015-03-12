@@ -61,7 +61,8 @@ public:
 	void generateMissedList(void);
 
 	void generateSearchList(string target);
-	int isHomeView(taskDate, list<Task>::iterator);
+	bool isNext7Days(taskDate, list<Task>::iterator);
+	bool isMissed(taskDate, list<Task>::iterator);
 
 	//void editTask(int number, Task content);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);

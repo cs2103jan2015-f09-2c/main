@@ -1,4 +1,4 @@
-﻿Build started 12-Mar-15 5:33:16 PM.
+﻿Build started 12-Mar-15 6:39:58 PM.
      1>Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
      1>Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\pc1\Documents\main\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
@@ -12,4 +12,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.65
+Time Elapsed 00:00:00.63
