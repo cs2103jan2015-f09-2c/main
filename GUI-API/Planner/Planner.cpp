@@ -24,7 +24,7 @@ string Planner::addTask(Task newTask){
 
 	//check where to slot
 	list<Task>::iterator iter;
-	for (iter = Home.begin(); iter != Home.end(); ++iter){
+	for (iter = All.begin(); iter != All.end(); ++iter){
 		if (newTask.getDateStart().year <= (*iter).getDateStart().year)
 			if (newTask.getDateStart().month < (*iter).getDateStart().month)
 				break;
@@ -40,7 +40,7 @@ string Planner::addTask(Task newTask){
 		}
 
 	/*
-	for (iter = Home.begin(); iter != Home.end(); ++iter){
+	for (iter = All.begin(); iter != All.end(); ++iter){
 		if ((*iter).getTimeStart() > newTask.getTimeStart()){
 			break;
 		}
@@ -68,7 +68,7 @@ string Planner::addTask(Task newTask){
 	}*/
 
 
-	Home.insert(iter, newTask);
+	All.insert(iter, newTask);
 	string status;
 	status=statusToString("add", newTask);
 	lastEntry.lastCommand = "add";
@@ -118,10 +118,10 @@ string Planner::addTask(Task newTask){
 string Planner::saveDataToString(){
 	ostringstream out;
 	list<Task> ::iterator it;
-	it = Home.begin();
+	it = All.begin();
 	
-	if (!Home.empty()){
-		for (it = Home.begin(); it != Home.end(); ++it){
+	if (!All.empty()){
+		for (it = All.begin(); it != All.end(); ++it){
 			out << (*it).getDescription() << "; ";
 
 			//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
@@ -567,7 +567,7 @@ int Planner::getIdOfLastEntry(void){
 	int n;
 
 	static int idGeneratror;
-	if (Home.empty()){
+	if (All.empty()){
 		idGeneratror = 10001;
 		}
 	else idGeneratror++;
@@ -578,7 +578,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
 	string status;
 	list<Task> ::iterator iter;
-	iter = Home.begin();
+	iter = All.begin();
 	if (nameOfList == "Home"){
 		for (int i = 1; i != serialNumber; i++){
 			iter++;
@@ -593,8 +593,8 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 
 string Planner::deleteIndex(int idNumber){
 	list<Task> ::iterator iter1, iter2;
-	iter1 = Home.begin();
-	for (iter1 = Home.begin(); iter1 != Home.end(); ++iter1){
+	iter1 = All.begin();
+	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
 		if ((*iter1).getIdNumber() == idNumber){
 			iter2 = iter1;
 			}
@@ -603,7 +603,7 @@ string Planner::deleteIndex(int idNumber){
 	lastEntry.lastCommand = "delete";
 	string status;
 	status=statusToString("delete", *iter2);
-	Home.erase(iter2);
+	All.erase(iter2);
 
 	generateAllOtherList();
 
@@ -630,7 +630,7 @@ string Planner::undo(void){
 	}
 
 string Planner::clear(void){
-	Home.clear();
+	All.clear();
 	generateAllOtherList();
 	return clearStatusToString();
 	}
@@ -659,11 +659,11 @@ string Planner::save(string fileName){
 string Planner::HomeToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
-	it = Home.begin();
+	it = All.begin();
 	int serialNumber = 1;
 	int entryCount = 0;
-	if (!Home.empty()){
-		for (it = Home.begin(); it != Home.end(); ++it){
+	if (!All.empty()){
+		for (it = All.begin(); it != All.end(); ++it){
 			out << serialNumber << ". " << (*it).getDescription() << " ";
 
 			switch ((*it).getNumOfDates()){
@@ -917,7 +917,7 @@ void Planner::generateAllOtherList(void){
 void Planner::generateNext7DaysList(void){
 	list<Task> ::iterator it;
 
-	for (it = Home.begin(); it != Home.end(); ++it){
+	for (it = All.begin(); it != All.end(); ++it){
 		if (isNext7Days(currentDate, it)) {
 			next7DaysList.push_back(*it);
 		}
@@ -967,7 +967,7 @@ bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
 void Planner::generateMissedList(void){
 	list<Task> ::iterator iter;
 
-	for (iter = Home.begin(); iter != Home.end(); ++iter){
+	for (iter = All.begin(); iter != All.end(); ++iter){
 		if (isMissed(currentDate, iter)) {
 			MissedList.push_back(*iter);
 		}
@@ -998,7 +998,7 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 void Planner::generateUpcomingList(void){
 	list<Task> ::iterator iter;
 
-	for (iter = Home.begin(); iter != Home.end(); ++iter){
+	for (iter = All.begin(); iter != All.end(); ++iter){
 		if (isUpcoming(currentDate, iter)) {
 			UpcomingList.push_back(*iter);
 		}
@@ -1070,7 +1070,7 @@ void Planner::generateSearchList(string target){
 	list<Task> ::iterator iter;
 	Task tempTask;
 	searchList.clear();
-	for (iter = Home.begin(); iter != Home.end(); ++iter){
+	for (iter = All.begin(); iter != All.end(); ++iter){
 		tempTask = *iter;
 		if (tempTask.isSearchTargetPresent(target)){
 			searchList.push_back(tempTask);

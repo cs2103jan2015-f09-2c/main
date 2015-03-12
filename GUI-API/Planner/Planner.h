@@ -18,7 +18,7 @@ struct undoEditData{
 class Planner{
 
 private:
-	list<Task> Home; // allTaskList
+	list<Task> All; // allTaskList
 	list<Task> next7DaysList;
 	list<Task> UpcomingList;
 	list<Task> MissedList;
