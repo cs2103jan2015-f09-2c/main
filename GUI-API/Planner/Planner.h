@@ -53,7 +53,7 @@ public:
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
 	string save(string);
-	void setCurrentDate(taskDate);
+	void setCurrentDate(taskDate&);
 
 	void generateAllOtherList(void);
 	void generateNext7DaysList(void);
@@ -61,6 +61,7 @@ public:
 	void generateMissedList(void);
 
 	void generateSearchList(string target);
+	int isHomeView(taskDate, list<Task>::iterator);
 
 	//void editTask(int number, Task content);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);

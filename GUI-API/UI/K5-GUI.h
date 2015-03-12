@@ -2,6 +2,7 @@
 #include "GUI.h"
 #include <string>
 #include <msclr\marshal_cppstd.h>
+#include <ctime>
 
 using namespace System;
 using namespace System::Drawing;
@@ -131,7 +132,7 @@ namespace UI {
 			// 
 			// K5GUI
 			// 
-			this->ClientSize = System::Drawing::Size(371, 445);
+			this->ClientSize = System::Drawing::Size(371, 430);
 			this->Controls->Add(this->prompt);
 			this->Controls->Add(this->upcomingButton);
 			this->Controls->Add(this->homeButton);
