@@ -578,8 +578,9 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
 	string status;
 	list<Task> ::iterator iter;
-	iter = All.begin();
+	
 	if (nameOfList == "Home"){
+		iter = next7DaysList.begin();
 		for (int i = 1; i != serialNumber; i++){
 			iter++;
 			}
@@ -587,6 +588,24 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 		
 		status=deleteIndex(idNumber);
 		}
+	else if (nameOfList == "Missed"){
+		iter = MissedList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = deleteIndex(idNumber);
+	}
+	else if (nameOfList == "Upcoming"){
+		iter = UpcomingList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = deleteIndex(idNumber);
+	}
 	else cout << "error! name of list is invalid" << endl;
 	return status;
 	}
