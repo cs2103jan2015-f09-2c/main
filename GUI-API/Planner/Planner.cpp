@@ -656,7 +656,7 @@ string Planner::save(string fileName){
 	return saveStatusToString();
 	}
 
-string Planner::HomeToString(void){
+string Planner::AllToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
 	it = All.begin();

@@ -42,7 +42,7 @@ public:
 	string clearStatusToString();
 	string saveStatusToString();
 	string saveDataToString();
-	string HomeToString(void);
+	string AllToString(void);
 	string next7DaystoString(void);
 	string upcomingListToString();
 	string missedListToString();

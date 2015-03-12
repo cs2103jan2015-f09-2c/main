@@ -1,9 +1,6 @@
-﻿Build started 12-Mar-15 7:47:32 PM.
+﻿Build started 12-Mar-15 7:53:01 PM.
      1>Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Planner /I..\Task /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
-         GUI.cpp
-       Lib:
+     1>Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
          "C:\Users\pc1\Documents\main\GUI-API\Debug\Task.lib"
          "C:\Users\pc1\Documents\main\GUI-API\Debug\Planner.lib"
@@ -12,4 +9,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.80
+Time Elapsed 00:00:00.23
