@@ -72,6 +72,10 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	if (command == "help"){
 		processCommandHelp();
 	}
+	else
+	if (command == "all"){
+		processCommandAll();
+	}
 
 	//save after each operation
 	string fileName = "myFile.txt";
@@ -129,7 +133,7 @@ void GUI::processCommandHelp(){
 }
 
 void GUI::updateDisplay(string viewType) {
-	if (viewType == "Help"){
+	if (viewType == "Help" || viewType == "All"){
 		return;
 	}
 
