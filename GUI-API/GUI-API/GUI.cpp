@@ -132,6 +132,10 @@ void GUI::processCommandHelp(){
 	display = helpMessage;
 }
 
+void GUI::processCommandAll(){
+	display = myPlanner.AllToString();
+}
+
 void GUI::updateDisplay(string viewType) {
 	if (viewType == "Help" || viewType == "All"){
 		return;
