@@ -928,7 +928,7 @@ bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinNext7Days = false;
 	//case 1: currentDate + 7 days = current month, same year
 	if (currentDate.day <= 23) {
-		if (currentDate.month == 3) {
+		if ((*it).getDateEnd().month == (currentDate.month)) {
 			if ((*it).getDateEnd().day <= (currentDate.day + 7) && (*it).getDateEnd().day >= currentDate.day) {
 				if ((*it).getDateEnd().year == currentDate.year) {
 					isWithinNext7Days = true;
@@ -997,13 +997,73 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 
 void Planner::generateUpcomingList(void){
 	list<Task> ::iterator iter;
-	Task tempTask;
 
 	for (iter = Home.begin(); iter != Home.end(); ++iter){
-		// if item falls in category
-		tempTask = *iter;
-		UpcomingList.push_back(tempTask);
+		if (isUpcoming(currentDate, iter)) {
+			UpcomingList.push_back(*iter);
+		}
 	}
+}
+
+bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){	
+	bool isWithinUpcoming = true;
+
+	//case 1-4 to check if entry should be within home
+
+	//case 1: currentDate + 7 days = current month, same year
+	if (currentDate.day <= 23) {
+		if ((*it).getDateEnd().month == (currentDate.month)) {
+			if ((*it).getDateEnd().day <= (currentDate.day + 7) && (*it).getDateEnd().day >= currentDate.day) {
+				if ((*it).getDateEnd().year == currentDate.year) {
+					isWithinUpcoming = false;
+				}
+			}
+		}
+	}
+	//case 2: currentDate + 7 days = next month, task = current month, not december
+	else if ((*it).getDateEnd().month == (currentDate.month)) {
+		if ((*it).getDateEnd().year == currentDate.year) {
+			if ((*it).getDateEnd().day <= 31 && (*it).getDateEnd().day >= currentDate.day) {
+				isWithinUpcoming = false;
+			}
+		}
+	}
+	//case 3:  currentDate + 7 days = next month, task = next month, not december
+	else if ((*it).getDateEnd().month == (currentDate.month + 1)) {
+		if ((*it).getDateEnd().year == currentDate.year) {
+			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
+				isWithinUpcoming = false;
+			}
+		}
+	}
+	//case 4: current date + 7 days = next month, december
+	else if ((*it).getDateEnd().year == (currentDate.year + 1)) {
+		if ((*it).getDateEnd().month == 1) {
+			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
+				isWithinUpcoming = false;
+			}
+		}
+	}
+
+	// case 5-7 to check if entry should be in missed
+
+	//case 5: passed year
+	if ((*it).getDateEnd().year < currentDate.year) {
+		isWithinUpcoming = false;
+	}
+	//case 6: same year, passed month
+	else if ((*it).getDateEnd().year == currentDate.year) {
+		if ((*it).getDateEnd().month < currentDate.month) {
+			isWithinUpcoming = false;
+		}//case 7: same year, same month, passed day
+		else if ((*it).getDateEnd().month == currentDate.month) {
+			if ((*it).getDateEnd().day < currentDate.day) {
+				isWithinUpcoming = false;
+			}
+		}
+	}
+
+	return isWithinUpcoming;
 }
 
 void Planner::generateSearchList(string target){

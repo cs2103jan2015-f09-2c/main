@@ -63,6 +63,7 @@ public:
 	void generateSearchList(string target);
 	bool isNext7Days(taskDate, list<Task>::iterator);
 	bool isMissed(taskDate, list<Task>::iterator);
+	bool isUpcoming(taskDate, list<Task>::iterator);
 
 	//void editTask(int number, Task content);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);
