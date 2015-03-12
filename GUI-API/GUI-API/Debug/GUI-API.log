@@ -1,33 +1,15 @@
-<<<<<<< HEAD
-﻿Build started 12/3/2015 9:59:27 PM.
-     1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
+﻿Build started 13-Mar-15 12:12:58 AM.
+     1>Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Planner /I..\Task /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
          GUI.cpp
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Task.lib"
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Planner.lib"
-         GUI-API.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib
-     1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
+         "C:\Users\pc1\Documents\main\GUI-API\Debug\Task.lib"
+         "C:\Users\pc1\Documents\main\GUI-API\Debug\Planner.lib"
+         GUI-API.vcxproj -> C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib
+     1>Done Building Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.63
-=======
-﻿Build started 12/3/2015 21:58:51 PM.
-     1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I..\Planner /I..\Task /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
-         GUI.cpp
-       Lib:
-         C:\Program Files\Microsoft Visual Studio 8\VC\bin\Lib.exe /OUT:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
-         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Task.lib"
-         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Planner.lib"
-         GUI-API.vcxproj -> D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib
-     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:06.08
->>>>>>> 9505a7c039df0511e284c1eb0532daa322ef23fc
+Time Elapsed 00:00:01.05
