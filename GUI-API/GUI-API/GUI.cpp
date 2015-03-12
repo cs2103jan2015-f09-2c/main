@@ -70,7 +70,6 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	}
 	else
 	if (command == "help"){
-		string helpMessage;
 		processCommandHelp();
 	}
 
@@ -130,6 +129,10 @@ void GUI::processCommandHelp(){
 }
 
 void GUI::updateDisplay(string viewType) {
+	if (viewType == "Help"){
+		return;
+	}
+
 	display = myPlanner.toString(viewType);
 }
 

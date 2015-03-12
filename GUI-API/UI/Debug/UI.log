@@ -1,40 +1,15 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-﻿Build started 11/3/2015 20:10:38 PM.
+﻿Build started 12/3/2015 21:30:22 PM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /AI"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /TP /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib "K5-GUI.cpp"
-         K5-GUI.cpp
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\ui\K5-GUI.h(180): error C2039: 'c_str' : is not a member of 'System::Void'
-                 c:\program files\reference assemblies\microsoft\framework\.netframework\v4.5\mscorlib.dll : see declaration of 'System::Void'
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\ui\K5-GUI.h(180): error C2512: 'System::String::String' : no appropriate default constructor available
-     1>K5-GUI.cpp(8): warning C4829: Possibly incorrect parameters to function main. Consider 'int main(Platform::Array<Platform::String^>^ argv)'
-     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" (Build target(s)) -- FAILED.
-=======
-﻿Build started 3/11/2015 8:27:19 PM.
-=======
-﻿Build started 12-Mar-15 7:53:01 PM.
->>>>>>> 634e92241097a0f8f7f5750732efa04110edfef4
-     1>Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
      1>Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\pc1\Documents\main\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
+         C:\Program Files\Microsoft Visual Studio 8\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
          "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
-         "C:\Users\pc1\Documents\main\GUI-API\Debug\Task.lib"
-         "C:\Users\pc1\Documents\main\GUI-API\Debug\Planner.lib"
-         "C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Task.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Planner.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib"
      1>Task.lib(Task.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
-         UI.vcxproj -> C:\Users\pc1\Documents\main\GUI-API\Debug\UI.exe
-     1>Done Building Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" (Build target(s)).
->>>>>>> d51c276e670238162a46ecc0c16d7db3c00f00c4
+         UI.vcxproj -> D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\UI.exe
+     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-Time Elapsed 00:00:01.72
-=======
-Time Elapsed 00:00:00.68
->>>>>>> d51c276e670238162a46ecc0c16d7db3c00f00c4
-=======
-Time Elapsed 00:00:00.64
->>>>>>> 634e92241097a0f8f7f5750732efa04110edfef4
+Time Elapsed 00:00:05.51

@@ -1,37 +1,15 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-﻿Build started 11/3/2015 20:10:37 PM.
+﻿Build started 12/3/2015 21:30:17 PM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I..\Planner /I..\Task /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
          GUI.cpp
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(10): error C2556: 'void GUI::processUserInput(std::string,std::string)' : overloaded function differs only by return type from 'std::string GUI::processUserInput(std::string,std::string)'
-                 d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.h(21) : see declaration of 'GUI::processUserInput'
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(10): error C2371: 'GUI::processUserInput' : redefinition; different basic types
-                 d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.h(21) : see declaration of 'GUI::processUserInput'
-     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)) -- FAILED.
-=======
-﻿Build started 3/11/2015 8:27:19 PM.
-=======
-﻿Build started 12-Mar-15 7:53:01 PM.
->>>>>>> 634e92241097a0f8f7f5750732efa04110edfef4
-     1>Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
-     1>Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
-         "C:\Users\pc1\Documents\main\GUI-API\Debug\Task.lib"
-         "C:\Users\pc1\Documents\main\GUI-API\Debug\Planner.lib"
-         GUI-API.vcxproj -> C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib
-     1>Done Building Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
->>>>>>> d51c276e670238162a46ecc0c16d7db3c00f00c4
+       Lib:
+         C:\Program Files\Microsoft Visual Studio 8\VC\bin\Lib.exe /OUT:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Task.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Planner.lib"
+         GUI-API.vcxproj -> D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib
+     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-Time Elapsed 00:00:01.13
-=======
-Time Elapsed 00:00:00.21
->>>>>>> d51c276e670238162a46ecc0c16d7db3c00f00c4
-=======
-Time Elapsed 00:00:00.23
->>>>>>> 634e92241097a0f8f7f5750732efa04110edfef4
+Time Elapsed 00:00:04.31
