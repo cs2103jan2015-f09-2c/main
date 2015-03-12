@@ -177,7 +177,8 @@ namespace UI {
 	}
 	private: System::Void switchView(String^ viewType) {
 		string unmanagedView = msclr::interop::marshal_as<std::string>(viewType);
-		displayWindow->Text = gcnew String(s->updateDisplay(unmanagedView).c_str());
+		s->updateDisplay(unmanagedView);
+		displayWindow->Text = gcnew String(s->displayContent().c_str());
 	}
 	//switch window
 	private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -216,7 +217,8 @@ namespace UI {
 			}
 			else if (userInput->Text == "help") {
 				currentView = "Help";
-				displayWindow->Text = gcnew String(s->displayHelp().c_str());
+				s->processUserInput("help", "Help");
+				displayWindow->Text = gcnew String(s->displayContent().c_str());
 				colourSwitch(currentView);
 			}
 			else {
@@ -226,7 +228,8 @@ namespace UI {
 				String^ managedView = currentView;
 				string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
 
-				strOutput = gcnew String(s->processUserInput(unmanagedInput, unmanagedView).c_str());
+				s->processUserInput(unmanagedInput, unmanagedView);
+				strOutput = gcnew String(s->displayContent().c_str());
 				displayWindow->Text = strOutput;
 				prompt->Text = gcnew String(s->displayOutcome().c_str());
 			}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿Build started 11/3/2015 20:10:38 PM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -8,7 +9,24 @@
      1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\ui\K5-GUI.h(180): error C2512: 'System::String::String' : no appropriate default constructor available
      1>K5-GUI.cpp(8): warning C4829: Possibly incorrect parameters to function main. Consider 'int main(Platform::Array<Platform::String^>^ argv)'
      1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" (Build target(s)) -- FAILED.
+=======
+﻿Build started 3/11/2015 8:27:19 PM.
+     1>Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\pc1\Documents\main\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
+         "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
+         "C:\Users\pc1\Documents\main\GUI-API\Debug\Task.lib"
+         "C:\Users\pc1\Documents\main\GUI-API\Debug\Planner.lib"
+         "C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib"
+     1>Task.lib(Task.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+         UI.vcxproj -> C:\Users\pc1\Documents\main\GUI-API\Debug\UI.exe
+     1>Done Building Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" (Build target(s)).
+>>>>>>> d51c276e670238162a46ecc0c16d7db3c00f00c4
 
 Build FAILED.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:01.72
+=======
+Time Elapsed 00:00:00.68
+>>>>>>> d51c276e670238162a46ecc0c16d7db3c00f00c4

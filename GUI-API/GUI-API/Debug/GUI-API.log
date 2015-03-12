@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿Build started 11/3/2015 20:10:37 PM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -8,7 +9,21 @@
      1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(10): error C2371: 'GUI::processUserInput' : redefinition; different basic types
                  d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.h(21) : see declaration of 'GUI::processUserInput'
      1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)) -- FAILED.
+=======
+﻿Build started 3/11/2015 8:27:19 PM.
+     1>Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
+         "C:\Users\pc1\Documents\main\GUI-API\Debug\Task.lib"
+         "C:\Users\pc1\Documents\main\GUI-API\Debug\Planner.lib"
+         GUI-API.vcxproj -> C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib
+     1>Done Building Project "C:\Users\pc1\Documents\main\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
+>>>>>>> d51c276e670238162a46ecc0c16d7db3c00f00c4
 
 Build FAILED.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:01.13
+=======
+Time Elapsed 00:00:00.21
+>>>>>>> d51c276e670238162a46ecc0c16d7db3c00f00c4
