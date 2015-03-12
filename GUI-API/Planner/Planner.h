@@ -31,6 +31,7 @@ private:
 
 public:
 
+	Planner();
 	string addTask(Task content);
 	string toString(string nameOfList);
 	string statusToString(string command, Task theTask);
@@ -53,7 +54,6 @@ public:
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
 	string save(string);
-	void setCurrentDate(taskDate&);
 
 	void generateAllOtherList(void);
 	void generateNext7DaysList(void);

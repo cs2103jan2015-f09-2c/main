@@ -8,6 +8,14 @@
 
 using namespace std;
 
+Planner::Planner(){
+	time_t t = time(0);   // get time now
+	struct tm * now = localtime(&t);
+	currentDate.year = (now->tm_year - 100);
+	currentDate.month = (now->tm_mon + 1);
+	currentDate.day = (now->tm_mday);
+}
+
 //Functions that edit the HomeONLY
 string Planner::addTask(Task newTask){
 	//create new task
@@ -190,7 +198,7 @@ string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
 	if (nameOfList == "Home"){
-		finalString = HomeToString();
+		finalString = next7DaystoString();
 		return finalString;
 		}
 	else if (nameOfList == "Upcoming"){
@@ -654,7 +662,6 @@ string Planner::HomeToString(void){
 	it = Home.begin();
 	int serialNumber = 1;
 	int entryCount = 0;
-	setCurrentDate(currentDate);
 	if (!Home.empty()){
 		for (it = Home.begin(); it != Home.end(); ++it){
 			out << serialNumber << ". " << (*it).getDescription() << " ";
@@ -697,7 +704,6 @@ string Planner::HomeToString(void){
 	else {
 		out << "The list is empty!" << endl;
 	}
-
 	return out.str();
 }
 
@@ -922,9 +928,7 @@ bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinNext7Days = false;
 	//case 1: currentDate + 7 days = current month, same year
 	if (currentDate.day <= 23) {
-		return true;
-		if ((*it).getDateEnd().month == currentDate.month) {
-	//		return true;
+		if (currentDate.month == 3) {
 			if ((*it).getDateEnd().day <= (currentDate.day + 7) && (*it).getDateEnd().day >= currentDate.day) {
 				if ((*it).getDateEnd().year == currentDate.year) {
 					isWithinNext7Days = true;
@@ -933,7 +937,7 @@ bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
 		}
 	}
 	//case 2: currentDate + 7 days = next month, task = current month, not december
-/*	else if ((*it).getDateEnd().month == (currentDate.month)) {
+	else if ((*it).getDateEnd().month == (currentDate.month)) {
 		if ((*it).getDateEnd().year == currentDate.year) {
 			if ((*it).getDateEnd().day <= 31 && (*it).getDateEnd().day >= currentDate.day) {
 				isWithinNext7Days = true;
@@ -955,20 +959,9 @@ bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
 				isWithinNext7Days = true;
 			}
 		}
-	}*/
+	}
 
 	return isWithinNext7Days;
-}
-
-void Planner::generateUpcomingList(void){
-	list<Task> ::iterator iter;
-	Task tempTask;
-
-	for (iter = Home.begin(); iter != Home.end(); ++iter){
-		// if item falls in category
-		tempTask = *iter;
-		UpcomingList.push_back(tempTask);
-	}
 }
 
 void Planner::generateMissedList(void){
@@ -978,7 +971,6 @@ void Planner::generateMissedList(void){
 		if (isMissed(currentDate, iter)) {
 			MissedList.push_back(*iter);
 		}
-
 	}
 }
 
@@ -992,15 +984,26 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 	else if ((*it).getDateEnd().year == currentDate.year) {
 		if ((*it).getDateEnd().month < currentDate.month) {
 			isWithinMissed = true;
-		}
+		}//case 3: same year, same month, passed day
 		else if ((*it).getDateEnd().month == currentDate.month) {
-				if ((*it).getDateEnd().day < currentDate.day) {
-					isWithinMissed = true;
-				}
+			if ((*it).getDateEnd().day < currentDate.day) {
+				isWithinMissed = true;
 			}
+		}
 	}
 
 	return isWithinMissed;
+}
+
+void Planner::generateUpcomingList(void){
+	list<Task> ::iterator iter;
+	Task tempTask;
+
+	for (iter = Home.begin(); iter != Home.end(); ++iter){
+		// if item falls in category
+		tempTask = *iter;
+		UpcomingList.push_back(tempTask);
+	}
 }
 
 void Planner::generateSearchList(string target){
@@ -1014,15 +1017,6 @@ void Planner::generateSearchList(string target){
 			}
 		}
 	}
-
-void Planner::setCurrentDate(taskDate &currentDate) {
-	time_t t = time(0);   // get time now
-	struct tm * now = localtime(&t);
-	currentDate.year = (now->tm_year - 100);
-	currentDate.month = (now->tm_mon + 1);
-	currentDate.day = (now->tm_mday);
-	}
-
 /*
 void Planner::deleteTask(int index){
 //find the index
