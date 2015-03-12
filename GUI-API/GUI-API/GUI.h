@@ -30,6 +30,7 @@ public:
 	void processCommandLoad(string fileName);
 	void processCommandSave(string fileName);
 	void processCommandHelp();
+	void processCommandAll();
 	void updateDisplay(string viewType);
 	void save(string fileName);
 	string displayOutcome();

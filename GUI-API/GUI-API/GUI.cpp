@@ -70,8 +70,11 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	}
 	else
 	if (command == "help"){
-		string helpMessage;
 		processCommandHelp();
+	}
+	else
+	if (command == "all"){
+		processCommandAll();
 	}
 
 	//save after each operation
@@ -129,7 +132,15 @@ void GUI::processCommandHelp(){
 	display = helpMessage;
 }
 
+void GUI::processCommandAll(){
+	display = myPlanner.AllToString();
+}
+
 void GUI::updateDisplay(string viewType) {
+	if (viewType == "Help" || viewType == "All"){
+		return;
+	}
+
 	display = myPlanner.toString(viewType);
 }
 
