@@ -10,21 +10,28 @@ struct undoData{
 	Task lastTask;
 };
 
+struct undoEditData{
+	Task deletedTask;
+	Task addedTask;
+};
+
 class Planner{
 
 private:
-	list<Task> Home; // allTaskList
+	list<Task> All; // allTaskList
 	list<Task> next7DaysList;
 	list<Task> UpcomingList;
 	list<Task> MissedList;
 	list<Task> searchList;
 
 	undoData lastEntry;
+	undoEditData lastEdit;
 
 	taskDate currentDate;
 
 public:
 
+	Planner();
 	string addTask(Task content);
 	string toString(string nameOfList);
 	string statusToString(string command, Task theTask);
@@ -35,7 +42,7 @@ public:
 	string clearStatusToString();
 	string saveStatusToString();
 	string saveDataToString();
-	string HomeToString(void);
+	string AllToString(void);
 	string next7DaystoString(void);
 	string upcomingListToString();
 	string missedListToString();
@@ -47,7 +54,6 @@ public:
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
 	string save(string);
-	void setCurrentDate(taskDate);
 
 	void generateAllOtherList(void);
 	void generateNext7DaysList(void);
@@ -55,6 +61,9 @@ public:
 	void generateMissedList(void);
 
 	void generateSearchList(string target);
+	bool isNext7Days(taskDate, list<Task>::iterator);
+	bool isMissed(taskDate, list<Task>::iterator);
+	bool isUpcoming(taskDate, list<Task>::iterator);
 
 	//void editTask(int number, Task content);
 	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);

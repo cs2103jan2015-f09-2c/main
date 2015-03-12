@@ -2,6 +2,7 @@
 #include "GUI.h"
 #include <string>
 #include <msclr\marshal_cppstd.h>
+#include <ctime>
 
 using namespace System;
 using namespace System::Drawing;
@@ -131,7 +132,7 @@ namespace UI {
 			// 
 			// K5GUI
 			// 
-			this->ClientSize = System::Drawing::Size(361, 410);
+			this->ClientSize = System::Drawing::Size(371, 430);
 			this->Controls->Add(this->prompt);
 			this->Controls->Add(this->upcomingButton);
 			this->Controls->Add(this->homeButton);
@@ -169,7 +170,7 @@ namespace UI {
 			upcomingButton->BackColor = Color::SteelBlue;
 			homeButton->BackColor = Color::SteelBlue;
 		}
-		else if (currentView == "Help") {
+		else if (currentView == "Help" || currentView == "All") {
 			missedButton->BackColor = Color::SteelBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
 			homeButton->BackColor = Color::SteelBlue;
@@ -218,6 +219,12 @@ namespace UI {
 			else if (userInput->Text == "help") {
 				currentView = "Help";
 				s->processUserInput("help", "Help");
+				displayWindow->Text = gcnew String(s->displayContent().c_str());
+				colourSwitch(currentView);
+			}
+			else if (userInput->Text == "all") {
+				currentView = "All";
+				s->processUserInput("all", "All");
 				displayWindow->Text = gcnew String(s->displayContent().c_str());
 				colourSwitch(currentView);
 			}
