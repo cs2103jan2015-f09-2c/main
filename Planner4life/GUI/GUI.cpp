@@ -8,6 +8,6 @@ using namespace UI;
 void main(array<String^>^ args) {
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
-	K5GUI mainWindow;
+	GUI mainWindow;
 	Application::Run(%mainWindow);
 }

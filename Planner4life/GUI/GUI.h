@@ -1,5 +1,5 @@
 #pragma once
-#include "C:\Users\User\Desktop\CS2103 Project\Planner4life\Logic.h"
+#include "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life\Logic.h"
 #include <string>
 #include <msclr\marshal_cppstd.h>
 #include <ctime>
@@ -13,26 +13,26 @@ using namespace System::Data;
 using namespace std;
 
 namespace UI {
-	/// Summary for K5GUI
-	public ref class K5GUI : public System::Windows::Forms::Form {
+	/// Summary for GUI
+	public ref class GUI : public System::Windows::Forms::Form {
 	private:
-		GUI* s;
+		Logic* s;
 	private: System::Windows::Forms::Label^  prompt;
 
 			 String^ currentView;
 
 	public:
-		K5GUI(void)
+		GUI(void)
 		{
 			InitializeComponent();
 			//Add the constructor code here
-			s = new GUI;
+			s = new Logic;
 			currentView = "Home";
 		}
 
 	protected:
 		/// Clean up any resources being used.
-		~K5GUI()
+		~GUI()
 		{
 			if (components)
 			{
@@ -80,7 +80,7 @@ namespace UI {
 			this->userInput->Name = L"userInput";
 			this->userInput->Size = System::Drawing::Size(339, 20);
 			this->userInput->TabIndex = 1;
-			this->userInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &K5GUI::userInput_KeyPress);
+			this->userInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &GUI::userInput_KeyPress);
 			// 
 			// missedButton
 			// 
@@ -93,7 +93,7 @@ namespace UI {
 			this->missedButton->TabIndex = 2;
 			this->missedButton->Text = L"Missed";
 			this->missedButton->UseVisualStyleBackColor = false;
-			this->missedButton->Click += gcnew System::EventHandler(this, &K5GUI::missedButton_Click);
+			this->missedButton->Click += gcnew System::EventHandler(this, &GUI::missedButton_Click);
 			// 
 			// homeButton
 			// 
@@ -106,7 +106,7 @@ namespace UI {
 			this->homeButton->TabIndex = 3;
 			this->homeButton->Text = L"Home";
 			this->homeButton->UseVisualStyleBackColor = false;
-			this->homeButton->Click += gcnew System::EventHandler(this, &K5GUI::homeButton_Click);
+			this->homeButton->Click += gcnew System::EventHandler(this, &GUI::homeButton_Click);
 			// 
 			// upcomingButton
 			// 
@@ -119,7 +119,7 @@ namespace UI {
 			this->upcomingButton->TabIndex = 4;
 			this->upcomingButton->Text = L"Upcoming";
 			this->upcomingButton->UseVisualStyleBackColor = false;
-			this->upcomingButton->Click += gcnew System::EventHandler(this, &K5GUI::upcomingButton_Click);
+			this->upcomingButton->Click += gcnew System::EventHandler(this, &GUI::upcomingButton_Click);
 			// 
 			// prompt
 			// 
@@ -130,7 +130,7 @@ namespace UI {
 			this->prompt->TabIndex = 5;
 			this->prompt->Text = L"Type \'help\' for the Help List";
 			// 
-			// K5GUI
+			// GUI
 			// 
 			this->ClientSize = System::Drawing::Size(371, 457);
 			this->Controls->Add(this->prompt);
@@ -141,17 +141,17 @@ namespace UI {
 			this->Controls->Add(this->displayWindow);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
-			this->Name = L"K5GUI";
-			this->Load += gcnew System::EventHandler(this, &K5GUI::K5GUI_Load_1);
+			this->Name = L"GUI";
+			this->Load += gcnew System::EventHandler(this, &GUI::GUI_Load_1);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
 
-	private: System::Void K5GUI_Load(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
 	}
-	private: System::Void K5GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
 		homeButton_Click(sender, e);
 	}
 	private: System::Void colourSwitch(String^ currentView) {

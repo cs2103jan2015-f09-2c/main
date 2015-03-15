@@ -1,13 +1,13 @@
 #include "Logic.h"
 
 Planner myPlanner;
-GUI::GUI(){
+Logic::Logic(){
 }
 
-GUI::~GUI(){
+Logic::~Logic(){
 }
 
-void GUI::processUserInput(string userInput, string currentView) {
+void Logic::processUserInput(string userInput, string currentView) {
 
 	string command = extractCommand(userInput);
 	processCommand(command, userInput, currentView);
@@ -15,7 +15,7 @@ void GUI::processUserInput(string userInput, string currentView) {
 	updateDisplay(currentView);
 }
 
-string GUI::extractCommand(string& userInput){
+string Logic::extractCommand(string& userInput){
 	//extract the first word to be the command 
 	string command;
 	string taskDetails;
@@ -29,7 +29,7 @@ string GUI::extractCommand(string& userInput){
 	return command;
 }
 
-void GUI::processCommand(std::string command, std::string taskDetail, string currentView){
+void Logic::processCommand(std::string command, std::string taskDetail, string currentView){
 
 	if (command == "load"){
 		processCommandLoad(taskDetail);
@@ -82,26 +82,26 @@ void GUI::processCommand(std::string command, std::string taskDetail, string cur
 	save(fileName);
 }
 
-void GUI::processCommandLoad(string fileName){
+void Logic::processCommandLoad(string fileName){
 
 }
 
-void GUI::processCommandSave(string fileName) {
+void Logic::processCommandSave(string fileName) {
 	save(fileName);
 }
 
-void GUI::processCommandAdd(string taskDetail){
+void Logic::processCommandAdd(string taskDetail){
 	Task currentTask;
 	currentTask.addDetails(taskDetail);
 	outcome = myPlanner.addTask(currentTask);
 }
 
-void GUI::processCommandDelete(string taskIndex, string currentView){
+void Logic::processCommandDelete(string taskIndex, string currentView){
 	int index = stoi(taskIndex);
 	outcome = myPlanner.deleteTask(index, currentView);
 }
 
-void GUI::processCommandEdit(string userInput, string currentView){
+void Logic::processCommandEdit(string userInput, string currentView){
 	char colon;
 	int taskIndex;
 	string taskDetails;
@@ -114,29 +114,29 @@ void GUI::processCommandEdit(string userInput, string currentView){
 	outcome = myPlanner.editTask(taskIndex, currentView, taskDetails);
 }
 
-void GUI::processCommandClear(){
+void Logic::processCommandClear(){
 	outcome = myPlanner.clear();
 }
 
-void GUI::processCommandUndo(){
+void Logic::processCommandUndo(){
 	outcome = myPlanner.undo();
 }
 
-void GUI::processCommandSearch(string taskDetail){
+void Logic::processCommandSearch(string taskDetail){
 	myPlanner.generateSearchList(taskDetail);
 	display = myPlanner.toString("search");
 }
 
-void GUI::processCommandHelp(){
+void Logic::processCommandHelp(){
 	string helpMessage = "HELP HELP HELP";
 	display = helpMessage;
 }
 
-void GUI::processCommandAll(){
+void Logic::processCommandAll(){
 	display = myPlanner.AllToString();
 }
 
-void GUI::updateDisplay(string viewType) {
+void Logic::updateDisplay(string viewType) {
 	if (viewType == "Help" || viewType == "All"){
 		return;
 	}
@@ -144,14 +144,14 @@ void GUI::updateDisplay(string viewType) {
 	display = myPlanner.toString(viewType);
 }
 
-void GUI::save(string fileName){
+void Logic::save(string fileName){
 	myPlanner.save(fileName);
 }
 
-string GUI::displayOutcome(){
+string Logic::displayOutcome(){
 	return outcome;
 }
 
-string GUI::displayContent(){
+string Logic::displayContent(){
 	return display;
 }
