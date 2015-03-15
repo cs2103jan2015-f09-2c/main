@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Planner4life", "Planner4life.vcxproj", "{FCB01008-3B5C-4973-AC17-FB1A970D70AB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Planner", "Planner\Planner.vcxproj", "{CAE971D3-18E2-47C4-B9DC-537412B0B10D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task", "Task\Task.vcxproj", "{02A61C4D-AA45-4854-8A79-B23F4AB9ED87}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUI", "GUI\GUI.vcxproj", "{9DC06F7A-2D14-49A6-A656-3FF3E2988F67}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCB01008-3B5C-4973-AC17-FB1A970D70AB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FCB01008-3B5C-4973-AC17-FB1A970D70AB}.Debug|Win32.Build.0 = Debug|Win32
+		{FCB01008-3B5C-4973-AC17-FB1A970D70AB}.Release|Win32.ActiveCfg = Release|Win32
+		{FCB01008-3B5C-4973-AC17-FB1A970D70AB}.Release|Win32.Build.0 = Release|Win32
+		{CAE971D3-18E2-47C4-B9DC-537412B0B10D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CAE971D3-18E2-47C4-B9DC-537412B0B10D}.Debug|Win32.Build.0 = Debug|Win32
+		{CAE971D3-18E2-47C4-B9DC-537412B0B10D}.Release|Win32.ActiveCfg = Release|Win32
+		{CAE971D3-18E2-47C4-B9DC-537412B0B10D}.Release|Win32.Build.0 = Release|Win32
+		{02A61C4D-AA45-4854-8A79-B23F4AB9ED87}.Debug|Win32.ActiveCfg = Debug|Win32
+		{02A61C4D-AA45-4854-8A79-B23F4AB9ED87}.Debug|Win32.Build.0 = Debug|Win32
+		{02A61C4D-AA45-4854-8A79-B23F4AB9ED87}.Release|Win32.ActiveCfg = Release|Win32
+		{02A61C4D-AA45-4854-8A79-B23F4AB9ED87}.Release|Win32.Build.0 = Release|Win32
+		{9DC06F7A-2D14-49A6-A656-3FF3E2988F67}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9DC06F7A-2D14-49A6-A656-3FF3E2988F67}.Debug|Win32.Build.0 = Debug|Win32
+		{9DC06F7A-2D14-49A6-A656-3FF3E2988F67}.Release|Win32.ActiveCfg = Release|Win32
+		{9DC06F7A-2D14-49A6-A656-3FF3E2988F67}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

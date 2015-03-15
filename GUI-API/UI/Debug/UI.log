@@ -1,19 +1,23 @@
-﻿Build started 13-Mar-15 12:22:08 AM.
-     1>Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
+﻿Build started 13/3/2015 1:11:00 AM.
+     1>Project "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib "K5-GUI.cpp"
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib "K5-GUI.cpp"
          K5-GUI.cpp
      1>K5-GUI.cpp(8): warning C4829: Possibly incorrect parameters to function main. Consider 'int main(Platform::Array<Platform::String^>^ argv)'
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /TP /analyze- /errorReport:prompt "C:\Users\Karthikeyan\AppData\Local\Temp\.NETFramework,Version=v4.5.AssemblyAttributes.cpp"
+         .NETFramework,Version=v4.5.AssemblyAttributes.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\pc1\Documents\main\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\pc1\Documents\main\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
          "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
-         "C:\Users\pc1\Documents\main\GUI-API\Debug\Task.lib"
-         "C:\Users\pc1\Documents\main\GUI-API\Debug\Planner.lib"
-         "C:\Users\pc1\Documents\main\GUI-API\Debug\GUI-API.lib"
+         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\Task.lib"
+         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\Planner.lib"
+         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\GUI-API.lib"
      1>Task.lib(Task.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
-         UI.vcxproj -> C:\Users\pc1\Documents\main\GUI-API\Debug\UI.exe
-     1>Done Building Project "C:\Users\pc1\Documents\main\GUI-API\UI\UI.vcxproj" (Build target(s)).
+         UI.vcxproj -> C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\UI.exe
+       BscMake:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\UI.bsc" /n "Debug\K5-GUI.sbr" "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.sbr"
+     1>Done Building Project "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\UI\UI.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.18
+Time Elapsed 00:00:09.17
