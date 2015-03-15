@@ -79,40 +79,7 @@ string Planner::addTask(Task newTask){
 	return status;
 
 
-	//add in the details
-	//newTask = content; // i dont know if this correct
-	//check time and date
-	//taskTime StartTime = newTask._timeStart;
-	//taskTime EndTime = newTask._timeEnd;
-	//taskDate StartDate = newTask._dateStart;
-	//taskDate EndDate = newTask._dateEnd;
-	//check for clash
-	//bool clash = false;
-	//clash=checkForClash(StartTime, EndTime, StartDate, EndDate);
-	//if no clash,
-	//find spot to enter
-	/*int index;
-	taskTime startTime, endTime;
-	taskDate startDate, endDate;
-	startTime = content.getTimeStart();
-	endTime = content.getTimeEnd();
-	startDate = content.getDateStart();
-	endDate = content.getDateEnd();
-	if (!clash){
-	index = findIndexToSlotIn(startTime, endTime, startDate, endDate);
-	}*/
-
-	//enter in to the list
-	//list<Task>::iterator it = allTaskList.begin();
-	//for (int i = 0; i < index; i++){
-	///it++;
-	//}
-	//allTaskList.insert(it, newTask);
-	//generate next7daysList, upcomingList, missedList,
-	//generate_next7DaysList();
-	//generate_upcomingList();
-	//generate_missedList();
-	//update the undoData, lastEntry Data Structure
+	
 }
 
 string Planner::saveDataToString(){
@@ -198,7 +165,7 @@ string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
 	if (nameOfList == "Home"){
-		finalString = next7DaystoString();
+		finalString = HomeListToString();
 		return finalString;
 	}
 	else if (nameOfList == "Upcoming"){
@@ -580,7 +547,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 	list<Task> ::iterator iter;
 
 	if (nameOfList == "Home"){
-		iter = next7DaysList.begin();
+		iter =HomeList.begin();
 		for (int i = 1; i != serialNumber; i++){
 			iter++;
 		}
@@ -726,13 +693,13 @@ string Planner::AllToString(void){
 	return out.str();
 }
 
-string Planner::next7DaystoString(void){
+string Planner::HomeListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
-	it = next7DaysList.begin();
+	it = HomeList.begin();
 	int serialNumber = 1;
-	if (!next7DaysList.empty()){
-		for (it = next7DaysList.begin(); it != next7DaysList.end(); ++it){
+	if (!HomeList.empty()){
+		for (it = HomeList.begin(); it != HomeList.end(); ++it){
 			out << serialNumber << ". " << (*it).getDescription() << " ";
 
 			switch ((*it).getNumOfDates()){
@@ -925,32 +892,32 @@ string Planner::searchListToString(void){
 }
 
 void Planner::generateAllOtherList(void){
-	next7DaysList.clear();
+	HomeList.clear();
 	MissedList.clear();
 	UpcomingList.clear();
-	generateNext7DaysList();
+	generateHomeList();
 	generateMissedList();
 	generateUpcomingList();
 }
 
-void Planner::generateNext7DaysList(void){
+void Planner::generateHomeList(void){
 	list<Task> ::iterator it;
 
 	for (it = All.begin(); it != All.end(); ++it){
-		if (isNext7Days(currentDate, it)) {
-			next7DaysList.push_back(*it);
+		if (isHome(currentDate, it)) {
+			HomeList.push_back(*it);
 		}
 	}
 }
 //assumes 30 days in a month
-bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
-	bool isWithinNext7Days = false;
+bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
+	bool isWithinHome = false;
 	//case 1: currentDate + 7 days = current month, same year
 	if (currentDate.day <= 23) {
 		if ((*it).getDateEnd().month == (currentDate.month)) {
 			if ((*it).getDateEnd().day <= (currentDate.day + 7) && (*it).getDateEnd().day >= currentDate.day) {
 				if ((*it).getDateEnd().year == currentDate.year) {
-					isWithinNext7Days = true;
+					isWithinHome = true;
 				}
 			}
 		}
@@ -959,7 +926,7 @@ bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
 	else if ((*it).getDateEnd().month == (currentDate.month)) {
 		if ((*it).getDateEnd().year == currentDate.year) {
 			if ((*it).getDateEnd().day <= 31 && (*it).getDateEnd().day >= currentDate.day) {
-				isWithinNext7Days = true;
+				isWithinHome = true;
 			}
 		}
 	}
@@ -967,7 +934,7 @@ bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
 	else if ((*it).getDateEnd().month == (currentDate.month + 1)) {
 		if ((*it).getDateEnd().year == currentDate.year) {
 			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
-				isWithinNext7Days = true;
+				isWithinHome = true;
 			}
 		}
 	}
@@ -975,12 +942,12 @@ bool Planner::isNext7Days(taskDate currentDate, list<Task>::iterator it) {
 	else if ((*it).getDateEnd().year == (currentDate.year + 1)) {
 		if ((*it).getDateEnd().month == 1) {
 			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
-				isWithinNext7Days = true;
+				isWithinHome = true;
 			}
 		}
 	}
 
-	return isWithinNext7Days;
+	return isWithinHome;
 }
 
 void Planner::generateMissedList(void){
