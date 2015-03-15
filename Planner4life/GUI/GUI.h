@@ -1,5 +1,5 @@
 #pragma once
-#include "Logic.h"
+#include "C:\Users\User\Desktop\CS2103 Project\Planner4life\Logic.h"
 #include <string>
 #include <msclr\marshal_cppstd.h>
 #include <ctime>

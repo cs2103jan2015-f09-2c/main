@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life\Task;..\Task;C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life\Planner;..\Planner;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\User\Desktop\CS2103 Project\Planner4life\Task;C:\Users\User\Desktop\CS2103 Project\Planner4life\Planner;C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life\Task;..\Task;C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life\Planner;..\Planner;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
