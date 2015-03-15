@@ -1,226 +1,96 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DirectedGraph xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
+    <Node Id="(@1 @7)" Category="CodeSchema_ProjectItem" Bounds="-823.177067589833,-1218.43340281679,78.5846667437457,25.9980000770793" FilePath="$(VsSolutionUri)/Logic.h" Label="Logic.h" UseManualLocation="True" />
     <Node Id="(@1)" Category="CodeSchema_Project" Bounds="317.208039335825,-388.661661863643,103.082233181116,26.0022331811163" Label="Planner4life" />
-    <Node Id="(@13 @10 @14 Member=Planner)" Category="CodeSchema_Method" Bounds="3837.6932461807,-357.201874380915,88.0033333333336,26" CodeSchemaProperty_IsConstructor="True" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="Planner‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" UseManualLocation="True" />
-    <Node Id="(@16 @10 @17 Member=(Name=addDetails @21))" Category="CodeSchema_Method" Bounds="361.257132428257,563.502459732355,134.346666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="addDetails‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@16 @10 @17 Member=(Name=isSearchTargetPresent @21))" Category="CodeSchema_Method" Bounds="681.507332428257,563.502459732355,194.973333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="isSearchTargetPresent‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="bool" />
-    <Node Id="(@16 @10 @17 Member=(Name=processDate @21))" Category="CodeSchema_Method" Bounds="1803.19803242826,575.557114362083,143.463333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processDate‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@16 @10 @17 Member=(Name=processDescription @21))" Category="CodeSchema_Method" Bounds="2142.11823242826,563.502459732355,178.853333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processDescription‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="(@16 @10 @17 Member=(Name=processImportance @21))" Category="CodeSchema_Method" Bounds="152.087032428257,563.502459732355,179.17,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processImportance‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="(@16 @10 @17 Member=(Name=processTime @21))" Category="CodeSchema_Method" Bounds="-168.563167571743,563.502459732355,144.406666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processTime‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@16 @10 @17 Member=(Name=storeEndDate @21))" Category="CodeSchema_Method" Bounds="1274.29106576159,563.502459732355,149.766666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="storeEndDate‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@16 @10 @17 Member=(Name=storeIdNumber OverloadingParameters=[(Type=int)]))" Category="CodeSchema_Method" Bounds="2645.78853242826,563.502459732355,142.51,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="storeIdNumber‎(int‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@16 @10 @17 Member=(Name=storeStartDate @21))" Category="CodeSchema_Method" Bounds="1618.57126576159,563.502459732355,154.626666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="storeStartDate‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@16 @10 @17 Member=Task)" Category="CodeSchema_Method" Bounds="1016.2956163962,583.666251098653,71.6900000000001,26" CodeSchemaProperty_IsConstructor="True" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="Task‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" />
-    <Node Id="(@16 @10 @17 Member=getDateEnd)" Category="CodeSchema_Method" Bounds="-309.003267571743,563.502459732355,110.44,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getDateEnd‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="taskDate" />
-    <Node Id="(@16 @10 @17 Member=getDateStart)" Category="CodeSchema_Method" Bounds="2350.97166576159,563.502459732355,115.3,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getDateStart‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="taskDate" />
-    <Node Id="(@16 @10 @17 Member=getDescription)" Category="CodeSchema_Method" Bounds="525.603899094924,577.114666949866,125.903333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getDescription‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="(@16 @10 @17 Member=getIdNumber)" Category="CodeSchema_Method" Bounds="2496.27176576159,563.502459732355,119.516666666666,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getIdNumber‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
-    <Node Id="(@16 @10 @17 Member=getImportance)" Category="CodeSchema_Method" Bounds="1117.985713797,568.721978402202,126.22,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getImportance‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="bool" />
-    <Node Id="(@16 @10 @17 Member=getNumOfDates)" Category="CodeSchema_Method" Bounds="1454.05783242826,579.568575542103,134.513333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getNumOfDates‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
-    <Node Id="(@16 @10 @17 Member=getNumOfTimes)" Category="CodeSchema_Method" Bounds="1976.66146576159,563.502459732355,135.456666666666,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getNumOfTimes‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
-    <Node Id="(@16 @10 @17 Member=getTimeEnd)" Category="CodeSchema_Method" Bounds="-450.386700905076,563.502459732355,111.383333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getTimeEnd‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
-    <Node Id="(@16 @10 @17 Member=getTimeStart)" Category="CodeSchema_Method" Bounds="5.84359909492366,569.404880069775,116.243333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getTimeStart‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
-    <Node Id="(@16 @10 @17 Member=~Task)" Category="CodeSchema_Method" Bounds="906.395518995403,579.423824346888,79.9,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="~Task‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_IsDestructor="True" />
+    <Node Id="(@10 @11 @12 Member=(Name=extractCommand OverloadingParameters=[(Type=&quot;std::string &amp;&quot;)]))" Category="CodeSchema_Method" Bounds="-728.180789591471,-385.175185944734,257.003333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="extractCommand‎(std‎::string &amp; userInput‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" UseManualLocation="True" />
+    <Node Id="(@10 @11 @12 Member=(Name=processUserInput OverloadingParameters=[@20,@20]))" Category="CodeSchema_Method" Bounds="-727.389674275716,-441.175285944734,326.186666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processUserInput‎(string userInput‎, string currentView‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="(@10 @11 @12 Member=(Name=save @21))" Category="CodeSchema_Method" Bounds="-722.768333740234,-553.175485944734,152.39,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="save‎(string fileName‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="(@10 @11 @12 Member=(Name=updateDisplay @21))" Category="CodeSchema_Method" Bounds="-722.658526204427,-497.175385944734,206.296666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="updateDisplay‎(string viewType‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="(@17 @11 @18 Member=(Name=addDetails @21))" Category="CodeSchema_Method" Bounds="592.106224772135,578.217956542969,134.346666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="addDetails‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="(@17 @11 @18 Member=(Name=isSearchTargetPresent @21))" Category="CodeSchema_Method" Bounds="756.452891438802,579.528930664063,194.973333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="isSearchTargetPresent‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="bool" UseManualLocation="True" />
     <Node Id="(@2)" Category="CodeSchema_Project" Bounds="132.083372483036,-388.57659561462,60.6722331811163,26.0022331811163" Label="GUI" UseManualLocation="True" />
-    <Node Id="(@3 @7)" Category="CodeSchema_ProjectItem" Bounds="1109.58965973676,447.069636412241,73.838000077079,25.998000077079" FilePath="$(VsSolutionUri)/Task/Task.h" Label="Task.h" UseManualLocation="True" />
     <Node Id="(@3)" Category="CodeSchema_Project" Bounds="222.755705596063,-388.661611632722,64.4522331811162,26.0022331811163" Label="Task" />
-    <Node Id="(@4 @8)" Category="CodeSchema_ProjectItem" Bounds="3795.98863414473,-469.2000748889,90.1513334104125,25.998000077079" FilePath="$(VsSolutionUri)/Planner/Planner.h" Label="Planner.h" UseManualLocation="True" />
     <Node Id="(@4)" Category="CodeSchema_Project" Bounds="21.317706725748,-388.661661863643,80.7655665144496,26.0022331811163" Label="Planner" UseManualLocation="True" />
-    <Node Id="(@9 @10 @11 Member=(Name=extractCommand OverloadingParameters=[(Type=&quot;std::string &amp;&quot;)]))" Category="CodeSchema_Method" Bounds="-1168.5971866862,-560.758373761027,257.003333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="extractCommand‎(std‎::string &amp; userInput‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="(@9 @10 @11 Member=(Name=processUserInput OverloadingParameters=[@20,@20]))" Category="CodeSchema_Method" Bounds="-645.216548055013,-560.758373761027,326.186666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processUserInput‎(string userInput‎, string currentView‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@9 @10 @11 Member=(Name=save @21))" Category="CodeSchema_Method" Bounds="-124.759705543779,-518.953187374929,152.39,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="save‎(string fileName‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@9 @10 @11 Member=(Name=updateDisplay @21))" Category="CodeSchema_Method" Bounds="-881.513354085286,-560.758373761027,206.296666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="updateDisplay‎(string viewType‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="(@9 @10 @11 Member=displayContent)" Category="CodeSchema_Method" Bounds="57.6303944562208,-512.628145775829,127.63,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="displayContent‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="(@9 @10 @11 Member=displayOutcome)" Category="CodeSchema_Method" Bounds="-289.029813537598,-557.886749252525,134.27,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="displayOutcome‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@12" Category="CodeSchema_Class" Bounds="-442.024480794271,-616.758473761027,69.1966666666667,26" CodeSchemaProperty_IsPublic="True" Icon="72e64bbb-677f-46d6-b133-87f03dda64de" Label="Logic" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_TypeName="Logic" />
-    <Node Id="@15" Category="CodeSchema_Class" Bounds="3799.26138915904,-413.201971686237,80.7633333333333,26" CodeSchemaProperty_IsPublic="True" Icon="72e64bbb-677f-46d6-b133-87f03dda64de" Label="Planner" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_TypeName="Planner" UseManualLocation="True" />
-    <Node Id="@18" Category="CodeSchema_Class" Bounds="1114.36921308023,507.549202120091,64.45,26" CodeSchemaProperty_IsPublic="True" Icon="72e64bbb-677f-46d6-b133-87f03dda64de" Label="Task" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_TypeName="Task" UseManualLocation="True" />
-    <Node Id="@19" Category="CodeSchema_Method" Bounds="3832.37524582,-165.201482485296,180.573333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="deleteIndex‎(int idNumber‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@22" Category="CodeSchema_Method" Bounds="3399.82679841234,222.494468130874,213.393333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="generateSearchList‎(string target‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="@23" Category="CodeSchema_Method" Bounds="-753.375669962565,-351.775363604777,250.763333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandAdd‎(string taskDetail‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@24" Category="CodeSchema_Method" Bounds="-1020.72619384766,-237.76787835087,250.38,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandLoad‎(string fileName‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@25" Category="CodeSchema_Method" Bounds="-1021.18391479492,-293.76797835087,249.03,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandSave‎(string fileName‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@26" Category="CodeSchema_Method" Bounds="-1024.44885904948,-177.11440545048,264.153333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandSearch‎(string taskDetail‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@27" Category="CodeSchema_Method" Bounds="3544.88529778428,-129.874333907892,101.56,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="save‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" UseManualLocation="True" />
-    <Node Id="@28" Category="CodeSchema_Method" Bounds="3658.12365830925,697.366744964354,184.126666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="toString‎(string nameOfList‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@29" Category="CodeSchema_Method" Bounds="3661.21567328321,925.367294280761,212.99,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="addStatusToString‎(Task theTask‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@30" Category="CodeSchema_Method" Bounds="3621.33156738696,-195.631429244806,159.23,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="addTask‎(Task content‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" UseManualLocation="True" />
-    <Node Id="@31" Category="CodeSchema_Method" Bounds="3661.21573675977,981.367360108904,225.62,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="deleteStatusToString‎(Task theTask‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@33" Category="CodeSchema_Method" Bounds="3658.14409776237,529.366434995586,129.236666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="AllToString‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@34" Category="CodeSchema_Method" Bounds="3540.68895670988,-251.631521357155,95.9966666666664,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="clear‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" UseManualLocation="True" />
-    <Node Id="@35" Category="CodeSchema_Method" Bounds="3417.63443378529,150.669761099624,179.646666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="generateAllOtherList‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@36" Category="CodeSchema_Method" Bounds="4000.88505524827,125.365378775405,172.953333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="generateMissedList‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="@37" Category="CodeSchema_Method" Bounds="3995.25511681542,297.36579076271,192.456666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="generateNext7DaysList‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="@38" Category="CodeSchema_Method" Bounds="3663.22032082956,201.006308951187,190.71,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="generateUpcomingList‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" />
-    <Node Id="@39" Category="CodeSchema_Method" Bounds="3832.3757568877,-221.20157403803,159.286666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="getIdOfLastEntry‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
-    <Node Id="@40" Category="CodeSchema_Method" Bounds="3852.29017849154,641.366683929199,167.993333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="next7DaystoString‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@41" Category="CodeSchema_Method" Bounds="3683.70903964626,-125.737882326604,98.6666666666665,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="undo‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" UseManualLocation="True" />
-    <Node Id="@42" Category="CodeSchema_Method" Bounds="4000.88525381598,181.365485586929,244.276666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="isMissed‎(taskDate‎, list‎&lt;Task‎&gt;‎::iterator‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="bool" />
-    <Node Id="@43" Category="CodeSchema_Method" Bounds="3995.25409468001,353.365882315444,263.78,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="isNext7Days‎(taskDate‎, list‎&lt;Task‎&gt;‎::iterator‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="bool" />
-    <Node Id="@44" Category="CodeSchema_Method" Bounds="3663.22090974046,257.006446280288,262.033333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="isUpcoming‎(taskDate‎, list‎&lt;Task‎&gt;‎::iterator‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="bool" />
-    <Node Id="@45" Category="CodeSchema_Method" Bounds="3832.37699061166,-109.201383303167,291.980000000001,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="deleteTask‎(int serialNumber‎, string nameOfList‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@46" Category="CodeSchema_Method" Bounds="-1030.03286174552,-64.1737821944825,363.656666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandDelete‎(string taskIndex‎, string currentView‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@47" Category="CodeSchema_Method" Bounds="-1026.3101578776,-121.11430545048,349.713333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandEdit‎(string userInput‎, string currentView‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@48" Category="CodeSchema_Method" Bounds="3661.21540961133,1037.36742593705,283.95,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="statusToString‎(string command‎, Task theTask‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@49" Category="CodeSchema_Method" Bounds="3532.4169710328,-30.6350265043276,346.303333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="editTask‎(int serialNumber‎, string nameOfList‎, string input‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@50" Category="CodeSchema_Method" Bounds="-1024.4488663737,-464.758173761027,423.763333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommand‎(string command‎, string taskDetail‎, string currentView‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@51" Category="CodeSchema_Method" Bounds="3661.21499619987,869.367172210448,150.436666666666,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="clearStatusToString‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@52" Category="CodeSchema_Method" Bounds="3661.21563584831,813.367050140136,145.746666666666,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="editStatusToString‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@53" Category="CodeSchema_Method" Bounds="3832.7779372806,585.366561858886,147.423333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="missedListToString‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@54" Category="CodeSchema_Method" Bounds="-742.153876139323,-295.63344841923,157.153333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandAll‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@55" Category="CodeSchema_Method" Bounds="-755.27330851237,-407.775485675089,170.493333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandClear‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@56" Category="CodeSchema_Method" Bounds="-1022.49992757161,-406.554621514933,168.356666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandHelp‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@57" Category="CodeSchema_Method" Bounds="-1019.79554199219,-350.554507891886,172.73,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="processCommandUndo‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
-    <Node Id="@58" Category="CodeSchema_Method" Bounds="3817.38125433789,529.366439788574,140.85,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="saveDataToString‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@59" Category="CodeSchema_Method" Bounds="3836.96249782748,813.367050140136,148.653333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="saveStatusToString‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@6" Category="CodeSchema_Solution" Bounds="169.914528077753,-444.605785338986,82.08,25.96" Label="Planner4life" UseManualLocation="True" />
-    <Node Id="@60" Category="CodeSchema_Method" Bounds="3658.12337673373,585.366557065898,144.633333333333,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="searchListToString‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@61" Category="CodeSchema_Method" Bounds="3841.65196885612,869.367172210448,153.106666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="undoStatusToString‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="@62" Category="CodeSchema_Method" Bounds="3658.12343369987,641.366679136211,164.166666666667,26" CodeSchemaProperty_IsPublic="True" Icon="226c9c97-da69-48dc-b0ab-538ff6eb6ff7" Label="upcomingListToString‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
-    <Node Id="DeleteFunction" Bounds="3812.37543001711,-261.20167403803,331.981744791669,198.000390734863" Group="Expanded" Label="Delete Function" UseManualLocation="True" />
-    <Node Id="GenerateHome" Bounds="3975.25415681077,257.36569076271,303.780000000001,142.000291552734" Group="Expanded" Label="Generate Home" />
-    <Node Id="GenerateListFunctions" Bounds="3379.82679841234,45.3651787754054,919.207358398437,374.000903540039" Group="Expanded" Label="Generate List Functions" UseManualLocation="True" />
-    <Node Id="GenerateMissed" Bounds="3980.88505524827,85.3652787754054,284.276865234375,142.000306811523" Group="Expanded" Label="Generate Missed" />
-    <Node Id="GenerateUpcoming" Bounds="3643.22025869879,161.006208951187,302.033984375,142.000337329102" Group="Expanded" Label="Generate Upcoming" />
-    <Node Id="KeyCommandFunctions" Bounds="3512.4169710328,-301.20177403803,651.940203775982,316.566849505616" Group="Expanded" Label="Key Command Functions" UseManualLocation="True" />
-    <Node Id="ListToString" Bounds="3638.16923774761,489.366287278583,402.160135091146,254.000561035163" Group="Expanded" Label="List To String" />
-    <Node Id="ProcessCommand" Bounds="-1050.03283162435,-504.758278710937,567.420494995117,486.584596362305" Group="Expanded" Label="Process Command" UseManualLocation="True" />
-    <Node Id="StatusUpdate" Bounds="3641.26085721376,773.366953489528,373.543639322917,310.000644140625" Group="Expanded" Label="Status Update" UseManualLocation="True" />
-    <Node Id="ToStringFunctions" Bounds="3618.16923774761,449.366187278583,442.160135091146,654.00151035157" Group="Expanded" Label="ToString Functions" UseManualLocation="True" />
+    <Node Id="@22" Category="CodeSchema_Method" Bounds="-1034.15556639879,-571.798095703125,250.763333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandAdd‎(string taskDetail‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@23" Category="CodeSchema_Method" Bounds="-1301.50573933174,-456.594482421875,250.38,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandLoad‎(string fileName‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@24" Category="CodeSchema_Method" Bounds="-1302.4637349372,-513.594589233398,249.03,25.9999999999999" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandSave‎(string fileName‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@25" Category="CodeSchema_Method" Bounds="-1305.22858763903,-395.9306640625,265.153333333333,27" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandSearch‎(string taskDetail‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@26" Category="CodeSchema_Method" Bounds="-123.772408752441,363.97354638771,101.56,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="save‎(string‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@27" Category="CodeSchema_Method" Bounds="-92.1361864217122,135.973024317398,184.126666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="toString‎(string nameOfList‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@28" Category="CodeSchema_Method" Bounds="7.78757883071899,363.973546387711,159.23,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="addTask‎(Task content‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@29" Category="CodeSchema_Method" Bounds="-123.772407887777,307.973424317398,95.9966666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="clear‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@30" Category="CodeSchema_Method" Bounds="2.22425858179728,307.973424317398,98.6666666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="undo‎(void‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@31" Category="CodeSchema_Method" Bounds="-123.772390594482,419.973668458023,291.98,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="deleteTask‎(int serialNumber‎, string nameOfList‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@32" Category="CodeSchema_Method" Bounds="-1310.81259073147,-281.930419921875,363.656666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandDelete‎(string taskIndex‎, string currentView‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@33" Category="CodeSchema_Method" Bounds="-1307.08970336168,-338.930541992188,350.713333333333,27" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandEdit‎(string userInput‎, string currentView‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@34" Category="CodeSchema_Method" Bounds="-92.1360984802246,191.973124317398,283.95,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="statusToString‎(string command‎, Task theTask‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@35" Category="CodeSchema_Method" Bounds="-123.772390391032,475.973768458023,346.303333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="editTask‎(int serialNumber‎, string nameOfList‎, string input‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@36" Category="CodeSchema_Method" Bounds="-1305.23262328356,-685.876892089844,423.763333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommand‎(string command‎, string taskDetail‎, string currentView‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@37" Category="CodeSchema_Method" Bounds="-702.192807617187,-686.214016022859,127.63,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="displayContent‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@38" Category="CodeSchema_Method" Bounds="-702.192891845703,-629.175685944734,134.27,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="displayOutcome‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@39" Category="CodeSchema_Method" Bounds="595.062012939453,331.217378265131,110.44,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getDateEnd‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="taskDate" />
+    <Node Id="@40" Category="CodeSchema_Method" Bounds="878.885369873047,331.217286712397,115.3,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getDateStart‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="taskDate" />
+    <Node Id="@41" Category="CodeSchema_Method" Bounds="603.56206624349,445.2175613706,125.903333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getDescription‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="string" />
+    <Node Id="@42" Category="CodeSchema_Method" Bounds="750.80541788737,388.217591888178,119.516666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getIdNumber‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
+    <Node Id="@43" Category="CodeSchema_Method" Bounds="760.465439453125,445.2175613706,126.22,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getImportance‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="bool" />
+    <Node Id="@44" Category="CodeSchema_Method" Bounds="603.561997884115,502.217759734857,134.513333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getNumOfDates‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
+    <Node Id="@45" Category="CodeSchema_Method" Bounds="769.075438639323,502.217759734857,135.456666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getNumOfTimes‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
+    <Node Id="@46" Category="CodeSchema_Method" Bounds="736.501936848958,331.217347747553,111.383333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getTimeEnd‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
+    <Node Id="@47" Category="CodeSchema_Method" Bounds="603.562110188802,388.217652923334,116.243333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="getTimeStart‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="int" />
+    <Node Id="@48" Category="CodeSchema_Method" Bounds="-1022.43366576403,-514.798034667969,157.153333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandAll‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@49" Category="CodeSchema_Method" Bounds="-1036.05294554918,-628.798278808594,170.493333333333,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandClear‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@50" Category="CodeSchema_Method" Bounds="-1303.27965616116,-627.597961425781,168.356666666667,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandHelp‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@51" Category="CodeSchema_Method" Bounds="-1300.57551472236,-570.597778320313,172.73,26" CodeSchemaProperty_IsPublic="True" Icon="47a27730-6174-4003-8620-7d4e440e694b" Label="processCommandUndo‎(‎)" Language="{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}" NativeProvider_CodeItemIds="Microsoft.VisualStudio.Progression.SmallList`1[System.Int64]" NativeProvider_ReturnType="void" UseManualLocation="True" />
+    <Node Id="@6" Category="CodeSchema_Solution" Bounds="170.022745352951,-444.602719264196,82.08,25.96" Label="Planner4life" UseManualLocation="True" />
+    <Node Id="Display" Bounds="-722.192891845703,-726.214116022859,174.27,143.038530078125" Group="Expanded" UseManualLocation="True" />
+    <Node Id="Display1" Bounds="-112.136186421712,95.972924317398,323.950087941488,142.0003" Group="Expanded" Label="Content for Display" UseManualLocation="True" />
+    <Node Id="Getter" Bounds="575.062012939453,291.217186712397,439.123356933594,257.000673022461" Group="Expanded" UseManualLocation="True" />
+    <Node Id="Operations" Bounds="-143.772408752441,267.973324317398,386.303351694743,254.000544140625" Group="Expanded" UseManualLocation="True" />
+    <Node Id="ProcessCommand" Bounds="-1330.81259073147,-725.876992089844,567.420357666016,489.946672167969" Group="Expanded" Label="Process Command" UseManualLocation="True" />
   </Nodes>
   <Links>
-    <Link Source="(@3 @7)" Target="@18" Category="Contains" Bounds="1146.5270107896,473.067634071743,0.0360784687129581,25.4815692852162" />
-    <Link Source="(@4 @8)" Target="@15" Category="Contains" Bounds="3840.21791488161,-443.202074423599,0.500515125454513,21.0026545453291" />
-    <Link Source="@12" Target="(@9 @10 @11 Member=(Name=extractCommand OverloadingParameters=[(Type=&quot;std::string &amp;&quot;)]))" Category="Contains" Bounds="-902.94779177153,-600.696036711696,460.92331097726,40.7981682480877" />
-    <Link Source="@12" Target="(@9 @10 @11 Member=(Name=processUserInput OverloadingParameters=[@20,@20]))" Category="Contains" Bounds="-457.581804776806,-590.758473761027,32.8152976666954,24.6015006780661" />
-    <Link Source="@12" Target="(@9 @10 @11 Member=(Name=save @21))" Category="Contains" Bounds="-372.827819824219,-599.053527832031,296.583961486816,75.216064453125" />
-    <Link Source="@12" Target="(@9 @10 @11 Member=(Name=updateDisplay @21))" Category="Contains" Bounds="-683.35520589438,-598.535213903384,241.330725100109,36.4333471409342" />
-    <Link Source="@12" Target="(@9 @10 @11 Member=displayContent)" Category="Contains" Bounds="-372.827819824219,-597.955383300781,425.870571136475,83.4094848632813" />
-    <Link Source="@12" Target="(@9 @10 @11 Member=displayOutcome)" Category="Contains" Bounds="-372.976092922143,-592.826977026559,101.53396283519,32.2181836293045" />
-    <Link Source="@12" Target="@23" Category="Contains" Bounds="-611.415217357239,-588.648905312686,193.168069751882,232.065878685857" />
-    <Link Source="@12" Target="@24" Category="Contains" Bounds="-871.684457718785,-589.765750259333,447.515333234234,347.471021661211" />
-    <Link Source="@12" Target="@25" Category="Contains" Bounds="-863.675367684843,-587.886840820313,436.641405481854,289.493671066284" />
-    <Link Source="@12" Target="@26" Category="Contains" Bounds="-871.364864949021,-590.138013868596,449.599166164476,407.599165987565" />
-    <Link Source="@12" Target="@46" Category="Contains" Bounds="-832.222593656525,-590.758483886719,414.426780613386,519.548880845376" />
-    <Link Source="@12" Target="@47" Category="Contains" Bounds="-833.801992017265,-590.758473761027,414.729676119754,462.940736167395" />
-    <Link Source="@12" Target="@50" Category="Contains" Bounds="-779.239468088747,-581.166948367683,346.492053557173,177.889861659677" />
-    <Link Source="@12" Target="@54" Category="Contains" Bounds="-647.589192226784,-589.623954988556,229.788782514692,287.948588571531" />
-    <Link Source="@12" Target="@55" Category="Contains" Bounds="-646.691616610627,-587.886840820313,222.966504405081,177.837341370091" />
-    <Link Source="@12" Target="@56" Category="Contains" Bounds="-900.435071138571,-587.886849252525,463.364684596989,203.201063227619" />
-    <Link Source="@12" Target="@57" Category="Contains" Bounds="-901.32675231696,-587.886840820312,469.723572227968,252.570550443725" />
-    <Link Source="@15" Target="(@13 @10 @14 Member=Planner)" Category="Contains" Bounds="3849.44043368328,-387.201974423599,17.0937092728436,22.7992335506933" />
-    <Link Source="@15" Target="@19" Category="Contains" Bounds="3498.74960035118,-27.9928709877746,404.956933700596,272.970103434358" />
-    <Link Source="@15" Target="@22" Category="Contains" Bounds="3769.3999425581,-211.614748931725,119.54844748179,230.014707653306" />
-    <Link Source="@15" Target="@27" Category="Contains" Bounds="3052.56695734416,-248.462280273438,796.435383279719,310.963780107435" />
-    <Link Source="@15" Target="@28" Category="Contains" Bounds="3890.21149725634,-248.453258440947,167.300761309335,270.347487676835" />
-    <Link Source="@15" Target="@29" Category="Contains" Bounds="3884.31907737401,-219.627325464676,291.347030045219,382.838852024327" />
-    <Link Source="@15" Target="@30" Category="Contains" Bounds="3150.53662700365,-248.460227812761,695.316082670273,248.020418696103" />
-    <Link Source="@15" Target="@31" Category="Contains" Bounds="3883.31923466011,-219.627325464676,300.0304540046,438.572774300922" />
-    <Link Source="@15" Target="@33" Category="Contains" Bounds="3897.52589187358,-248.452667105873,123.093332456433,104.185555299832" />
-    <Link Source="@15" Target="@34" Category="Contains" Bounds="3049.07007261646,-250.963424569988,792.88741174332,206.314640067836" />
-    <Link Source="@15" Target="@35" Category="Contains" Bounds="3170.30892553678,-248.462280273438,700.158956251874,769.415351692025" />
-    <Link Source="@15" Target="@36" Category="Contains" Bounds="3883.48565689532,-239.448318534154,21.6509119844673,213.046617684232" />
-    <Link Source="@15" Target="@37" Category="Contains" Bounds="3888.51112958899,-265.231440011545,231.846615779377,386.345763935892" />
-    <Link Source="@15" Target="@38" Category="Contains" Bounds="3729.18696607457,-239.460204090944,161.173874156168,255.816392873523" />
-    <Link Source="@15" Target="@39" Category="Contains" Bounds="3493.48454441966,-27.9928709877746,405.309223751705,217.741219270357" />
-    <Link Source="@15" Target="@40" Category="Contains" Bounds="3901.78329497197,-248.453258440947,327.491033798064,217.028901106122" />
-    <Link Source="@15" Target="@41" Category="Contains" Bounds="3173.9872737957,-248.460227812761,680.202342926874,314.593531430841" />
-    <Link Source="@15" Target="@42" Category="Contains" Bounds="3906.90493699418,-239.448318534154,9.25463339626413,269.005921351763" />
-    <Link Source="@15" Target="@43" Category="Contains" Bounds="3888.61848910708,-265.200944397005,267.324928753446,442.34735543575" />
-    <Link Source="@15" Target="@44" Category="Contains" Bounds="3760.89906011706,-239.460204090944,132.131688577409,311.147195787967" />
-    <Link Source="@15" Target="@45" Category="Contains" Bounds="3548.63254768297,-27.9928709877746,360.085498794102,327.940675728386" />
-    <Link Source="@15" Target="@48" Category="Contains" Bounds="3883.09407340312,-219.627325464676,329.734482963483,494.512960939493" />
-    <Link Source="@15" Target="@49" Category="Contains" Bounds="3522.27435593028,-27.8733726043634,372.372296762168,399.914403564067" />
-    <Link Source="@15" Target="@51" Category="Contains" Bounds="3884.72859045038,-219.627325464676,259.111685415461,326.947212286725" />
-    <Link Source="@15" Target="@52" Category="Contains" Bounds="3886.52618372501,-219.627325464676,252.629596799326,271.412766858403" />
-    <Link Source="@15" Target="@53" Category="Contains" Bounds="3905.4859332844,-248.452667105873,289.908585347258,161.617669993889" />
-    <Link Source="@15" Target="@58" Category="Contains" Bounds="3913.30209285397,-248.452667105873,255.148780613011,106.532350803806" />
-    <Link Source="@15" Target="@59" Category="Contains" Bounds="3894.10380034814,-219.627325464676,413.297002969275,273.039683663943" />
-    <Link Source="@15" Target="@60" Category="Contains" Bounds="3893.56733085854,-248.453258440947,139.644427968079,159.233843731872" />
-    <Link Source="@15" Target="@61" Category="Contains" Bounds="3891.29255453896,-219.627325464676,426.217061402432,328.506504984761" />
-    <Link Source="@15" Target="@62" Category="Contains" Bounds="3891.50493582224,-248.453258440947,154.219198717748,214.690911443121" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=addDetails @21))" Category="Contains" Bounds="504.576622085706,523.059893836507,609.792616195544,47.5098841561813" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=isSearchTargetPresent @21))" Category="Contains" Bounds="873.298583389332,525.454232854391,241.070654891918,36.6938975302957" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=processDate @21))" Category="Contains" Bounds="1178.81923828125,523.558186543963,615.417762403715,57.4643057177211" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=processDescription @21))" Category="Contains" Bounds="1178.81923828125,522.211107284587,954.310839630941,49.2158740549155" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=processImportance @21))" Category="Contains" Bounds="340.239872320762,522.541733988002,774.129365960488,47.8660498837611" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=processTime @21))" Category="Contains" Bounds="-15.1656123434663,521.999845987336,1129.53485062472,50.8475282038906" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=storeEndDate @21))" Category="Contains" Bounds="1178.81923828125,529.449839471084,114.613090453689,31.6564917291142" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=storeIdNumber OverloadingParameters=[(Type=int)]))" Category="Contains" Bounds="1178.81923828125,521.697332859081,1457.97504774322,51.9459214304328" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=(Name=storeStartDate @21))" Category="Contains" Bounds="1178.81923828125,523.831781050598,430.798405453826,43.8831069802781" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=Task)" Category="Contains" Bounds="1075.28000975898,533.549194335938,55.1825323979804,44.4697764975481" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getDateEnd)" Category="Contains" Bounds="-189.570439677685,521.836770995586,1303.93967795894,52.0999936363037" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getDateStart)" Category="Contains" Bounds="1178.81923828125,521.977921868162,1163.16129836417,51.5699168779123" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getDescription)" Category="Contains" Bounds="660.438082011576,524.566385174933,453.931156269674,56.5873726144706" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getIdNumber)" Category="Contains" Bounds="1178.81923828125,521.828495882226,1308.4595413722,51.9445869521662" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getImportance)" Category="Contains" Bounds="1153.92624061599,533.549194335938,15.4161783660647,27.3336408813459" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getNumOfDates)" Category="Contains" Bounds="1178.81923828125,526.742682145936,267.953314175254,51.4993199377266" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getNumOfTimes)" Category="Contains" Bounds="1178.81923828125,522.557550581361,788.859687836561,49.1640428496306" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getTimeEnd)" Category="Contains" Bounds="-330.009280608499,521.719054810946,1444.37851888975,52.4351075314524" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=getTimeStart)" Category="Contains" Bounds="131.072277156428,522.390360973671,983.296961124822,56.1804052694411" />
-    <Link Source="@18" Target="(@16 @10 @17 Member=~Task)" Category="Contains" Bounds="991.035483277695,531.984396181102,123.699329892902,44.3990059620992" />
-    <Link Source="@6" Target="(@1)" Category="Contains" Bounds="247.546579379944,-418.653750995474,76.0688466133237,26.983287886035" />
-    <Link Source="@6" Target="(@2)" Category="Contains" Bounds="179.566806302841,-418.653750995474,20.1496935303086,23.2730174513575" />
-    <Link Source="@6" Target="(@3)" Category="Contains" Bounds="221.162857433367,-418.653750995474,18.0303621051387,22.9258171084801" />
-    <Link Source="@6" Target="(@4)" Category="Contains" Bounds="104.795215320373,-418.653750995474,71.5478088146704,26.8318399463698" />
-    <Link Source="DeleteFunction" Target="@19" Category="Contains" />
-    <Link Source="DeleteFunction" Target="@39" Category="Contains" />
-    <Link Source="DeleteFunction" Target="@45" Category="Contains" />
-    <Link Source="GenerateHome" Target="@37" Category="Contains" />
-    <Link Source="GenerateHome" Target="@43" Category="Contains" />
-    <Link Source="GenerateListFunctions" Target="@22" Category="Contains" />
-    <Link Source="GenerateListFunctions" Target="@35" Category="Contains" />
-    <Link Source="GenerateListFunctions" Target="GenerateHome" Category="Contains" />
-    <Link Source="GenerateListFunctions" Target="GenerateMissed" Category="Contains" />
-    <Link Source="GenerateListFunctions" Target="GenerateUpcoming" Category="Contains" />
-    <Link Source="GenerateMissed" Target="@36" Category="Contains" />
-    <Link Source="GenerateMissed" Target="@42" Category="Contains" />
-    <Link Source="GenerateUpcoming" Target="@38" Category="Contains" />
-    <Link Source="GenerateUpcoming" Target="@44" Category="Contains" />
-    <Link Source="KeyCommandFunctions" Target="@27" Category="Contains" />
-    <Link Source="KeyCommandFunctions" Target="@30" Category="Contains" />
-    <Link Source="KeyCommandFunctions" Target="@34" Category="Contains" />
-    <Link Source="KeyCommandFunctions" Target="@41" Category="Contains" />
-    <Link Source="KeyCommandFunctions" Target="@49" Category="Contains" />
-    <Link Source="KeyCommandFunctions" Target="DeleteFunction" Category="Contains" />
-    <Link Source="ListToString" Target="@28" Category="Contains" />
-    <Link Source="ListToString" Target="@33" Category="Contains" />
-    <Link Source="ListToString" Target="@40" Category="Contains" />
-    <Link Source="ListToString" Target="@53" Category="Contains" />
-    <Link Source="ListToString" Target="@58" Category="Contains" />
-    <Link Source="ListToString" Target="@60" Category="Contains" />
-    <Link Source="ListToString" Target="@62" Category="Contains" />
+    <Link Source="@6" Target="(@1)" Category="Contains" Bounds="247.578518096375,-418.640900047765,76.0649310576815,26.990399294777" />
+    <Link Source="@6" Target="(@2)" Category="Contains" Bounds="179.611337283485,-418.640900047765,20.126832540441,23.2016198681531" />
+    <Link Source="@6" Target="(@3)" Category="Contains" Bounds="221.200004131288,-418.640900047765,18.0178518970077,22.9240942877975" />
+    <Link Source="@6" Target="(@4)" Category="Contains" Bounds="104.822089240764,-418.652215448459,71.6030962782964,26.8323806338955" />
+    <Link Source="Display" Target="@37" Category="Contains" />
+    <Link Source="Display" Target="@38" Category="Contains" />
+    <Link Source="Display1" Target="@27" Category="Contains" />
+    <Link Source="Display1" Target="@34" Category="Contains" />
+    <Link Source="Getter" Target="@39" Category="Contains" />
+    <Link Source="Getter" Target="@40" Category="Contains" />
+    <Link Source="Getter" Target="@41" Category="Contains" />
+    <Link Source="Getter" Target="@42" Category="Contains" />
+    <Link Source="Getter" Target="@43" Category="Contains" />
+    <Link Source="Getter" Target="@44" Category="Contains" />
+    <Link Source="Getter" Target="@45" Category="Contains" />
+    <Link Source="Getter" Target="@46" Category="Contains" />
+    <Link Source="Getter" Target="@47" Category="Contains" />
+    <Link Source="Operations" Target="@26" Category="Contains" />
+    <Link Source="Operations" Target="@28" Category="Contains" />
+    <Link Source="Operations" Target="@29" Category="Contains" />
+    <Link Source="Operations" Target="@30" Category="Contains" />
+    <Link Source="Operations" Target="@31" Category="Contains" />
+    <Link Source="Operations" Target="@35" Category="Contains" />
+    <Link Source="ProcessCommand" Target="@22" Category="Contains" />
     <Link Source="ProcessCommand" Target="@23" Category="Contains" />
     <Link Source="ProcessCommand" Target="@24" Category="Contains" />
     <Link Source="ProcessCommand" Target="@25" Category="Contains" />
-    <Link Source="ProcessCommand" Target="@26" Category="Contains" />
-    <Link Source="ProcessCommand" Target="@46" Category="Contains" />
-    <Link Source="ProcessCommand" Target="@47" Category="Contains" />
+    <Link Source="ProcessCommand" Target="@32" Category="Contains" />
+    <Link Source="ProcessCommand" Target="@33" Category="Contains" />
+    <Link Source="ProcessCommand" Target="@36" Category="Contains" />
+    <Link Source="ProcessCommand" Target="@48" Category="Contains" />
+    <Link Source="ProcessCommand" Target="@49" Category="Contains" />
     <Link Source="ProcessCommand" Target="@50" Category="Contains" />
-    <Link Source="ProcessCommand" Target="@54" Category="Contains" />
-    <Link Source="ProcessCommand" Target="@55" Category="Contains" />
-    <Link Source="ProcessCommand" Target="@56" Category="Contains" />
-    <Link Source="ProcessCommand" Target="@57" Category="Contains" />
-    <Link Source="StatusUpdate" Target="@29" Category="Contains" />
-    <Link Source="StatusUpdate" Target="@31" Category="Contains" />
-    <Link Source="StatusUpdate" Target="@48" Category="Contains" />
-    <Link Source="StatusUpdate" Target="@51" Category="Contains" />
-    <Link Source="StatusUpdate" Target="@52" Category="Contains" />
-    <Link Source="StatusUpdate" Target="@59" Category="Contains" />
-    <Link Source="StatusUpdate" Target="@61" Category="Contains" />
-    <Link Source="ToStringFunctions" Target="ListToString" Category="Contains" />
-    <Link Source="ToStringFunctions" Target="StatusUpdate" Category="Contains" />
+    <Link Source="ProcessCommand" Target="@51" Category="Contains" />
   </Links>
   <Categories>
-    <Category Id="CodeSchema_Class" Label="Class" BasedOn="CodeSchema_Type" CanBeDataDriven="True" DefaultAction="Node:Both:CodeSchema_Member" Icon="CodeSchema_Class" NavigationActionLabel="Classes" />
     <Category Id="CodeSchema_Member" Label="Member" CanBeDataDriven="True" DefaultAction="Microsoft.Contains" Icon="CodeSchema_Field" NavigationActionLabel="Members" />
     <Category Id="CodeSchema_Method" Label="Method" BasedOn="CodeSchema_Member" CanBeDataDriven="True" DefaultAction="Link:Forward:CodeSchema_Calls" Icon="CodeSchema_Method" NavigationActionLabel="Methods" />
     <Category Id="CodeSchema_Project" Label="Project" CanBeDataDriven="True" DefaultAction="Node:Both:CodeSchema_ProjectItem" Icon="CodeSchema_Project" NavigationActionLabel="Projects" />
     <Category Id="CodeSchema_ProjectItem" Label="Project Item" BasedOn="File" CanBeDataDriven="True" DefaultAction="Node:Both:CodeSchema_Type" Icon="File" NavigationActionLabel="Project Items" />
     <Category Id="CodeSchema_Solution" Label="Solution" CanBeDataDriven="True" DefaultAction="Microsoft.Contains" NavigationActionLabel="Solutions" />
-    <Category Id="CodeSchema_Type" Label="Type" CanBeDataDriven="True" DefaultAction="Node:Both:CodeSchema_Member" Icon="CodeSchema_Class" NavigationActionLabel="Types" />
     <Category Id="Contains" Label="Contains" Description="Whether the source of the link contains the target object" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="Contained By" IsContainment="True" OutgoingActionLabel="Contains" />
     <Category Id="File" Label="File" CanBeDataDriven="True" DefaultAction="Microsoft.Contains" Icon="File" NavigationActionLabel="Files" />
   </Categories>
@@ -228,7 +98,6 @@
     <Property Id="Bounds" DataType="System.Windows.Rect" />
     <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
     <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
-    <Property Id="CodeSchemaProperty_IsConstructor" Label="Is Constructor" Description="Flag to indicate the method is a constructor" DataType="System.Boolean" />
     <Property Id="CodeSchemaProperty_IsPublic" Label="Is Public" Description="Flag to indicate the scope is Public" DataType="System.Boolean" />
     <Property Id="DefaultAction" Label="DefaultAction" Description="DefaultAction" DataType="System.String" />
     <Property Id="FilePath" Label="File Path" Description="File Path" DataType="System.String" />
@@ -239,22 +108,18 @@
     <Property Id="Label" Label="Label" Description="Displayable label of an Annotatable object" DataType="System.String" />
     <Property Id="Language" Label="Language" Description="Language" DataType="System.String" />
     <Property Id="NativeProvider_CodeItemIds" Label="NodeIds" Description="NodeIds" DataType="Microsoft.VisualStudio.Progression.SmallList`1[[System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" />
-    <Property Id="NativeProvider_IsDestructor" Label="IsDestructor" Description="IsDestructor" DataType="System.Boolean" />
     <Property Id="NativeProvider_ReturnType" Label="Return Type" Description="Return Type" DataType="System.String" />
-    <Property Id="NativeProvider_TypeName" Label="TypeName" Description="TypeName" DataType="System.String" />
     <Property Id="NavigationActionLabel" Label="NavigationActionLabel" Description="NavigationActionLabel" DataType="System.String" />
     <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
     <Property Id="UseManualLocation" DataType="System.Boolean" />
   </Properties>
   <QualifiedNames>
-    <Name Id="Argument" Label="Argument" ValueType="System.Object" />
     <Name Id="Assembly" Label="Assembly" ValueType="Uri" />
     <Name Id="File" Label="File" ValueType="Uri" />
     <Name Id="Member" Label="Member" ValueType="System.Object" />
     <Name Id="Name" Label="Name" ValueType="System.String" />
     <Name Id="Namespace" Label="Namespace" ValueType="System.String" />
     <Name Id="OverloadingParameters" Label="Parameter" ValueType="Microsoft.VisualStudio.GraphModel.GraphNodeIdCollection" Formatter="NameValueNoEscape" />
-    <Name Id="TemplateArguments" Label="TemplateArguments" ValueType="Microsoft.VisualStudio.GraphModel.GraphNodeIdCollection" Formatter="NameValueNoEscape" />
     <Name Id="Type" Label="Type" ValueType="System.Object" />
   </QualifiedNames>
   <IdentifierAliases>
@@ -264,67 +129,55 @@
     <Alias n="4" Uri="Assembly=$(VsSolutionUri)/Planner/Planner.vcxproj" />
     <Alias n="5" Uri="Assembly=$(VsSolutionUri)/Planner4life.sln" />
     <Alias n="6" Id="(@5)" />
-    <Alias n="7" Uri="File=$(VsSolutionUri)/Task/Task.h" />
-    <Alias n="8" Uri="File=$(VsSolutionUri)/Planner/Planner.h" />
-    <Alias n="9" Uri="Assembly=$(fcb01008-3b5c-4973-ac17-fb1a970d70ab.OutputPathUri)" />
-    <Alias n="10" Id="Namespace=::" />
-    <Alias n="11" Id="Type=Logic" />
-    <Alias n="12" Id="(@9 @10 @11)" />
-    <Alias n="13" Uri="Assembly=$(cae971d3-18e2-47c4-b9dc-537412b0b10d.OutputPathUri)" />
-    <Alias n="14" Id="Type=Planner" />
-    <Alias n="15" Id="(@13 @10 @14)" />
-    <Alias n="16" Uri="Assembly=$(02a61c4d-aa45-4854-8a79-b23f4ab9ed87.OutputPathUri)" />
-    <Alias n="17" Id="Type=Task" />
-    <Alias n="18" Id="(@16 @10 @17)" />
-    <Alias n="19" Id="(@13 @10 @14 Member=(Name=deleteIndex OverloadingParameters=[(Type=int)]))" />
+    <Alias n="7" Uri="File=$(VsSolutionUri)/Logic.h" />
+    <Alias n="10" Uri="Assembly=$(fcb01008-3b5c-4973-ac17-fb1a970d70ab.OutputPathUri)" />
+    <Alias n="11" Id="Namespace=::" />
+    <Alias n="12" Id="Type=Logic" />
+    <Alias n="14" Uri="Assembly=$(cae971d3-18e2-47c4-b9dc-537412b0b10d.OutputPathUri)" />
+    <Alias n="15" Id="Type=Planner" />
+    <Alias n="17" Uri="Assembly=$(02a61c4d-aa45-4854-8a79-b23f4ab9ed87.OutputPathUri)" />
+    <Alias n="18" Id="Type=Task" />
     <Alias n="20" Id="(Type=string)" />
     <Alias n="21" Id="OverloadingParameters=[@20]" />
-    <Alias n="22" Id="(@13 @10 @14 Member=(Name=generateSearchList @21))" />
-    <Alias n="23" Id="(@9 @10 @11 Member=(Name=processCommandAdd @21))" />
-    <Alias n="24" Id="(@9 @10 @11 Member=(Name=processCommandLoad @21))" />
-    <Alias n="25" Id="(@9 @10 @11 Member=(Name=processCommandSave @21))" />
-    <Alias n="26" Id="(@9 @10 @11 Member=(Name=processCommandSearch @21))" />
-    <Alias n="27" Id="(@13 @10 @14 Member=(Name=save @21))" />
-    <Alias n="28" Id="(@13 @10 @14 Member=(Name=toString @21))" />
-    <Alias n="29" Id="(@13 @10 @14 Member=(Name=addStatusToString OverloadingParameters=[(@17)]))" />
-    <Alias n="30" Id="(@13 @10 @14 Member=(Name=addTask OverloadingParameters=[(@17)]))" />
-    <Alias n="31" Id="(@13 @10 @14 Member=(Name=deleteStatusToString OverloadingParameters=[(@17)]))" />
-    <Alias n="32" Id="OverloadingParameters=[(Type=void)]" />
-    <Alias n="33" Id="(@13 @10 @14 Member=(Name=AllToString @32))" />
-    <Alias n="34" Id="(@13 @10 @14 Member=(Name=clear @32))" />
-    <Alias n="35" Id="(@13 @10 @14 Member=(Name=generateAllOtherList @32))" />
-    <Alias n="36" Id="(@13 @10 @14 Member=(Name=generateMissedList @32))" />
-    <Alias n="37" Id="(@13 @10 @14 Member=(Name=generateNext7DaysList @32))" />
-    <Alias n="38" Id="(@13 @10 @14 Member=(Name=generateUpcomingList @32))" />
-    <Alias n="39" Id="(@13 @10 @14 Member=(Name=getIdOfLastEntry @32))" />
-    <Alias n="40" Id="(@13 @10 @14 Member=(Name=next7DaystoString @32))" />
-    <Alias n="41" Id="(@13 @10 @14 Member=(Name=undo @32))" />
-    <Alias n="42" Id="(@13 @10 @14 Member=(Name=isMissed OverloadingParameters=[(Type=taskDate),(Type=(Name=list::iterator TemplateArguments=(Argument=Task)))]))" />
-    <Alias n="43" Id="(@13 @10 @14 Member=(Name=isNext7Days OverloadingParameters=[(Type=taskDate),(Type=(Name=list::iterator TemplateArguments=(Argument=Task)))]))" />
-    <Alias n="44" Id="(@13 @10 @14 Member=(Name=isUpcoming OverloadingParameters=[(Type=taskDate),(Type=(Name=list::iterator TemplateArguments=(Argument=Task)))]))" />
-    <Alias n="45" Id="(@13 @10 @14 Member=(Name=deleteTask OverloadingParameters=[(Type=int),@20]))" />
-    <Alias n="46" Id="(@9 @10 @11 Member=(Name=processCommandDelete OverloadingParameters=[@20,@20]))" />
-    <Alias n="47" Id="(@9 @10 @11 Member=(Name=processCommandEdit OverloadingParameters=[@20,@20]))" />
-    <Alias n="48" Id="(@13 @10 @14 Member=(Name=statusToString OverloadingParameters=[@20,(@17)]))" />
-    <Alias n="49" Id="(@13 @10 @14 Member=(Name=editTask OverloadingParameters=[(Type=int),@20,@20]))" />
-    <Alias n="50" Id="(@9 @10 @11 Member=(Name=processCommand OverloadingParameters=[@20,@20,@20]))" />
-    <Alias n="51" Id="(@13 @10 @14 Member=clearStatusToString)" />
-    <Alias n="52" Id="(@13 @10 @14 Member=editStatusToString)" />
-    <Alias n="53" Id="(@13 @10 @14 Member=missedListToString)" />
-    <Alias n="54" Id="(@9 @10 @11 Member=processCommandAll)" />
-    <Alias n="55" Id="(@9 @10 @11 Member=processCommandClear)" />
-    <Alias n="56" Id="(@9 @10 @11 Member=processCommandHelp)" />
-    <Alias n="57" Id="(@9 @10 @11 Member=processCommandUndo)" />
-    <Alias n="58" Id="(@13 @10 @14 Member=saveDataToString)" />
-    <Alias n="59" Id="(@13 @10 @14 Member=saveStatusToString)" />
-    <Alias n="60" Id="(@13 @10 @14 Member=searchListToString)" />
-    <Alias n="61" Id="(@13 @10 @14 Member=undoStatusToString)" />
-    <Alias n="62" Id="(@13 @10 @14 Member=upcomingListToString)" />
+    <Alias n="22" Id="(@10 @11 @12 Member=(Name=processCommandAdd @21))" />
+    <Alias n="23" Id="(@10 @11 @12 Member=(Name=processCommandLoad @21))" />
+    <Alias n="24" Id="(@10 @11 @12 Member=(Name=processCommandSave @21))" />
+    <Alias n="25" Id="(@10 @11 @12 Member=(Name=processCommandSearch @21))" />
+    <Alias n="26" Id="(@14 @11 @15 Member=(Name=save @21))" />
+    <Alias n="27" Id="(@14 @11 @15 Member=(Name=toString @21))" />
+    <Alias n="28" Id="(@14 @11 @15 Member=(Name=addTask OverloadingParameters=[(@18)]))" />
+    <Alias n="29" Id="(@14 @11 @15 Member=(Name=clear OverloadingParameters=[(Type=void)]))" />
+    <Alias n="30" Id="(@14 @11 @15 Member=(Name=undo OverloadingParameters=[(Type=void)]))" />
+    <Alias n="31" Id="(@14 @11 @15 Member=(Name=deleteTask OverloadingParameters=[(Type=int),@20]))" />
+    <Alias n="32" Id="(@10 @11 @12 Member=(Name=processCommandDelete OverloadingParameters=[@20,@20]))" />
+    <Alias n="33" Id="(@10 @11 @12 Member=(Name=processCommandEdit OverloadingParameters=[@20,@20]))" />
+    <Alias n="34" Id="(@14 @11 @15 Member=(Name=statusToString OverloadingParameters=[@20,(@18)]))" />
+    <Alias n="35" Id="(@14 @11 @15 Member=(Name=editTask OverloadingParameters=[(Type=int),@20,@20]))" />
+    <Alias n="36" Id="(@10 @11 @12 Member=(Name=processCommand OverloadingParameters=[@20,@20,@20]))" />
+    <Alias n="37" Id="(@10 @11 @12 Member=displayContent)" />
+    <Alias n="38" Id="(@10 @11 @12 Member=displayOutcome)" />
+    <Alias n="39" Id="(@17 @11 @18 Member=getDateEnd)" />
+    <Alias n="40" Id="(@17 @11 @18 Member=getDateStart)" />
+    <Alias n="41" Id="(@17 @11 @18 Member=getDescription)" />
+    <Alias n="42" Id="(@17 @11 @18 Member=getIdNumber)" />
+    <Alias n="43" Id="(@17 @11 @18 Member=getImportance)" />
+    <Alias n="44" Id="(@17 @11 @18 Member=getNumOfDates)" />
+    <Alias n="45" Id="(@17 @11 @18 Member=getNumOfTimes)" />
+    <Alias n="46" Id="(@17 @11 @18 Member=getTimeEnd)" />
+    <Alias n="47" Id="(@17 @11 @18 Member=getTimeStart)" />
+    <Alias n="48" Id="(@10 @11 @12 Member=processCommandAll)" />
+    <Alias n="49" Id="(@10 @11 @12 Member=processCommandClear)" />
+    <Alias n="50" Id="(@10 @11 @12 Member=processCommandHelp)" />
+    <Alias n="51" Id="(@10 @11 @12 Member=processCommandUndo)" />
   </IdentifierAliases>
   <Paths>
+    <Path Id="02a61c4d-aa45-4854-8a79-b23f4ab9ed87.OutputPath" Value="C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life\Debug\Task.lib" />
     <Path Id="02a61c4d-aa45-4854-8a79-b23f4ab9ed87.OutputPathUri" Value="file:///C:/Users/Karthikeyan/Desktop/2015 Sem 2/CS2103/Project/Planner4life/Debug/Task.lib" />
+    <Path Id="cae971d3-18e2-47c4-b9dc-537412b0b10d.OutputPath" Value="C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life\Debug\Planner.lib" />
     <Path Id="cae971d3-18e2-47c4-b9dc-537412b0b10d.OutputPathUri" Value="file:///C:/Users/Karthikeyan/Desktop/2015 Sem 2/CS2103/Project/Planner4life/Debug/Planner.lib" />
+    <Path Id="fcb01008-3b5c-4973-ac17-fb1a970d70ab.OutputPath" Value="C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life\Debug\Planner4life.lib" />
     <Path Id="fcb01008-3b5c-4973-ac17-fb1a970d70ab.OutputPathUri" Value="file:///C:/Users/Karthikeyan/Desktop/2015 Sem 2/CS2103/Project/Planner4life/Debug/Planner4life.lib" />
+    <Path Id="VsSolution" Value="C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\Planner4life" />
     <Path Id="VsSolutionUri" Value="file:///C:/Users/Karthikeyan/Desktop/2015 Sem 2/CS2103/Project/Planner4life" />
   </Paths>
 </DirectedGraph>
