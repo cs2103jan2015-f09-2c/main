@@ -25,7 +25,7 @@ void Task::addDetails(string details){
 	details = processImportance(details);
 
 	noOfDelimiters = count(details.begin(), details.end(), ';');
-	
+
 	switch (noOfDelimiters){
 	case 0:
 		_description = details;
