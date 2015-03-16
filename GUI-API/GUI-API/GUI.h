@@ -7,17 +7,18 @@
 #include "Planner.h" 
 
 
+
 using namespace std;
 
-class GUI{
+class Logic{
 private:
 	string outcome; //feedback prompt
 	string display;
 
 public:
-	
-	GUI();
-	~GUI();
+
+	Logic();
+	~Logic();
 	void processUserInput(string userInput, string currentView);
 	string extractCommand(std::string& userInput);
 	void processCommand(string command, string taskDetail, string currentView);
@@ -36,4 +37,3 @@ public:
 	string displayOutcome();
 	string displayContent();
 };
-

@@ -19,7 +19,7 @@ class Planner{
 
 private:
 	list<Task> All; // allTaskList 
-	list<Task> next7DaysList;
+	list<Task> HomeList;
 	list<Task> UpcomingList;
 	list<Task> MissedList;
 	list<Task> searchList;
@@ -29,12 +29,6 @@ private:
 
 	taskDate currentDate;
 
-public:
-
-	Planner();
-	string addTask(Task content);
-	string toString(string nameOfList);
-	string statusToString(string command, Task theTask);
 	string addStatusToString(Task theTask);
 	string deleteStatusToString(Task theTask);
 	string editStatusToString();
@@ -42,51 +36,39 @@ public:
 	string clearStatusToString();
 	string saveStatusToString();
 	string saveDataToString();
-	string AllToString(void);
-	string next7DaystoString(void);
+
+	string HomeListToString(void);
 	string upcomingListToString();
 	string missedListToString();
 	string searchListToString();
+
 	int getIdOfLastEntry(void);
-	string deleteTask(int serialNumber, string nameOfList);
 	string deleteIndex(int idNumber);
+
+	void generateAllOtherList(void);
+	void generateHomeList(void);
+	void generateUpcomingList(void);
+	void generateMissedList(void);
+
+	bool isHome(taskDate, list<Task>::iterator);
+	bool isMissed(taskDate, list<Task>::iterator);
+	bool isUpcoming(taskDate, list<Task>::iterator);
+
+public:
+
+	Planner();
+	string addTask(Task content);
+	string deleteTask(int serialNumber, string nameOfList);
+	string toString(string nameOfList);
+	string statusToString(string command, Task theTask);
 	string undo(void);
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
 	string save(string);
-
-	void generateAllOtherList(void);
-	void generateNext7DaysList(void);
-	void generateUpcomingList(void);
-	void generateMissedList(void);
-
 	void generateSearchList(string target);
-	bool isNext7Days(taskDate, list<Task>::iterator);
-	bool isMissed(taskDate, list<Task>::iterator);
-	bool isUpcoming(taskDate, list<Task>::iterator);
+	string AllToString(void);
 
-	//void editTask(int number, Task content);
-	//bool checkForClash(taskDate, taskDate, taskTime, taskTime);
-	/*
-	//Functions that generate the next7daysList,
-	//upcomingList, missedList, searchList
-	void generate_next7DaysList(void);
-	void generate_upcomingList(void);
-	void generate_missedList(void);
-	void generate_searchList(string target);*/
-	/*
-	//other functions
-	Tdate getTodaysDate(void);
-	Ttime getCurrentTime(void);
-	Tdate convertDate(time_t t);
-	Ttime convertTime(time_t t);
-	int findIndexToSlotIn(Tdate, Tdate, Ttime, Ttime);
-	int findIDNumber(int number, string nameOfList);
-	//toSting functions
-	string next7DaysListToString(void);
-	string upcomingListToString(void);
-	string missedListToString(void);
-	string searchListToString(void);
-	*/
+
 };
 #endif // !PLANNER_H
+

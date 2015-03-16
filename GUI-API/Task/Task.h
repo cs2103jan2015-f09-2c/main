@@ -22,7 +22,12 @@ private:
 	int _idNumber;
 	int _numOfDates;
 	int _numOfTimes;
-
+	string processImportance(string);
+	string processDescription(string);
+	void processDate(string);
+	void processTime(string);
+	void storeStartDate(string);
+	void storeEndDate(string);
 public:
 	Task();
 	~Task();
@@ -34,16 +39,11 @@ public:
 	taskDate getDateStart();
 	taskDate getDateEnd();
 	bool getImportance();
-	string processImportance(string);
-	string processDescription(string);
-	void processDate(string);
-	void processTime(string);
-	void storeStartDate(string);
-	void storeEndDate(string);
-	void storeIdNumber(int);
 	int getIdNumber();
 	int getNumOfDates();
 	int getNumOfTimes();
+	void storeIdNumber(int);
 };
 #endif
+
 
