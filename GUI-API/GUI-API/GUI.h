@@ -17,8 +17,8 @@ private:
 
 public:
 
-	GUI();
-	~GUI();
+	Logic();
+	~Logic();
 	void processUserInput(string userInput, string currentView);
 	string extractCommand(std::string& userInput);
 	void processCommand(string command, string taskDetail, string currentView);

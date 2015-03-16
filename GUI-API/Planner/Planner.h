@@ -37,7 +37,6 @@ private:
 	string saveStatusToString();
 	string saveDataToString();
 
-	string AllToString(void);
 	string HomeListToString(void);
 	string upcomingListToString();
 	string missedListToString();
@@ -50,7 +49,6 @@ private:
 	void generateHomeList(void);
 	void generateUpcomingList(void);
 	void generateMissedList(void);
-	void generateSearchList(string target);
 
 	bool isHome(taskDate, list<Task>::iterator);
 	bool isMissed(taskDate, list<Task>::iterator);
@@ -67,8 +65,8 @@ public:
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
 	string save(string);
-
-
+	void generateSearchList(string target);
+	string AllToString(void);
 
 
 };

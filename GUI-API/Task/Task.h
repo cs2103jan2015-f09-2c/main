@@ -28,7 +28,6 @@ private:
 	void processTime(string);
 	void storeStartDate(string);
 	void storeEndDate(string);
-	void storeIdNumber(int);
 public:
 	Task();
 	~Task();
@@ -43,6 +42,7 @@ public:
 	int getIdNumber();
 	int getNumOfDates();
 	int getNumOfTimes();
+	void storeIdNumber(int);
 };
 #endif
 
