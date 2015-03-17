@@ -38,13 +38,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\pc1\Documents\main\GUI-API\Task;..\Task;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\User\Desktop\CS2103 Project\GUI-API\LogSystem;C:\Users\pc1\Documents\main\GUI-API\Task;..\Task;..\LogSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
@@ -54,6 +56,9 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <Lib>
+      <AdditionalLibraryDirectories>..\LogSystem;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -73,6 +78,9 @@
     <ClInclude Include="Planner.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LogSystem\LogSystem.vcxproj">
+      <Project>{82c9329f-c8d7-4c9b-931c-cba46c26b750}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Task\Task.vcxproj">
       <Project>{55bcd928-ffa3-4f4c-900b-b0baa807d4f3}</Project>
     </ProjectReference>

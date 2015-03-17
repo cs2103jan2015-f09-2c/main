@@ -1,6 +1,8 @@
 #ifndef PLANNER_H
 #define PLANNER_H
 #include "Task.h"
+#include "Log.h"
+//#include"C:\Users\User\Desktop\CS2103_Project\GUI-API\LogSystem"
 #include <string>
 #include <list>
 using namespace std;
@@ -23,6 +25,8 @@ private:
 	list<Task> UpcomingList;
 	list<Task> MissedList;
 	list<Task> searchList;
+
+	Log LogData;
 
 	undoData lastEntry;
 	undoEditData lastEdit;

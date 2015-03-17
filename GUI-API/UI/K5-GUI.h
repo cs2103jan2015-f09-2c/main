@@ -1,5 +1,6 @@
 #pragma once
 #include "GUI.h"
+#include"Log.h"
 #include <string>
 #include <msclr\marshal_cppstd.h>
 #include <ctime>
