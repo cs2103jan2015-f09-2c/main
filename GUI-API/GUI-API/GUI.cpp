@@ -1,5 +1,6 @@
 #include "GUI.h"
 
+const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered!";
 Planner myPlanner;
 Logic::Logic(){
 }
@@ -8,7 +9,16 @@ Logic::~Logic(){
 }
 
 void Logic::processUserInput(string userInput, string currentView) {
+	try {
+		if (userInput == ""){
+			throw ERROR_MESSAGE_EMPTY_INPUT;
+		}
+	}
+	catch (const string ) {
+		outcome = ERROR_MESSAGE_EMPTY_INPUT + " Please enter a command!\n";
+	}
 
+	Assert::AreEqual
 	string command = extractCommand(userInput);
 	processCommand(command, userInput, currentView);
 
