@@ -1,6 +1,10 @@
 #TargetFrameworkVersion=v4.5:PlatformToolSet=v120:EnableManagedIncrementalBuild=true:VCToolArchitecture=Native32Bit
 <<<<<<< HEAD
+<<<<<<< HEAD
 Debug|Win32|D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\|
 =======
 Debug|Win32|C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\|
 >>>>>>> d4e750ee91da23ecc05a94727ed029986b884da3
+=======
+Debug|Win32|C:\Users\User\Desktop\CS2103 Project\GUI-API\|
+>>>>>>> 6e96689cd60857d04fd36bf6a3ed36d8d25dd3c5

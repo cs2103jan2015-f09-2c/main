@@ -128,7 +128,7 @@ void Logic::processCommandSearch(string taskDetail){
 }
 
 void Logic::processCommandHelp(){
-	string helpMessage = "HELP HELP HELP";
+	string helpMessage = "HELP HELP HELP"; // refactoring needed
 	display = helpMessage;
 }
 
