@@ -1,4 +1,5 @@
 #include "Task.h"
+#include "Log.h"
 #include <iostream>
 #include <string>
 
@@ -25,10 +26,10 @@ void Task::addDetails(string details){
 	details = processImportance(details);
 
 	noOfDelimiters = count(details.begin(), details.end(), ';');
-
 	switch (noOfDelimiters){
 	case 0:
 		_description = details;
+		LogData.addLog("UPDATE", "In addDetails, Case 0 was called");
 		break;
 	case 1:
 		details = processDescription(details);

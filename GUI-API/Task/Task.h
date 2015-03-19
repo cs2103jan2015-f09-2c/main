@@ -1,7 +1,9 @@
 #ifndef TASK_H
 #define TASK_H
+#include "Log.h"
 #include <iostream>
 #include <string>
+
 
 using namespace std;
 
@@ -28,6 +30,7 @@ private:
 	void processTime(string);
 	void storeStartDate(string);
 	void storeEndDate(string);
+	Log LogData;
 public:
 	Task();
 	~Task();

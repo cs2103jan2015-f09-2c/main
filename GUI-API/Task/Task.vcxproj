@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\LogSystem;..\LogSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
@@ -73,6 +73,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Task.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LogSystem\LogSystem.vcxproj">
+      <Project>{82c9329f-c8d7-4c9b-931c-cba46c26b750}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
