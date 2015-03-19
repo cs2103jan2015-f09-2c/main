@@ -1,16 +1,41 @@
+<<<<<<< HEAD
 ﻿Build started 19/3/2015 10:59:32 PM.
      1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" on node 3 (Build target(s)).
+=======
+<<<<<<< HEAD
+﻿Build started 19/3/2015 21:13:41 PM.
+     1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files\Microsoft Visual Studio 8\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
+=======
+﻿Build started 19/3/2015 8:30:04 PM.
+     1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
+>>>>>>> 32d80131cf8ebdcc98e14fde6af1fb66d1214b26
      1>Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
+>>>>>>> 855ab277341a88084c289b88ed97f21cacfd5867
          "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\LogSystem.lib"
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Task.lib"
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Planner.lib"
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\LogSystem.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Task.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Planner.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib"
      1>LogSystem.lib(Log.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+<<<<<<< HEAD
+         UI.vcxproj -> D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\UI.exe
+     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\UI\UI.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.92
+=======
          UI.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.exe
      1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" (Build target(s)).
 
 Build succeeded.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:03.24
+=======
+Time Elapsed 00:00:02.16
+>>>>>>> 855ab277341a88084c289b88ed97f21cacfd5867
+>>>>>>> 32d80131cf8ebdcc98e14fde6af1fb66d1214b26

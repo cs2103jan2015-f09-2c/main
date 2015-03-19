@@ -1,4 +1,11 @@
+#include <stdexcept>
 #include "GUI.h"
+#include "assert.h"
+
+const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
+const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
+const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
+const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
 
 Planner myPlanner;
 Logic::Logic(){
@@ -8,9 +15,26 @@ Logic::~Logic(){
 }
 
 void Logic::processUserInput(string userInput, string currentView) {
+	//Check whether currentView is empty or invalid views 
+	assert(currentView == "Home" || currentView == "Missed" || currentView == "Upcoming" || currentView == "Help" || currentView == "All");
 
-	string command = extractCommand(userInput);
-	processCommand(command, userInput, currentView);
+	try {
+		if (userInput == ""){
+			throw ERROR_MESSAGE_EMPTY_INPUT;
+		}
+
+		string command = extractCommand(userInput);
+
+		try {
+			processCommand(command, userInput, currentView);
+		}
+		catch (const string error){
+			outcome = error;
+		}
+	}
+	catch (const string error ) {
+		outcome = error;
+	}
 
 	updateDisplay(currentView);
 }
@@ -29,7 +53,7 @@ string Logic::extractCommand(string& userInput){
 	return command;
 }
 
-void Logic::processCommand(std::string command, std::string taskDetail, string currentView){
+void Logic::processCommand(std::string command, std::string taskDetail, string currentView) throw (const string) {
 
 	if (command == "load"){
 		processCommandLoad(taskDetail);
@@ -42,12 +66,22 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 
 		else
 			if (command == "delete"){
-				processCommandDelete(taskDetail, currentView);
+				try {
+					processCommandDelete(taskDetail, currentView);
+				}
+				catch (const string error) {
+					throw error;
+				}
 			}
 
 			else
 				if (command == "edit"){
-					processCommandEdit(taskDetail, currentView);
+					try {
+						processCommandEdit(taskDetail, currentView);
+					}
+					catch (const string error){
+						throw error;
+					}
 				}
 
 				else
@@ -76,7 +110,9 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 										if (command == "all"){
 											processCommandAll();
 										}
-
+										else {
+											throw ERROR_MESSAGE_INVALID_COMMAND;
+										}
 	//save after each operation
 	string fileName = "myFile.txt";
 	save(fileName);
@@ -96,18 +132,42 @@ void Logic::processCommandAdd(string taskDetail){
 	outcome = myPlanner.addTask(currentTask);
 }
 
-void Logic::processCommandDelete(string taskIndex, string currentView){
-	int index = stoi(taskIndex);
+void Logic::processCommandDelete(string taskIndex, string currentView) throw (invalid_argument&) {
+	int index = 0;
+
+	try {
+		index = stoi(taskIndex);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
+	}
+	
 	outcome = myPlanner.deleteTask(index, currentView);
 }
 
-void Logic::processCommandEdit(string userInput, string currentView){
+void Logic::processCommandEdit(string userInput, string currentView) throw (bad_cast&) {
 	char colon;
 	int taskIndex;
 	string taskDetails;
 	istringstream in(userInput);
-	in >> taskIndex;
-	in >> colon;
+	try {
+		if (!(in >> taskIndex)){
+			throw bad_cast();
+		}
+	}
+	catch (bad_cast& error){
+			throw ERROR_MESSAGE_INVALID_SERIAL_NO;
+	}
+
+	try {
+		if (!(in >> colon)){
+			throw bad_cast();
+		}
+	}
+	catch (bad_cast& error){
+		throw ERROR_MESSAGE_MISSING_COLON;
+	}
+
 	//in >> taskDetails;
 	int sizeToSubstr = userInput.size() - 2;
 	taskDetails = userInput.substr(2, sizeToSubstr);
