@@ -1,6 +1,8 @@
 #include "GUI.h"
+#include "assert.h"
 
-const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered!";
+const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
+const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
 Planner myPlanner;
 Logic::Logic(){
 }
@@ -9,18 +11,27 @@ Logic::~Logic(){
 }
 
 void Logic::processUserInput(string userInput, string currentView) {
+	//Check whether currentView is empty or invalid views 
+	assert(currentView != "");
+	assert(currentView == "Home" || currentView == "Missed" || currentView == "Upcoming");
+
 	try {
 		if (userInput == ""){
 			throw ERROR_MESSAGE_EMPTY_INPUT;
 		}
-	}
-	catch (const string ) {
-		outcome = ERROR_MESSAGE_EMPTY_INPUT + " Please enter a command!\n";
-	}
 
-	Assert::AreEqual
-	string command = extractCommand(userInput);
-	processCommand(command, userInput, currentView);
+		string command = extractCommand(userInput);
+
+		try {
+			processCommand(command, userInput, currentView);
+		}
+		catch (const string error){
+			outcome = error;
+		}
+	}
+	catch (const string error ) {
+		outcome = error;
+	}
 
 	updateDisplay(currentView);
 }
@@ -39,7 +50,7 @@ string Logic::extractCommand(string& userInput){
 	return command;
 }
 
-void Logic::processCommand(std::string command, std::string taskDetail, string currentView){
+void Logic::processCommand(std::string command, std::string taskDetail, string currentView) throw (const string) {
 
 	if (command == "load"){
 		processCommandLoad(taskDetail);
@@ -86,7 +97,9 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 										if (command == "all"){
 											processCommandAll();
 										}
-
+										else {
+											throw ERROR_MESSAGE_INVALID_COMMAND;
+										}
 	//save after each operation
 	string fileName = "myFile.txt";
 	save(fileName);

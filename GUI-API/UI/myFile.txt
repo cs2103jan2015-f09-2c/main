@@ -1,9 +1,1 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-The list is empty!
-=======
-hello; 0-10-10-1 to 0-10-10-1 ;
->>>>>>> d4e750ee91da23ecc05a94727ed029986b884da3
-=======
-The list is empty!
->>>>>>> 6e96689cd60857d04fd36bf6a3ed36d8d25dd3c5
+homework; 0-10-10-1 to 200315 ;

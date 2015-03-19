@@ -1,39 +1,19 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-﻿Build started 13/3/2015 0:19:42 AM.
+﻿Build started 19/3/2015 14:32:26 PM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
-     1>Lib:
+     1>ClCompile:
+         C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I..\Planner /I..\Task /I..\LogSystem /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
+         GUI.cpp
+     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(53): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+       Lib:
+         C:\Program Files\Microsoft Visual Studio 8\VC\bin\Lib.exe /OUT:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\LogSystem.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Task.lib"
+         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Planner.lib"
          GUI-API.vcxproj -> D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib
+       BscMake:
+         C:\Program Files\Microsoft Visual Studio 8\VC\bin\bscmake.exe /nologo /o"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.bsc" /n Debug\GUI.sbr
      1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.47
-=======
-﻿Build started 16/3/2015 12:00:10 PM.
-     1>Project "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Rebuild target(s)).
-=======
-﻿Build started 17/3/2015 11:26:58 PM.
-     1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 3 (Rebuild target(s)).
->>>>>>> 6e96689cd60857d04fd36bf6a3ed36d8d25dd3c5
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Planner /I..\Task /I..\LogSystem /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
-         GUI.cpp
-       Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\LogSystem.lib"
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Task.lib"
-         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Planner.lib"
-         GUI-API.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib
-       BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.bsc" /n Debug\GUI.sbr
-     1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" (Rebuild target(s)).
-
-Build succeeded.
-
-<<<<<<< HEAD
-Time Elapsed 00:00:00.86
->>>>>>> d4e750ee91da23ecc05a94727ed029986b884da3
-=======
-Time Elapsed 00:00:01.93
->>>>>>> 6e96689cd60857d04fd36bf6a3ed36d8d25dd3c5
+Time Elapsed 00:00:04.81
