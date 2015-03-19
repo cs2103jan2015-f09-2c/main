@@ -17,12 +17,13 @@ Log::~Log(){
 
 void Log::addLog(string type, string message){
 	loadLog();
+//
 	ostringstream out;
 	time_t _tm = time(NULL);
 	struct tm * curtime = localtime(&_tm);
 	out << type << ": " << message << "; "<<asctime(curtime);
 	string text = out.str();
-	_numLines++;
+	_numLines = _numLines + 1;
 	_logList.push_back(text);
 	saveLog();
 	
@@ -72,4 +73,12 @@ void Log::loadLog(void){
 	}
 
 	_numLines = _logList.size();
+}
+
+void Log::clearLog(){
+	while (!_logList.empty()){
+		_logList.pop_back();
+	}
+	_numLines = _logList.size();
+	saveLog();
 }
