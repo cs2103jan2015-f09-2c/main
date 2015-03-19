@@ -17,7 +17,12 @@ Log::~Log(){
 
 void Log::addLog(string type, string message){
 	loadLog();
-//
+	
+	if (_numLines >= 99){
+		_logList.erase(_logList.begin());
+		_numLines = _numLines - 1;
+	}
+	
 	ostringstream out;
 	time_t _tm = time(NULL);
 	struct tm * curtime = localtime(&_tm);
