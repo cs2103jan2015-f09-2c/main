@@ -1,8 +1,10 @@
+#include <stdexcept>
 #include "GUI.h"
 #include "assert.h"
 
 const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
 const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
+const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalide serial number! Serial number should be a positive integer.";
 Planner myPlanner;
 Logic::Logic(){
 }
@@ -12,8 +14,7 @@ Logic::~Logic(){
 
 void Logic::processUserInput(string userInput, string currentView) {
 	//Check whether currentView is empty or invalid views 
-	assert(currentView != "");
-	assert(currentView == "Home" || currentView == "Missed" || currentView == "Upcoming");
+	assert(currentView == "Home" || currentView == "Missed" || currentView == "Upcoming" || currentView == "Help" || currentView == "All");
 
 	try {
 		if (userInput == ""){
@@ -63,7 +64,12 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 
 		else
 			if (command == "delete"){
-				processCommandDelete(taskDetail, currentView);
+				try {
+					processCommandDelete(taskDetail, currentView);
+				}
+				catch (const string error) {
+					throw error;
+				}
 			}
 
 			else
@@ -119,8 +125,17 @@ void Logic::processCommandAdd(string taskDetail){
 	outcome = myPlanner.addTask(currentTask);
 }
 
-void Logic::processCommandDelete(string taskIndex, string currentView){
-	int index = stoi(taskIndex);
+void Logic::processCommandDelete(string taskIndex, string currentView) throw (invalid_argument&) {
+	int index = 0;
+
+	try {
+		index = stoi(taskIndex);
+		throw invalid_argument(ERROR_MESSAGE_INVALID_SERIAL_NO);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
+	}
+	
 	outcome = myPlanner.deleteTask(index, currentView);
 }
 
