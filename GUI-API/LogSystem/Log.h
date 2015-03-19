@@ -6,7 +6,6 @@ class Log
 {
 private: 
 	vector<string> _logList;
-	vector<int> _numberList;
 
 public:
 	Log();
@@ -14,5 +13,6 @@ public:
 	int _numLines;
 	void addLog(string type, string message);
 	void saveLog();
+	void loadLog();
 };
 

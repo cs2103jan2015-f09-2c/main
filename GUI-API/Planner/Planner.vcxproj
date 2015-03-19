@@ -46,7 +46,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\User\Desktop\CS2103 Project\GUI-API\LogSystem;C:\Users\pc1\Documents\main\GUI-API\Task;..\Task;..\LogSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\LogSystem;C:\Users\User\Desktop\CS2103 Project\GUI-API\LogSystem;C:\Users\pc1\Documents\main\GUI-API\Task;..\Task;..\LogSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>

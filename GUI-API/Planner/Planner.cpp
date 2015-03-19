@@ -1,4 +1,5 @@
 #include "Planner.h"
+#include "Log.h"
 #include <iostream>
 #include <string>
 #include <list>
