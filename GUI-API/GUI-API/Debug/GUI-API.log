@@ -1,18 +1,13 @@
-﻿Build started 19/3/2015 8:12:40 PM.
-     1>Project "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Rebuild target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Planner /I..\Task /I..\LogSystem /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
-         GUI.cpp
-       Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
-         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\LogSystem.lib"
-         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\Task.lib"
-         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\Planner.lib"
-         GUI-API.vcxproj -> C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\GUI-API.lib
-       BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\GUI-API.bsc" /n Debug\GUI.sbr
-     1>Done Building Project "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\GUI-API\GUI-API.vcxproj" (Rebuild target(s)).
+﻿Build started 19/3/2015 8:30:02 PM.
+     1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\LogSystem.lib"
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Task.lib"
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Planner.lib"
+         GUI-API.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib
+     1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.00
+Time Elapsed 00:00:01.34

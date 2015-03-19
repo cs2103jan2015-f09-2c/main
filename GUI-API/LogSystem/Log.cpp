@@ -60,8 +60,15 @@ void Log::loadLog(void){
 	}
 	
 	vector<string>::iterator iter1;
+	int i = 0;
 	for (iter1 = _logList.begin(); iter1 != _logList.end(); ++iter1){
-		(*iter1).erase(0, 2);
+		i++;
+		if (i <= 9){
+			(*iter1).erase(0, 2);
+		}
+		else {
+			(*iter1).erase(0, 3);
+		}
 	}
 
 	_numLines = _logList.size();
