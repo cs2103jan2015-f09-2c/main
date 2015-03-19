@@ -4,7 +4,9 @@
 
 const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
 const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
-const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalide serial number! Serial number should be a positive integer.";
+const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
+const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
+
 Planner myPlanner;
 Logic::Logic(){
 }
@@ -74,7 +76,12 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 
 			else
 				if (command == "edit"){
-					processCommandEdit(taskDetail, currentView);
+					try {
+						processCommandEdit(taskDetail, currentView);
+					}
+					catch (const string error){
+						throw error;
+					}
 				}
 
 				else
@@ -130,7 +137,6 @@ void Logic::processCommandDelete(string taskIndex, string currentView) throw (in
 
 	try {
 		index = stoi(taskIndex);
-		throw invalid_argument(ERROR_MESSAGE_INVALID_SERIAL_NO);
 	}
 	catch (invalid_argument& error){
 		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
@@ -139,13 +145,29 @@ void Logic::processCommandDelete(string taskIndex, string currentView) throw (in
 	outcome = myPlanner.deleteTask(index, currentView);
 }
 
-void Logic::processCommandEdit(string userInput, string currentView){
+void Logic::processCommandEdit(string userInput, string currentView) throw (bad_cast&) {
 	char colon;
 	int taskIndex;
 	string taskDetails;
 	istringstream in(userInput);
-	in >> taskIndex;
-	in >> colon;
+	try {
+		if (!(in >> taskIndex)){
+			throw bad_cast();
+		}
+	}
+	catch (bad_cast& error){
+			throw ERROR_MESSAGE_INVALID_SERIAL_NO;
+	}
+
+	try {
+		if (!(in >> colon)){
+			throw bad_cast();
+		}
+	}
+	catch (bad_cast& error){
+		throw ERROR_MESSAGE_MISSING_COLON;
+	}
+
 	//in >> taskDetails;
 	int sizeToSubstr = userInput.size() - 2;
 	taskDetails = userInput.substr(2, sizeToSubstr);
