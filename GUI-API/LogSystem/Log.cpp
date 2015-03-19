@@ -59,9 +59,9 @@ void Log::loadLog(void){
 		}
 	}
 	
-	vector<string>::iterator iter;
-	for (iter = _logList.begin(); iter != _logList.end(); ++iter){
-		(*iter).erase(0, 2);
+	vector<string>::iterator iter1;
+	for (iter1 = _logList.begin(); iter1 != _logList.end(); ++iter1){
+		(*iter1).erase(0, 2);
 	}
 
 	_numLines = _logList.size();
