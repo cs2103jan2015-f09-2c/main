@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 1.<<<<< HEAD
 2.UPDATE: ID of new entry is 10001; Thu Mar 19 21:15:18 2015
 3.UPDATE: File Save Operation; Thu Mar 19 21:15:18 2015
@@ -71,3 +72,5 @@
 71.UPDATE: ID of new entry is 10002; Fri Mar 20 07:44:32 2015
 72.UPDATE: File Save Operation; Fri Mar 20 07:44:32 2015
 
+=======
+>>>>>>> 2c8f59e4027c3d4c04e6a02a97c03d158bac544b

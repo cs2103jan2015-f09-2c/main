@@ -28,10 +28,12 @@ void Task::addDetails(string details){
 	noOfDelimiters = count(details.begin(), details.end(), ';');
 	switch (noOfDelimiters){
 	case 0:
-		_description = details;
 		LogData.addLog("UPDATE", "In addDetails, Case 0 was called");
+		_description = details;
+		LogData.addLog("UPDATE", "In addDetails, Case 0 was finished successfully");
 		break;
 	case 1:
+		LogData.addLog("UPDATE", "In addDetails, Case 1 was called");
 		details = processDescription(details);
 		if (details.find("date") != string::npos){
 			processDate(details);
@@ -39,8 +41,10 @@ void Task::addDetails(string details){
 		else{
 			processTime(details);
 		}
+		LogData.addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
 		break;
 	case 2:
+		LogData.addLog("UPDATE", "In addDetails, Case 2 was called");
 		details = processDescription(details);
 		index = details.find(';');
 		if (details.substr(0, index).find("date") != string::npos){
@@ -58,6 +62,7 @@ void Task::addDetails(string details){
 		}
 		processDate(dateInfo);
 		processTime(timeInfo);
+		LogData.addLog("UPDATE", "In addDetails, Case 2 was finished successfully");
 		break;
 	default:
 		cout << "fatal error!" << endl;
@@ -82,6 +87,7 @@ string Task::processDescription(string details){
 	_description = details.substr(0, index);
 	index = index + 1;
 	details = details.substr(index, details.size() - index);				//cut out the description part to be left with the date and/or time part
+	LogData.addLog("UPDATE", "In addDetails(processDescription), Description stored successfully");
 	return details;
 }
 
@@ -106,6 +112,8 @@ void Task::processDate(string dateInfo){
 		storeEndDate(dateInfo);
 		_numOfDates = 1;
 	}
+
+	LogData.addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
 }
 
 //Splits the start date string into individual components and stores them in the relevant variables
@@ -154,14 +162,18 @@ void Task::processTime(string timeInfo){
 		_timeStart = stoi(timeInfo);
 		_numOfTimes = 1;
 	}
+
+	LogData.addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
 }
 
 //Checks if the target word is present in the task description
 bool Task::isSearchTargetPresent(string target){
+	LogData.addLog("UPDATE", "In isSearchTargetPresent, search initiated");
 	bool isFound = true;
 	if (_description.find(target) == string::npos){
 		isFound = false;
 	}
+	LogData.addLog("UPDATE", "In isSearchTargetPresent, search completed");
 	return isFound;
 }
 

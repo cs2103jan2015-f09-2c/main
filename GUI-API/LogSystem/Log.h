@@ -6,13 +6,14 @@ class Log
 {
 private: 
 	vector<string> _logList;
+	int _numLines;
+	void saveLog();
+	void loadLog();
 
 public:
 	Log();
 	~Log();
-	int _numLines;
 	void addLog(string type, string message);
-	void saveLog();
-	void loadLog();
+	void clearLog();
 };
 
