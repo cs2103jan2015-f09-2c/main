@@ -1,12 +1,2 @@
-<<<<<<< HEAD
-Test task 1; 0-10-10-1 to 010203 ;0-1-1
-Test task 3; 0-10-10-1 to 0-10-10-1 ;0-1-1
-Test task 2; 110315 to 120315 ;
-=======
-<<<<<<< HEAD
-meeting; 0-10-10-1 to 0-10-10-1 ;
-=======
-task 4; 0-10-10-1 to 190315 ;
-task 3; 0-10-10-1 to 110415 ;
->>>>>>> 855ab277341a88084c289b88ed97f21cacfd5867
->>>>>>> 32d80131cf8ebdcc98e14fde6af1fb66d1214b26
+Internship applications	; 130315 to 190315 ;0800 to 1000
+Do homework		; 130315 to 190315 ;1000 to 1200

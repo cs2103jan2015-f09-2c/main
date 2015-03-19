@@ -5,6 +5,10 @@
 #include <msclr\marshal_cppstd.h>
 #include <ctime>
 
+// uncomment to disable assert()
+// #define NDEBUG
+#include <cassert>
+
 using namespace System;
 using namespace System::Drawing;
 using namespace System::Collections;
@@ -157,6 +161,7 @@ namespace UI {
 	}
 	private: System::Void colourSwitch(String^ currentView) {
 		if (currentView == "Home") {
+			assert(currentView == "Home");							//assert demonstration
 			homeButton->BackColor = Color::LightSkyBlue;
 			missedButton->BackColor = Color::SteelBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
@@ -200,6 +205,13 @@ namespace UI {
 		switchView(currentView);
 		colourSwitch(currentView);
 	}
+	private: System::Void checkOutput(String^ output) {
+		for (int i = 0; i < output->Length; i++) {
+			if (output[i] == '.') {
+				assert(isdigit(output[i-1]));
+			}
+		}
+	}
 			 //takes in user input
 	private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
 		String^ strOutput;
@@ -238,6 +250,7 @@ namespace UI {
 
 				s->processUserInput(unmanagedInput, unmanagedView);
 				strOutput = gcnew String(s->displayContent().c_str());
+				checkOutput(strOutput);
 				displayWindow->Text = strOutput;
 				prompt->Text = gcnew String(s->displayOutcome().c_str());
 			}
