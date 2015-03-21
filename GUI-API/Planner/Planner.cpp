@@ -68,6 +68,9 @@ string Planner::addTask(Task newTask){
 
 	//check where to slot
 	list<Task>::iterator iter;
+
+	/*	old logic
+
 	for (iter = All.begin(); iter != All.end(); ++iter){
 		if (newTask.getDateStart().year <= (*iter).getDateStart().year)
 			if (newTask.getDateStart().month < (*iter).getDateStart().month)
@@ -83,7 +86,7 @@ string Planner::addTask(Task newTask){
 						}
 	}
 
-	/* ************ NEW LOGIC - IN THE PROCESS. DON'T EDIT OR DELETE *************
+*/
 
 	//case when new task has no date and no time
 	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
@@ -109,29 +112,63 @@ string Planner::addTask(Task newTask){
 		}
 	}
 
-	//case when new task has no time and has 2 dates
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		if ((*iter).getDateStart().year > newTask.getDateStart().year){
-			break;
-		}
-		else if ((*iter).getDateStart().year == newTask.getDateStart().year){
-			if ((*iter).getDateStart().month > newTask.getDateStart().month){
+	//case when new task has 2 dates (0,1 or 2 times)
+	else if (newTask.getNumOfDates() == 2){
+		for (iter = All.begin(); iter != All.end(); ++iter){
+			if ((*iter).getDateStart().year > newTask.getDateStart().year){
 				break;
 			}
-			else if ((*iter).getDateStart().month == newTask.getDateStart().month){
-				if ((*iter).getDateStart().day > newTask.getDateStart().day){
+			else if ((*iter).getDateStart().year == newTask.getDateStart().year){
+				if ((*iter).getDateStart().month > newTask.getDateStart().month){
 					break;
+				}
+				else if ((*iter).getDateStart().month == newTask.getDateStart().month){
+					if ((*iter).getDateStart().day > newTask.getDateStart().day){
+						break;
+					}
+					else if ((*iter).getDateStart().day == newTask.getDateStart().day){
+						if ((*iter).getTimeStart() > newTask.getTimeStart()){
+							break;
+						}
+						else if ((*iter).getTimeStart() == newTask.getTimeStart()){
+							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+								break;
+							}
+						}
+					}
 				}
 			}
 		}
 	}
 
-	//case when new task has no time and has 1 date
-
-
-	//case when new task has time and date (either 1 or 2 for both date and time)
-//	*******************************************************************************
-	*/
+	//case when new task has 1 date (0,1 or 2 times)
+	else if (newTask.getNumOfDates() == 1){
+		for (iter = All.begin(); iter != All.end(); ++iter){
+			if ((*iter).getDateStart().year > newTask.getDateEnd().year){
+				break;
+			}
+			else if ((*iter).getDateStart().year == newTask.getDateEnd().year){
+				if ((*iter).getDateStart().month > newTask.getDateEnd().month){
+					break;
+				}
+				else if ((*iter).getDateStart().month == newTask.getDateEnd().month){
+					if ((*iter).getDateStart().day > newTask.getDateEnd().day){
+						break;
+					}
+					else if ((*iter).getDateStart().day == newTask.getDateEnd().day){
+						if ((*iter).getTimeStart() > newTask.getTimeStart()){
+							break;
+						}
+						else if ((*iter).getTimeStart() == newTask.getTimeStart()){
+							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	All.insert(iter, newTask);
 	
