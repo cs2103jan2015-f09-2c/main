@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-Internship applications	; 130315 to 190315 ;0800 to 1000
-Do homework		; 130315 to 190315 ;1000 to 1200
-=======
-hello; 121212 to 131213 ;1234 to 2345
->>>>>>> 2c8f59e4027c3d4c04e6a02a97c03d158bac544b
+yo; 0-10-10-1 to 111111 ;
+bye; 0-10-10-1 to 0-10-10-1 ;
+hello; 0-10-10-1 to 0-10-10-1 ;

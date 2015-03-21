@@ -5,14 +5,18 @@ using namespace std;
 class Log
 {
 private: 
+	Log();
+	~Log();
+	static bool instanceFlag;
+	static Log *theOne;
 	vector<string> _logList;
 	int _numLines;
 	void saveLog();
-	void loadLog();
+	//void loadLog();
+
 
 public:
-	Log();
-	~Log();
+	static Log* getInstance();
 	void addLog(string type, string message);
 	void clearLog();
 };

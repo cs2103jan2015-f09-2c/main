@@ -26,7 +26,8 @@ private:
 	list<Task> MissedList;
 	list<Task> searchList;
 
-	Log LogData;
+	Log* LogData = Log::getInstance();
+	
 
 	undoData lastEntry;
 	undoEditData lastEdit;

@@ -25,7 +25,7 @@ string Planner::addTask(Task newTask){
 	//logging
 	stringstream message;
 	message << "ID of new entry is " << id;
-	LogData.addLog("UPDATE", message.str());
+	LogData->addLog("UPDATE", message.str());
 	newTask.storeIdNumber(id);
 
 	//check where to slot
@@ -601,7 +601,7 @@ string Planner::deleteIndex(int idNumber){
 	//logging
 	stringstream message;
 	message << "ID of deleted entry is " << idNumber;
-	LogData.addLog("UPDATE", message.str());
+	LogData->addLog("UPDATE", message.str());
 
 	return status;
 
@@ -628,7 +628,7 @@ string Planner::undo(void){
 string Planner::clear(void){
 	All.clear();
 	generateAllOtherList();
-	LogData.addLog("UPDATE", "ALL entries cleared ");
+	LogData->addLog("UPDATE", "ALL entries cleared ");
 	return clearStatusToString();
 }
 
@@ -641,7 +641,7 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	lastEdit.addedTask = lastEntry.lastTask;
 	lastEntry.lastCommand = "edit";
 	generateAllOtherList();
-	LogData.addLog("UPDATE", "Edit Taken Place ");
+	LogData->addLog("UPDATE", "Edit Taken Place ");
 	return editStatusToString();
 }
 
@@ -651,7 +651,7 @@ string Planner::save(string fileName){
 	allTasks = saveDataToString();
 	write << allTasks;
 	write.close();
-	LogData.addLog("UPDATE", "File Save Operation");
+	LogData->addLog("UPDATE", "File Save Operation");
 	return saveStatusToString();
 }
 

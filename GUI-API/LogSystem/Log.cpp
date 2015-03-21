@@ -6,7 +6,21 @@
 #include<vector>
 #include "Log.h"
 
+bool Log::instanceFlag = false;
+Log* Log::theOne = NULL;
 
+Log* Log::getInstance(){
+	if (!instanceFlag)
+	{
+		theOne = new Log();
+		instanceFlag = true;
+		return theOne;
+	}
+	else
+	{
+		return theOne;
+	}
+}
 Log::Log(void){
 	_numLines = 0;
 }
@@ -16,12 +30,6 @@ Log::~Log(){
 }
 
 void Log::addLog(string type, string message){
-	loadLog();
-	
-	if (_numLines >= 99){
-		_logList.erase(_logList.begin());
-		_numLines = _numLines - 1;
-	}
 	
 	ostringstream out;
 	time_t _tm = time(NULL);
@@ -35,15 +43,16 @@ void Log::addLog(string type, string message){
 	}
 
 void Log::saveLog(void){
-	ofstream outFile("Planner4Life_Log_File.txt");
+	ofstream outFile;
+	outFile.open("Planner4Life_Log_File.txt", std::ios::app);
 	
-	for (int i = 1; i <= _numLines; i++){
-		outFile << i << "." << _logList[i - 1] << endl;
-	}
+	
+		outFile << _numLines << "." << _logList[_numLines-1] << endl;
+	
 	outFile.close();
 }
 
-void Log::loadLog(void){
+/*void Log::loadLog(void){
 	ifstream readFile("Planner4Life_log_File.txt");
 	string line;
 
@@ -78,12 +87,14 @@ void Log::loadLog(void){
 	}
 
 	_numLines = _logList.size();
-}
+}*/
 
 void Log::clearLog(){
 	while (!_logList.empty()){
 		_logList.pop_back();
 	}
 	_numLines = _logList.size();
-	saveLog();
+	ofstream outFile("Planner4Life_Log_File.txt");
+	outFile << "";
+	outFile.close();
 }
