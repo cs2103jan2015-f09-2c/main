@@ -67,7 +67,6 @@ string Planner::addTask(Task newTask){
 	newTask.storeIdNumber(id);
 
 	//check where to slot
-	//THYE JIE PLEASE ADD BRACKETS FOR ALL THE IF ELSE
 	list<Task>::iterator iter;
 	for (iter = All.begin(); iter != All.end(); ++iter){
 		if (newTask.getDateStart().year <= (*iter).getDateStart().year)
@@ -83,6 +82,35 @@ string Planner::addTask(Task newTask){
 								break;
 						}
 	}
+
+	/* ************ NEW LOGIC - IN THE PROCESS. DON'T EDIT OR DELETE *************
+
+	//case when new task has no date and no time
+	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
+		//look for slot at the end of tasks with no date and no time
+		for (iter = All.begin(); iter != All.end(); ++iter){
+			if ((*iter).getNumOfDates() > 0 || (*iter).getNumOfTimes() > 0){
+				break;
+			}
+		}
+	}
+
+	//case when new task has no date and has time (either 1 or 2 times)
+	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
+		for (iter = All.begin(); iter != All.end(); ++iter){
+			if ((*iter).getTimeStart() > newTask.getTimeStart()){
+				break;
+			}
+			else if ((*iter).getTimeStart() == newTask.getTimeStart()){
+				if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+					break;
+				}
+			}
+		}
+	}
+	
+	*******************************************************************************
+	*/
 
 	All.insert(iter, newTask);
 	
