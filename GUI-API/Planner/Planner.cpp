@@ -108,8 +108,29 @@ string Planner::addTask(Task newTask){
 			}
 		}
 	}
-	
-	*******************************************************************************
+
+	//case when new task has no time and has 2 dates
+	for (iter = All.begin(); iter != All.end(); ++iter){
+		if ((*iter).getDateStart().year > newTask.getDateStart().year){
+			break;
+		}
+		else if ((*iter).getDateStart().year == newTask.getDateStart().year){
+			if ((*iter).getDateStart().month > newTask.getDateStart().month){
+				break;
+			}
+			else if ((*iter).getDateStart().month == newTask.getDateStart().month){
+				if ((*iter).getDateStart().day > newTask.getDateStart().day){
+					break;
+				}
+			}
+		}
+	}
+
+	//case when new task has no time and has 1 date
+
+
+	//case when new task has time and date (either 1 or 2 for both date and time)
+//	*******************************************************************************
 	*/
 
 	All.insert(iter, newTask);
