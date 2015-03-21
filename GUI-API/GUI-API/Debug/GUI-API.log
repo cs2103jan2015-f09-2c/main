@@ -1,24 +1,13 @@
-﻿Build started 21/3/2015 3:03:41 PM.
+﻿Build started 21/3/2015 4:43:29 PM.
      1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Planner /I..\Task /I..\LogSystem /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
-         GUI.cpp
-     1>c:\users\user\desktop\cs2103 project\gui-api\gui-api\gui.cpp(56): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>c:\users\user\desktop\cs2103 project\gui-api\gui-api\gui.cpp(135): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>c:\users\user\desktop\cs2103 project\gui-api\gui-api\gui.cpp(141): warning C4101: 'error' : unreferenced local variable
-     1>c:\users\user\desktop\cs2103 project\gui-api\gui-api\gui.cpp(148): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>c:\users\user\desktop\cs2103 project\gui-api\gui-api\gui.cpp(158): warning C4101: 'error' : unreferenced local variable
-     1>c:\users\user\desktop\cs2103 project\gui-api\gui-api\gui.cpp(167): warning C4101: 'error' : unreferenced local variable
-       Lib:
+     1>Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\LogSystem.lib"
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Task.lib"
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Planner.lib"
          GUI-API.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib
-       BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.bsc" /n Debug\GUI.sbr
      1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:07.89
+Time Elapsed 00:00:02.16

@@ -7,6 +7,45 @@
 #include <sstream>
 #include <fstream>
 
+const string COMMAND_ADD = "add";
+const string COMMAND_DELETE = "delete";
+const string COMMAND_EDIT = "edit";
+const string COMMAND_UNDO = "undo";
+const string COMMAND_CLEAR = "clear";
+const string COMMAND_SAVE = "save";
+
+const string HOME_LIST = "Home";
+const string MISSED_LIST = "Missed";
+const string UPCOMING_LIST = "Upcoming";
+const string SEARCH_LIST = "searchList";
+
+const string LOG_FILE_UPDATE_KEY_WORD = "UPDATE";
+const string LOG_FILE_ADD_TASK_INTRO_MSG = "ID of new entry is ";
+const string LOG_FILE_DELETE_TASK_INTRO_MSG = "ID of deleted entry is ";
+const string LOG_FILE_CLEAR_TASK_MSG = "Delete ID : ";
+const string LOG_FILE_EDIT_TASK_MSG = "Edit Taken Place ";
+const string LOG_FILE_SAVE_MSG = "File Save Operation";
+
+const string ERROR_MESSAGE_FATAL = "Fatal Error !!";
+const string ERROR_MESSSAGE_INVALID_LIST_NAME = "Error!! Name of list is invalid!!";
+const string ERROR_MESSSAGE_INVALID_FILE_NAME = "Error!! Name of file is invalid!!";
+const string ERROR_MESSSAGE_INVALID_COMMAND = "Error!! Command is invalid!!";
+
+const string EMPTY_LIST_MESSAGE = "The list is empty";
+const string NEWLINE = "\r\n";
+const string IMPORTANCE_SYMBOL = "#impt";
+
+const string STATUS_TO_STRING_ADD_INTRO = "Task added: ";
+const string STATUS_TO_STRING_DELETE_INTRO = "Task deleted:";
+const string STATUS_TO_STRING_EDIT_INTRO = "The following Task : \r\n";
+const string STATUS_TO_STRING_EDIT_MID = "\r\nhas been edited to :\r\n";
+const string STATUS_TO_STRING_UNDO_ADD_MSG = "The following Task has been added back: \r\n";
+const string STATUS_TO_STRING_UNDO_DELETE_MSG = "The following Task has been removed: \r\n";
+const string STATUS_TO_STRING_CLEAR_MSG = "All content cleared. \r\n";
+const string STATUS_TO_STRING_SAVE_MSG = "File has been saved. \r\n";
+
+
+
 using namespace std;
 //Public Functions
 Planner::Planner(){
@@ -23,11 +62,12 @@ string Planner::addTask(Task newTask){
 
 	//logging
 	stringstream message;
-	message << "ID of new entry is " << id;
-	LogData->addLog("UPDATE", message.str());
+	message << LOG_FILE_ADD_TASK_INTRO_MSG << id;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 	newTask.storeIdNumber(id);
 
 	//check where to slot
+	//THYE JIE PLEASE ADD BRACKETS FOR ALL THE IF ELSE
 	list<Task>::iterator iter;
 	for (iter = All.begin(); iter != All.end(); ++iter){
 		if (newTask.getDateStart().year <= (*iter).getDateStart().year)
@@ -44,82 +84,68 @@ string Planner::addTask(Task newTask){
 						}
 	}
 
-	/*
-	for (iter = All.begin(); iter != All.end(); ++iter){
-	if ((*iter).getTimeStart() > newTask.getTimeStart()){
-	break;
-	}
-	if ((*iter).getTimeStart() == newTask.getTimeStart()){
-	if ((*iter).getNumOfTimes() == 2 && newTask.getNumOfTimes() == 2){
-	if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
-	break;
-	}
-	}
-
-	if (((*iter).getNumOfTimes() == 2 && newTask.getNumOfTimes() == 1)){
-	break;
-	}
-
-	if (((*iter).getNumOfTimes() == 1 && newTask.getNumOfTimes() == 2)){
-	iter++;
-	break;
-	}
-
-	if (((*iter).getNumOfTimes() == 1 && newTask.getNumOfTimes() == 1)){
-	if ((*iter).getIdNumber() > newTask.getIdNumber())
-	break;
-	}
-	}
-	}*/
-
-
 	All.insert(iter, newTask);
+	
 	string status;
-	status = statusToString("add", newTask);
-	lastEntry.lastCommand = "add";
+	status = statusToString(COMMAND_ADD, newTask);
+	lastEntry.lastCommand = COMMAND_ADD;
 	lastEntry.lastTask = newTask;
 
 	generateAllOtherList();
 
 	return status;
-
-
-
 }
 
-string Planner::deleteIndex(int idNumber){
-	list<Task> ::iterator iter1, iter2;
-	iter1 = All.begin();
-	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
-		if ((*iter1).getIdNumber() == idNumber){
-			iter2 = iter1;
-		}
-	}
-	lastEntry.lastTask = *iter2;
-	lastEntry.lastCommand = "delete";
+string Planner::deleteTask(int serialNumber, string nameOfList){
+	int idNumber;
 	string status;
-	status = statusToString("delete", *iter2);
-	All.erase(iter2);
+	list<Task> ::iterator iter;
 
-	generateAllOtherList();
+	if (nameOfList == HOME_LIST){
+		iter = HomeList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = deleteIndex(idNumber);
+	}
+	else if (nameOfList == MISSED_LIST){
+		iter = MissedList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = deleteIndex(idNumber);
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		iter = UpcomingList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = deleteIndex(idNumber);
+	}
+	else cout << ERROR_MESSSAGE_INVALID_LIST_NAME << endl;
 	//logging
 	stringstream message;
-	message << "ID of deleted entry is " << idNumber;
-	LogData->addLog("UPDATE", message.str());
-
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+	
 	return status;
-
 }
 
 string Planner::undo(void){
-	if (lastEntry.lastCommand == "add"){
+	if (lastEntry.lastCommand == COMMAND_ADD){
 		int lastEntryID = getIdOfLastEntry() - 1;
 		deleteIndex(lastEntryID);
 	}
-	else if (lastEntry.lastCommand == "delete"){
+	else if (lastEntry.lastCommand == COMMAND_DELETE){
 		addTask(lastEntry.lastTask);
 	}
-	else if (lastEntry.lastCommand == "edit"){
+	else if (lastEntry.lastCommand == COMMAND_EDIT){
 		deleteIndex(lastEdit.addedTask.getIdNumber());
 		addTask(lastEdit.deletedTask);
 	}
@@ -132,7 +158,7 @@ string Planner::undo(void){
 string Planner::clear(void){
 	All.clear();
 	generateAllOtherList();
-	LogData->addLog("UPDATE", "ALL entries cleared ");
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
 	return clearStatusToString();
 }
 
@@ -143,9 +169,9 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	lastEdit.deletedTask = lastEntry.lastTask;
 	addTask(newTask);
 	lastEdit.addedTask = lastEntry.lastTask;
-	lastEntry.lastCommand = "edit";
+	lastEntry.lastCommand = COMMAND_EDIT;
 	generateAllOtherList();
-	LogData->addLog("UPDATE", "Edit Taken Place ");
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
 	return editStatusToString();
 }
 
@@ -155,7 +181,7 @@ string Planner::save(string fileName){
 	allTasks = saveDataToString();
 	write << allTasks;
 	write.close();
-	LogData->addLog("UPDATE", "File Save Operation");
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD,LOG_FILE_SAVE_MSG);
 	return saveStatusToString();
 }
 
@@ -174,22 +200,23 @@ void Planner::generateSearchList(string target){
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
-	if (nameOfList == "Home"){
+	if (nameOfList == HOME_LIST){
 		finalString = HomeListToString();
 		return finalString;
 	}
-	else if (nameOfList == "Upcoming"){
+	else if (nameOfList == UPCOMING_LIST){
 		finalString = upcomingListToString();
 		return finalString;
 	}
-	else if (nameOfList == "Missed"){
+	else if (nameOfList == MISSED_LIST){
 		finalString = missedListToString();
 		return finalString;
 	}
-	else if (nameOfList == "searchList"){
+	else if (nameOfList == SEARCH_LIST){
 		finalString = searchListToString();
 		return finalString;
 	}
+	else return ERROR_MESSSAGE_INVALID_FILE_NAME;
 }
 
 string Planner::AllToString(void){
@@ -200,75 +227,46 @@ string Planner::AllToString(void){
 	int entryCount = 0;
 	if (!All.empty()){
 		for (it = All.begin(); it != All.end(); ++it){
-			out << serialNumber << ". " << (*it).getDescription() << " ";
-
-			switch ((*it).getNumOfDates()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			case 2:
-				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			}
-
-			switch ((*it).getNumOfTimes()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getTimeStart();
-				break;
-			case 2:
-				out << (*it).getTimeStart() << " to ";
-				out << (*it).getTimeEnd();
-				break;
-			default:
-				cout << "fatal error!";
-			}
-
-			if ((*it).getImportance()){
-				out << " #impt";
-			}
-
-			out << "\r\n";
+			out << serialNumber << ". ";
+			out<<descriptionOfTaskToString(*(it));
+			out << NEWLINE;
 			serialNumber = serialNumber + 1;
 			entryCount++;
 		}
 	}
 	else {
-		out << "The list is empty!" << endl;
+		out << EMPTY_LIST_MESSAGE << endl;
 	}
 	return out.str();
 }
 
 string Planner::statusToString(string command, Task theTask){
 	string finalString;
-	if (command == "add"){
+	if (command == COMMAND_ADD){
 		finalString = addStatusToString(theTask);
 		return finalString;
 	}
-	else if (command == "delete"){
+	else if (command == COMMAND_DELETE){
 		finalString = deleteStatusToString(theTask);
 		return finalString;
 	}
-	else if (command == "edit"){
+	else if (command == COMMAND_EDIT){
 		finalString = editStatusToString();
 		return finalString;
 	}
-	else if (command == "undo"){
+	else if (command == COMMAND_UNDO){
 		finalString = undoStatusToString();
 		return finalString;
 	}
-	else if (command == "clear"){
+	else if (command == COMMAND_CLEAR){
 		finalString = clearStatusToString();
 		return finalString;
 	}
-	else if (command == "save"){
+	else if (command == COMMAND_SAVE){
 		finalString = saveStatusToString();
 		return finalString;
 	}
+	else return ERROR_MESSSAGE_INVALID_COMMAND;
 }
 
 //Private Functions
@@ -299,37 +297,38 @@ string Planner::descriptionOfTaskToString(Task theTask){
 		out << theTask.getTimeEnd();
 		break;
 	default:
-		cout << "fatal error!";
+		cout << ERROR_MESSAGE_FATAL;
 	}
 
 
 
 	if (theTask.getImportance()){
-		out << " #impt";
+		out << IMPORTANCE_SYMBOL;
 	}
 	return out.str();
 }
+
 string Planner::addStatusToString(Task theTask){
 	ostringstream out;
-	out << "Task added: ";
+	out << STATUS_TO_STRING_ADD_INTRO;
 	out << descriptionOfTaskToString(theTask);
-	out << "\r\n";
+	out << NEWLINE;
 	return out.str();
 }
 
 string Planner::deleteStatusToString(Task theTask){
 	ostringstream out;
-	out << "Task deleted : ";
+	out << STATUS_TO_STRING_DELETE_INTRO;
 	out << descriptionOfTaskToString(theTask);
-	out << "\r\n";
+	out << NEWLINE;
 	return out.str();
 }
 
 string Planner::editStatusToString(){ // to be completed after undo edit works
 	ostringstream out;
-	out << "The following Task : \r\n";
+	out <<STATUS_TO_STRING_EDIT_INTRO;
 	out << descriptionOfTaskToString(lastEdit.deletedTask);
-	out << "\r\nhas been edited to :\r\n";
+	out << STATUS_TO_STRING_EDIT_MID;
 	out << descriptionOfTaskToString(lastEdit.addedTask);
 	return out.str();
 }
@@ -337,29 +336,29 @@ string Planner::editStatusToString(){ // to be completed after undo edit works
 string Planner::undoStatusToString(){ 
 	ostringstream out;
 
-	if (lastEntry.lastCommand == "add"){
-		out << "The following Task has been added back: \r\n";
+	if (lastEntry.lastCommand == COMMAND_ADD){
+		out << STATUS_TO_STRING_UNDO_ADD_MSG;
 		out << descriptionOfTaskToString(lastEntry.lastTask);
 	}
-	else if (lastEntry.lastCommand == "delete"){
-		out << "The following Task has been removed: \r\n";
+	else if (lastEntry.lastCommand == COMMAND_DELETE){
+		out << STATUS_TO_STRING_UNDO_DELETE_MSG;
 		out << descriptionOfTaskToString(lastEntry.lastTask);
 	}
-	else if (lastEntry.lastCommand == "edit"){ 
-		out << "The following Task : \r\n";
+	else if (lastEntry.lastCommand == COMMAND_EDIT){ 
+		out << STATUS_TO_STRING_EDIT_INTRO;
 		out << descriptionOfTaskToString(lastEdit.addedTask);
-		out << "\r\n has been edited to \r\n";
+		out << STATUS_TO_STRING_EDIT_MID;
 		out << descriptionOfTaskToString(lastEdit.deletedTask);
 	}
 	return out.str();
 }
 
 string Planner::clearStatusToString(){
-	return "All content cleared. \r\n";
+	return STATUS_TO_STRING_CLEAR_MSG;
 }
 
 string Planner::saveStatusToString(){
-	return "File has been saved. \r\n";
+	return STATUS_TO_STRING_SAVE_MSG;
 }
 
 string Planner::HomeListToString(void){
@@ -369,44 +368,13 @@ string Planner::HomeListToString(void){
 	int serialNumber = 1;
 	if (!HomeList.empty()){
 		for (it = HomeList.begin(); it != HomeList.end(); ++it){
-			out << serialNumber << ". " << (*it).getDescription() << " ";
-
-			switch ((*it).getNumOfDates()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			case 2:
-				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			}
-
-			switch ((*it).getNumOfTimes()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getTimeStart();
-				break;
-			case 2:
-				out << (*it).getTimeStart() << " to ";
-				out << (*it).getTimeEnd();
-				break;
-			default:
-				cout << "fatal error!";
-			}
-
-
-			if ((*it).getImportance()){
-				out << " #impt";
-			}
-
-			out << "\r\n";
+			out << serialNumber << ". ";
+			out << descriptionOfTaskToString(*(it));
+			out << NEWLINE;
 			serialNumber = serialNumber + 1;
 		}
 	}
-	else out << "The list is empty!" << endl;
+	else out << EMPTY_LIST_MESSAGE << endl;
 
 	return out.str();
 }
@@ -418,44 +386,13 @@ string Planner::upcomingListToString(void){
 	int serialNumber = 1;
 	if (!UpcomingList.empty()){
 		for (it = UpcomingList.begin(); it != UpcomingList.end(); ++it){
-			out << serialNumber << ". " << (*it).getDescription() << " ";
-
-			switch ((*it).getNumOfDates()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			case 2:
-				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			}
-
-			switch ((*it).getNumOfTimes()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getTimeStart();
-				break;
-			case 2:
-				out << (*it).getTimeStart() << " to ";
-				out << (*it).getTimeEnd();
-				break;
-			default:
-				cout << "fatal error!";
-			}
-
-
-			if ((*it).getImportance()){
-				out << " #impt";
-			}
-
-			out << "\r\n";
+			out << serialNumber << ". " ;
+			out << descriptionOfTaskToString(*(it));
+			out << NEWLINE;
 			serialNumber = serialNumber + 1;
 		}
 	}
-	else out << "The list is empty!" << endl;
+	else out <<EMPTY_LIST_MESSAGE << endl;
 
 	return out.str();
 }
@@ -467,44 +404,13 @@ string Planner::missedListToString(void){
 	int serialNumber = 1;
 	if (!MissedList.empty()){
 		for (it = MissedList.begin(); it != MissedList.end(); ++it){
-			out << serialNumber << ". " << (*it).getDescription() << " ";
-
-			switch ((*it).getNumOfDates()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			case 2:
-				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			}
-
-			switch ((*it).getNumOfTimes()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getTimeStart();
-				break;
-			case 2:
-				out << (*it).getTimeStart() << " to ";
-				out << (*it).getTimeEnd();
-				break;
-			default:
-				cout << "fatal error!";
-			}
-
-
-			if ((*it).getImportance()){
-				out << " #impt";
-			}
-
-			out << "\r\n";
+			out << serialNumber << ". " ;
+			out << descriptionOfTaskToString(*(it));
+			out << NEWLINE;
 			serialNumber = serialNumber + 1;
 		}
 	}
-	else out << "The list is empty!" << endl;
+	else out << EMPTY_LIST_MESSAGE << endl;
 
 	return out.str();
 }
@@ -517,45 +423,13 @@ string Planner::searchListToString(void){
 	int serialNumber = 1;
 	if (!searchList.empty()){
 		for (it = searchList.begin(); it != searchList.end(); ++it){
-			out << serialNumber << ". " << (*it).getDescription() << " ";
-
-			switch ((*it).getNumOfDates()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			case 2:
-				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			}
-
-			switch ((*it).getNumOfTimes()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getTimeStart();
-				break;
-			case 2:
-				out << (*it).getTimeStart() << " to ";
-				out << (*it).getTimeEnd();
-				break;
-			default:
-				cout << "fatal error!";
-			}
-
-			out << " " << (*it).getIdNumber();			//remember to remove
-
-			if ((*it).getImportance()){
-				out << " #impt";
-			}
-
-			out << "\r\n";
+			out << serialNumber << ". ";
+			out << descriptionOfTaskToString(*(it));
+			out << NEWLINE;
 			serialNumber = serialNumber + 1;
 		}
 	}
-	else out << "The list is empty!" << endl;
+	else out << EMPTY_LIST_MESSAGE << endl;
 
 	return out.str();
 }
@@ -570,40 +444,28 @@ int Planner::getIdOfLastEntry(void){// act this function returns id not last ent
 	return idGeneratror;
 }
 
-string Planner::deleteTask(int serialNumber, string nameOfList){
-	int idNumber;
+string Planner::deleteIndex(int idNumber){
+	list<Task> ::iterator iter1, iter2;
+	iter1 = All.begin();
+	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
+		if ((*iter1).getIdNumber() == idNumber){
+			iter2 = iter1;
+		}
+	}
+	lastEntry.lastTask = *iter2;
+	lastEntry.lastCommand = COMMAND_DELETE;
 	string status;
-	list<Task> ::iterator iter;
+	status = statusToString(COMMAND_DELETE, *iter2);
+	All.erase(iter2);
 
-	if (nameOfList == "Home"){
-		iter = HomeList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
-		}
-		idNumber = (*iter).getIdNumber();
+	generateAllOtherList();
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 
-		status = deleteIndex(idNumber);
-	}
-	else if (nameOfList == "Missed"){
-		iter = MissedList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
-		}
-		idNumber = (*iter).getIdNumber();
-
-		status = deleteIndex(idNumber);
-	}
-	else if (nameOfList == "Upcoming"){
-		iter = UpcomingList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
-		}
-		idNumber = (*iter).getIdNumber();
-
-		status = deleteIndex(idNumber);
-	}
-	else cout << "error! name of list is invalid" << endl;
 	return status;
+
 }
 
 string Planner::saveDataToString(){
