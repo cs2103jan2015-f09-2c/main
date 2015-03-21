@@ -8,7 +8,7 @@
 #include <fstream>
 
 using namespace std;
-
+//Public Functions
 Planner::Planner(){
 	time_t t = time(0);   // get time now
 	struct tm * now = localtime(&t);
@@ -17,11 +17,10 @@ Planner::Planner(){
 	currentDate.day = (now->tm_mday);
 }
 
-//Functions that edit the HomeONLY
 string Planner::addTask(Task newTask){
 	//create new task
 	int id = getIdOfLastEntry(); // use static to actually create id
-	
+
 	//logging
 	stringstream message;
 	message << "ID of new entry is " << id;
@@ -88,83 +87,88 @@ string Planner::addTask(Task newTask){
 
 }
 
-string Planner::saveDataToString(){
-	ostringstream out;
-	list<Task> ::iterator it;
-	it = All.begin();
-
-	if (!All.empty()){
-		for (it = All.begin(); it != All.end(); ++it){
-			out << (*it).getDescription() << "; ";
-
-			//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
-			if ((*it).getDateStart().day < 10){
-				out << "0" << (*it).getDateStart().day;
-			}
-			else out << (*it).getDateStart().day;
-
-			if ((*it).getDateStart().month < 10){
-				out << "0" << (*it).getDateStart().month;
-			}
-			else out << (*it).getDateStart().month;
-
-			if ((*it).getDateStart().year < 10){
-				out << "0" << (*it).getDateStart().year;
-			}
-			else out << (*it).getDateStart().year;
-
-			out << " to ";
-
-			if ((*it).getDateEnd().day < 10){
-				out << "0" << (*it).getDateEnd().day;
-			}
-			else out << (*it).getDateEnd().day;
-
-			if ((*it).getDateEnd().month < 10){
-				out << "0" << (*it).getDateEnd().month;
-			}
-			else out << (*it).getDateEnd().month;
-
-			if ((*it).getDateEnd().year < 10){
-				out << "0" << (*it).getDateEnd().year;
-			}
-			else out << (*it).getDateEnd().year;
-
-			out << " ;";
-
-
-			//			}
-			// don't edit this part. its not finished. going to add more
-
-			if ((*it).getTimeEnd() != -1) {
-				if ((*it).getTimeStart() < 1000){
-					out << "0" << (*it).getTimeStart();
-				}
-				else out << (*it).getTimeStart();
-
-				out << " to ";
-			}
-
-			if ((*it).getTimeStart() != -1){
-				if ((*it).getTimeEnd() < 1000){
-					out << "0" << (*it).getTimeEnd();
-				}
-				out << (*it).getTimeEnd();
-			}
-
-
-
-			if ((*it).getImportance()){
-				out << " #impt";
-			}
-			out << "\r\n";
-
+string Planner::deleteIndex(int idNumber){
+	list<Task> ::iterator iter1, iter2;
+	iter1 = All.begin();
+	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
+		if ((*iter1).getIdNumber() == idNumber){
+			iter2 = iter1;
 		}
 	}
-	else out << "The list is empty!" << endl;
+	lastEntry.lastTask = *iter2;
+	lastEntry.lastCommand = "delete";
+	string status;
+	status = statusToString("delete", *iter2);
+	All.erase(iter2);
 
-	return out.str();
+	generateAllOtherList();
+	//logging
+	stringstream message;
+	message << "ID of deleted entry is " << idNumber;
+	LogData->addLog("UPDATE", message.str());
 
+	return status;
+
+}
+
+string Planner::undo(void){
+	if (lastEntry.lastCommand == "add"){
+		int lastEntryID = getIdOfLastEntry() - 1;
+		deleteIndex(lastEntryID);
+	}
+	else if (lastEntry.lastCommand == "delete"){
+		addTask(lastEntry.lastTask);
+	}
+	else if (lastEntry.lastCommand == "edit"){
+		deleteIndex(lastEdit.addedTask.getIdNumber());
+		addTask(lastEdit.deletedTask);
+	}
+	string status;
+	status = undoStatusToString();
+	generateAllOtherList();
+	return status;
+}
+
+string Planner::clear(void){
+	All.clear();
+	generateAllOtherList();
+	LogData->addLog("UPDATE", "ALL entries cleared ");
+	return clearStatusToString();
+}
+
+string Planner::editTask(int serialNumber, string nameOfList, string input){
+	Task newTask;
+	newTask.addDetails(input);
+	deleteTask(serialNumber, nameOfList);
+	lastEdit.deletedTask = lastEntry.lastTask;
+	addTask(newTask);
+	lastEdit.addedTask = lastEntry.lastTask;
+	lastEntry.lastCommand = "edit";
+	generateAllOtherList();
+	LogData->addLog("UPDATE", "Edit Taken Place ");
+	return editStatusToString();
+}
+
+string Planner::save(string fileName){
+	ofstream write(fileName);
+	string allTasks;
+	allTasks = saveDataToString();
+	write << allTasks;
+	write.close();
+	LogData->addLog("UPDATE", "File Save Operation");
+	return saveStatusToString();
+}
+
+void Planner::generateSearchList(string target){
+	list<Task> ::iterator iter;
+	Task tempTask;
+	searchList.clear();
+	for (iter = All.begin(); iter != All.end(); ++iter){
+		tempTask = *iter;
+		if (tempTask.isSearchTargetPresent(target)){
+			searchList.push_back(tempTask);
+		}
+	}
 }
 
 string Planner::toString(string nameOfList){
@@ -186,6 +190,57 @@ string Planner::toString(string nameOfList){
 		finalString = searchListToString();
 		return finalString;
 	}
+}
+
+string Planner::AllToString(void){
+	ostringstream out;
+	list<Task> ::iterator it;
+	it = All.begin();
+	int serialNumber = 1;
+	int entryCount = 0;
+	if (!All.empty()){
+		for (it = All.begin(); it != All.end(); ++it){
+			out << serialNumber << ". " << (*it).getDescription() << " ";
+
+			switch ((*it).getNumOfDates()){
+			case 0:
+				break;
+			case 1:
+				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
+				break;
+			case 2:
+				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
+				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
+				break;
+			}
+
+			switch ((*it).getNumOfTimes()){
+			case 0:
+				break;
+			case 1:
+				out << (*it).getTimeStart();
+				break;
+			case 2:
+				out << (*it).getTimeStart() << " to ";
+				out << (*it).getTimeEnd();
+				break;
+			default:
+				cout << "fatal error!";
+			}
+
+			if ((*it).getImportance()){
+				out << " #impt";
+			}
+
+			out << "\r\n";
+			serialNumber = serialNumber + 1;
+			entryCount++;
+		}
+	}
+	else {
+		out << "The list is empty!" << endl;
+	}
+	return out.str();
 }
 
 string Planner::statusToString(string command, Task theTask){
@@ -216,6 +271,7 @@ string Planner::statusToString(string command, Task theTask){
 	}
 }
 
+//Private Functions
 string Planner::addStatusToString(Task theTask){
 
 	ostringstream out;
@@ -535,177 +591,6 @@ string Planner::saveStatusToString(){
 	return "File has been saved. \r\n";
 }
 
-int Planner::getIdOfLastEntry(void){// act this function returns id not last entry, need to change name
-
-	int n;
-
-	static int idGeneratror;
-	if (All.empty()){
-		idGeneratror = 10001;
-	}
-	else idGeneratror++;
-	return idGeneratror;
-}
-
-string Planner::deleteTask(int serialNumber, string nameOfList){
-	int idNumber;
-	string status;
-	list<Task> ::iterator iter;
-
-	if (nameOfList == "Home"){
-		iter = HomeList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
-		}
-		idNumber = (*iter).getIdNumber();
-
-		status = deleteIndex(idNumber);
-	}
-	else if (nameOfList == "Missed"){
-		iter = MissedList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
-		}
-		idNumber = (*iter).getIdNumber();
-
-		status = deleteIndex(idNumber);
-	}
-	else if (nameOfList == "Upcoming"){
-		iter = UpcomingList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
-		}
-		idNumber = (*iter).getIdNumber();
-
-		status = deleteIndex(idNumber);
-	}
-	else cout << "error! name of list is invalid" << endl;
-	return status;
-}
-
-string Planner::deleteIndex(int idNumber){
-	list<Task> ::iterator iter1, iter2;
-	iter1 = All.begin();
-	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
-		if ((*iter1).getIdNumber() == idNumber){
-			iter2 = iter1;
-		}
-	}
-	lastEntry.lastTask = *iter2;
-	lastEntry.lastCommand = "delete";
-	string status;
-	status = statusToString("delete", *iter2);
-	All.erase(iter2);
-
-	generateAllOtherList();
-	//logging
-	stringstream message;
-	message << "ID of deleted entry is " << idNumber;
-	LogData->addLog("UPDATE", message.str());
-
-	return status;
-
-}
-
-string Planner::undo(void){
-	if (lastEntry.lastCommand == "add"){
-		int lastEntryID = getIdOfLastEntry() - 1;
-		deleteIndex(lastEntryID);
-	}
-	else if (lastEntry.lastCommand == "delete"){
-		addTask(lastEntry.lastTask);
-	}
-	else if (lastEntry.lastCommand == "edit"){
-		deleteIndex(lastEdit.addedTask.getIdNumber());
-		addTask(lastEdit.deletedTask);
-	}
-	string status;
-	status = undoStatusToString();
-	generateAllOtherList();
-	return status;
-}
-
-string Planner::clear(void){
-	All.clear();
-	generateAllOtherList();
-	LogData->addLog("UPDATE", "ALL entries cleared ");
-	return clearStatusToString();
-}
-
-string Planner::editTask(int serialNumber, string nameOfList, string input){
-	Task newTask;
-	newTask.addDetails(input);
-	deleteTask(serialNumber, nameOfList);
-	lastEdit.deletedTask = lastEntry.lastTask;
-	addTask(newTask);
-	lastEdit.addedTask = lastEntry.lastTask;
-	lastEntry.lastCommand = "edit";
-	generateAllOtherList();
-	LogData->addLog("UPDATE", "Edit Taken Place ");
-	return editStatusToString();
-}
-
-string Planner::save(string fileName){
-	ofstream write(fileName);
-	string allTasks;
-	allTasks = saveDataToString();
-	write << allTasks;
-	write.close();
-	LogData->addLog("UPDATE", "File Save Operation");
-	return saveStatusToString();
-}
-
-string Planner::AllToString(void){
-	ostringstream out;
-	list<Task> ::iterator it;
-	it = All.begin();
-	int serialNumber = 1;
-	int entryCount = 0;
-	if (!All.empty()){
-		for (it = All.begin(); it != All.end(); ++it){
-			out << serialNumber << ". " << (*it).getDescription() << " ";
-
-			switch ((*it).getNumOfDates()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			case 2:
-				out << (*it).getDateStart().day << "/" << (*it).getDateStart().month << "/" << (*it).getDateStart().year << " to ";
-				out << (*it).getDateEnd().day << "/" << (*it).getDateEnd().month << "/" << (*it).getDateEnd().year << " ";
-				break;
-			}
-
-			switch ((*it).getNumOfTimes()){
-			case 0:
-				break;
-			case 1:
-				out << (*it).getTimeStart();
-				break;
-			case 2:
-				out << (*it).getTimeStart() << " to ";
-				out << (*it).getTimeEnd();
-				break;
-			default:
-				cout << "fatal error!";
-			}
-
-			if ((*it).getImportance()){
-				out << " #impt";
-			}
-
-			out << "\r\n";
-			serialNumber = serialNumber + 1;
-			entryCount++;
-		}
-	}
-	else {
-		out << "The list is empty!" << endl;
-	}
-	return out.str();
-}
-
 string Planner::HomeListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -904,6 +789,131 @@ string Planner::searchListToString(void){
 	return out.str();
 }
 
+int Planner::getIdOfLastEntry(void){// act this function returns id not last entry, need to change name
+
+	static int idGeneratror;
+	if (All.empty()){
+		idGeneratror = 10001;
+	}
+	else idGeneratror++;
+	return idGeneratror;
+}
+
+string Planner::deleteTask(int serialNumber, string nameOfList){
+	int idNumber;
+	string status;
+	list<Task> ::iterator iter;
+
+	if (nameOfList == "Home"){
+		iter = HomeList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = deleteIndex(idNumber);
+	}
+	else if (nameOfList == "Missed"){
+		iter = MissedList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = deleteIndex(idNumber);
+	}
+	else if (nameOfList == "Upcoming"){
+		iter = UpcomingList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = deleteIndex(idNumber);
+	}
+	else cout << "error! name of list is invalid" << endl;
+	return status;
+}
+
+string Planner::saveDataToString(){
+	ostringstream out;
+	list<Task> ::iterator it;
+	it = All.begin();
+
+	if (!All.empty()){
+		for (it = All.begin(); it != All.end(); ++it){
+			out << (*it).getDescription() << "; ";
+
+			//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
+			if ((*it).getDateStart().day < 10){
+				out << "0" << (*it).getDateStart().day;
+			}
+			else out << (*it).getDateStart().day;
+
+			if ((*it).getDateStart().month < 10){
+				out << "0" << (*it).getDateStart().month;
+			}
+			else out << (*it).getDateStart().month;
+
+			if ((*it).getDateStart().year < 10){
+				out << "0" << (*it).getDateStart().year;
+			}
+			else out << (*it).getDateStart().year;
+
+			out << " to ";
+
+			if ((*it).getDateEnd().day < 10){
+				out << "0" << (*it).getDateEnd().day;
+			}
+			else out << (*it).getDateEnd().day;
+
+			if ((*it).getDateEnd().month < 10){
+				out << "0" << (*it).getDateEnd().month;
+			}
+			else out << (*it).getDateEnd().month;
+
+			if ((*it).getDateEnd().year < 10){
+				out << "0" << (*it).getDateEnd().year;
+			}
+			else out << (*it).getDateEnd().year;
+
+			out << " ;";
+
+
+			//			}
+			// don't edit this part. its not finished. going to add more
+
+			if ((*it).getTimeEnd() != -1) {
+				if ((*it).getTimeStart() < 1000){
+					out << "0" << (*it).getTimeStart();
+				}
+				else out << (*it).getTimeStart();
+
+				out << " to ";
+			}
+
+			if ((*it).getTimeStart() != -1){
+				if ((*it).getTimeEnd() < 1000){
+					out << "0" << (*it).getTimeEnd();
+				}
+				out << (*it).getTimeEnd();
+			}
+
+
+
+			if ((*it).getImportance()){
+				out << " #impt";
+			}
+			out << "\r\n";
+
+		}
+	}
+	else out << "The list is empty!" << endl;
+
+	return out.str();
+
+}
+
 void Planner::generateAllOtherList(void){
 	HomeList.clear();
 	MissedList.clear();
@@ -919,6 +929,26 @@ void Planner::generateHomeList(void){
 	for (it = All.begin(); it != All.end(); ++it){
 		if (isHome(currentDate, it)) {
 			HomeList.push_back(*it);
+		}
+	}
+}
+
+void Planner::generateUpcomingList(void){
+	list<Task> ::iterator iter;
+
+	for (iter = All.begin(); iter != All.end(); ++iter){
+		if (isUpcoming(currentDate, iter)) {
+			UpcomingList.push_back(*iter);
+		}
+	}
+}
+
+void Planner::generateMissedList(void){
+	list<Task> ::iterator iter;
+
+	for (iter = All.begin(); iter != All.end(); ++iter){
+		if (isMissed(currentDate, iter)) {
+			MissedList.push_back(*iter);
 		}
 	}
 }
@@ -963,16 +993,6 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	return isWithinHome;
 }
 
-void Planner::generateMissedList(void){
-	list<Task> ::iterator iter;
-
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		if (isMissed(currentDate, iter)) {
-			MissedList.push_back(*iter);
-		}
-	}
-}
-
 bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinMissed = false;
 	//case 1: passed year
@@ -992,16 +1012,6 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 	}
 
 	return isWithinMissed;
-}
-
-void Planner::generateUpcomingList(void){
-	list<Task> ::iterator iter;
-
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		if (isUpcoming(currentDate, iter)) {
-			UpcomingList.push_back(*iter);
-		}
-	}
 }
 
 bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
@@ -1063,16 +1073,4 @@ bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 	}
 
 	return isWithinUpcoming;
-}
-
-void Planner::generateSearchList(string target){
-	list<Task> ::iterator iter;
-	Task tempTask;
-	searchList.clear();
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		tempTask = *iter;
-		if (tempTask.isSearchTargetPresent(target)){
-			searchList.push_back(tempTask);
-		}
-	}
 }
