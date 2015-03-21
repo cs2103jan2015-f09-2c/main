@@ -33,6 +33,7 @@ private:
 	//Time Structure
 	taskDate currentDate;
 	//status returning functions
+	string descriptionOfTaskToString(Task theTask);
 	string addStatusToString(Task theTask);
 	string deleteStatusToString(Task theTask);
 	string editStatusToString();

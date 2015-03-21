@@ -272,11 +272,8 @@ string Planner::statusToString(string command, Task theTask){
 }
 
 //Private Functions
-string Planner::addStatusToString(Task theTask){
-
+string Planner::descriptionOfTaskToString(Task theTask){
 	ostringstream out;
-	out << "Task added: ";
-
 	out << theTask.getDescription() << " ";
 
 	switch (theTask.getNumOfDates()){
@@ -310,275 +307,49 @@ string Planner::addStatusToString(Task theTask){
 	if (theTask.getImportance()){
 		out << " #impt";
 	}
-
+	return out.str();
+}
+string Planner::addStatusToString(Task theTask){
+	ostringstream out;
+	out << "Task added: ";
+	out << descriptionOfTaskToString(theTask);
 	out << "\r\n";
-
 	return out.str();
 }
 
 string Planner::deleteStatusToString(Task theTask){
 	ostringstream out;
 	out << "Task deleted : ";
-
-	out << theTask.getDescription() << " ";
-
-	switch (theTask.getNumOfDates()){
-	case 0:
-		break;
-	case 1:
-		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
-		break;
-	case 2:
-		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
-		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
-		break;
-	}
-
-	switch (theTask.getNumOfTimes()){
-	case 0:
-		break;
-	case 1:
-		out << theTask.getTimeStart();
-		break;
-	case 2:
-		out << theTask.getTimeStart() << " to ";
-		out << theTask.getTimeEnd();
-		break;
-	default:
-		cout << "fatal error!";
-	}
-
-
-	if (theTask.getImportance()){
-		out << " #impt";
-	}
-
+	out << descriptionOfTaskToString(theTask);
 	out << "\r\n";
-
 	return out.str();
 }
 
 string Planner::editStatusToString(){ // to be completed after undo edit works
 	ostringstream out;
 	out << "The following Task : \r\n";
-	out << lastEdit.deletedTask.getDescription() << " ";
-
-	switch (lastEdit.deletedTask.getNumOfDates()){
-	case 0:
-		break;
-	case 1:
-		out << lastEdit.deletedTask.getDateEnd().day << "/" << lastEdit.deletedTask.getDateEnd().month << "/" << lastEdit.deletedTask.getDateEnd().year << " ";
-		break;
-	case 2:
-		out << lastEdit.deletedTask.getDateStart().day << "/" << lastEdit.deletedTask.getDateStart().month << "/" << lastEdit.deletedTask.getDateStart().year << " to ";
-		out << lastEdit.deletedTask.getDateEnd().day << "/" << lastEdit.deletedTask.getDateEnd().month << "/" << lastEdit.deletedTask.getDateEnd().year << " ";
-		break;
-	}
-
-	switch (lastEdit.deletedTask.getNumOfTimes()){
-	case 0:
-		break;
-	case 1:
-		out << lastEdit.deletedTask.getTimeStart();
-		break;
-	case 2:
-		out << lastEdit.deletedTask.getTimeStart() << " to ";
-		out << lastEdit.deletedTask.getTimeEnd();
-		break;
-	default:
-		cout << "fatal error!";
-	}
-
-
-	if (lastEdit.deletedTask.getImportance()){
-		out << " #impt";
-	}
-
+	out << descriptionOfTaskToString(lastEdit.deletedTask);
 	out << "\r\nhas been edited to :\r\n";
-
-
-	out << lastEdit.addedTask.getDescription() << " ";
-
-	switch (lastEdit.addedTask.getNumOfDates()){
-	case 0:
-		break;
-	case 1:
-		out << lastEdit.addedTask.getDateEnd().day << "/" << lastEdit.addedTask.getDateEnd().month << "/" << lastEdit.addedTask.getDateEnd().year << " ";
-		break;
-	case 2:
-		out << lastEdit.addedTask.getDateStart().day << "/" << lastEdit.addedTask.getDateStart().month << "/" << lastEdit.addedTask.getDateStart().year << " to ";
-		out << lastEdit.addedTask.getDateEnd().day << "/" << lastEdit.addedTask.getDateEnd().month << "/" << lastEdit.addedTask.getDateEnd().year << " ";
-		break;
-	}
-
-	switch (lastEdit.addedTask.getNumOfTimes()){
-	case 0:
-		break;
-	case 1:
-		out << lastEdit.addedTask.getTimeStart();
-		break;
-	case 2:
-		out << lastEdit.addedTask.getTimeStart() << " to ";
-		out << lastEdit.addedTask.getTimeEnd();
-		break;
-	default:
-		cout << "fatal error!";
-	}
-
-	if (lastEdit.addedTask.getImportance()){
-		out << " #impt";
-	}
-
-
+	out << descriptionOfTaskToString(lastEdit.addedTask);
 	return out.str();
 }
 
-string Planner::undoStatusToString(){ //needs severe refactoring
+string Planner::undoStatusToString(){ 
 	ostringstream out;
 
 	if (lastEntry.lastCommand == "add"){
 		out << "The following Task has been added back: \r\n";
-		out << lastEntry.lastTask.getDescription() << " ";
-
-		switch (lastEntry.lastTask.getNumOfDates()){
-		case 0:
-			break;
-		case 1:
-			out << lastEntry.lastTask.getDateEnd().day << "/" << lastEntry.lastTask.getDateEnd().month << "/" << lastEntry.lastTask.getDateEnd().year << " ";
-			break;
-		case 2:
-			out << lastEntry.lastTask.getDateStart().day << "/" << lastEntry.lastTask.getDateStart().month << "/" << lastEntry.lastTask.getDateStart().year << " to ";
-			out << lastEntry.lastTask.getDateEnd().day << "/" << lastEntry.lastTask.getDateEnd().month << "/" << lastEntry.lastTask.getDateEnd().year << " ";
-			break;
-		}
-
-		switch (lastEntry.lastTask.getNumOfTimes()){
-		case 0:
-			break;
-		case 1:
-			out << lastEntry.lastTask.getTimeStart();
-			break;
-		case 2:
-			out << lastEntry.lastTask.getTimeStart() << " to ";
-			out << lastEntry.lastTask.getTimeEnd();
-			break;
-		default:
-			cout << "fatal error!";
-		}
-
-
-		if (lastEntry.lastTask.getImportance()){
-			out << " #impt";
-		}
-
+		out << descriptionOfTaskToString(lastEntry.lastTask);
 	}
 	else if (lastEntry.lastCommand == "delete"){
 		out << "The following Task has been removed: \r\n";
-		out << lastEntry.lastTask.getDescription() << " ";
-
-		switch (lastEntry.lastTask.getNumOfDates()){
-		case 0:
-			break;
-		case 1:
-			out << lastEntry.lastTask.getDateEnd().day << "/" << lastEntry.lastTask.getDateEnd().month << "/" << lastEntry.lastTask.getDateEnd().year << " ";
-			break;
-		case 2:
-			out << lastEntry.lastTask.getDateStart().day << "/" << lastEntry.lastTask.getDateStart().month << "/" << lastEntry.lastTask.getDateStart().year << " to ";
-			out << lastEntry.lastTask.getDateEnd().day << "/" << lastEntry.lastTask.getDateEnd().month << "/" << lastEntry.lastTask.getDateEnd().year << " ";
-			break;
-		}
-
-		switch (lastEntry.lastTask.getNumOfTimes()){
-		case 0:
-			break;
-		case 1:
-			out << lastEntry.lastTask.getTimeStart();
-			break;
-		case 2:
-			out << lastEntry.lastTask.getTimeStart() << " to ";
-			out << lastEntry.lastTask.getTimeEnd();
-			break;
-		default:
-			cout << "fatal error!";
-		}
-
-
-		if (lastEntry.lastTask.getImportance()){
-			out << " #impt";
-		}
-
-
+		out << descriptionOfTaskToString(lastEntry.lastTask);
 	}
-	else if (lastEntry.lastCommand == "edit"){ // will do this after undo edit works
+	else if (lastEntry.lastCommand == "edit"){ 
 		out << "The following Task : \r\n";
-		out << lastEdit.addedTask.getDescription() << " ";
-
-		switch (lastEdit.addedTask.getNumOfDates()){
-		case 0:
-			break;
-		case 1:
-			out << lastEdit.addedTask.getDateEnd().day << "/" << lastEdit.addedTask.getDateEnd().month << "/" << lastEdit.addedTask.getDateEnd().year << " ";
-			break;
-		case 2:
-			out << lastEdit.addedTask.getDateStart().day << "/" << lastEdit.addedTask.getDateStart().month << "/" << lastEdit.addedTask.getDateStart().year << " to ";
-			out << lastEdit.addedTask.getDateEnd().day << "/" << lastEdit.addedTask.getDateEnd().month << "/" << lastEdit.addedTask.getDateEnd().year << " ";
-			break;
-		}
-
-		switch (lastEdit.addedTask.getNumOfTimes()){
-		case 0:
-			break;
-		case 1:
-			out << lastEdit.addedTask.getTimeStart();
-			break;
-		case 2:
-			out << lastEdit.addedTask.getTimeStart() << " to ";
-			out << lastEdit.addedTask.getTimeEnd();
-			break;
-		default:
-			cout << "fatal error!";
-		}
-
-
-		if (lastEdit.addedTask.getImportance()){
-			out << " #impt";
-		}
-
+		out << descriptionOfTaskToString(lastEdit.addedTask);
 		out << "\r\n has been edited to \r\n";
-
-		out << lastEdit.deletedTask.getDescription() << " ";
-
-		switch (lastEdit.deletedTask.getNumOfDates()){
-		case 0:
-			break;
-		case 1:
-			out << lastEdit.deletedTask.getDateEnd().day << "/" << lastEdit.deletedTask.getDateEnd().month << "/" << lastEdit.deletedTask.getDateEnd().year << " ";
-			break;
-		case 2:
-			out << lastEdit.deletedTask.getDateStart().day << "/" << lastEdit.deletedTask.getDateStart().month << "/" << lastEdit.deletedTask.getDateStart().year << " to ";
-			out << lastEdit.deletedTask.getDateEnd().day << "/" << lastEdit.deletedTask.getDateEnd().month << "/" << lastEdit.deletedTask.getDateEnd().year << " ";
-			break;
-		}
-
-		switch (lastEdit.deletedTask.getNumOfTimes()){
-		case 0:
-			break;
-		case 1:
-			out << lastEdit.deletedTask.getTimeStart();
-			break;
-		case 2:
-			out << lastEdit.deletedTask.getTimeStart() << " to ";
-			out << lastEdit.deletedTask.getTimeEnd();
-			break;
-		default:
-			cout << "fatal error!";
-		}
-
-
-		if (lastEdit.deletedTask.getImportance()){
-			out << " #impt";
-		}
-
+		out << descriptionOfTaskToString(lastEdit.deletedTask);
 	}
 	return out.str();
 }
