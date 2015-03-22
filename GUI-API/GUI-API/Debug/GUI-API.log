@@ -1,24 +1,33 @@
+<<<<<<< HEAD
 ﻿Build started 19/3/2015 23:04:36 PM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
+=======
+﻿Build started 22/3/2015 12:43:45 AM.
+     1>Project "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Rebuild target(s)).
+>>>>>>> 0ee49c62a1920d6777596e399eb805dc7d080584
      1>ClCompile:
-         C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I..\Planner /I..\Task /I..\LogSystem /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Planner /I..\Task /I..\LogSystem /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
          GUI.cpp
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(56): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(135): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(141): warning C4101: 'error' : unreferenced local variable
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(148): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(158): warning C4101: 'error' : unreferenced local variable
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(167): warning C4101: 'error' : unreferenced local variable
+     1>c:\users\karthikeyan\desktop\2015 sem 2\cs2103\project\gui-api\gui-api\gui.cpp(56): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+     1>c:\users\karthikeyan\desktop\2015 sem 2\cs2103\project\gui-api\gui-api\gui.cpp(135): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+     1>c:\users\karthikeyan\desktop\2015 sem 2\cs2103\project\gui-api\gui-api\gui.cpp(141): warning C4101: 'error' : unreferenced local variable
+     1>c:\users\karthikeyan\desktop\2015 sem 2\cs2103\project\gui-api\gui-api\gui.cpp(148): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+     1>c:\users\karthikeyan\desktop\2015 sem 2\cs2103\project\gui-api\gui-api\gui.cpp(158): warning C4101: 'error' : unreferenced local variable
+     1>c:\users\karthikeyan\desktop\2015 sem 2\cs2103\project\gui-api\gui-api\gui.cpp(167): warning C4101: 'error' : unreferenced local variable
        Lib:
-         C:\Program Files\Microsoft Visual Studio 8\VC\bin\Lib.exe /OUT:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
-         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\LogSystem.lib"
-         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Task.lib"
-         "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\Planner.lib"
-         GUI-API.vcxproj -> D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
+         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\LogSystem.lib"
+         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\Task.lib"
+         "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\Planner.lib"
+         GUI-API.vcxproj -> C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\GUI-API.lib
        BscMake:
-         C:\Program Files\Microsoft Visual Studio 8\VC\bin\bscmake.exe /nologo /o"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.bsc" /n Debug\GUI.sbr
-     1>Done Building Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\Debug\GUI-API.bsc" /n Debug\GUI.sbr
+     1>Done Building Project "C:\Users\Karthikeyan\Desktop\2015 Sem 2\CS2103\Project\GUI-API\GUI-API\GUI-API.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:02.45
+=======
+Time Elapsed 00:00:01.12
+>>>>>>> 0ee49c62a1920d6777596e399eb805dc7d080584

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 1.<<<<< HEAD
 2.UPDATE: ID of new entry is 10001; Thu Mar 19 21:15:18 2015
 3.UPDATE: File Save Operation; Thu Mar 19 21:15:18 2015
@@ -69,4 +70,284 @@
 69.UPDATE: File Save Operation; Thu Mar 19 23:10:31 2015
 70.UPDATE: ID of new entry is 10001; Thu Mar 19 23:20:48 2015
 71.UPDATE: File Save Operation; Thu Mar 19 23:20:48 2015
+=======
+
+1.UPDATE: In addDetails, Case 0 was called; Sat Mar 21 15:04:39 2015
+
+2.UPDATE: In addDetails, Case 0 was finished successfully; Sat Mar 21 15:04:39 2015
+
+3.UPDATE: ID of new entry is 10001; Sat Mar 21 15:04:39 2015
+
+4.UPDATE: File Save Operation; Sat Mar 21 15:04:39 2015
+
+5.UPDATE: In addDetails, Case 0 was called; Sat Mar 21 15:04:41 2015
+
+6.UPDATE: In addDetails, Case 0 was finished successfully; Sat Mar 21 15:04:41 2015
+
+7.UPDATE: ID of new entry is 10002; Sat Mar 21 15:04:41 2015
+
+8.UPDATE: File Save Operation; Sat Mar 21 15:04:41 2015
+
+9.UPDATE: In addDetails, Case 1 was called; Sat Mar 21 15:04:50 2015
+
+10.UPDATE: In addDetails(processDescription), Description stored successfully; Sat Mar 21 15:04:50 2015
+
+11.UPDATE: In addDetails(processDate), Date stored successfully; Sat Mar 21 15:04:50 2015
+
+12.UPDATE: In addDetails, Case 1 was finished successfully; Sat Mar 21 15:04:50 2015
+
+13.UPDATE: ID of new entry is 10003; Sat Mar 21 15:04:50 2015
+
+14.UPDATE: File Save Operation; Sat Mar 21 15:04:50 2015
+
+1.UPDATE: In addDetails, Case 0 was called; Sun Mar 22 00:28:48 2015
+
+2.UPDATE: In addDetails, Case 0 was finished successfully; Sun Mar 22 00:28:48 2015
+
+3.UPDATE: ID of new entry is 10001; Sun Mar 22 00:28:48 2015
+
+4.UPDATE: File Save Operation; Sun Mar 22 00:28:48 2015
+
+5.UPDATE: In addDetails, Case 0 was called; Sun Mar 22 00:28:58 2015
+
+6.UPDATE: In addDetails, Case 0 was finished successfully; Sun Mar 22 00:28:58 2015
+
+7.UPDATE: ID of new entry is 10002; Sun Mar 22 00:28:58 2015
+
+8.UPDATE: File Save Operation; Sun Mar 22 00:28:58 2015
+
+9.UPDATE: In addDetails, Case 1 was called; Sun Mar 22 00:29:16 2015
+
+10.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:29:16 2015
+
+11.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:29:16 2015
+
+12.UPDATE: In addDetails, Case 1 was finished successfully; Sun Mar 22 00:29:16 2015
+
+13.UPDATE: ID of new entry is 10003; Sun Mar 22 00:29:16 2015
+
+14.UPDATE: File Save Operation; Sun Mar 22 00:29:16 2015
+
+15.UPDATE: In addDetails, Case 1 was called; Sun Mar 22 00:29:33 2015
+
+16.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:29:33 2015
+
+17.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:29:33 2015
+
+18.UPDATE: In addDetails, Case 1 was finished successfully; Sun Mar 22 00:29:33 2015
+
+19.UPDATE: ID of new entry is 10004; Sun Mar 22 00:29:33 2015
+
+20.UPDATE: File Save Operation; Sun Mar 22 00:29:33 2015
+
+21.UPDATE: In addDetails, Case 1 was called; Sun Mar 22 00:30:06 2015
+
+22.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:30:06 2015
+
+23.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:30:06 2015
+
+24.UPDATE: In addDetails, Case 1 was finished successfully; Sun Mar 22 00:30:06 2015
+
+25.UPDATE: ID of new entry is 10005; Sun Mar 22 00:30:06 2015
+
+26.UPDATE: File Save Operation; Sun Mar 22 00:30:06 2015
+
+27.UPDATE: In addDetails, Case 1 was called; Sun Mar 22 00:30:54 2015
+
+28.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:30:54 2015
+
+29.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:30:54 2015
+
+30.UPDATE: In addDetails, Case 1 was finished successfully; Sun Mar 22 00:30:54 2015
+
+31.UPDATE: ID of new entry is 10006; Sun Mar 22 00:30:54 2015
+
+32.UPDATE: File Save Operation; Sun Mar 22 00:30:54 2015
+
+33.UPDATE: In addDetails, Case 1 was called; Sun Mar 22 00:31:06 2015
+
+34.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:31:06 2015
+
+35.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:31:06 2015
+
+36.UPDATE: In addDetails, Case 1 was finished successfully; Sun Mar 22 00:31:06 2015
+
+37.UPDATE: ID of new entry is 10007; Sun Mar 22 00:31:06 2015
+
+38.UPDATE: File Save Operation; Sun Mar 22 00:31:06 2015
+
+39.UPDATE: In addDetails, Case 1 was called; Sun Mar 22 00:31:52 2015
+
+40.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:31:52 2015
+
+41.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:31:52 2015
+
+42.UPDATE: In addDetails, Case 1 was finished successfully; Sun Mar 22 00:31:52 2015
+
+43.UPDATE: ID of new entry is 10008; Sun Mar 22 00:31:52 2015
+
+44.UPDATE: File Save Operation; Sun Mar 22 00:31:52 2015
+
+45.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:32:25 2015
+
+46.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:32:25 2015
+
+47.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:32:25 2015
+
+48.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:32:25 2015
+
+49.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:32:25 2015
+
+50.UPDATE: ID of new entry is 10009; Sun Mar 22 00:32:25 2015
+
+51.UPDATE: File Save Operation; Sun Mar 22 00:32:25 2015
+
+52.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:32:52 2015
+
+53.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:32:52 2015
+
+54.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:33:11 2015
+
+55.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:33:11 2015
+
+56.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:33:11 2015
+
+57.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:33:11 2015
+
+58.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:33:11 2015
+
+59.UPDATE: ID of new entry is 10010; Sun Mar 22 00:33:11 2015
+
+60.UPDATE: File Save Operation; Sun Mar 22 00:33:11 2015
+
+61.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:34:55 2015
+
+62.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:34:55 2015
+
+63.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:34:55 2015
+
+64.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:34:55 2015
+
+65.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:34:55 2015
+
+66.UPDATE: ID of new entry is 10011; Sun Mar 22 00:34:55 2015
+
+67.UPDATE: File Save Operation; Sun Mar 22 00:34:55 2015
+
+68.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:35:15 2015
+
+69.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:35:15 2015
+
+70.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:35:15 2015
+
+71.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:35:15 2015
+
+72.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:35:15 2015
+
+73.UPDATE: ID of new entry is 10012; Sun Mar 22 00:35:15 2015
+
+74.UPDATE: File Save Operation; Sun Mar 22 00:35:15 2015
+
+75.UPDATE: Delete ID : ; Sun Mar 22 00:35:38 2015
+
+76.UPDATE: File Save Operation; Sun Mar 22 00:35:38 2015
+
+77.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:36:10 2015
+
+78.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:36:10 2015
+
+79.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:36:10 2015
+
+80.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:36:10 2015
+
+81.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:36:10 2015
+
+82.UPDATE: ID of new entry is 10001; Sun Mar 22 00:36:10 2015
+
+83.UPDATE: File Save Operation; Sun Mar 22 00:36:10 2015
+
+84.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:36:28 2015
+
+85.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:36:28 2015
+
+86.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:36:28 2015
+
+87.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:36:28 2015
+
+88.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:36:28 2015
+
+89.UPDATE: ID of new entry is 10002; Sun Mar 22 00:36:28 2015
+
+90.UPDATE: File Save Operation; Sun Mar 22 00:36:28 2015
+
+91.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:38:38 2015
+
+92.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:38:38 2015
+
+93.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:38:38 2015
+
+94.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:38:38 2015
+
+95.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:38:38 2015
+
+96.UPDATE: ID of new entry is 10003; Sun Mar 22 00:38:38 2015
+
+97.UPDATE: File Save Operation; Sun Mar 22 00:38:38 2015
+
+98.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:39:19 2015
+
+99.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:39:19 2015
+
+100.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:39:19 2015
+
+101.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:39:19 2015
+
+102.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:39:19 2015
+
+103.UPDATE: ID of new entry is 10004; Sun Mar 22 00:39:19 2015
+
+104.UPDATE: File Save Operation; Sun Mar 22 00:39:19 2015
+
+1.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:41:09 2015
+
+2.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:41:09 2015
+
+3.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:41:09 2015
+
+4.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:41:09 2015
+
+5.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:41:09 2015
+
+6.UPDATE: ID of new entry is 10001; Sun Mar 22 00:41:09 2015
+
+7.UPDATE: File Save Operation; Sun Mar 22 00:41:09 2015
+
+8.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:41:21 2015
+
+9.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:41:21 2015
+
+10.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:41:21 2015
+
+11.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:41:21 2015
+
+12.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:41:21 2015
+
+13.UPDATE: ID of new entry is 10002; Sun Mar 22 00:41:21 2015
+
+14.UPDATE: File Save Operation; Sun Mar 22 00:41:21 2015
+
+15.UPDATE: In addDetails, Case 2 was called; Sun Mar 22 00:41:35 2015
+
+16.UPDATE: In addDetails(processDescription), Description stored successfully; Sun Mar 22 00:41:35 2015
+
+17.UPDATE: In addDetails(processDate), Date stored successfully; Sun Mar 22 00:41:35 2015
+
+18.UPDATE: In addDetails(processTime), Time stored successfully; Sun Mar 22 00:41:35 2015
+
+19.UPDATE: In addDetails, Case 2 was finished successfully; Sun Mar 22 00:41:35 2015
+
+20.UPDATE: ID of new entry is 10003; Sun Mar 22 00:41:35 2015
+
+21.UPDATE: File Save Operation; Sun Mar 22 00:41:35 2015
+>>>>>>> 0ee49c62a1920d6777596e399eb805dc7d080584
 

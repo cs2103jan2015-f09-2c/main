@@ -30,7 +30,8 @@ private:
 	void processTime(string);
 	void storeStartDate(string);
 	void storeEndDate(string);
-	Log LogData;
+	Log* LogData = Log::getInstance();
+
 public:
 	Task();
 	~Task();

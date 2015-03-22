@@ -2,13 +2,12 @@
 #define PLANNER_H
 #include "Task.h"
 #include "Log.h"
-//#include"C:\Users\User\Desktop\CS2103_Project\GUI-API\LogSystem"
 #include <string>
 #include <list>
 using namespace std;
 
 struct undoData{
-	string lastCommand; // should be add/delete/edit
+	string lastCommand;
 	Task lastTask;
 };
 
@@ -20,40 +19,43 @@ struct undoEditData{
 class Planner{
 
 private:
+	// all the private lists
 	list<Task> All; // allTaskList 
 	list<Task> HomeList;
 	list<Task> UpcomingList;
 	list<Task> MissedList;
 	list<Task> searchList;
-
-	Log LogData;
-
+	// List of all the Log Data
+	Log* LogData = Log::getInstance();
+	//Undo Structures
 	undoData lastEntry;
 	undoEditData lastEdit;
-
+	//Time Structure
 	taskDate currentDate;
-
+	//status returning functions
+	string descriptionOfTaskToString(Task theTask);
 	string addStatusToString(Task theTask);
 	string deleteStatusToString(Task theTask);
 	string editStatusToString();
 	string undoStatusToString();
 	string clearStatusToString();
 	string saveStatusToString();
-	string saveDataToString();
-
+	// List reurning functions
 	string HomeListToString(void);
 	string upcomingListToString();
 	string missedListToString();
 	string searchListToString();
-
+	// delete helper functions
 	int getIdOfLastEntry(void);
 	string deleteIndex(int idNumber);
-
+	//save helper function
+	string saveDataToString();
+	//list generating functions
 	void generateAllOtherList(void);
 	void generateHomeList(void);
 	void generateUpcomingList(void);
 	void generateMissedList(void);
-
+	// list boolean functions
 	bool isHome(taskDate, list<Task>::iterator);
 	bool isMissed(taskDate, list<Task>::iterator);
 	bool isUpcoming(taskDate, list<Task>::iterator);
@@ -61,18 +63,19 @@ private:
 public:
 
 	Planner();
+	//command functions to be called by Logic
 	string addTask(Task content);
 	string deleteTask(int serialNumber, string nameOfList);
-	string toString(string nameOfList);
-	string statusToString(string command, Task theTask);
 	string undo(void);
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
 	string save(string);
 	void generateSearchList(string target);
+	// string of list returning function
+	string toString(string nameOfList);
 	string AllToString(void);
-
-
+	//string of status returning function
+	string statusToString(string command, Task theTask);
 };
 #endif // !PLANNER_H
 
