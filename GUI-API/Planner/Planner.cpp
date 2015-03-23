@@ -261,7 +261,7 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	return editStatusToString();
 }
 
-string Planner::save(string fileName){
+/*string Planner::save(string fileName){
 	ofstream write(fileName);
 	string allTasks;
 	allTasks = saveDataToString();
@@ -269,7 +269,7 @@ string Planner::save(string fileName){
 	write.close();
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD,LOG_FILE_SAVE_MSG);
 	return saveStatusToString();
-}
+} */
 
 void Planner::generateSearchList(string target){
 	list<Task> ::iterator iter;

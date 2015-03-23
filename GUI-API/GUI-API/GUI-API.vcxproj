@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Planner;..\Task;..\LogSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Storage;..\Planner;..\Task;..\LogSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
@@ -82,6 +82,9 @@
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="..\Storage\Storage.vcxproj">
+      <Project>{5bc0f512-d4f6-43c0-880a-0db0ad1c3695}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Task\Task.vcxproj">
       <Project>{55bcd928-ffa3-4f4c-900b-b0baa807d4f3}</Project>

@@ -6,6 +6,7 @@
 #include "Task.h"
 #include "Planner.h" 
 #include"Log.h"
+#include "Storage.h"
 
 
 
@@ -15,6 +16,9 @@ class Logic{
 private:
 	string outcome; //feedback prompt
 	string display;
+	string saveAddress;
+	Planner myPlanner;
+	Storage* myStorage;
 
 public:
 
@@ -30,7 +34,7 @@ public:
 	void processCommandUndo();
 	void processCommandSearch(string taskDetail);
 	void processCommandLoad(string fileName);
-	void processCommandSave(string fileName);
+	void processCommandSave(string taskDetail);
 	void processCommandHelp();
 	void processCommandAll();
 	void updateDisplay(string viewType);

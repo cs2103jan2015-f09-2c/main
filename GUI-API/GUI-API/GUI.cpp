@@ -2,13 +2,21 @@
 #include "GUI.h"
 #include "assert.h"
 
+const string STATUS_MESSAGE_CURRENT_SAVE_ADDRESS = "Your tasks will be saved to this address: ";
+const string STATUS_MESSAGE_NEW_SAVE_ADDRESS = "Change save address by typing save followed by file address";
 const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
 const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
 const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
 const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
 
-Planner myPlanner;
+
 Logic::Logic(){
+	myStorage = Storage::getInstanceOfStorage();
+	saveAddress = myStorage->retrieveSaveAddress();
+
+	if (saveAddress == Storage::DEFAULT_FILE_NAME){
+		outcome = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
+	}
 }
 
 Logic::~Logic(){
@@ -100,7 +108,7 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 							}
 							else
 								if (command == "save") {
-									//processCommandSave(taskDetail);
+									processCommandSave(taskDetail);
 								}
 								else
 									if (command == "help"){
@@ -122,8 +130,11 @@ void Logic::processCommandLoad(string fileName){
 
 }
 
-void Logic::processCommandSave(string fileName) {
-	save(fileName);
+void Logic::processCommandSave(string taskDetail) {
+	if (!taskDetail.empty()){
+		saveAddress = taskDetail; // need to check whether the save address entered by user is valid
+		outcome = myStorage->save(saveAddress);
+	}
 }
 
 void Logic::processCommandAdd(string taskDetail){
