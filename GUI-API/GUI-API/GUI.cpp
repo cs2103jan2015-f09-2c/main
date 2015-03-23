@@ -135,6 +135,10 @@ void Logic::processCommandSave(string taskDetail) {
 		saveAddress = taskDetail; // need to check whether the save address entered by user is valid
 		outcome = myStorage->save(saveAddress);
 	}
+
+	else {
+		outcome = myStorage->save();
+	}
 }
 
 void Logic::processCommandAdd(string taskDetail){

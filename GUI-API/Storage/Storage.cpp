@@ -36,14 +36,30 @@ bool Storage::isListEmpty() const {
 
 string Storage::retrieveFirstAddress(){
 	list<string>::iterator iter = listOfFileAddress.begin();
-	string firstAddress = *iter;
-	return firstAddress;
+	fileAddress = *iter;
+	return fileAddress;
 }
 
 string Storage::save(string saveAddress){
 	//check if the address is in the list
-	bool exist = doesAddressAlrdExist(saveAddress);
+	bool doesExist = doesAddressAlrdExist(saveAddress);
+	if (!doesExist){
+		listOfFileAddress.push_front(saveAddress);
+	}
 
+	fileAddress = saveAddress;
+	string status = save();
+	return status;
+}
+
+string Storage::save(){
+	ofstream write(fileAddress, ios_base::app);
+	string status = STATUS_MESSAGE_SAVED_SUCCESSFULLY + fileAddress;
+	return status;
+}
+
+void Storage::updateContent(string content){
+	fileContent = content;
 }
 
 string Storage::retrieveSaveAddress() {
@@ -52,4 +68,16 @@ string Storage::retrieveSaveAddress() {
 	}
 
 	return fileAddress;
+}
+
+bool Storage::doesAddressAlrdExist(string saveAddress){
+	list<string>::iterator iter = listOfFileAddress.begin();
+	bool isSame = false;
+
+	while (!isSame && iter != listOfFileAddress.end()){
+		if (*iter == saveAddress){
+			isSame = true;
+		}
+	}
+	return isSame;
 }
