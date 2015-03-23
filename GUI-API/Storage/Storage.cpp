@@ -14,12 +14,27 @@ void Storage::retrieveList(){
 Storage::Storage()
 {
 	retrieveList();
-	fileAddress = retrieveFirstAddress();
+	if (!listOfFileAddress.empty()){
+		fileAddress = retrieveFirstAddress();
+	}
+
+	else {
+		fileAddress = DEFAULT_FILE_NAME;
+	}
 }
 
 
-Storage::~Storage()
-{
+Storage::~Storage(){
+	ofstream write(myList);
+	if (!listOfFileAddress.empty()){
+		list<string>::iterator iter = listOfFileAddress.begin();
+
+		for (; iter != listOfFileAddress.end(); iter++){
+			write << (*iter);
+		}
+	}
+
+	write.close();
 }
 
 Storage* Storage::getInstanceOfStorage(){
@@ -40,7 +55,7 @@ string Storage::retrieveFirstAddress(){
 	return fileAddress;
 }
 
-string Storage::save(string saveAddress){
+string Storage::save(string saveAddress, string content){
 	//check if the address is in the list
 	bool doesExist = doesAddressAlrdExist(saveAddress);
 	if (!doesExist){
@@ -48,12 +63,14 @@ string Storage::save(string saveAddress){
 	}
 
 	fileAddress = saveAddress;
-	string status = save();
+	string status = save(content);
 	return status;
 }
 
-string Storage::save(){
-	ofstream write(fileAddress, ios_base::app);
+string Storage::save(string content){
+	updateContent(content);
+	ofstream write(fileAddress/*, ios_base::app*/);
+	write << fileContent;
 	string status = STATUS_MESSAGE_SAVED_SUCCESSFULLY + fileAddress;
 	return status;
 }
@@ -63,10 +80,6 @@ void Storage::updateContent(string content){
 }
 
 string Storage::retrieveSaveAddress() {
-	if (fileAddress.empty()){
-		fileAddress = DEFAULT_FILE_NAME;
-	}
-
 	return fileAddress;
 }
 

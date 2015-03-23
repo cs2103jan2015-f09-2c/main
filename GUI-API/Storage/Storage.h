@@ -4,12 +4,13 @@
 using namespace std;
 
 const string STATUS_MESSAGE_SAVED_SUCCESSFULLY = "saved successfully to this address: ";
+const string DEFAULT_FILE_NAME = "myPlanner.txt";
 
 class Storage{
 private:
 	string fileContent;
 	string fileAddress;
-	string fileName;
+	//string fileName;
 	list<string> listOfFileAddress;
 	Storage();
 	static Storage* myStorage;
@@ -18,13 +19,13 @@ private:
 	bool isListEmpty() const;
 	string retrieveFirstAddress();
 	bool doesAddressAlrdExist(string);
+	void updateContent(string);
+
 public:
-	static const string DEFAULT_FILE_NAME = "myPlanner.txt";
 	static Storage* getInstanceOfStorage();
 	~Storage();
 	string retrieveSaveAddress();
+	string save(string, string);
 	string save(string);
-	string save();
-	void updateContent(string);
 };
 
