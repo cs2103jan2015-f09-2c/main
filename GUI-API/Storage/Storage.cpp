@@ -24,16 +24,6 @@ Storage::Storage(){
 
 
 Storage::~Storage(){
-	ofstream write(myList);
-	if (!listOfFileAddress.empty()){
-		list<string>::iterator iter = listOfFileAddress.begin();
-
-		for (; iter != listOfFileAddress.end(); iter++){
-			write << (*iter);
-		}
-	}
-
-	write.close();
 }
 
 Storage* Storage::getInstanceOfStorage(){
@@ -59,6 +49,7 @@ string Storage::saveWithFileAddress(string saveAddress, string content){
 	bool doesExist = doesAddressAlrdExist(saveAddress);
 	if (!doesExist){
 		listOfFileAddress.push_front(saveAddress);
+		updateMyList();
 	}
 
 	fileAddress = saveAddress;
@@ -85,9 +76,6 @@ string Storage::retrieveSaveAddress() {
 
 bool Storage::doesAddressAlrdExist(string saveAddress){
 	list<string>::iterator iter;
-	if (isListEmpty()){
-		iter = listOfFileAddress.begin();
-	}
 	
 	bool isSame = false;
 
@@ -97,4 +85,17 @@ bool Storage::doesAddressAlrdExist(string saveAddress){
 		}
 	}
 	return isSame;
+}
+
+void Storage::updateMyList(){
+	ofstream write(myList);
+	if (!listOfFileAddress.empty()){
+		list<string>::iterator iter;
+
+		for (iter = listOfFileAddress.begin(); iter != listOfFileAddress.end(); ++iter){
+			write << (*iter) << "\n";
+		}
+	}
+
+	write.close();
 }

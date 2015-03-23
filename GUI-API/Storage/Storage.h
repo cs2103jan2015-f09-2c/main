@@ -20,6 +20,7 @@ private:
 	string retrieveFirstAddress();
 	bool doesAddressAlrdExist(string);
 	void updateContent(string);
+	void updateMyList();
 
 public:
 	static Storage* getInstanceOfStorage();

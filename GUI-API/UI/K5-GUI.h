@@ -208,7 +208,7 @@ namespace UI {
 	private: System::Void checkOutput(String^ output) {
 		for (int i = 0; i < output->Length; i++) {
 			if (output[i] == '.') {
-			//	assert(isdigit(output[i-1]));
+				assert(isdigit(output[i-1]));
 			}
 		}
 	}
