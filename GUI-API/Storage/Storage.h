@@ -25,7 +25,7 @@ public:
 	static Storage* getInstanceOfStorage();
 	~Storage();
 	string retrieveSaveAddress();
-	string save(string, string);
+	string saveWithFileAddress(string, string);
 	string save(string);
 };
 

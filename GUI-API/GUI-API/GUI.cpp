@@ -49,21 +49,30 @@ void Logic::processUserInput(string userInput, string currentView) {
 }
 
 string Logic::extractCommand(string& userInput){
+	string command = "";
+	string taskDetails = "";
 	//extract the first word to be the command 
-	string command;
-	string taskDetails;
-	istringstream in(userInput);
-	in >> command;
+	if (userInput == "save" || userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
+		command = userInput;
+		userInput = taskDetails;
+		return command;
+	}
+	
+	//istringstream in(userInput);
+	//istringstream in("save");
+	//in >> command;
 
 	//update userInput
 	size_t pos = userInput.find_first_of(" ");
-	string newUserInput = userInput.substr(pos + 1, userInput.size() - pos);
-	userInput = newUserInput;
+	command = userInput.substr(0, pos);
+	userInput.erase(0, pos + 1);
+	//string newUserInput = userInput.substr(pos + 1, userInput.size() - pos);
+	//userInput = newUserInput;
 	return command;
 }
 
 void Logic::processCommand(std::string command, std::string taskDetail, string currentView) throw (const string) {
-
+	outcome = "";
 	if (command == "load"){
 		processCommandLoad(taskDetail);
 	}
@@ -123,7 +132,7 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 		throw ERROR_MESSAGE_INVALID_COMMAND;
 	}
 	string fileContent = myPlanner.saveDataToString();
-	outcome = myStorage->save(fileContent);
+	string feedback = myStorage->save(fileContent); //think of a better way to get rid of this feedback
 }
 
 void Logic::processCommandLoad(string fileName){
@@ -134,7 +143,7 @@ void Logic::processCommandSave(string taskDetail) {
 	string fileContent = myPlanner.saveDataToString();
 	if (!taskDetail.empty()){
 		saveAddress = taskDetail; // need to check whether the save address entered by user is valid
-		outcome = myStorage->save(saveAddress, fileContent);
+		outcome = myStorage->saveWithFileAddress(saveAddress, fileContent);
 	}
 
 	else {

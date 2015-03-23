@@ -1,14 +1,14 @@
-﻿Build started 24/3/2015 1:25:22 AM.
+﻿Build started 24/3/2015 3:09:03 AM.
      1>Project "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files\Microsoft Visual Studio 8\VC\bin\CL.exe /c /I"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Storage" /I..\Storage /I..\Planner /I..\Task /I..\LogSystem /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt GUI.cpp
          GUI.cpp
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(65): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(151): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(157): warning C4101: 'error' : unreferenced local variable
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(164): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(174): warning C4101: 'error' : unreferenced local variable
+     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(74): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(160): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(166): warning C4101: 'error' : unreferenced local variable
+     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(173): warning C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
      1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(183): warning C4101: 'error' : unreferenced local variable
+     1>d:\nus year 2\year 2 sem 2\cs2103\planner project\planner(main function)\gui-api\gui-api\gui.cpp(192): warning C4101: 'error' : unreferenced local variable
        Lib:
          C:\Program Files\Microsoft Visual Studio 8\VC\bin\Lib.exe /OUT:"D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
          "D:\NUS Year 2\Year 2 Sem 2\CS2103\Planner project\Planner(main function)\GUI-API\Debug\LogSystem.lib"
@@ -21,4 +21,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.73
+Time Elapsed 00:00:03.96
