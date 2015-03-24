@@ -815,3 +815,81 @@
 
 5.UPDATE: ID of new entry is 10001; Tue Mar 24 08:44:15 2015
 
+1.UPDATE: In addDetails, Case 2 was called; Tue Mar 24 10:17:17 2015
+
+2.UPDATE: In addDetails(processDescription), Description stored successfully; Tue Mar 24 10:17:17 2015
+
+3.UPDATE: In addDetails(processDate), Date stored successfully; Tue Mar 24 10:17:17 2015
+
+4.UPDATE: In addDetails(processTime), Time stored successfully; Tue Mar 24 10:17:17 2015
+
+5.UPDATE: In addDetails, Case 2 was finished successfully; Tue Mar 24 10:17:17 2015
+
+6.UPDATE: ID of new entry is 10001; Tue Mar 24 10:17:17 2015
+
+7.UPDATE: In addDetails, Case 1 was called; Tue Mar 24 10:17:29 2015
+
+8.UPDATE: In addDetails(processDescription), Description stored successfully; Tue Mar 24 10:17:29 2015
+
+9.UPDATE: In addDetails(processDate), Date stored successfully; Tue Mar 24 10:17:29 2015
+
+10.UPDATE: In addDetails, Case 1 was finished successfully; Tue Mar 24 10:17:29 2015
+
+11.UPDATE: ID of new entry is 10002; Tue Mar 24 10:17:29 2015
+
+12.UPDATE: In addDetails, Case 1 was called; Tue Mar 24 10:17:36 2015
+
+13.UPDATE: In addDetails(processDescription), Description stored successfully; Tue Mar 24 10:17:36 2015
+
+14.UPDATE: In addDetails(processTime), Time stored successfully; Tue Mar 24 10:17:36 2015
+
+15.UPDATE: In addDetails, Case 1 was finished successfully; Tue Mar 24 10:17:36 2015
+
+16.UPDATE: ID of new entry is 10003; Tue Mar 24 10:17:36 2015
+
+17.UPDATE: Delete ID : ; Tue Mar 24 10:17:44 2015
+
+1.UPDATE: In addDetails, Case 2 was called; Tue Mar 24 10:19:45 2015
+
+2.UPDATE: In addDetails(processDescription), Description stored successfully; Tue Mar 24 10:19:45 2015
+
+3.UPDATE: In addDetails(processDate), Date stored successfully; Tue Mar 24 10:19:45 2015
+
+4.UPDATE: In addDetails(processTime), Time stored successfully; Tue Mar 24 10:19:45 2015
+
+5.UPDATE: In addDetails, Case 2 was finished successfully; Tue Mar 24 10:19:45 2015
+
+6.UPDATE: ID of new entry is 10001; Tue Mar 24 10:19:45 2015
+
+1.UPDATE: In addDetails, Case 1 was called; Tue Mar 24 10:20:09 2015
+
+2.UPDATE: In addDetails(processDescription), Description stored successfully; Tue Mar 24 10:20:09 2015
+
+3.UPDATE: In addDetails(processDate), Date stored successfully; Tue Mar 24 10:20:09 2015
+
+4.UPDATE: In addDetails, Case 1 was finished successfully; Tue Mar 24 10:20:09 2015
+
+5.UPDATE: ID of new entry is 10001; Tue Mar 24 10:20:09 2015
+
+1.UPDATE: In addDetails, Case 1 was called; Tue Mar 24 10:21:21 2015
+
+2.UPDATE: In addDetails(processDescription), Description stored successfully; Tue Mar 24 10:21:21 2015
+
+3.UPDATE: In addDetails(processDate), Date stored successfully; Tue Mar 24 10:21:21 2015
+
+4.UPDATE: In addDetails, Case 1 was finished successfully; Tue Mar 24 10:21:21 2015
+
+5.UPDATE: ID of new entry is 10001; Tue Mar 24 10:21:21 2015
+
+6.UPDATE: In addDetails, Case 1 was called; Tue Mar 24 10:21:30 2015
+
+7.UPDATE: In addDetails(processDescription), Description stored successfully; Tue Mar 24 10:21:30 2015
+
+8.UPDATE: In addDetails(processTime), Time stored successfully; Tue Mar 24 10:21:30 2015
+
+9.UPDATE: In addDetails, Case 1 was finished successfully; Tue Mar 24 10:21:30 2015
+
+10.UPDATE: ID of new entry is 10002; Tue Mar 24 10:21:30 2015
+
+11.UPDATE: Delete ID : ; Tue Mar 24 10:21:31 2015
+

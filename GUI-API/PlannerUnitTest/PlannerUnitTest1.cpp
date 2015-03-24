@@ -36,7 +36,9 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask2);
 			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
-			if (testPlanner.AllToString() == "1. Test task 1 1/2/3 1100\r\n2. Test task 3 1900\r\n3. Test task 2 11/3/15 to 12/3/15 \r\n"){
+			string s = testPlanner.AllToString();
+			string t = testPlanner.toString("Missed");
+			if (testPlanner.AllToString() == "1. Test task 1 1/2/3 1100\r\n2. Test task 2 11/3/15 to 12/3/15\r\n3. Test task 3 1900\r\n"){
 				doesFunctionWork = true;
 			}
 			else{
@@ -57,8 +59,7 @@ namespace PlannerUnitTest
 			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.clear();
-			string s = testPlanner.AllToString();
-			if (testPlanner.AllToString() == "The list is empty!\n"){
+			if (testPlanner.AllToString() == "The list is empty\n"){
 				doesFunctionWork = true;
 			}
 			else{

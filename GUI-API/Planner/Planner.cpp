@@ -368,7 +368,7 @@ string Planner::descriptionOfTaskToString(Task theTask){
 		break;
 	case 2:
 		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
-		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
+		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year ;
 		break;
 	}
 
