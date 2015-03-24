@@ -805,3 +805,13 @@
 
 3.UPDATE: ID of new entry is 10001; Tue Mar 24 04:03:43 2015
 
+1.UPDATE: In addDetails, Case 1 was called; Tue Mar 24 08:44:15 2015
+
+2.UPDATE: In addDetails(processDescription), Description stored successfully; Tue Mar 24 08:44:15 2015
+
+3.UPDATE: In addDetails(processDate), Date stored successfully; Tue Mar 24 08:44:15 2015
+
+4.UPDATE: In addDetails, Case 1 was finished successfully; Tue Mar 24 08:44:15 2015
+
+5.UPDATE: ID of new entry is 10001; Tue Mar 24 08:44:15 2015
+
