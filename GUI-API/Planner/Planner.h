@@ -49,7 +49,7 @@ private:
 	int getIdOfLastEntry(void);
 	string deleteIndex(int idNumber);
 	//save helper function
-	string saveDataToString();
+	
 	//list generating functions
 	void generateAllOtherList(void);
 	void generateHomeList(void);
@@ -69,13 +69,14 @@ public:
 	string undo(void);
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
-	string save(string);
+	//string save(string);
 	void generateSearchList(string target);
 	// string of list returning function
 	string toString(string nameOfList);
 	string AllToString(void);
 	//string of status returning function
 	string statusToString(string command, Task theTask);
+	string saveDataToString();
 };
 #endif // !PLANNER_H
 

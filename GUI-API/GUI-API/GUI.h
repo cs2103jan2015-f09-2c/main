@@ -6,8 +6,7 @@
 #include "Task.h"
 #include "Planner.h" 
 #include"Log.h"
-
-
+#include "Storage.h"
 
 using namespace std;
 
@@ -15,12 +14,10 @@ class Logic{
 private:
 	string outcome; //feedback prompt
 	string display;
-
-public:
-
-	Logic();
-	~Logic();
-	void processUserInput(string userInput, string currentView);
+	string saveAddress;
+	Planner myPlanner;
+	Storage* myStorage;
+	
 	string extractCommand(std::string& userInput);
 	void processCommand(string command, string taskDetail, string currentView);
 	void processCommandAdd(string taskDetail);
@@ -30,11 +27,16 @@ public:
 	void processCommandUndo();
 	void processCommandSearch(string taskDetail);
 	void processCommandLoad(string fileName);
-	void processCommandSave(string fileName);
+	void processCommandSave(string taskDetail);
 	void processCommandHelp();
 	void processCommandAll();
+
+public:
+	Logic();
+	~Logic();	
+	void processUserInput(string userInput, string currentView);
 	void updateDisplay(string viewType);
-	void save(string fileName);
+	//void save(string fileName);
 	string displayOutcome();
 	string displayContent();
 };

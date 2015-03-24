@@ -1,14 +1,23 @@
 #include <stdexcept>
 #include "GUI.h"
+#include "Storage.h"
 #include "assert.h"
 
+const string STATUS_MESSAGE_CURRENT_SAVE_ADDRESS = "Your tasks will be saved to this address: ";
+const string STATUS_MESSAGE_NEW_SAVE_ADDRESS = "Change save address by typing save followed by file address";
 const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
 const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
 const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
 const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
 
-Planner myPlanner;
+
 Logic::Logic(){
+	myStorage = Storage::getInstanceOfStorage();
+	saveAddress = myStorage->retrieveSaveAddress();
+
+	if (saveAddress == DEFAULT_FILE_NAME){
+		outcome = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
+	}
 }
 
 Logic::~Logic(){
@@ -40,90 +49,106 @@ void Logic::processUserInput(string userInput, string currentView) {
 }
 
 string Logic::extractCommand(string& userInput){
+	string command = "";
+	string taskDetails = "";
 	//extract the first word to be the command 
-	string command;
-	string taskDetails;
-	istringstream in(userInput);
-	in >> command;
+	if (userInput == "save" || userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
+		command = userInput;
+		userInput = taskDetails;
+		return command;
+	}
+	
+	//istringstream in(userInput);
+	//istringstream in("save");
+	//in >> command;
 
 	//update userInput
 	size_t pos = userInput.find_first_of(" ");
-	string newUserInput = userInput.substr(pos + 1, userInput.size() - pos);
-	userInput = newUserInput;
+	command = userInput.substr(0, pos);
+	userInput.erase(0, pos + 1);
+	//string newUserInput = userInput.substr(pos + 1, userInput.size() - pos);
+	//userInput = newUserInput;
 	return command;
 }
 
 void Logic::processCommand(std::string command, std::string taskDetail, string currentView) throw (const string) {
-
+	outcome = "";
 	if (command == "load"){
 		processCommandLoad(taskDetail);
 	}
 
 	else
-		if (command == "add"){
+	if (command == "add"){
 			processCommandAdd(taskDetail);
+	}
+
+	else
+	if (command == "delete"){
+		try {
+			processCommandDelete(taskDetail, currentView);
 		}
+		catch (const string error) {
+			throw error;
+		}
+	}
 
-		else
-			if (command == "delete"){
-				try {
-					processCommandDelete(taskDetail, currentView);
-				}
-				catch (const string error) {
-					throw error;
-				}
-			}
+	else
+	if (command == "edit"){
+		try {
+			processCommandEdit(taskDetail, currentView);
+		}
+		catch (const string error){
+			throw error;
+		}
+	}
 
-			else
-				if (command == "edit"){
-					try {
-						processCommandEdit(taskDetail, currentView);
-					}
-					catch (const string error){
-						throw error;
-					}
-				}
+	else
+	if (command == "clear"){
+		processCommandClear();
+	}
 
-				else
-					if (command == "clear"){
-						processCommandClear();
-					}
+	else
+	if (command == "search"){
+		processCommandSearch(taskDetail);
+	}
 
-					else
-						if (command == "search"){
-							processCommandSearch(taskDetail);
-						}
-
-						else
-							if (command == "undo"){
-								processCommandUndo();
-							}
-							else
-								if (command == "save") {
-									//processCommandSave(taskDetail);
-								}
-								else
-									if (command == "help"){
-										processCommandHelp();
-									}
-									else
-										if (command == "all"){
-											processCommandAll();
-										}
-										else {
-											throw ERROR_MESSAGE_INVALID_COMMAND;
-										}
-	//save after each operation
-	string fileName = "myFile.txt";
-	save(fileName);
+	else
+	if (command == "undo"){
+		processCommandUndo();
+	}
+	else
+	if (command == "save") {
+		processCommandSave(taskDetail);
+	}
+	else
+	if (command == "help"){
+		processCommandHelp();
+	}
+	else
+	if (command == "all"){
+		processCommandAll();
+	}
+	else {
+		throw ERROR_MESSAGE_INVALID_COMMAND;
+	}
+	string fileContent = myPlanner.saveDataToString();
+	string feedback = myStorage->save(fileContent); //think of a better way to get rid of this feedback
 }
 
 void Logic::processCommandLoad(string fileName){
 
 }
 
-void Logic::processCommandSave(string fileName) {
-	save(fileName);
+void Logic::processCommandSave(string taskDetail) {
+	string fileContent = myPlanner.saveDataToString();
+	if (!taskDetail.empty()){
+		saveAddress = taskDetail; // need to check whether the save address entered by user is valid
+		outcome = myStorage->saveWithFileAddress(saveAddress, fileContent);
+	}
+
+	else {
+		outcome = myStorage->save(fileContent);
+	}
 }
 
 void Logic::processCommandAdd(string taskDetail){
@@ -204,9 +229,9 @@ void Logic::updateDisplay(string viewType) {
 	display = myPlanner.toString(viewType);
 }
 
-void Logic::save(string fileName){
+/*void Logic::save(string fileName){
 	myPlanner.save(fileName);
-}
+} */
 
 string Logic::displayOutcome(){
 	return outcome;
