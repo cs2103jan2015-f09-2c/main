@@ -793,3 +793,21 @@ bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 
 	return isWithinUpcoming;
 }
+
+void Planner::loadData(string data){
+	Task* tempTask;
+	string tempString, dataCopy = data;
+	size_t start=0, end=0;
+	All.clear();
+
+	while (dataCopy.size()>0){
+		end = dataCopy.find_first_of("\n");
+		tempString = dataCopy.substr(start, end - start);
+		dataCopy = dataCopy.substr(end+1, dataCopy.size() - end);
+		tempTask = new Task;
+		(*tempTask).addDetails(tempString);
+		addTask(*tempTask);
+		delete tempTask;
+		tempTask = NULL;
+	}
+}

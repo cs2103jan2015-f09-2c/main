@@ -77,6 +77,8 @@ public:
 	//string of status returning function
 	string statusToString(string command, Task theTask);
 	string saveDataToString();
+	//load from save file
+	void loadData(string data);
 };
 #endif // !PLANNER_H
 
