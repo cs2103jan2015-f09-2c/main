@@ -17,7 +17,9 @@ const string COMMAND_SAVE = "save";
 const string HOME_LIST = "Home";
 const string MISSED_LIST = "Missed";
 const string UPCOMING_LIST = "Upcoming";
-const string SEARCH_LIST = "searchList";
+const string SEARCH_LIST = "Search";
+
+const string SEARCH_RESULTS_MSG = "Search Results";
 
 const string LOG_FILE_UPDATE_KEY_WORD = "UPDATE";
 const string LOG_FILE_ADD_TASK_INTRO_MSG = "ID of new entry is ";
@@ -32,6 +34,7 @@ const string ERROR_MESSSAGE_INVALID_FILE_NAME = "Error!! Name of file is invalid
 const string ERROR_MESSSAGE_INVALID_COMMAND = "Error!! Command is invalid!!";
 
 const string EMPTY_LIST_MESSAGE = "The list is empty";
+const string NO_RESULTS_MESSAGE = "No results found!";
 const string NEWLINE = "\r\n";
 const string IMPORTANCE_SYMBOL = "#impt";
 
@@ -271,9 +274,10 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	return saveStatusToString();
 } */
 
-void Planner::generateSearchList(string target){
+string Planner::generateSearchList(string target){
 	list<Task> ::iterator iter;
 	Task tempTask;
+	string status;
 	searchList.clear();
 	for (iter = All.begin(); iter != All.end(); ++iter){
 		tempTask = *iter;
@@ -281,6 +285,8 @@ void Planner::generateSearchList(string target){
 			searchList.push_back(tempTask);
 		}
 	}
+	
+	return searchStatusToString();
 }
 
 string Planner::toString(string nameOfList){
@@ -447,6 +453,10 @@ string Planner::saveStatusToString(){
 	return STATUS_TO_STRING_SAVE_MSG;
 }
 
+string Planner::searchStatusToString(){
+	return SEARCH_RESULTS_MSG;
+}
+
 string Planner::HomeListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -515,7 +525,7 @@ string Planner::searchListToString(void){
 			serialNumber = serialNumber + 1;
 		}
 	}
-	else out << EMPTY_LIST_MESSAGE << endl;
+	else out << NO_RESULTS_MESSAGE << endl;
 
 	return out.str();
 }

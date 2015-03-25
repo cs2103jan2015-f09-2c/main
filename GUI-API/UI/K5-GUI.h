@@ -161,7 +161,6 @@ namespace UI {
 	}
 	private: System::Void colourSwitch(String^ currentView) {
 		if (currentView == "Home") {
-			assert(currentView == "Home");							//assert demonstration
 			homeButton->BackColor = Color::LightSkyBlue;
 			missedButton->BackColor = Color::SteelBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
@@ -176,7 +175,7 @@ namespace UI {
 			upcomingButton->BackColor = Color::SteelBlue;
 			homeButton->BackColor = Color::SteelBlue;
 		}
-		else if (currentView == "Help" || currentView == "All") {
+		else if (currentView == "Help" || currentView == "All" || currentView == "Search") {
 			missedButton->BackColor = Color::SteelBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
 			homeButton->BackColor = Color::SteelBlue;
@@ -205,13 +204,6 @@ namespace UI {
 		switchView(currentView);
 		colourSwitch(currentView);
 	}
-	private: System::Void checkOutput(String^ output) {
-		for (int i = 0; i < output->Length; i++) {
-			if (output[i] == '.') {
-				assert(isdigit(output[i-1]));
-			}
-		}
-	}
 			 //takes in user input
 	private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
 		String^ strOutput;
@@ -233,26 +225,31 @@ namespace UI {
 				currentView = "Help";
 				s->processUserInput("help", "Help");
 				displayWindow->Text = gcnew String(s->displayContent().c_str());
+				prompt->Text = gcnew String(s->displayOutcome().c_str());
 				colourSwitch(currentView);
 			}
 			else if (userInput->Text == "all") {
 				currentView = "All";
 				s->processUserInput("all", "All");
 				displayWindow->Text = gcnew String(s->displayContent().c_str());
+				prompt->Text = gcnew String(s->displayOutcome().c_str());
 				colourSwitch(currentView);
 			}
 			else {
 				String^ managedInput = userInput->Text;
-				string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
-
 				String^ managedView = currentView;
+
+				string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);				
 				string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
 
 				s->processUserInput(unmanagedInput, unmanagedView);
 				strOutput = gcnew String(s->displayContent().c_str());
-				checkOutput(strOutput);
 				displayWindow->Text = strOutput;
 				prompt->Text = gcnew String(s->displayOutcome().c_str());
+				if (prompt->Text == "Search Results") {
+					currentView = "Search";
+					colourSwitch(currentView);
+				}
 			}
 
 			userInput->Text = "";

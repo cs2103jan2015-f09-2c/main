@@ -40,6 +40,7 @@ private:
 	string undoStatusToString();
 	string clearStatusToString();
 	string saveStatusToString();
+	string searchStatusToString();
 	// List reurning functions
 	string HomeListToString(void);
 	string upcomingListToString();
@@ -70,7 +71,7 @@ public:
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
 	//string save(string);
-	void generateSearchList(string target);
+	string generateSearchList(string target);
 	// string of list returning function
 	string toString(string nameOfList);
 	string AllToString(void);

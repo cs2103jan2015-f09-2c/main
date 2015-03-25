@@ -25,7 +25,7 @@ Logic::~Logic(){
 
 void Logic::processUserInput(string userInput, string currentView) {
 	//Check whether currentView is empty or invalid views 
-	assert(currentView == "Home" || currentView == "Missed" || currentView == "Upcoming" || currentView == "Help" || currentView == "All");
+	assert(currentView == "Home" || currentView == "Missed" || currentView == "Upcoming" || currentView == "Help" || currentView == "All" || currentView == "Search");
 
 	try {
 		if (userInput == ""){
@@ -208,21 +208,23 @@ void Logic::processCommandUndo(){
 }
 
 void Logic::processCommandSearch(string taskDetail){
-	myPlanner.generateSearchList(taskDetail);
-	display = myPlanner.toString("search");
+	outcome = myPlanner.generateSearchList(taskDetail);
+	display = myPlanner.toString("Search");
 }
 
 void Logic::processCommandHelp(){
 	string helpMessage = "HELP HELP HELP"; // refactoring needed
 	display = helpMessage;
+	outcome = "Help window";												// prompt for help (refactor needed)
 }
 
 void Logic::processCommandAll(){
 	display = myPlanner.AllToString();
+	outcome = "All list";													//prompt for All (refactor needed)
 }
 
 void Logic::updateDisplay(string viewType) {
-	if (viewType == "Help" || viewType == "All"){
+	if (viewType == "Help" || viewType == "All" || viewType == "Search"){
 		return;
 	}
 
