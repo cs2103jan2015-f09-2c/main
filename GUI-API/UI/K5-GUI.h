@@ -156,9 +156,11 @@ namespace UI {
 
 	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
 	}
+
 	private: System::Void GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
 		homeButton_Click(sender, e);
 	}
+
 	private: System::Void colourSwitch(String^ currentView) {
 		if (currentView == "Home") {
 			homeButton->BackColor = Color::LightSkyBlue;
@@ -181,29 +183,35 @@ namespace UI {
 			homeButton->BackColor = Color::SteelBlue;
 		}
 	}
+
 	private: System::Void switchView(String^ viewType) {
 		string unmanagedView = msclr::interop::marshal_as<std::string>(viewType);
 		s->updateDisplay(unmanagedView);
 		displayWindow->Text = gcnew String(s->displayContent().c_str());
+		colourSwitch(currentView);
 	}
+
 			 //switch window
 	private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		currentView = "Home";
 		switchView(currentView);
-		colourSwitch(currentView);
+		prompt->Text = "Home";
 	}
+
 			 //switch window
 	private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		currentView = "Upcoming";
 		switchView(currentView);
-		colourSwitch(currentView);
+		prompt->Text = "Upcoming";
 	}
+
 			 //switch window
 	private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		currentView = "Missed";
 		switchView(currentView);
-		colourSwitch(currentView);
+		prompt->Text = "Missed";
 	}
+
 			 //takes in user input
 	private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
 		String^ strOutput;
@@ -218,22 +226,20 @@ namespace UI {
 			else if (userInput->Text == "upcoming") {
 				upcomingButton_Click(sender, e);
 			}
-			else if (userInput->Text == "exit") {
-				Application::Exit();
-			}
 			else if (userInput->Text == "help") {
 				currentView = "Help";
 				s->processUserInput("help", "Help");
-				displayWindow->Text = gcnew String(s->displayContent().c_str());
+				switchView(currentView);
 				prompt->Text = gcnew String(s->displayOutcome().c_str());
-				colourSwitch(currentView);
 			}
 			else if (userInput->Text == "all") {
 				currentView = "All";
 				s->processUserInput("all", "All");
-				displayWindow->Text = gcnew String(s->displayContent().c_str());
+				switchView(currentView);
 				prompt->Text = gcnew String(s->displayOutcome().c_str());
-				colourSwitch(currentView);
+			}
+			else if (userInput->Text == "exit") {
+				Application::Exit();
 			}
 			else {
 				String^ managedInput = userInput->Text;
@@ -241,8 +247,9 @@ namespace UI {
 
 				string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);				
 				string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
-
+		
 				s->processUserInput(unmanagedInput, unmanagedView);
+
 				strOutput = gcnew String(s->displayContent().c_str());
 				displayWindow->Text = strOutput;
 				prompt->Text = gcnew String(s->displayOutcome().c_str());
