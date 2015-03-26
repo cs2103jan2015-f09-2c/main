@@ -578,8 +578,6 @@ string Planner::saveDataToString(){
 			case 0:
 				break;
 			case 1:
-				out << "; date "; //
-
 				out << "; date ";
 				if ((*it).getDateEnd().day < 10){
 					out << "0" << (*it).getDateEnd().day;
@@ -595,8 +593,6 @@ string Planner::saveDataToString(){
 				else out << (*it).getDateEnd().year << " ";
 				break;
 			case 2:
-				out << "; date "; //
-
 				out << "; date ";
 				if ((*it).getDateStart().day < 10){
 					out << "0" << (*it).getDateStart().day;
