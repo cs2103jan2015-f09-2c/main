@@ -52,7 +52,7 @@ namespace TaskUnitTest
 
 		TEST_METHOD(isSearchTargetPresentTest){
 			Task testTask;
-			string positiveSearchTarget = "Meeting", negativeSearchTarget = "class";
+			string positiveSearchTarget = "meeting", negativeSearchTarget = "class";
 
 			testTask.addDetails("Meeting with Prof; date 270315; time 1400");
 

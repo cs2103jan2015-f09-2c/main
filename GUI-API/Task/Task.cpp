@@ -170,9 +170,18 @@ void Task::processTime(string timeInfo){
 bool Task::isSearchTargetPresent(string target){
 	LogData->addLog("UPDATE", "In isSearchTargetPresent, search initiated");
 	bool isFound = true;
+	string targetWithUpperCase = target, targetWithLowerCase = target;
+	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
+	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
+
 	if (_description.find(target) == string::npos){
-		isFound = false;
+		if (_description.find(targetWithUpperCase) == string::npos){			//for search to include the target with first letter in upper case
+			if (_description.find(targetWithLowerCase) == string::npos){		//for search to include the target with first letter in upper case
+				isFound = false;
+			}
+		}
 	}
+
 	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
 	return isFound;
 }
