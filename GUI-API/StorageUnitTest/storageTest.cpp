@@ -8,6 +8,7 @@ namespace StorageUnitTest{
 	public:
 		
 		TEST_METHOD(SaveWithFileAddressTest){
+		//save content to a valid file address
 			Storage* myTestStorage;
 			myTestStorage = Storage::getInstanceOfStorage();
 			string saveAddress = "D:\hello.txt";
@@ -22,5 +23,28 @@ namespace StorageUnitTest{
 			Assert::AreEqual(expectedContent, actualContent);
 		}
 
+		TEST_METHOD(loadTest){
+		//file address specified exist
+			Storage* myTestStorage;
+			myTestStorage = Storage::getInstanceOfStorage();
+			string saveAddress = "D:\hello.txt";
+			string expectedContent = "test\n";
+			string actualContent;
+			string actualOutcome = myTestStorage->load(saveAddress, actualContent);
+			string expectedOutcome = "D:\hello.txt loaded successfully";
+			Assert::AreEqual(expectedOutcome, actualOutcome);
+			Assert::AreEqual(expectedContent, actualContent);
+		}
+
+		TEST_METHOD(invalidLoadTest){
+		//file address specified does not exist
+			Storage* myTestStorage;
+			myTestStorage = Storage::getInstanceOfStorage();
+			string actualContent;
+			string saveAddress = "D:\wrong.txt";
+			string actualOutcome = myTestStorage->load(saveAddress, actualContent);
+			string expectedOutcome = "file not found";
+			Assert::AreEqual(expectedOutcome, actualOutcome);
+		}
 	};
 }

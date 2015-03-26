@@ -578,11 +578,9 @@ string Planner::saveDataToString(){
 			case 0:
 				break;
 			case 1:
-<<<<<<< HEAD
 				out << "; date "; //
-=======
+
 				out << "; date ";
->>>>>>> 9ad8ed9aa1bf315ab5c51d9c1f71f0ba0a08864f
 				if ((*it).getDateEnd().day < 10){
 					out << "0" << (*it).getDateEnd().day;
 				}
@@ -597,11 +595,9 @@ string Planner::saveDataToString(){
 				else out << (*it).getDateEnd().year << " ";
 				break;
 			case 2:
-<<<<<<< HEAD
 				out << "; date "; //
-=======
+
 				out << "; date ";
->>>>>>> 9ad8ed9aa1bf315ab5c51d9c1f71f0ba0a08864f
 				if ((*it).getDateStart().day < 10){
 					out << "0" << (*it).getDateStart().day;
 				}
