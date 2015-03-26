@@ -572,13 +572,13 @@ string Planner::saveDataToString(){
 	if (!All.empty()){
 
 		for (it = All.begin(); it != All.end(); ++it){
-			out << (*it).getDescription() << " ";
+			out << (*it).getDescription();
 
 			switch ((*it).getNumOfDates()){
 			case 0:
 				break;
 			case 1:
-				out << ";date ";
+				out << "; date ";
 				if ((*it).getDateEnd().day < 10){
 					out << "0" << (*it).getDateEnd().day;
 				}
@@ -593,7 +593,7 @@ string Planner::saveDataToString(){
 				else out << (*it).getDateEnd().year << " ";
 				break;
 			case 2:
-				out << ";date ";
+				out << "; date ";
 				if ((*it).getDateStart().day < 10){
 					out << "0" << (*it).getDateStart().day;
 				}
@@ -632,6 +632,7 @@ string Planner::saveDataToString(){
 				out << (*it).getTimeStart();
 				break;
 			case 2:
+				out << "; time ";
 				out << (*it).getTimeStart() << " to ";
 				out << (*it).getTimeEnd();
 				break;
@@ -650,7 +651,7 @@ string Planner::saveDataToString(){
 		}
 		
 	}
-	else out << "The list is empty!" << endl;
+	else out << "";
 
 	return out.str();
 }
