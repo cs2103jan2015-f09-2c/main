@@ -99,3 +99,13 @@ void Storage::updateMyList(){
 
 	write.close();
 }
+
+string Storage::load(){
+	ifstream read(fileAddress);
+	string lineContent;
+	string allTasks = "";
+	while (getline(read, lineContent)){
+		allTasks = allTasks + lineContent + "\n";
+	}
+	return allTasks;
+}

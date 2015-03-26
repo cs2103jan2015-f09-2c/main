@@ -14,10 +14,9 @@ const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a col
 Logic::Logic(){
 	myStorage = Storage::getInstanceOfStorage();
 	saveAddress = myStorage->retrieveSaveAddress();
-
-	if (saveAddress == DEFAULT_FILE_NAME){
-		outcome = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
-	}
+	outcome = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
+	string allTasks = myStorage->load();
+	myPlanner.loadData(allTasks);
 }
 
 Logic::~Logic(){
