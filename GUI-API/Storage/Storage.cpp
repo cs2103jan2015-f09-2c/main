@@ -109,3 +109,15 @@ string Storage::load(){
 	}
 	return allTasks;
 }
+
+string Storage::load(string saveAddress, string& allTasks){
+	bool doesExist = doesAddressAlrdExist(saveAddress);
+	if (!doesExist){
+		return STATUS_MESSAGE_FILE_NOT_FOUND;
+	}
+
+	fileAddress = saveAddress;
+	allTasks = load();
+	string outcome = fileAddress + " loaded successfully";
+	return outcome;
+}

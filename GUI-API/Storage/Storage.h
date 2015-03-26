@@ -5,6 +5,7 @@ using namespace std;
 
 const string STATUS_MESSAGE_SAVED_SUCCESSFULLY = "saved successfully to this address: ";
 const string DEFAULT_FILE_NAME = "myPlanner.txt";
+const string STATUS_MESSAGE_FILE_NOT_FOUND = "file not found";
 
 class Storage{
 private:
@@ -29,5 +30,6 @@ public:
 	string saveWithFileAddress(string, string);
 	string save(string);
 	string load();
+	string load(string, string&);
 };
 

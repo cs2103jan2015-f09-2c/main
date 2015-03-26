@@ -134,8 +134,15 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 	string feedback = myStorage->save(fileContent); //think of a better way to get rid of this feedback
 }
 
-void Logic::processCommandLoad(string fileName){
+void Logic::processCommandLoad(string saveAddress){
+	string allTasks;
+	outcome = myStorage->load(saveAddress, allTasks);
 
+	if (allTasks.empty()){
+		return;
+	}
+
+	myPlanner.loadData(allTasks);
 }
 
 void Logic::processCommandSave(string taskDetail) {
