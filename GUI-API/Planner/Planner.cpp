@@ -570,78 +570,91 @@ string Planner::saveDataToString(){
 	it = All.begin();
 
 	if (!All.empty()){
+
 		for (it = All.begin(); it != All.end(); ++it){
-			out << (*it).getDescription() << "; ";
+			out << (*it).getDescription() << " ";
 
-			//			if ((*it).getDateStart().day != -1 && (*it).getDateEnd().day != -1) {
-			if ((*it).getDateStart().day < 10){
-				out << "0" << (*it).getDateStart().day;
-			}
-			else out << (*it).getDateStart().day;
-
-			if ((*it).getDateStart().month < 10){
-				out << "0" << (*it).getDateStart().month;
-			}
-			else out << (*it).getDateStart().month;
-
-			if ((*it).getDateStart().year < 10){
-				out << "0" << (*it).getDateStart().year;
-			}
-			else out << (*it).getDateStart().year;
-
-			out << " to ";
-
-			if ((*it).getDateEnd().day < 10){
-				out << "0" << (*it).getDateEnd().day;
-			}
-			else out << (*it).getDateEnd().day;
-
-			if ((*it).getDateEnd().month < 10){
-				out << "0" << (*it).getDateEnd().month;
-			}
-			else out << (*it).getDateEnd().month;
-
-			if ((*it).getDateEnd().year < 10){
-				out << "0" << (*it).getDateEnd().year;
-			}
-			else out << (*it).getDateEnd().year;
-
-			out << " ;";
-
-
-			//			}
-			// don't edit this part. its not finished. going to add more
-
-			if ((*it).getTimeEnd() != -1) {
-				if ((*it).getTimeStart() < 1000){
-					out << "0" << (*it).getTimeStart();
+			switch ((*it).getNumOfDates()){
+			case 0:
+				break;
+			case 1:
+				out << ";date ";
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
 				}
-				else out << (*it).getTimeStart();
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+				break;
+			case 2:
+				out << ";date ";
+				if ((*it).getDateStart().day < 10){
+					out << "0" << (*it).getDateStart().day;
+				}
+				else out << (*it).getDateStart().day;
+				if ((*it).getDateStart().month < 10){
+					out << "0" << (*it).getDateStart().month;
+				}
+
+				if ((*it).getDateStart().year < 10){
+					out << "0" << (*it).getDateStart().year << " ";
+				}
+				else out << (*it).getDateStart().year << " ";
 
 				out << " to ";
+
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+
+				break;
 			}
 
-			if ((*it).getTimeStart() != -1){
-				if ((*it).getTimeEnd() < 1000){
-					out << "0" << (*it).getTimeEnd();
-				}
+			switch ((*it).getNumOfTimes()){
+			case 0:
+				break;
+			case 1:
+				out << "; time ";
+				out << (*it).getTimeStart();
+				break;
+			case 2:
+				out << (*it).getTimeStart() << " to ";
 				out << (*it).getTimeEnd();
+				break;
+			default:
+				cout << ERROR_MESSAGE_FATAL;
 			}
 
 
 
 			if ((*it).getImportance()){
-				out << " #impt";
+				out << IMPORTANCE_SYMBOL;
 			}
-			out << "\r\n";
+			
+			out << NEWLINE;
 
 		}
+		
 	}
 	else out << "The list is empty!" << endl;
 
 	return out.str();
-
 }
+
 
 void Planner::generateAllOtherList(void){
 	HomeList.clear();
