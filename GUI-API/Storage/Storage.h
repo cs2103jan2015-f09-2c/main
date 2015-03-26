@@ -28,5 +28,6 @@ public:
 	string retrieveSaveAddress();
 	string saveWithFileAddress(string, string);
 	string save(string);
+	string load();
 };
 
