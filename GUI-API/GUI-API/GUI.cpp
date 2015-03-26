@@ -15,7 +15,8 @@ Logic::Logic(){
 	myStorage = Storage::getInstanceOfStorage();
 	saveAddress = myStorage->retrieveSaveAddress();
 	outcome = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
-	display = myStorage->load();
+	string allTasks = myStorage->load();
+	myPlanner.loadData(allTasks);
 }
 
 Logic::~Logic(){

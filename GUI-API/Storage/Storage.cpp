@@ -107,4 +107,5 @@ string Storage::load(){
 	while (getline(read, lineContent)){
 		allTasks = allTasks + lineContent + "\n";
 	}
+	return allTasks;
 }
