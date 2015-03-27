@@ -81,7 +81,7 @@ namespace TaskUnitTest
 			Assert::AreEqual(dateStartControl.year, testTask.getDateStart().year);
 
 
-			//boundary case - 3 digits in each date field
+			//boundary case for positive value partition: 3 digits in each date field
 			dateStartControl.day = 445;
 			dateStartControl.month = 455;
 			dateStartControl.year = 566;
@@ -98,7 +98,7 @@ namespace TaskUnitTest
 			Assert::AreNotEqual(dateStartControl.month, testTask.getDateStart().month);
 			Assert::AreNotEqual(dateStartControl.year, testTask.getDateStart().year);
 
-			//boundary case: 1 digit in each field;
+			//boundary case for positive value partition: 1 digit in each field;
 			dateStartControl.day = 4;
 			dateStartControl.month = 5;
 			dateStartControl.year = 6;
@@ -114,6 +114,48 @@ namespace TaskUnitTest
 			Assert::AreNotEqual(dateStartControl.day, testTask.getDateStart().day);
 			Assert::AreNotEqual(dateStartControl.month, testTask.getDateStart().month);
 			Assert::AreNotEqual(dateStartControl.year, testTask.getDateStart().year);
+
+			//negative value partition
+			dateStartControl.day = -4;
+			dateStartControl.month = -5;
+			dateStartControl.year = -6;
+
+			dateEndControl.day = -1;
+			dateEndControl.month = -2;
+			dateEndControl.year = -3;
+
+			Assert::AreNotEqual(dateEndControl.day, testTask.getDateEnd().day);
+			Assert::AreNotEqual(dateEndControl.month, testTask.getDateEnd().month);
+			Assert::AreNotEqual(dateEndControl.year, testTask.getDateEnd().year);
+
+			Assert::AreNotEqual(dateStartControl.day, testTask.getDateStart().day);
+			Assert::AreNotEqual(dateStartControl.month, testTask.getDateStart().month);
+			Assert::AreNotEqual(dateStartControl.year, testTask.getDateStart().year);
+
+			//switched start and end partition
+
+			dateStartControl.day = 11;
+			dateStartControl.month = 22;
+			dateStartControl.year = 33;
+
+			dateEndControl.day = 44;
+			dateEndControl.month = 55;
+			dateEndControl.year = 66;
+
+			Assert::AreNotEqual(dateEndControl.day, testTask.getDateEnd().day);
+			Assert::AreNotEqual(dateEndControl.month, testTask.getDateEnd().month);
+			Assert::AreNotEqual(dateEndControl.year, testTask.getDateEnd().year);
+
+			Assert::AreNotEqual(dateStartControl.day, testTask.getDateStart().day);
+			Assert::AreNotEqual(dateStartControl.month, testTask.getDateStart().month);
+			Assert::AreNotEqual(dateStartControl.year, testTask.getDateStart().year);
+
+		}
+
+		TEST_METHOD(storeTimeTest){
+		}
+
+		TEST_METHOD(storeDescriptionTest){
 		}
 
 	};
