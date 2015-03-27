@@ -6,8 +6,14 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace StorageUnitTest{		
 	TEST_CLASS(StorageTest){
 	public:
-		
-		TEST_METHOD(SaveWithFileAddressTest){
+
+		/************************************************************************************************
+
+											Save Unit Tests
+
+		************************************************************************************************/
+
+		TEST_METHOD(testSave_fileAddress){
 		//save content to a valid file address
 			Storage* myTestStorage;
 			myTestStorage = Storage::getInstanceOfStorage();
@@ -23,7 +29,12 @@ namespace StorageUnitTest{
 			Assert::AreEqual(expectedContent, actualContent);
 		}
 
-		TEST_METHOD(loadTest){
+		/************************************************************************************************
+
+												Load Unit Tests
+
+		************************************************************************************************/
+		TEST_METHOD(testLoad_Storage_valid_outcome){
 		//file address specified exist
 			Storage* myTestStorage;
 			myTestStorage = Storage::getInstanceOfStorage();
@@ -33,10 +44,21 @@ namespace StorageUnitTest{
 			string actualOutcome = myTestStorage->load(saveAddress, actualContent);
 			string expectedOutcome = "D:\hello.txt loaded successfully";
 			Assert::AreEqual(expectedOutcome, actualOutcome);
+		}
+
+		TEST_METHOD(testLoad_Storage_valid_content){
+			//file address specified exist
+			Storage* myTestStorage;
+			myTestStorage = Storage::getInstanceOfStorage();
+			string saveAddress = "D:\hello.txt";
+			string expectedContent = "test\n";
+			string actualContent;
+			string actualOutcome = myTestStorage->load(saveAddress, actualContent);
+			string expectedOutcome = "D:\hello.txt loaded successfully";
 			Assert::AreEqual(expectedContent, actualContent);
 		}
 
-		TEST_METHOD(invalidLoadTest){
+		TEST_METHOD(testLoadStorage_invalid){
 		//file address specified does not exist
 			Storage* myTestStorage;
 			myTestStorage = Storage::getInstanceOfStorage();
