@@ -28,8 +28,8 @@ private:
 	string processDescription(string);
 	void processDate(string);
 	void processTime(string);
-	void storeStartDate(string);
-	void storeEndDate(string);
+	void storeStartDate(string);				//tested
+	void storeEndDate(string);					//tested
 	Log* LogData = Log::getInstance();
 
 public:

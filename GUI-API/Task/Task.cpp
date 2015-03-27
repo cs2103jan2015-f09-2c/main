@@ -83,12 +83,14 @@ string Task::processImportance(string details){
 //stores description into task object and returns the remainder of user input
 string Task::processDescription(string details){
 	int index;
+
 	index = details.find_first_of(";");
 	_description = details.substr(0, index);
 	index = index + 1;
 	details = details.substr(index, details.size() - index);				//cut out the description part to be left with the date and/or time part
 	LogData->addLog("UPDATE", "In addDetails(processDescription), Description stored successfully");
 	return details;
+
 }
 
 //Takes in date related information in a string and stores into the respective variables in Task object

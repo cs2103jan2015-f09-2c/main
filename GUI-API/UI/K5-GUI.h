@@ -71,6 +71,8 @@ namespace UI {
 			// 
 			// displayWindow
 			// 
+			this->displayWindow->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->displayWindow->Location = System::Drawing::Point(10, 12);
 			this->displayWindow->Multiline = true;
 			this->displayWindow->Name = L"displayWindow";
