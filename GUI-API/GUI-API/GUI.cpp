@@ -3,7 +3,7 @@
 #include "Storage.h"
 #include "assert.h"
 
-const string STATUS_MESSAGE_CURRENT_SAVE_ADDRESS = "Your tasks will be saved to this address: ";
+const string STATUS_MESSAGE_CURRENT_SAVE_ADDRESS = "Tasks will be saved to this address: ";
 const string STATUS_MESSAGE_NEW_SAVE_ADDRESS = "Change save address by typing save followed by file address";
 const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
 const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
