@@ -204,6 +204,9 @@ namespace UI {
 			searchCheck = msclr::interop::marshal_as<std::string>(userInput->Text);
 
 			if (e->KeyChar == (char)13) {
+				e->Handled = true;
+				//e->suppress = true;
+
 				if (userInput->Text == "home") {
 					homeButton_Click(sender, e);
 				}
