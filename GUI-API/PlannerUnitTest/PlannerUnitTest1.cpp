@@ -182,7 +182,5 @@ namespace PlannerUnitTest
 			}
 			Assert::IsTrue(doesFunctionWork);
 		}
-		
-
 	};
 }

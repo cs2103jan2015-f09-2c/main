@@ -237,8 +237,6 @@ namespace UI {
 
 					string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);				
 					string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
-
-
 		
 					s->processUserInput(unmanagedInput, unmanagedView);
 
