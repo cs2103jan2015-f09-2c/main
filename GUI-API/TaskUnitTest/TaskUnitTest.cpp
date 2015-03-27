@@ -11,7 +11,7 @@ namespace TaskUnitTest
 		
 		TEST_METHOD(addDetailsTest){
 			Task testTask1, testTask2, testTask3;
-			bool isDescCorrect = false, isTimeCorrect = false, isStartDateCorrect = false, isEndDateCorrect = false;
+			bool isDescCorrect = false, isTimeCorrect = false;
 		
 			testTask1.addDetails("Meeting in school; date 270315 to 290315; time 1300 to 1500");
 			testTask2.addDetails("Project meeting; date 280315; time 1400");
@@ -44,19 +44,6 @@ namespace TaskUnitTest
 			Assert::AreEqual(1, testTask2.getNumOfDates());
 			Assert::AreEqual(0, testTask3.getNumOfDates());
 
-			if (testTask1.getDateStart().day == 27 && testTask1.getDateStart().month == 3 && 
-					testTask1.getDateStart().year == 15){
-				isStartDateCorrect = true;
-			}
-			Assert::IsTrue(isStartDateCorrect);
-
-			if (testTask1.getDateEnd().day == 29 && testTask1.getDateEnd().month == 3 && 
-					testTask1.getDateEnd().year == 15){
-				isEndDateCorrect = true;
-			}
-			Assert::IsTrue(isEndDateCorrect);
-
-
 		}
 
 		TEST_METHOD(isSearchTargetPresentTest){
@@ -68,6 +55,65 @@ namespace TaskUnitTest
 			Assert::IsTrue(testTask.isSearchTargetPresent(positiveSearchTarget));
 			Assert::IsFalse(testTask.isSearchTargetPresent(negativeSearchTarget));
 
+		}
+
+		TEST_METHOD(storeDateTest){
+			taskDate dateStartControl;
+			taskDate dateEndControl;
+			Task testTask;
+
+			dateStartControl.day = 44;
+			dateStartControl.month = 55;
+			dateStartControl.year = 66;
+
+			dateEndControl.day = 11;
+			dateEndControl.month = 22;
+			dateEndControl.year = 33;
+
+			testTask.addDetails("Meeting in school; date 445566 to 112233; time 1300 to 1500");
+
+			Assert::AreEqual(dateEndControl.day, testTask.getDateEnd().day);
+			Assert::AreEqual(dateEndControl.month, testTask.getDateEnd().month);
+			Assert::AreEqual(dateEndControl.year, testTask.getDateEnd().year);
+
+			Assert::AreEqual(dateStartControl.day, testTask.getDateStart().day);
+			Assert::AreEqual(dateStartControl.month, testTask.getDateStart().month);
+			Assert::AreEqual(dateStartControl.year, testTask.getDateStart().year);
+
+
+			//boundary case - 3 digits in each date field
+			dateStartControl.day = 445;
+			dateStartControl.month = 455;
+			dateStartControl.year = 566;
+
+			dateEndControl.day = 112;
+			dateEndControl.month = 122;
+			dateEndControl.year = 233;
+
+			Assert::AreNotEqual(dateEndControl.day, testTask.getDateEnd().day);
+			Assert::AreNotEqual(dateEndControl.month, testTask.getDateEnd().month);
+			Assert::AreNotEqual(dateEndControl.year, testTask.getDateEnd().year);
+
+			Assert::AreNotEqual(dateStartControl.day, testTask.getDateStart().day);
+			Assert::AreNotEqual(dateStartControl.month, testTask.getDateStart().month);
+			Assert::AreNotEqual(dateStartControl.year, testTask.getDateStart().year);
+
+			//boundary case: 1 digit in each field;
+			dateStartControl.day = 4;
+			dateStartControl.month = 5;
+			dateStartControl.year = 6;
+
+			dateEndControl.day = 1;
+			dateEndControl.month = 2;
+			dateEndControl.year = 3;
+
+			Assert::AreNotEqual(dateEndControl.day, testTask.getDateEnd().day);
+			Assert::AreNotEqual(dateEndControl.month, testTask.getDateEnd().month);
+			Assert::AreNotEqual(dateEndControl.year, testTask.getDateEnd().year);
+
+			Assert::AreNotEqual(dateStartControl.day, testTask.getDateStart().day);
+			Assert::AreNotEqual(dateStartControl.month, testTask.getDateStart().month);
+			Assert::AreNotEqual(dateStartControl.year, testTask.getDateStart().year);
 		}
 
 	};
