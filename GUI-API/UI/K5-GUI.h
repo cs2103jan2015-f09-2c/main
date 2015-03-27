@@ -156,113 +156,146 @@ namespace UI {
 		}
 #pragma endregion
 
-	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
-	}
+		/************************************************************************************************
 
-	private: System::Void GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
-		homeButton_Click(sender, e);
-	}
+												Initialization
 
-	private: System::Void colourSwitch(String^ currentView) {
-		if (currentView == "Home") {
-			homeButton->BackColor = Color::LightSkyBlue;
-			missedButton->BackColor = Color::SteelBlue;
-			upcomingButton->BackColor = Color::SteelBlue;
+		************************************************************************************************/
+
+		private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
 		}
-		else if (currentView == "Upcoming") {
-			upcomingButton->BackColor = Color::LightSkyBlue;
-			missedButton->BackColor = Color::SteelBlue;
-			homeButton->BackColor = Color::SteelBlue;
+
+		private: System::Void GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
+			homeButton_Click(sender, e);
 		}
-		else if (currentView == "Missed") {
-			missedButton->BackColor = Color::LightSkyBlue;
-			upcomingButton->BackColor = Color::SteelBlue;
-			homeButton->BackColor = Color::SteelBlue;
+
+		/************************************************************************************************
+
+											GUI control functions
+
+		************************************************************************************************/		
+
+				 //switch window
+		private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			currentView = "Home";
+			switchView(currentView);
+			prompt->Text = "Home";
 		}
-		else if (currentView == "Help" || currentView == "All" || currentView == "Search") {
-			missedButton->BackColor = Color::SteelBlue;
-			upcomingButton->BackColor = Color::SteelBlue;
-			homeButton->BackColor = Color::SteelBlue;
+
+				 //switch window
+		private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			currentView = "Upcoming";
+			switchView(currentView);
+			prompt->Text = "Upcoming";
 		}
-	}
 
-	private: System::Void switchView(String^ viewType) {
-		string unmanagedView = msclr::interop::marshal_as<std::string>(viewType);
-		s->updateDisplay(unmanagedView);
-		displayWindow->Text = gcnew String(s->displayContent().c_str());
-		colourSwitch(currentView);
-	}
+				 //switch window
+		private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			currentView = "Missed";
+			switchView(currentView);
+			prompt->Text = "Missed";
+		}
 
-			 //switch window
-	private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		currentView = "Home";
-		switchView(currentView);
-		prompt->Text = "Home";
-	}
+				 //takes in user input
+		private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
+			String^ strOutput;
+			string searchCheck;
 
-			 //switch window
-	private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		currentView = "Upcoming";
-		switchView(currentView);
-		prompt->Text = "Upcoming";
-	}
+			searchCheck = msclr::interop::marshal_as<std::string>(userInput->Text);
 
-			 //switch window
-	private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		currentView = "Missed";
-		switchView(currentView);
-		prompt->Text = "Missed";
-	}
-
-			 //takes in user input
-	private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
-		String^ strOutput;
-
-		if (e->KeyChar == (char)13) {
-			if (userInput->Text == "home") {
-				homeButton_Click(sender, e);
-			}
-			else if (userInput->Text == "missed") {
-				missedButton_Click(sender, e);
-			}
-			else if (userInput->Text == "upcoming") {
-				upcomingButton_Click(sender, e);
-			}
-			else if (userInput->Text == "help") {
-				currentView = "Help";
-				s->processUserInput("help", "Help");
-				switchView(currentView);
-				prompt->Text = gcnew String(s->displayOutcome().c_str());
-			}
-			else if (userInput->Text == "all") {
-				currentView = "All";
-				s->processUserInput("all", "All");
-				switchView(currentView);
-				prompt->Text = gcnew String(s->displayOutcome().c_str());
-			}
-			else if (userInput->Text == "exit") {
-				Application::Exit();
-			}
-			else {
-				String^ managedInput = userInput->Text;
-				String^ managedView = currentView;
-
-				string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);				
-				string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
-		
-				s->processUserInput(unmanagedInput, unmanagedView);
-
-				strOutput = gcnew String(s->displayContent().c_str());
-				displayWindow->Text = strOutput;
-				prompt->Text = gcnew String(s->displayOutcome().c_str());
-				if (prompt->Text == "Search Results") {
-					currentView = "Search";
-					colourSwitch(currentView);
+			if (e->KeyChar == (char)13) {
+				if (userInput->Text == "home") {
+					homeButton_Click(sender, e);
 				}
-			}
+				else if (userInput->Text == "missed") {
+					missedButton_Click(sender, e);
+				}
+				else if (userInput->Text == "upcoming") {
+					upcomingButton_Click(sender, e);
+				}
+				else if (userInput->Text == "help") {
+					currentView = "Help";
+					helpView(currentView);
+				}
+				else if (userInput->Text == "all") {
+					currentView = "All";
+					allView(currentView);
+				}
+				else if (userInput->Text == "exit") {
+					Application::Exit();
+				}
+				else {
+					//check for search command
+					if (searchCheck.find("search") != string::npos) {
+						currentView = "Search";
+						colourSwitch(currentView);
+					}
 
-			userInput->Text = "";
+					//processing other inputs
+					String^ managedInput = userInput->Text;
+					String^ managedView = currentView;
+
+					string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);				
+					string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
+
+
+		
+					s->processUserInput(unmanagedInput, unmanagedView);
+
+					strOutput = gcnew String(s->displayContent().c_str());
+					displayWindow->Text = strOutput;
+					prompt->Text = gcnew String(s->displayOutcome().c_str());
+				}			
+
+				userInput->Text = "";
+			}
 		}
-	}
+		 /************************************************************************************************
+
+												 GUI view functions
+
+		 ************************************************************************************************/
+		 private: System::Void colourSwitch(String^ currentView) {
+			 if (currentView == "Home") {
+				 homeButton->BackColor = Color::LightSkyBlue;
+				 missedButton->BackColor = Color::SteelBlue;
+				 upcomingButton->BackColor = Color::SteelBlue;
+			 }
+			 else if (currentView == "Upcoming") {
+				 upcomingButton->BackColor = Color::LightSkyBlue;
+				 missedButton->BackColor = Color::SteelBlue;
+				 homeButton->BackColor = Color::SteelBlue;
+			 }
+			 else if (currentView == "Missed") {
+				 missedButton->BackColor = Color::LightSkyBlue;
+				 upcomingButton->BackColor = Color::SteelBlue;
+				 homeButton->BackColor = Color::SteelBlue;
+			 }
+			 else if (currentView == "Help" || currentView == "All" || currentView == "Search") {
+				 missedButton->BackColor = Color::SteelBlue;
+				 upcomingButton->BackColor = Color::SteelBlue;
+				 homeButton->BackColor = Color::SteelBlue;
+			 }
+		 }
+
+		private: System::Void switchView(String^ viewType) {
+			string unmanagedView = msclr::interop::marshal_as<std::string>(viewType);
+			s->updateDisplay(unmanagedView);
+			displayWindow->Text = gcnew String(s->displayContent().c_str());
+			colourSwitch(currentView);
+		}
+
+		private: System::Void helpView(String^ viewType) {
+			s->processUserInput("help", "Help");
+			switchView(currentView);
+			prompt->Text = gcnew String(s->displayOutcome().c_str());
+		}
+
+		private: System::Void allView(String^ viewType) {
+			s->processUserInput("all", "All");
+			switchView(currentView);
+			prompt->Text = gcnew String(s->displayOutcome().c_str());
+		}
+
 	};
 }
