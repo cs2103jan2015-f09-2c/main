@@ -43,6 +43,8 @@ namespace TaskUnitTest
 		}
 
 		//maybe?
+		//Whats the point of this test? When we enter add ;date 270315 to 290315; time 1300 to 1500
+		// the program says invalid, When we enter date 270315 to 290315; time 1300 to 1500 then it is taken as a string
 		TEST_METHOD(testAddDetails_Description_blank){
 			Task testTask;
 			string testDescription = "No description";
