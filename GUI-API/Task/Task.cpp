@@ -15,6 +15,7 @@ Task::Task(){
 	_timeStart = -1;
 	_timeEnd = -1;
 	_isImpt = false;
+	_isDone = false;
 	_numOfDates = 0;
 	_numOfTimes = 0;
 }
@@ -249,4 +250,14 @@ bool Task::isSearchTargetPresent(string target){
 
 	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
 	return isFound;
+}
+
+
+
+void Task::markIsDoneAsTrue(){
+	_isDone = true;
+}
+
+bool Task::doneStatus(){
+	return _isDone;
 }

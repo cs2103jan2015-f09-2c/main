@@ -13,11 +13,13 @@ const string COMMAND_EDIT = "edit";
 const string COMMAND_UNDO = "undo";
 const string COMMAND_CLEAR = "clear";
 const string COMMAND_SAVE = "save";
+const string COMMAND_DONE = "done";
 
 const string HOME_LIST = "Home";
 const string MISSED_LIST = "Missed";
 const string UPCOMING_LIST = "Upcoming";
 const string SEARCH_LIST = "Search";
+const string DONE_LIST = "Done";
 
 const string SEARCH_RESULTS_MSG = "Search Results";
 
@@ -27,6 +29,7 @@ const string LOG_FILE_DELETE_TASK_INTRO_MSG = "ID of deleted entry is ";
 const string LOG_FILE_CLEAR_TASK_MSG = "Delete ID : ";
 const string LOG_FILE_EDIT_TASK_MSG = "Edit Taken Place ";
 const string LOG_FILE_SAVE_MSG = "File Save Operation";
+const string LOG_FILE_MARK_DONE_MSG = "The item is marked as done";
 
 const string ERROR_MESSAGE_FATAL = "Fatal Error !!";
 const string ERROR_MESSSAGE_INVALID_LIST_NAME = "Error!! Name of list is invalid!!";
@@ -46,6 +49,7 @@ const string STATUS_TO_STRING_UNDO_ADD_MSG = "The following Task has been added 
 const string STATUS_TO_STRING_UNDO_DELETE_MSG = "The following Task has been removed: \r\n";
 const string STATUS_TO_STRING_CLEAR_MSG = "All content cleared. \r\n";
 const string STATUS_TO_STRING_SAVE_MSG = "File has been saved. \r\n";
+const string STATUS_TO_STRING_DONE_MSG = "Task has been marked as done \r\n";
 
 
 
@@ -299,15 +303,6 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	return editStatusToString();
 }
 
-/*string Planner::save(string fileName){
-	ofstream write(fileName);
-	string allTasks;
-	allTasks = saveDataToString();
-	write << allTasks;
-	write.close();
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD,LOG_FILE_SAVE_MSG);
-	return saveStatusToString();
-} */
 
 void Planner::loadData(string data){
 	Task* tempTask;
@@ -337,6 +332,69 @@ int Planner::getIdOfLastEntry(void){// act this function returns id not last ent
 	return idGeneratror;
 }
 
+string Planner::markDone(int serialNumber, string nameOfList){
+	int idNumber=0;
+	string status;
+	list<Task> ::iterator iter;
+
+	if (nameOfList == HOME_LIST){
+		iter = HomeList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		
+		idNumber = (*iter).getIdNumber();
+		status = markDoneIndex(idNumber);
+	}
+	else if (nameOfList == MISSED_LIST){
+		iter = MissedList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		
+		idNumber = (*iter).getIdNumber();
+		status = markDoneIndex(idNumber);
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		iter = UpcomingList.begin();
+		for (int i = 1; i != serialNumber; i++){
+			iter++;
+		}
+		idNumber = (*iter).getIdNumber();
+
+		status = markDoneIndex(idNumber);
+	}
+	else cout << ERROR_MESSSAGE_INVALID_LIST_NAME << endl;
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+
+}
+
+string Planner::markDoneIndex(int idNumber){
+	list<Task> ::iterator iter1, iter2;
+	string status;
+	iter1 = All.begin();
+	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
+		if ((*iter1).getIdNumber() == idNumber){
+			(*iter1).markIsDoneAsTrue();
+			status = statusToString(COMMAND_DONE, *iter1);
+		}
+	}
+
+	generateAllOtherList();
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+
+}
+
 /************************************************************************************************
 
 										Printing functions
@@ -361,6 +419,9 @@ string Planner::toString(string nameOfList){
 	else if (nameOfList == SEARCH_LIST){
 		finalString = searchListToString();
 		return finalString;
+	}
+	else if (nameOfList == DONE_LIST){
+		finalString = doneListToString();
 	}
 	else return ERROR_MESSSAGE_INVALID_FILE_NAME;
 }
@@ -412,6 +473,9 @@ string Planner::statusToString(string command, Task theTask){
 		finalString = saveStatusToString();
 		return finalString;
 	}
+	else if (command == COMMAND_DONE){
+		finalString = doneStatusToString();
+	}
 	else return ERROR_MESSSAGE_INVALID_COMMAND;
 }
 
@@ -450,6 +514,10 @@ string Planner::descriptionOfTaskToString(Task theTask){
 
 	if (theTask.getImportance()){
 		out << IMPORTANCE_SYMBOL;
+	}
+
+	if (theTask.doneStatus()){
+		out << "DONE";
 	}
 	return out.str();
 }
@@ -507,6 +575,10 @@ string Planner::saveStatusToString(){
 	return STATUS_TO_STRING_SAVE_MSG;
 }
 
+string Planner::doneStatusToString(){
+	return STATUS_TO_STRING_DONE_MSG;
+}
+
 string Planner::searchStatusToString(){
 	return SEARCH_RESULTS_MSG;
 }
@@ -562,6 +634,23 @@ string Planner::missedListToString(void){
 	}
 	else out << EMPTY_LIST_MESSAGE << endl;
 
+	return out.str();
+}
+
+string Planner::doneListToString(){
+	ostringstream out;
+	list<Task> ::iterator it;
+	it = doneList.begin();
+	int serialNumber = 1;
+	if (!doneList.empty()){
+		for (it = doneList.begin(); it != doneList.end(); ++it){
+			out << serialNumber << ". ";
+			out << descriptionOfTaskToString(*(it));
+			out << NEWLINE;
+			serialNumber = serialNumber + 1;
+		}
+	}
+	else out << EMPTY_LIST_MESSAGE << endl;
 	return out.str();
 }
 
@@ -688,9 +777,11 @@ void Planner::generateAllOtherList(void){
 	HomeList.clear();
 	MissedList.clear();
 	UpcomingList.clear();
+	doneList.clear();
 	generateHomeList();
 	generateMissedList();
 	generateUpcomingList();
+	generateDoneList();
 }
 
 string Planner::generateSearchList(string target){
@@ -707,7 +798,15 @@ string Planner::generateSearchList(string target){
 
 	return searchStatusToString();
 }
+void Planner::generateDoneList(void){
+	list<Task> ::iterator it;
 
+	for (it = All.begin(); it != All.end(); ++it){
+		if ((*it).doneStatus()) {
+			doneList.push_back(*it);
+		}
+	}
+}
 void Planner::generateHomeList(void){
 	list<Task> ::iterator it;
 
@@ -781,6 +880,10 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 		}
 	}
 
+	if ((*it).doneStatus()){
+		isWithinHome = false;
+	}
+
 	return isWithinHome;
 }
 
@@ -800,6 +903,10 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 				isWithinMissed = true;
 			}
 		}
+	}
+
+	if ((*it).doneStatus()){
+		isWithinMissed = false;
 	}
 
 	return isWithinMissed;
@@ -861,6 +968,10 @@ bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 				isWithinUpcoming = false;
 			}
 		}
+	}
+
+	if ((*it).doneStatus()){
+		isWithinUpcoming = false;
 	}
 
 	return isWithinUpcoming;
