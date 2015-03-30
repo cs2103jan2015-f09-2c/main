@@ -16,8 +16,8 @@ struct taskDate{
 class Task{
 private:
 	string _description;
-	int _timeStart;
-	int _timeEnd;
+	int _timeStart = -1;
+	int _timeEnd = -1;
 	taskDate _dateStart;
 	taskDate _dateEnd;
 	bool _isImpt;
@@ -25,11 +25,11 @@ private:
 	int _numOfDates;
 	int _numOfTimes;
 	string processImportance(string);
-	string processDescription(string);
-	void processDate(string);
-	void processTime(string);
-	void storeStartDate(string);
-	void storeEndDate(string);
+	string processDescription(string);			
+	void processDate(string);					
+	void processTime(string);					
+	void storeStartDate(string);				
+	void storeEndDate(string);					
 	Log* LogData = Log::getInstance();
 
 public:

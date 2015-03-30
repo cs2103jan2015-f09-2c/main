@@ -5,7 +5,12 @@
 
 using namespace std;
 
-//Constructor
+/************************************************************************************************
+
+										Initialization
+
+************************************************************************************************/
+
 Task::Task(){
 	_timeStart = -1;
 	_timeEnd = -1;
@@ -14,9 +19,14 @@ Task::Task(){
 	_numOfTimes = 0;
 }
 
-//Destrcutor
 Task::~Task(){
 }
+
+/************************************************************************************************
+
+								Task Information Setter Functions
+
+************************************************************************************************/
 
 //Function takes in user input and stores the task details
 void Task::addDetails(string details){
@@ -83,12 +93,14 @@ string Task::processImportance(string details){
 //stores description into task object and returns the remainder of user input
 string Task::processDescription(string details){
 	int index;
+
 	index = details.find_first_of(";");
 	_description = details.substr(0, index);
 	index = index + 1;
 	details = details.substr(index, details.size() - index);				//cut out the description part to be left with the date and/or time part
 	LogData->addLog("UPDATE", "In addDetails(processDescription), Description stored successfully");
 	return details;
+
 }
 
 //Takes in date related information in a string and stores into the respective variables in Task object
@@ -166,6 +178,59 @@ void Task::processTime(string timeInfo){
 	LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
 }
 
+//Stores a unique ID number that is created by the Planner class
+void Task::storeIdNumber(int num){
+	_idNumber = num;
+}
+
+/************************************************************************************************
+
+								Task Information Getter Functions
+
+************************************************************************************************/
+
+string Task::getDescription(){
+	return _description;
+}
+
+int Task::getTimeStart(){
+	return _timeStart;
+}
+
+int Task::getTimeEnd(){
+	return _timeEnd;
+}
+
+taskDate Task::getDateStart(){
+	return _dateStart;
+}
+
+taskDate Task::getDateEnd(){
+	return _dateEnd;
+}
+
+bool Task::getImportance(){
+	return _isImpt;
+}
+
+int Task::getIdNumber(){
+	return _idNumber;
+}
+
+int Task::getNumOfDates(){
+	return _numOfDates;
+}
+
+int Task::getNumOfTimes(){
+	return _numOfTimes;
+}
+
+/************************************************************************************************
+
+Search function
+
+************************************************************************************************/
+
 //Checks if the target word is present in the task description
 bool Task::isSearchTargetPresent(string target){
 	LogData->addLog("UPDATE", "In isSearchTargetPresent, search initiated");
@@ -184,56 +249,4 @@ bool Task::isSearchTargetPresent(string target){
 
 	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
 	return isFound;
-}
-
-//Returns task description
-string Task::getDescription(){
-	return _description;
-}
-
-//Returns start time of task
-int Task::getTimeStart(){
-	return _timeStart;
-}
-
-//Returns end time of task
-int Task::getTimeEnd(){
-	return _timeEnd;
-}
-
-//Return start date of task
-taskDate Task::getDateStart(){
-	return _dateStart;
-}
-
-//Return end date of task
-taskDate Task::getDateEnd(){
-	return _dateEnd;
-}
-
-//Checks if task is marked as important by user
-bool Task::getImportance(){
-	return _isImpt;
-}
-
-//Stores a unique ID number that is created by the K5 planner class
-void Task::storeIdNumber(int num){
-	_idNumber = num;
-}
-
-//Returns unique ID number
-int Task::getIdNumber(){
-	return _idNumber;
-}
-
-//Returns the number of dates user has input for the particular task. i.e. if user has input both start and end date then function 
-//will return 2
-int Task::getNumOfDates(){
-	return _numOfDates;
-}
-
-//Returns the number of timings user has input for the particular task. i.e. if user has input both start and end time then function 
-//will return 2
-int Task::getNumOfTimes(){
-	return _numOfTimes;
 }

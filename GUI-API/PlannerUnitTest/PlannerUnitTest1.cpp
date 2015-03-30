@@ -9,7 +9,7 @@ namespace PlannerUnitTest
 	{
 	public:
 		
-		TEST_METHOD(TestAddFunction_1_task_only)
+		TEST_METHOD(testAdd_oneTask)
 		{
 			Planner testPlanner;
 			Task testTask;
@@ -25,7 +25,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		TEST_METHOD(TestAddFunction_multiple_tasks)
+		TEST_METHOD(testAdd_manyTasks)
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
@@ -47,7 +47,8 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		TEST_METHOD(TestClearFunction)
+
+		TEST_METHOD(testClear)
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
@@ -68,7 +69,8 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		TEST_METHOD(TestDeleteFunction_forMissedList)
+
+		TEST_METHOD(testDelete_Missed)
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
@@ -85,7 +87,8 @@ namespace PlannerUnitTest
 			}
 			Assert::IsTrue(doesFunctionWork);
 		}
-		TEST_METHOD(TestEditFunction)
+
+		TEST_METHOD(testEdit)
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
@@ -104,7 +107,8 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 
 		}
-		TEST_METHOD(TestUndoAdd)
+
+		TEST_METHOD(testUndo_Add)
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
@@ -122,7 +126,8 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 
 		}
-		TEST_METHOD(TestUndoDelete)
+
+		TEST_METHOD(testUndo_Delete)
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
@@ -141,7 +146,8 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 			
 		}
-		TEST_METHOD(TestUndoEdit)
+
+		TEST_METHOD(testUndo_Edit)
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
@@ -162,7 +168,7 @@ namespace PlannerUnitTest
 
 		}
 
-		TEST_METHOD(TestLoadFunction)
+		TEST_METHOD(testLoad_Planner)
 		{
 			Planner testPlanner;
 			bool doesFunctionWork = false;
@@ -176,7 +182,5 @@ namespace PlannerUnitTest
 			}
 			Assert::IsTrue(doesFunctionWork);
 		}
-		
-
 	};
 }

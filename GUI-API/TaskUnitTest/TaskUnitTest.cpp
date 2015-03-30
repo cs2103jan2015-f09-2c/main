@@ -8,67 +8,234 @@ namespace TaskUnitTest
 	TEST_CLASS(TaskUnitTest)
 	{
 	public:
+
+		/************************************************************************************************
+
+											Description Unit Tests
+
+		************************************************************************************************/
+
+		TEST_METHOD(testAddDetails_Description_normal){
+			Task testTask;
+			string testDescription = "Meeting in school";
 		
-		TEST_METHOD(addDetailsTest){
-			Task testTask1, testTask2, testTask3;
-			bool isDescCorrect = false, isTimeCorrect = false, isStartDateCorrect = false, isEndDateCorrect = false;
-		
-			testTask1.addDetails("Meeting in school; date 270315 to 290315; time 1300 to 1500");
-			testTask2.addDetails("Project meeting; date 280315; time 1400");
-			testTask3.addDetails("Consultation with prof");
+			testTask.addDetails("Meeting in school; date 270315 to 290315; time 1300 to 1500");
 
-			//Check Description
-			if (testTask1.getDescription() == "Meeting in school"){
-				isDescCorrect = true;
-			}
-			Assert::IsTrue(isDescCorrect);
-			
-			//Check Time
-			//Equivalence partition [0 .. 2] is the range that produces true
-			//Check boundary case 0, 1, 2 and 3
-			Assert::AreNotEqual(3, testTask1.getNumOfTimes());
-			Assert::AreEqual(2, testTask1.getNumOfTimes());
-			Assert::AreEqual(1, testTask2.getNumOfTimes());
-			Assert::AreEqual(0, testTask3.getNumOfTimes());
-
-			if (testTask1.getTimeStart() == 1300 && testTask1.getTimeEnd() == 1500){
-				isTimeCorrect = true;
-			}
-			Assert::IsTrue(isTimeCorrect);
-
-			//Check Date
-			//Equivalence partition [0 .. 2] is the range that produces true
-			//Check boundary case 0, 1, 2 and 3
-			Assert::AreNotEqual(3, testTask1.getNumOfDates());
-			Assert::AreEqual(2, testTask1.getNumOfDates());
-			Assert::AreEqual(1, testTask2.getNumOfDates());
-			Assert::AreEqual(0, testTask3.getNumOfDates());
-
-			if (testTask1.getDateStart().day == 27 && testTask1.getDateStart().month == 3 && 
-					testTask1.getDateStart().year == 15){
-				isStartDateCorrect = true;
-			}
-			Assert::IsTrue(isStartDateCorrect);
-
-			if (testTask1.getDateEnd().day == 29 && testTask1.getDateEnd().month == 3 && 
-					testTask1.getDateEnd().year == 15){
-				isEndDateCorrect = true;
-			}
-			Assert::IsTrue(isEndDateCorrect);
-
-
+			Assert::AreEqual(testTask.getDescription(), testDescription);
 		}
 
-		TEST_METHOD(isSearchTargetPresentTest){
+		TEST_METHOD(testAddDetails_Description_whitespace){
+			Task testTask;
+			string testDescription = "  ";
+
+			testTask.addDetails("  ; date 270315 to 290315; time 1300 to 1500");
+
+			Assert::AreEqual(testTask.getDescription(), testDescription);
+		}
+
+		TEST_METHOD(testAddDetails_Description_blankDelimiter){
+			Task testTask;
+			string testDescription = "";
+
+			testTask.addDetails("; date 270315 to 290315; time 1300 to 1500");
+
+			Assert::AreEqual(testTask.getDescription(), testDescription);
+		}
+
+		//maybe?
+		//Whats the point of this test? When we enter add ;date 270315 to 290315; time 1300 to 1500
+		// the program says invalid, When we enter date 270315 to 290315; time 1300 to 1500 then it is taken as a string
+		TEST_METHOD(testAddDetails_Description_blank){
+			Task testTask;
+			string testDescription = "No description";
+
+			testTask.addDetails("date 270315 to 290315; time 1300 to 1500");
+
+			//Check Description
+			Assert::AreEqual(testTask.getDescription(), testDescription);
+		}
+
+		/************************************************************************************************
+
+													Date Unit Tests
+
+		************************************************************************************************/
+
+		TEST_METHOD(testStoreStartDate_Date_startDay){
+			taskDate dateStartControl;
+			Task testTask;
+
+			dateStartControl.day = 15;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+
+			Assert::AreEqual(dateStartControl.day, testTask.getDateStart().day);
+		}
+
+		TEST_METHOD(testStoreStartDate_Date_startMonth){
+			taskDate dateStartControl;
+			Task testTask;
+
+			dateStartControl.month = 3;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+
+			Assert::AreEqual(dateStartControl.month, testTask.getDateStart().month);
+		}
+
+		TEST_METHOD(testStoreStartDate_Date_startYear){
+			taskDate dateStartControl;
+			Task testTask;
+
+			dateStartControl.year = 15;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+
+			Assert::AreEqual(dateStartControl.year, testTask.getDateStart().year);
+		}
+
+		TEST_METHOD(testStoreEndDate_Date_EndDay){
+			taskDate dateEndControl;
+			Task testTask;
+
+			dateEndControl.day = 16;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+
+			Assert::AreEqual(dateEndControl.day, testTask.getDateEnd().day);
+		}
+
+		TEST_METHOD(testStoreEndDate_Date_EndMonth){
+			taskDate dateEndControl;
+			Task testTask;
+
+			dateEndControl.month = 4;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+
+			Assert::AreEqual(dateEndControl.month, testTask.getDateEnd().month);
+		}
+
+		TEST_METHOD(testStoreEndDate_Date_EndYear){
+			taskDate dateEndControl;
+			Task testTask;
+
+			dateEndControl.year = 16;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+
+			Assert::AreEqual(dateEndControl.year, testTask.getDateEnd().year);
+		}
+
+		TEST_METHOD(testProcessDate_Date_oneDate){
+			Task testTask;
+			bool isOneDate;
+
+			testTask.addDetails("Meeting in school; date 150315; time 1300 to 1500");
+
+			if (testTask.getDateStart().year == -1 && testTask.getDateStart().month == -1 && testTask.getDateStart().day == -1){
+				if (testTask.getDateEnd().year == 15 && testTask.getDateEnd().month == 3 && testTask.getDateEnd().day == 15)
+				isOneDate = true;
+			}
+
+			Assert::IsTrue(isOneDate);
+		}
+
+		TEST_METHOD(testProcessDate_Date_noDate){
+			Task testTask;
+			bool isNoDate;
+
+			testTask.addDetails("Meeting in school; time 1300 to 1500");
+
+			if (testTask.getDateStart().year == -1 && testTask.getDateStart().month == -1 && testTask.getDateStart().day == -1){
+				if (testTask.getDateEnd().year == -1 && testTask.getDateEnd().month == -1 && testTask.getDateEnd().day == -1){
+					isNoDate = true;
+				}
+			}
+
+			Assert::IsTrue(isNoDate);
+		}
+
+			//boundary case for positive value partition: 3 digits in each date field
+			//boundary case for positive value partition: 1 digit in each field;
+			//Partition for negative dates
+			//Partition for switch of start and end date
+
+		/************************************************************************************************
+
+												Time Unit Tests
+
+		************************************************************************************************/
+
+		TEST_METHOD(testProcessTime_Time_Start){
+			Task testTask;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+
+			Assert::AreEqual(testTask.getTimeStart(), 1300);
+		}
+
+		TEST_METHOD(testProcessTime_Time_End){
+			Task testTask;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+
+			Assert::AreEqual(testTask.getTimeEnd(), 1500);
+		}
+
+		TEST_METHOD(testProcessTime_Time_oneTime){
+			Task testTask;
+			bool isOneTime;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300");
+
+			if (testTask.getTimeEnd() == -1) {
+				if (testTask.getTimeStart() == 1300) {
+					isOneTime = true;
+				}
+			}
+
+			Assert::IsTrue(isOneTime);
+		}
+
+		TEST_METHOD(testProcessTime_Time_noTime){
+			Task testTask;
+			bool isNoTime;
+
+			testTask.addDetails("Meeting in school; date 150315 to 160416");
+
+			if (testTask.getTimeEnd() == -1) {
+				if (testTask.getTimeStart() == -1) {
+					isNoTime = true;
+				}
+			}
+
+			Assert::IsTrue(isNoTime);
+		}
+
+
+		/************************************************************************************************
+
+												Search Unit Tests
+
+		************************************************************************************************/
+
+		TEST_METHOD(testIsSearchTargetPresent_Positive){
 			Task testTask;
 			string positiveSearchTarget = "meeting", negativeSearchTarget = "class";
 
 			testTask.addDetails("Meeting with Prof; date 270315; time 1400");
 
 			Assert::IsTrue(testTask.isSearchTargetPresent(positiveSearchTarget));
-			Assert::IsFalse(testTask.isSearchTargetPresent(negativeSearchTarget));
-
 		}
 
+		TEST_METHOD(testIsSearchTargetPresent_Negative){
+			Task testTask;
+			string positiveSearchTarget = "meeting", negativeSearchTarget = "class";
+
+			testTask.addDetails("Meeting with Prof; date 270315; time 1400");
+
+			Assert::IsFalse(testTask.isSearchTargetPresent(negativeSearchTarget));
+		}
 	};
 }

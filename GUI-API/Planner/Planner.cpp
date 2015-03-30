@@ -50,7 +50,13 @@ const string STATUS_TO_STRING_SAVE_MSG = "File has been saved. \r\n";
 
 
 using namespace std;
-//Public Functions
+
+/************************************************************************************************
+
+										Initialization
+
+************************************************************************************************/
+
 Planner::Planner(){
 	time_t t = time(0);   // get time now
 	struct tm * now = localtime(&t);
@@ -58,6 +64,12 @@ Planner::Planner(){
 	currentDate.month = (now->tm_mon + 1);
 	currentDate.day = (now->tm_mday);
 }
+
+/************************************************************************************************
+
+									Planner4Life operations
+
+************************************************************************************************/
 
 string Planner::addTask(Task newTask){
 	//create new task
@@ -226,6 +238,29 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 	return status;
 }
 
+string Planner::deleteIndex(int idNumber){
+	list<Task> ::iterator iter1, iter2;
+	iter1 = All.begin();
+	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
+		if ((*iter1).getIdNumber() == idNumber){
+			iter2 = iter1;
+		}
+	}
+	lastEntry.lastTask = *iter2;
+	lastEntry.lastCommand = COMMAND_DELETE;
+	string status;
+	status = statusToString(COMMAND_DELETE, *iter2);
+	All.erase(iter2);
+
+	generateAllOtherList();
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
 string Planner::undo(void){
 	if (lastEntry.lastCommand == COMMAND_ADD){
 		int lastEntryID = getIdOfLastEntry() - 1;
@@ -274,20 +309,39 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	return saveStatusToString();
 } */
 
-string Planner::generateSearchList(string target){
-	list<Task> ::iterator iter;
-	Task tempTask;
-	string status;
-	searchList.clear();
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		tempTask = *iter;
-		if (tempTask.isSearchTargetPresent(target)){
-			searchList.push_back(tempTask);
-		}
+void Planner::loadData(string data){
+	Task* tempTask;
+	string tempString, dataCopy = data;
+	size_t start = 0, end = 0;
+	All.clear();
+
+	while (dataCopy.size()>0){
+		end = dataCopy.find_first_of("\n");
+		tempString = dataCopy.substr(start, end - start);
+		dataCopy = dataCopy.substr(end + 1, dataCopy.size() - end);
+		tempTask = new Task;
+		(*tempTask).addDetails(tempString);
+		addTask(*tempTask);
+		delete tempTask;
+		tempTask = NULL;
 	}
-	
-	return searchStatusToString();
 }
+
+int Planner::getIdOfLastEntry(void){// act this function returns id not last entry, need to change name
+
+	static int idGeneratror;
+	if (All.empty()){
+		idGeneratror = 10001;
+	}
+	else idGeneratror++;
+	return idGeneratror;
+}
+
+/************************************************************************************************
+
+										Printing functions
+
+************************************************************************************************/
 
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
@@ -530,39 +584,7 @@ string Planner::searchListToString(void){
 	return out.str();
 }
 
-int Planner::getIdOfLastEntry(void){// act this function returns id not last entry, need to change name
 
-	static int idGeneratror;
-	if (All.empty()){
-		idGeneratror = 10001;
-	}
-	else idGeneratror++;
-	return idGeneratror;
-}
-
-string Planner::deleteIndex(int idNumber){
-	list<Task> ::iterator iter1, iter2;
-	iter1 = All.begin();
-	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
-		if ((*iter1).getIdNumber() == idNumber){
-			iter2 = iter1;
-		}
-	}
-	lastEntry.lastTask = *iter2;
-	lastEntry.lastCommand = COMMAND_DELETE;
-	string status;
-	status = statusToString(COMMAND_DELETE, *iter2);
-	All.erase(iter2);
-
-	generateAllOtherList();
-	//logging
-	stringstream message;
-	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
-
-	return status;
-
-}
 
 string Planner::saveDataToString(){
 	ostringstream out;
@@ -656,6 +678,11 @@ string Planner::saveDataToString(){
 	return out.str();
 }
 
+/************************************************************************************************
+
+								Generation of Planner4Life Lists
+
+************************************************************************************************/
 
 void Planner::generateAllOtherList(void){
 	HomeList.clear();
@@ -664,6 +691,21 @@ void Planner::generateAllOtherList(void){
 	generateHomeList();
 	generateMissedList();
 	generateUpcomingList();
+}
+
+string Planner::generateSearchList(string target){
+	list<Task> ::iterator iter;
+	Task tempTask;
+	string status;
+	searchList.clear();
+	for (iter = All.begin(); iter != All.end(); ++iter){
+		tempTask = *iter;
+		if (tempTask.isSearchTargetPresent(target)){
+			searchList.push_back(tempTask);
+		}
+	}
+
+	return searchStatusToString();
 }
 
 void Planner::generateHomeList(void){
@@ -730,6 +772,12 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
 				isWithinHome = true;
 			}
+		}
+	}
+	//case 5: floating task
+	else if ((*it).getDateStart().year == -1 && (*it).getDateStart().month == -1 && (*it).getDateStart().day == -1){
+		if ((*it).getDateEnd().year == -1 && (*it).getDateEnd().month == -1 && (*it).getDateEnd().day == -1){
+			isWithinHome = true;
 		}
 	}
 
@@ -818,20 +866,3 @@ bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 	return isWithinUpcoming;
 }
 
-void Planner::loadData(string data){
-	Task* tempTask;
-	string tempString, dataCopy = data;
-	size_t start=0, end=0;
-	All.clear();
-
-	while (dataCopy.size()>0){
-		end = dataCopy.find_first_of("\n");
-		tempString = dataCopy.substr(start, end - start);
-		dataCopy = dataCopy.substr(end+1, dataCopy.size() - end);
-		tempTask = new Task;
-		(*tempTask).addDetails(tempString);
-		addTask(*tempTask);
-		delete tempTask;
-		tempTask = NULL;
-	}
-}
