@@ -375,13 +375,14 @@ string Planner::markDone(int serialNumber, string nameOfList){
 }
 
 string Planner::markDoneIndex(int idNumber){
-	list<Task> ::iterator iter1, iter2;
-	string status;
+	list<Task> ::iterator iter1;
 	iter1 = All.begin();
+	string status;
 	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
 		if ((*iter1).getIdNumber() == idNumber){
 			(*iter1).markIsDoneAsTrue();
-			status = statusToString(COMMAND_DONE, *iter1);
+			status = statusToString(COMMAND_DONE, (*iter1));
+			break;
 		}
 	}
 
@@ -422,6 +423,7 @@ string Planner::toString(string nameOfList){
 	}
 	else if (nameOfList == DONE_LIST){
 		finalString = doneListToString();
+		return finalString;
 	}
 	else return ERROR_MESSSAGE_INVALID_FILE_NAME;
 }
@@ -475,6 +477,7 @@ string Planner::statusToString(string command, Task theTask){
 	}
 	else if (command == COMMAND_DONE){
 		finalString = doneStatusToString();
+		return finalString;
 	}
 	else return ERROR_MESSSAGE_INVALID_COMMAND;
 }
@@ -516,8 +519,8 @@ string Planner::descriptionOfTaskToString(Task theTask){
 		out << IMPORTANCE_SYMBOL;
 	}
 
-	if (theTask.doneStatus()){
-		out << "DONE";
+	if (theTask.doneStatus()==true){
+		out << " DONE";
 	}
 	return out.str();
 }
@@ -802,7 +805,7 @@ void Planner::generateDoneList(void){
 	list<Task> ::iterator it;
 
 	for (it = All.begin(); it != All.end(); ++it){
-		if ((*it).doneStatus()) {
+		if ((*it).doneStatus()==true) {
 			doneList.push_back(*it);
 		}
 	}

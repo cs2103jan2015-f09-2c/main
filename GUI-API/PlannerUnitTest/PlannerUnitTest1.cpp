@@ -200,7 +200,7 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 		}
 
-		TEST_METHOD(testMark_Done)
+		TEST_METHOD(testMark_Done_effect_on_missed_list_1_task)
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
@@ -212,10 +212,44 @@ namespace PlannerUnitTest
 			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.markDone(2, "Missed");
-			string s = testPlanner.toString("Missed");
-		if (testPlanner.toString("Missed") == "Test task 1; date 010203; time 1100"){
-		doesFunctionWork = true;
+			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 3 1900\r\n"){
+				doesFunctionWork = true;
 		}
+			Assert::IsTrue(doesFunctionWork);
+		}
+		TEST_METHOD(testMark_Done_effect_on_done_list_1_task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			bool doesFunctionWork = false;
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.markDone(2, "Missed");
+			if (testPlanner.toString("Done") == "1. Test task 2 11/3/15 to 12/3/15 DONE\r\n"){
+				doesFunctionWork = true;
+			}
+			Assert::IsTrue(doesFunctionWork);
+		}
+		TEST_METHOD(testMark_Done_effect_on_done_list_2_task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			bool doesFunctionWork = false;
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.markDone(2, "Missed");
+			testPlanner.markDone(1, "Missed");
+			if (testPlanner.toString("Done") == "1. Test task 1 1/2/3 1100 DONE\r\n2. Test task 2 11/3/15 to 12/3/15 DONE\r\n"){
+				doesFunctionWork = true;
+			}
 			Assert::IsTrue(doesFunctionWork);
 		}
 	};
