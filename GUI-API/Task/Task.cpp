@@ -53,9 +53,7 @@ void Task::addDetails(string details){
 		else if (details.find("time") != string::npos){
 			processTime(details);
 		}
-		else if (details.find("recur") != string::npos){
-		//	processRecur(details);
-		}
+		
 		LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
 		break;
 	case 2:
@@ -282,6 +280,10 @@ int Task::getNumOfTimes(){
 	return _numOfTimes;
 }
 
+list<Task> Task::getRecurringTasks(){
+	return _recurringTasks;
+}
+
 /************************************************************************************************
 
 Search function
@@ -308,12 +310,41 @@ bool Task::isSearchTargetPresent(string target){
 	return isFound;
 }
 
-
-
 void Task::markIsDoneAsTrue(){
 	_isDone = true;
 }
 
 bool Task::doneStatus(){
 	return _isDone;
+}
+
+
+
+
+void Task::recurTask(string details){
+	string frequency, taskDetails;
+	int numOfRecurrence;
+	char delimiter;
+	Task *recTaskPtr;
+
+	istringstream in;
+	in >> frequency;						//daily, weekly, monthly or yearly
+	in >> numOfRecurrence;					//no of times to recur
+	in >> delimiter;
+	in >> details;
+
+	for (int i = 1; i <= numOfRecurrence; i++){
+		recTaskPtr = new Task;
+		(*recTaskPtr).addDetails(details);
+		_recurringTasks.push_back(*recTaskPtr);
+		delete recTaskPtr;
+		recTaskPtr = NULL;
+		details = modifyDetails(i, frequency, details);
+	}
+
+}
+
+string Task::modifyDetails(int n, string frequency, string details){
+
+	return details;
 }
