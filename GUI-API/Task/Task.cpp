@@ -2,6 +2,7 @@
 #include "Log.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -52,6 +53,7 @@ void Task::addDetails(string details){
 		else if (details.find("time") != string::npos){
 			processTime(details);
 		}
+		
 		LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
 		break;
 	case 2:
@@ -106,6 +108,29 @@ string Task::processDescription(string details){
 
 //Takes in date related information in a string and stores into the respective variables in Task object
 void Task::processDate(string dateInfo){
+	string keyword, startDate, endDate, separator;
+	int index;
+	istringstream in(dateInfo);
+
+	index = dateInfo.find("to");			// locate the word to in string
+	if (index != string::npos){
+		in >> keyword;
+		in >> startDate;
+		in >> separator;
+		in >> endDate;
+		storeStartDate(startDate);
+		storeEndDate(endDate);
+		_numOfDates = 2;
+	}
+	else{
+		in >> keyword;
+		in >> endDate;
+		storeEndDate(endDate);
+		_numOfDates = 1;
+	}
+
+	
+	/*
 	int index;
 	string dateStart, dateEnd;
 
@@ -125,9 +150,17 @@ void Task::processDate(string dateInfo){
 		storeEndDate(dateInfo);
 		_numOfDates = 1;
 	}
+	*/
 
 	LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
 }
+
+/*
+void Task::processRecur(string recurInfo){
+	recurInfo.replace(0, 7, "");			//get rid of the word recur at the start of the string
+
+}
+*/
 
 //Splits the start date string into individual components and stores them in the relevant variables
 void Task::storeStartDate(string dateStart){
@@ -157,8 +190,29 @@ void Task::storeEndDate(string dateEnd){
 void Task::processTime(string timeInfo){
 
 	int index;
-	string timeStart, timeEnd;
+	string keyword, timeStart, timeEnd, separator;
 
+	istringstream in(timeInfo);
+	index = timeInfo.find("to");			// locate the word to in string
+
+	if (index != string::npos){
+		in >> keyword;
+		in >> timeStart;
+		in >> separator;
+		in >> timeEnd;
+
+		_timeStart = stoi(timeStart);
+		_timeEnd = stoi(timeEnd);
+		_numOfTimes = 2;
+	}
+	else{
+		in >> keyword;
+		in >> timeStart;
+		_timeStart = stoi(timeStart);
+		_numOfTimes = 1;
+	}
+
+	/*
 	timeInfo.replace(0, 6, "");				//get rid of the word time at the start of the string
 
 	index = timeInfo.find("to");			// locate the word to in string
@@ -175,7 +229,7 @@ void Task::processTime(string timeInfo){
 		_timeStart = stoi(timeInfo);
 		_numOfTimes = 1;
 	}
-
+	*/
 	LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
 }
 
@@ -226,6 +280,10 @@ int Task::getNumOfTimes(){
 	return _numOfTimes;
 }
 
+list<Task> Task::getRecurringTasks(){
+	return _recurringTasks;
+}
+
 /************************************************************************************************
 
 Search function
@@ -252,12 +310,44 @@ bool Task::isSearchTargetPresent(string target){
 	return isFound;
 }
 
-
-
 void Task::markIsDoneAsTrue(){
 	_isDone = true;
 }
 
 bool Task::doneStatus(){
 	return _isDone;
+}
+
+
+
+
+void Task::recurTask(string details){
+	string frequency, taskDetails;
+	int numOfRecurrence, index;
+	char delimiter;
+	Task *recTaskPtr;
+
+	istringstream in(details);
+	in >> frequency;						//daily, weekly, monthly or yearly
+	in >> numOfRecurrence;					//no of times to recur
+	
+	index = details.find_first_of(";");
+	index++;
+
+	details = details.substr(index, details.size() - index);		//to extract out relevant details for task
+	
+	for (int i = 1; i <= numOfRecurrence; i++){
+		recTaskPtr = new Task;
+		(*recTaskPtr).addDetails(details);
+		_recurringTasks.push_back(*recTaskPtr);
+		delete recTaskPtr;
+		recTaskPtr = NULL;
+		details = modifyDetails(i, frequency, details);
+	}
+
+}
+
+string Task::modifyDetails(int n, string frequency, string details){
+
+	return details;
 }

@@ -30,6 +30,7 @@ private:
 	void processCommandSave(string taskDetail);
 	void processCommandHelp();
 	void processCommandAll();
+	void processCommandRecur(string taskDetail);
 
 public:
 	Logic();

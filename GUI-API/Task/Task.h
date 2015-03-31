@@ -3,6 +3,7 @@
 #include "Log.h"
 #include <iostream>
 #include <string>
+#include <list>
 
 
 using namespace std;
@@ -25,12 +26,14 @@ private:
 	int _idNumber;
 	int _numOfDates;
 	int _numOfTimes;
+	list<Task> _recurringTasks;
 	string processImportance(string);
 	string processDescription(string);			
 	void processDate(string);					
 	void processTime(string);					
 	void storeStartDate(string);				
-	void storeEndDate(string);					
+	void storeEndDate(string);
+	string modifyDetails(int, string, string);
 	Log* LogData = Log::getInstance();
 
 public:
@@ -38,6 +41,7 @@ public:
 	~Task();
 	
 	void addDetails(string);
+	void recurTask(string);
 	bool isSearchTargetPresent(string);
 	string getDescription();
 	int getTimeStart();
@@ -51,6 +55,7 @@ public:
 	int getNumOfTimes();
 	void storeIdNumber(int);
 	void markIsDoneAsTrue();
+	list<Task> getRecurringTasks();
 };
 #endif
 
