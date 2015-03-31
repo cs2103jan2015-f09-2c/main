@@ -35,6 +35,7 @@ const string ERROR_MESSAGE_FATAL = "Fatal Error !!";
 const string ERROR_MESSSAGE_INVALID_LIST_NAME = "Error!! Name of list is invalid!!";
 const string ERROR_MESSSAGE_INVALID_FILE_NAME = "Error!! Name of file is invalid!!";
 const string ERROR_MESSSAGE_INVALID_COMMAND = "Error!! Command is invalid!!";
+const string ERROR_MESSAGE_INVALID_INDEX = "Invalid index!";
 
 const string EMPTY_LIST_MESSAGE = "The list is empty";
 const string NO_RESULTS_MESSAGE = "No results found!";
@@ -203,35 +204,54 @@ string Planner::addTask(Task newTask){
 
 string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
+	int indexCount = 1;
 	string status;
 	list<Task> ::iterator iter;
 
 	if (nameOfList == HOME_LIST){
 		iter = HomeList.begin();
-		for (int i = 1; i != serialNumber; i++){
+		for (int i = 1; i != serialNumber && i < HomeList.size(); i++){
 			iter++;
+			indexCount++;
 		}
-		idNumber = (*iter).getIdNumber();
-
-		status = deleteIndex(idNumber);
+		if (indexCount != serialNumber || HomeList.empty()) {
+			status = ERROR_MESSAGE_INVALID_INDEX;
+			return status;
+		}
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
 	}
 	else if (nameOfList == MISSED_LIST){
 		iter = MissedList.begin();
-		for (int i = 1; i != serialNumber; i++){
+		for (int i = 1; i != serialNumber && i < MissedList.size(); i++){
 			iter++;
+			indexCount++;
 		}
-		idNumber = (*iter).getIdNumber();
-
-		status = deleteIndex(idNumber);
+		if (indexCount != serialNumber || MissedList.empty()) {
+			status = ERROR_MESSAGE_INVALID_INDEX;
+			return status;
+		}
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
 		iter = UpcomingList.begin();
-		for (int i = 1; i != serialNumber; i++){
+		for (int i = 1; i != serialNumber && i < UpcomingList.size(); i++){
 			iter++;
+			indexCount++;
 		}
-		idNumber = (*iter).getIdNumber();
-
-		status = deleteIndex(idNumber);
+		if (indexCount != serialNumber || UpcomingList.empty()) {
+			status = ERROR_MESSAGE_INVALID_INDEX;
+			return status;
+		}
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
 	}
 	else cout << ERROR_MESSSAGE_INVALID_LIST_NAME << endl;
 	//logging
@@ -863,7 +883,7 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	//case 3:  currentDate + 7 days = next month, task = next month, not december
 	else if ((*it).getDateEnd().month == (currentDate.month + 1)) {
 		if ((*it).getDateEnd().year == currentDate.year) {
-			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
+			if ((*it).getDateEnd().day < (7 - (30 - currentDate.day))) {
 				isWithinHome = true;
 			}
 		}
@@ -871,7 +891,7 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	//case 4: current date + 7 days = next month, december
 	else if ((*it).getDateEnd().year == (currentDate.year + 1)) {
 		if ((*it).getDateEnd().month == 1) {
-			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
+			if ((*it).getDateEnd().day < (7 - (30 - currentDate.day))) {
 				isWithinHome = true;
 			}
 		}
@@ -948,7 +968,7 @@ bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 	//case 3:  currentDate + 7 days = next month, task = next month, not december
 	else if ((*it).getDateEnd().month == (currentDate.month + 1)) {
 		if ((*it).getDateEnd().year == currentDate.year) {
-			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
+			if ((*it).getDateEnd().day < (7 - (30 - currentDate.day))) {
 				isWithinUpcoming = false;
 			}
 		}
@@ -956,7 +976,7 @@ bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 	//case 4: current date + 7 days = next month, december
 	else if ((*it).getDateEnd().year == (currentDate.year + 1)) {
 		if ((*it).getDateEnd().month == 1) {
-			if ((*it).getDateEnd().day < (30 - currentDate.day)) {
+			if ((*it).getDateEnd().day < (7 - (30 - currentDate.day))) {
 				isWithinUpcoming = false;
 			}
 		}

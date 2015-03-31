@@ -51,7 +51,7 @@ string Logic::extractCommand(string& userInput){
 	string command = "";
 	string taskDetails = "";
 	//extract the first word to be the command 
-	if (userInput == "save" || userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
+	if (userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
 		command = userInput;
 		userInput = taskDetails;
 		return command;
