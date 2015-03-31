@@ -10,6 +10,7 @@ const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
 const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
 const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
 const string CLEAR_CANCELLED = "Clear cancelled.";
+const string HELP_MESSAGE = "Add\tadd entries\r\n\r\nEdit\tedit task contents\r\n\r\nDelete\tdelete tasks\r\n\r\nClear\tclears the entire planner\r\n\r\nUndo\tundo the previous add, edit or delete\r\n\r\nSearch\tsearch for keywords throughout all \ttasks\n";
 
 
 Logic::Logic(){
@@ -225,8 +226,7 @@ void Logic::processCommandSearch(string taskDetail){
 }
 
 void Logic::processCommandHelp(){
-	string helpMessage = "HELP HELP HELP"; // refactoring needed
-	display = helpMessage;
+	display = HELP_MESSAGE;
 	outcome = "Help window";												// prompt for help (refactor needed)
 }
 

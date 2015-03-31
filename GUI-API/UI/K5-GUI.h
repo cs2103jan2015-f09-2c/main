@@ -84,11 +84,17 @@ namespace UI {
 			// 
 			// userInput
 			// 
+			this->userInput->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(10) {
+				L"add", L"date", L"time", L"delete",
+					L"edit", L"clear", L"exit", L"search", L"undo", L"help"
+			});
+			this->userInput->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+			this->userInput->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
 			this->userInput->Location = System::Drawing::Point(10, 363);
 			this->userInput->Name = L"userInput";
 			this->userInput->Size = System::Drawing::Size(339, 20);
 			this->userInput->TabIndex = 1;
-			this->userInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &GUI::userInput_KeyPress);
+			this->userInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &GUI::userInput_KeyDown);
 			// 
 			// missedButton
 			// 
@@ -175,15 +181,12 @@ namespace UI {
 											GUI control functions
 
 		************************************************************************************************/		
-				 
-				 //takes in user input
-		private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
-
+		private: System::Void userInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			string searchCheck;
 
 			searchCheck = msclr::interop::marshal_as<std::string>(userInput->Text);
 
-			if (e->KeyChar == (char)13) {
+			if (e->KeyCode == Keys::Enter) {
 				e->Handled = true;
 
 				if (userInput->Text == "home") {
@@ -220,7 +223,7 @@ namespace UI {
 						colourSwitch(currentView);
 					}
 					processInput(userInput->Text, currentView);
-				}			
+				}
 
 				userInput->Text = "";
 			}
@@ -303,5 +306,6 @@ namespace UI {
 			switchView(currentView);
 			prompt->Text = "Missed";
 		}
+
 	};
 }
