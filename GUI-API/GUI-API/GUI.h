@@ -31,6 +31,7 @@ private:
 	void processCommandHelp();
 	void processCommandAll();
 	void processCommandRecur(string taskDetail);
+	void processCommandDone(string taskIndex, string currentView);
 
 public:
 	Logic();

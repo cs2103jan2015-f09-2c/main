@@ -59,10 +59,6 @@ string Logic::extractCommand(string& userInput){
 		return command;
 	}
 	
-	//istringstream in(userInput);
-	//istringstream in("save");
-	//in >> command;
-
 	//update userInput
 	size_t pos = userInput.find_first_of(" ");
 	command = userInput.substr(0, pos);
@@ -133,6 +129,10 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 	if (command == "recur"){
 		processCommandRecur(taskDetail);
 	}
+	else
+	if (command == "done"){
+		processCommandDone(taskDetail, currentView);
+	}
 	else {
 		throw ERROR_MESSAGE_INVALID_COMMAND;
 	}
@@ -175,10 +175,9 @@ void Logic::processCommandRecur(string taskDetail){
 	list<Task> listOfTasks;
 	currentTask.recurTask(taskDetail);
 	listOfTasks = currentTask.getRecurringTasks();
-	list<Task>::iterator it;
-	it = listOfTasks.begin();
-	for (it = listOfTasks.begin(); it != listOfTasks.end(); it++){
-		outcome = myPlanner.addTask((*it));
+	list<Task>::iterator iter;
+	for (iter = listOfTasks.begin(); iter != listOfTasks.end(); iter++){
+		string outcome = myPlanner.addTask((*iter)); //edit this to inform users that recurring tasks added
 	}
 }
 
@@ -193,6 +192,19 @@ void Logic::processCommandDelete(string taskIndex, string currentView) throw (in
 	}
 	
 	outcome = myPlanner.deleteTask(index, currentView);
+}
+
+void Logic::processCommandDone(string taskIndex, string currentView)throw (invalid_argument&) {
+	int index = 0;
+
+	try {
+		index = stoi(taskIndex);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
+	}
+
+	outcome = myPlanner.markDone(index, currentView);
 }
 
 void Logic::processCommandEdit(string userInput, string currentView) throw (bad_cast&) {
