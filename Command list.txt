@@ -1,0 +1,19 @@
+command list
+
+Functions:
+add
+edit
+delete
+undo
+search
+clear
+done
+
+Controls:
+home
+upcoming
+missed
+show done
+all
+help
+exit
