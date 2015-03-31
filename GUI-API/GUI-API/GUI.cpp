@@ -129,6 +129,10 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 	if (command == "all"){
 		processCommandAll();
 	}
+	else
+	if (command == "recur"){
+		processCommandRecur(taskDetail);
+	}
 	else {
 		throw ERROR_MESSAGE_INVALID_COMMAND;
 	}
@@ -169,6 +173,7 @@ void Logic::processCommandRecur(string taskDetail){
 
 	Task currentTask;
 	list<Task> listOfTasks;
+	currentTask.recurTask(taskDetail);
 	listOfTasks = currentTask.getRecurringTasks();
 	list<Task>::iterator it;
 	it = listOfTasks.begin();

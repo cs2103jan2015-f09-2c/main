@@ -323,16 +323,19 @@ bool Task::doneStatus(){
 
 void Task::recurTask(string details){
 	string frequency, taskDetails;
-	int numOfRecurrence;
+	int numOfRecurrence, index;
 	char delimiter;
 	Task *recTaskPtr;
 
-	istringstream in;
+	istringstream in(details);
 	in >> frequency;						//daily, weekly, monthly or yearly
 	in >> numOfRecurrence;					//no of times to recur
-	in >> delimiter;
-	in >> details;
+	
+	index = details.find_first_of(";");
+	index++;
 
+	details = details.substr(index, details.size() - index);		//to extract out relevant details for task
+	
 	for (int i = 1; i <= numOfRecurrence; i++){
 		recTaskPtr = new Task;
 		(*recTaskPtr).addDetails(details);
