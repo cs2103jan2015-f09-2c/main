@@ -208,6 +208,10 @@ namespace UI {
 					currentView = "Help";
 					helpView(currentView);
 				}
+				else if (userInput->Text == "show done") {
+					currentView = "Done";
+					doneView(currentView);
+				}
 				else if (userInput->Text == "all") {
 					currentView = "All";
 					allView(currentView);
@@ -285,6 +289,12 @@ namespace UI {
 
 		private: System::Void helpView(String^ viewType) {
 			s->processUserInput("help", "Help");
+			switchView(currentView);
+			prompt->Text = gcnew String(s->displayOutcome().c_str());
+		}
+
+		private: System::Void doneView(String^ viewType) {
+			s->processUserInput("show done", "Done");
 			switchView(currentView);
 			prompt->Text = gcnew String(s->displayOutcome().c_str());
 		}

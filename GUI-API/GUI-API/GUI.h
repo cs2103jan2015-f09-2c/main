@@ -32,6 +32,7 @@ private:
 	void processCommandAll();
 	void processCommandRecur(string taskDetail);
 	void processCommandDone(string taskIndex, string currentView);
+	void processCommandShowDone(string currentView);
 
 public:
 	Logic();

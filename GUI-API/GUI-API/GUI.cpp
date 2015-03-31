@@ -26,7 +26,7 @@ Logic::~Logic(){
 
 void Logic::processUserInput(string userInput, string currentView) {
 	//Check whether currentView is empty or invalid views 
-	assert(currentView == "Home" || currentView == "Missed" || currentView == "Upcoming" || currentView == "Help" || currentView == "All" || currentView == "Search");
+	assert(currentView == "Done" || currentView == "Home" || currentView == "Missed" || currentView == "Upcoming" || currentView == "Help" || currentView == "All" || currentView == "Search");
 
 	try {
 		if (userInput == ""){
@@ -53,7 +53,7 @@ string Logic::extractCommand(string& userInput){
 	string command = "";
 	string taskDetails = "";
 	//extract the first word to be the command 
-	if (userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
+	if (userInput == "show done" || userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
 		command = userInput;
 		userInput = taskDetails;
 		return command;
@@ -132,6 +132,10 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 	else
 	if (command == "done"){
 		processCommandDone(taskDetail, currentView);
+	}
+	else
+	if (command == "show done"){
+		processCommandShowDone(currentView);
 	}
 	else {
 		throw ERROR_MESSAGE_INVALID_COMMAND;
@@ -259,8 +263,13 @@ void Logic::processCommandHelp(){
 	outcome = "Help window";												// prompt for help (refactor needed)
 }
 
+void Logic::processCommandShowDone(string currentView){
+	display = myPlanner.toString(currentView);
+	outcome = "Done list";
+}
+
 void Logic::processCommandAll(){
-	display = myPlanner.AllToString();
+	//display = myPlanner.AllToString();
 	outcome = "All list";													//prompt for All (refactor needed)
 }
 
