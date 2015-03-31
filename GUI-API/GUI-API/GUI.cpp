@@ -9,6 +9,7 @@ const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please ent
 const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
 const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
 const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
+const string CLEAR_CANCELLED = "Clear cancelled.";
 
 
 Logic::Logic(){
@@ -102,8 +103,8 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 	}
 
 	else
-	if (command == "clear"){
-		processCommandClear();
+	if (command == "Y" || command == "N"){
+		processCommandClear(command);
 	}
 
 	else
@@ -205,8 +206,13 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 	outcome = myPlanner.editTask(taskIndex, currentView, taskDetails);
 }
 
-void Logic::processCommandClear(){
-	outcome = myPlanner.clear();
+void Logic::processCommandClear(string command){
+	if (command == "Y") {
+		outcome = myPlanner.clear();
+	}
+	else {
+		outcome = CLEAR_CANCELLED;
+	}
 }
 
 void Logic::processCommandUndo(){
