@@ -84,11 +84,17 @@ namespace UI {
 			// 
 			// userInput
 			// 
-			this->userInput->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(10) {
-				L"add", L"date", L"time", L"delete",
-					L"edit", L"clear", L"exit", L"search", L"undo", L"help"
+			this->userInput->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(8) {
+				L"add <task description>; date <start date> to <end date>; time <start time> to <end time>",
+					L"delete <index number>", 
+					L"edit <task index >: <key in new task in 'add' format>", 
+					L"clear", 
+					L"exit", 
+					L"search <target word>",
+					L"undo", 
+					L"help"
 			});
-			this->userInput->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+			this->userInput->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
 			this->userInput->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
 			this->userInput->Location = System::Drawing::Point(10, 363);
 			this->userInput->Name = L"userInput";
