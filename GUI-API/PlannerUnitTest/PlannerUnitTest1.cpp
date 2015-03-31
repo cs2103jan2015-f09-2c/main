@@ -79,10 +79,10 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315");
 			testPlanner.addTask(testTask2);
-			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.deleteTask(2, "Missed");
-			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 3 1900\r\n"){
+			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 3 13/3/15 1900\r\n"){
 				doesFunctionWork = true;
 			}
 			Assert::IsTrue(doesFunctionWork);
@@ -96,11 +96,10 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315");
 			testPlanner.addTask(testTask2);
-			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.deleteTask(1, "Missed");
-			string s = testPlanner.toString("Missed");
-			if (testPlanner.toString("Missed") == "1. Test task 2 11/3/15 to 12/3/15\r\n2. Test task 3 1900\r\n"){
+			if (testPlanner.toString("Missed") == "1. Test task 2 11/3/15 to 12/3/15\r\n2. Test task 3 13/3/15 1900\r\n"){
 				doesFunctionWork = true;
 			}
 			Assert::IsTrue(doesFunctionWork);
@@ -114,11 +113,11 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315");
 			testPlanner.addTask(testTask2);
-			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.editTask(1, "Missed", "Test task 1 EDITED; date 010203; time 1100");
 			string s =testPlanner.toString("Missed");
-			if (testPlanner.toString("Missed") == "1. Test task 1 EDITED 1/2/3 1100\r\n2. Test task 2 11/3/15 to 12/3/15\r\n3. Test task 3 1900\r\n"){
+			if (testPlanner.toString("Missed") == "1. Test task 1 EDITED 1/2/3 1100\r\n2. Test task 2 11/3/15 to 12/3/15\r\n3. Test task 3 13/3/15 1900\r\n"){
 				doesFunctionWork = true;
 			}
 			Assert::IsTrue(doesFunctionWork);
@@ -153,11 +152,11 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315");
 			testPlanner.addTask(testTask2);
-			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.deleteTask(2, "Missed");
 			testPlanner.undo();
-			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 3 1900\r\n3. Test task 2 11/3/15 to 12/3/15\r\n"){
+			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 3 13/3/15 1900\r\n3. Test task 2 11/3/15 to 12/3/15\r\n"){
 				doesFunctionWork = true;
 			}
 			Assert::IsTrue(doesFunctionWork);
@@ -173,12 +172,12 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315");
 			testPlanner.addTask(testTask2);
-			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.editTask(1, "Missed", "Test task 1 EDITED; date 010203; time 1100");
 			testPlanner.undo();
 			string s = testPlanner.toString("Missed");
-			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 2 11/3/15 to 12/3/15\r\n3. Test task 3 1900\r\n"){
+			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 2 11/3/15 to 12/3/15\r\n3. Test task 3 13/3/15 1900\r\n"){
 				doesFunctionWork = true;
 			}
 			Assert::IsTrue(doesFunctionWork);
@@ -209,10 +208,11 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315");
 			testPlanner.addTask(testTask2);
-			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.markDone(2, "Missed");
-			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 3 1900\r\n"){
+			string s = testPlanner.toString("Missed");
+			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100\r\n2. Test task 3 13/3/15 1900\r\n"){
 				doesFunctionWork = true;
 		}
 			Assert::IsTrue(doesFunctionWork);
@@ -226,7 +226,7 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315");
 			testPlanner.addTask(testTask2);
-			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
 			testPlanner.addTask(testTask3);
 			testPlanner.markDone(2, "Missed");
 			if (testPlanner.toString("Done") == "1. Test task 2 11/3/15 to 12/3/15 DONE\r\n"){
