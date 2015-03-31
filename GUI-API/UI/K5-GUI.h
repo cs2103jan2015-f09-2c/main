@@ -25,6 +25,7 @@ namespace UI {
 	private: System::Windows::Forms::Label^  prompt;
 
 			 String^ currentView;
+			 bool clearTrigger;
 
 	public:
 		GUI(void)
@@ -83,11 +84,23 @@ namespace UI {
 			// 
 			// userInput
 			// 
+			this->userInput->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(8) {
+				L"add <task description>; date <start date> to <end date>; time <start time> to <end time>",
+					L"delete <index number>", 
+					L"edit <task index >: <key in new task in 'add' format>", 
+					L"clear", 
+					L"exit", 
+					L"search <target word>",
+					L"undo", 
+					L"help"
+			});
+			this->userInput->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
+			this->userInput->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
 			this->userInput->Location = System::Drawing::Point(10, 363);
 			this->userInput->Name = L"userInput";
 			this->userInput->Size = System::Drawing::Size(339, 20);
 			this->userInput->TabIndex = 1;
-			this->userInput->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &GUI::userInput_KeyPress);
+			this->userInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &GUI::userInput_KeyDown);
 			// 
 			// missedButton
 			// 
@@ -174,38 +187,13 @@ namespace UI {
 											GUI control functions
 
 		************************************************************************************************/		
-
-				 //switch window
-		private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			currentView = "Home";
-			switchView(currentView);
-			prompt->Text = "Home";
-		}
-
-				 //switch window
-		private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			currentView = "Upcoming";
-			switchView(currentView);
-			prompt->Text = "Upcoming";
-		}
-
-				 //switch window
-		private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			currentView = "Missed";
-			switchView(currentView);
-			prompt->Text = "Missed";
-		}
-
-				 //takes in user input
-		private: System::Void userInput_KeyPress(System::Object^  sender, System::Windows::Forms::KeyPressEventArgs^  e) {
-			String^ strOutput;
+		private: System::Void userInput_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			string searchCheck;
 
 			searchCheck = msclr::interop::marshal_as<std::string>(userInput->Text);
 
-			if (e->KeyChar == (char)13) {
+			if (e->KeyCode == Keys::Enter) {
 				e->Handled = true;
-				//e->suppress = true;
 
 				if (userInput->Text == "home") {
 					homeButton_Click(sender, e);
@@ -227,30 +215,39 @@ namespace UI {
 				else if (userInput->Text == "exit") {
 					Application::Exit();
 				}
+				else if (userInput->Text == "clear") {
+					prompt->Text = "Are you sure? Enter Y to confirm or N to deny";
+					clearTrigger = true;
+				}
+				else if ((userInput->Text == "Y" || userInput->Text == "N") && clearTrigger == true) {
+					processInput(userInput->Text, currentView);
+				}
 				else {
 					//check for search command
 					if (searchCheck.find("search") != string::npos) {
 						currentView = "Search";
 						colourSwitch(currentView);
 					}
-
-					//processing other inputs
-					String^ managedInput = userInput->Text;
-					String^ managedView = currentView;
-
-					string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);				
-					string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
-		
-					s->processUserInput(unmanagedInput, unmanagedView);
-
-					strOutput = gcnew String(s->displayContent().c_str());
-					displayWindow->Text = strOutput;
-					prompt->Text = gcnew String(s->displayOutcome().c_str());
-				}			
+					processInput(userInput->Text, currentView);
+				}
 
 				userInput->Text = "";
 			}
 		}
+
+		private: System::Void processInput(String^ managedInput, String^ managedView) {
+			String^ strOutput;
+
+			string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
+			string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
+
+			s->processUserInput(unmanagedInput, unmanagedView);
+
+			strOutput = gcnew String(s->displayContent().c_str());
+			displayWindow->Text = strOutput;
+			prompt->Text = gcnew String(s->displayOutcome().c_str());
+		}
+
 		 /************************************************************************************************
 
 												 GUI view functions
@@ -296,6 +293,24 @@ namespace UI {
 			s->processUserInput("all", "All");
 			switchView(currentView);
 			prompt->Text = gcnew String(s->displayOutcome().c_str());
+		}
+
+		private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			currentView = "Home";
+			switchView(currentView);
+			prompt->Text = "Home";
+		}
+
+		private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			currentView = "Upcoming";
+			switchView(currentView);
+			prompt->Text = "Upcoming";
+		}
+
+		private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			currentView = "Missed";
+			switchView(currentView);
+			prompt->Text = "Missed";
 		}
 
 	};

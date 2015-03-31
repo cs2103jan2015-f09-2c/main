@@ -25,6 +25,7 @@ private:
 	list<Task> UpcomingList;
 	list<Task> MissedList;
 	list<Task> searchList;
+	list<Task> doneList;
 	// List of all the Log Data
 	Log* LogData = Log::getInstance();
 	//Undo Structures
@@ -41,11 +42,13 @@ private:
 	string clearStatusToString();
 	string saveStatusToString();
 	string searchStatusToString();
+	string doneStatusToString();
 	// List reurning functions
 	string HomeListToString(void);
 	string upcomingListToString();
 	string missedListToString();
 	string searchListToString();
+	string doneListToString();
 	// delete helper functions
 	int getIdOfLastEntry(void);
 	string deleteIndex(int idNumber);
@@ -56,11 +59,13 @@ private:
 	void generateHomeList(void);
 	void generateUpcomingList(void);
 	void generateMissedList(void);
+	void generateDoneList(void);
 	// list boolean functions
 	bool isHome(taskDate, list<Task>::iterator);
 	bool isMissed(taskDate, list<Task>::iterator);
 	bool isUpcoming(taskDate, list<Task>::iterator);
 
+	string markDoneIndex(int idNumber);
 public:
 
 	Planner();
@@ -70,6 +75,7 @@ public:
 	string undo(void);
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
+	string markDone(int serialNumber, string nameOfList);
 	//string save(string);
 	string generateSearchList(string target);
 	// string of list returning function

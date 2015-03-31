@@ -23,7 +23,7 @@ private:
 	void processCommandAdd(string taskDetail);
 	void processCommandDelete(string taskIndex, string currentView);
 	void processCommandEdit(string userInput, string currentView);
-	void processCommandClear();
+	void processCommandClear(string command);
 	void processCommandUndo();
 	void processCommandSearch(string taskDetail);
 	void processCommandLoad(string fileName);

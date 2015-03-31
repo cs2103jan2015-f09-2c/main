@@ -15,6 +15,7 @@ Task::Task(){
 	_timeStart = -1;
 	_timeEnd = -1;
 	_isImpt = false;
+	_isDone = false;
 	_numOfDates = 0;
 	_numOfTimes = 0;
 }
@@ -48,7 +49,7 @@ void Task::addDetails(string details){
 		if (details.find("date") != string::npos){
 			processDate(details);
 		}
-		else{
+		else if (details.find("time") != string::npos){
 			processTime(details);
 		}
 		LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
@@ -249,4 +250,14 @@ bool Task::isSearchTargetPresent(string target){
 
 	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
 	return isFound;
+}
+
+
+
+void Task::markIsDoneAsTrue(){
+	_isDone = true;
+}
+
+bool Task::doneStatus(){
+	return _isDone;
 }

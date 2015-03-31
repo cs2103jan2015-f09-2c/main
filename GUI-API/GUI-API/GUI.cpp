@@ -9,6 +9,8 @@ const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please ent
 const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
 const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
 const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
+const string CLEAR_CANCELLED = "Clear cancelled.";
+const string HELP_MESSAGE = "Add\tadd entries\r\n\r\nEdit\tedit task contents\r\n\r\nDelete\tdelete tasks\r\n\r\nClear\tclears the entire planner\r\n\r\nUndo\tundo the previous add, edit or delete\r\n\r\nSearch\tsearch for keywords throughout all \ttasks\n";
 
 
 Logic::Logic(){
@@ -51,7 +53,7 @@ string Logic::extractCommand(string& userInput){
 	string command = "";
 	string taskDetails = "";
 	//extract the first word to be the command 
-	if (userInput == "save" || userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
+	if (userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
 		command = userInput;
 		userInput = taskDetails;
 		return command;
@@ -102,8 +104,8 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 	}
 
 	else
-	if (command == "clear"){
-		processCommandClear();
+	if (command == "Y" || command == "N"){
+		processCommandClear(command);
 	}
 
 	else
@@ -205,8 +207,13 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 	outcome = myPlanner.editTask(taskIndex, currentView, taskDetails);
 }
 
-void Logic::processCommandClear(){
-	outcome = myPlanner.clear();
+void Logic::processCommandClear(string command){
+	if (command == "Y") {
+		outcome = myPlanner.clear();
+	}
+	else {
+		outcome = CLEAR_CANCELLED;
+	}
 }
 
 void Logic::processCommandUndo(){
@@ -219,8 +226,7 @@ void Logic::processCommandSearch(string taskDetail){
 }
 
 void Logic::processCommandHelp(){
-	string helpMessage = "HELP HELP HELP"; // refactoring needed
-	display = helpMessage;
+	display = HELP_MESSAGE;
 	outcome = "Help window";												// prompt for help (refactor needed)
 }
 

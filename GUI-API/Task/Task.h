@@ -21,6 +21,7 @@ private:
 	taskDate _dateStart;
 	taskDate _dateEnd;
 	bool _isImpt;
+	bool _isDone;
 	int _idNumber;
 	int _numOfDates;
 	int _numOfTimes;
@@ -35,6 +36,7 @@ private:
 public:
 	Task();
 	~Task();
+	
 	void addDetails(string);
 	bool isSearchTargetPresent(string);
 	string getDescription();
@@ -43,10 +45,12 @@ public:
 	taskDate getDateStart();
 	taskDate getDateEnd();
 	bool getImportance();
+	bool doneStatus();
 	int getIdNumber();
 	int getNumOfDates();
 	int getNumOfTimes();
 	void storeIdNumber(int);
+	void markIsDoneAsTrue();
 };
 #endif
 
