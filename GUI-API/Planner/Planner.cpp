@@ -907,6 +907,13 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 			}
 		}
 	}
+	
+	//case 3: reject floating tasks
+	if ((*it).getDateStart().year == -1 && (*it).getDateStart().month == -1 && (*it).getDateStart().day == -1){
+		if ((*it).getDateEnd().year == -1 && (*it).getDateEnd().month == -1 && (*it).getDateEnd().day == -1){
+			isWithinMissed = false;
+		}
+	}
 
 	if ((*it).doneStatus()){
 		isWithinMissed = false;
