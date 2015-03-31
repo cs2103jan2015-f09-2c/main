@@ -2,6 +2,7 @@
 #include "Log.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -51,6 +52,9 @@ void Task::addDetails(string details){
 		}
 		else if (details.find("time") != string::npos){
 			processTime(details);
+		}
+		else if (details.find("recur") != string::npos){
+		//	processRecur(details);
 		}
 		LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
 		break;
@@ -106,6 +110,29 @@ string Task::processDescription(string details){
 
 //Takes in date related information in a string and stores into the respective variables in Task object
 void Task::processDate(string dateInfo){
+	string keyword, startDate, endDate, separator;
+	int index;
+	istringstream in(dateInfo);
+
+	index = dateInfo.find("to");			// locate the word to in string
+	if (index != string::npos){
+		in >> keyword;
+		in >> startDate;
+		in >> separator;
+		in >> endDate;
+		storeStartDate(startDate);
+		storeEndDate(endDate);
+		_numOfDates = 2;
+	}
+	else{
+		in >> keyword;
+		in >> endDate;
+		storeEndDate(endDate);
+		_numOfDates = 1;
+	}
+
+	
+	/*
 	int index;
 	string dateStart, dateEnd;
 
@@ -125,9 +152,17 @@ void Task::processDate(string dateInfo){
 		storeEndDate(dateInfo);
 		_numOfDates = 1;
 	}
+	*/
 
 	LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
 }
+
+/*
+void Task::processRecur(string recurInfo){
+	recurInfo.replace(0, 7, "");			//get rid of the word recur at the start of the string
+
+}
+*/
 
 //Splits the start date string into individual components and stores them in the relevant variables
 void Task::storeStartDate(string dateStart){
@@ -157,8 +192,29 @@ void Task::storeEndDate(string dateEnd){
 void Task::processTime(string timeInfo){
 
 	int index;
-	string timeStart, timeEnd;
+	string keyword, timeStart, timeEnd, separator;
 
+	istringstream in(timeInfo);
+	index = timeInfo.find("to");			// locate the word to in string
+
+	if (index != string::npos){
+		in >> keyword;
+		in >> timeStart;
+		in >> separator;
+		in >> timeEnd;
+
+		_timeStart = stoi(timeStart);
+		_timeEnd = stoi(timeEnd);
+		_numOfTimes = 2;
+	}
+	else{
+		in >> keyword;
+		in >> timeStart;
+		_timeStart = stoi(timeStart);
+		_numOfTimes = 1;
+	}
+
+	/*
 	timeInfo.replace(0, 6, "");				//get rid of the word time at the start of the string
 
 	index = timeInfo.find("to");			// locate the word to in string
@@ -175,7 +231,7 @@ void Task::processTime(string timeInfo){
 		_timeStart = stoi(timeInfo);
 		_numOfTimes = 1;
 	}
-
+	*/
 	LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
 }
 
