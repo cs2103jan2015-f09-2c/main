@@ -312,15 +312,22 @@ string Planner::clear(void){
 
 string Planner::editTask(int serialNumber, string nameOfList, string input){
 	Task newTask;
+	string validEditCheck;
 	newTask.addDetails(input);
-	deleteTask(serialNumber, nameOfList);
-	lastEdit.deletedTask = lastEntry.lastTask;
-	addTask(newTask);
-	lastEdit.addedTask = lastEntry.lastTask;
-	lastEntry.lastCommand = COMMAND_EDIT;
-	generateAllOtherList();
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
-	return editStatusToString();
+	validEditCheck = deleteTask(serialNumber, nameOfList);
+	
+	if (validEditCheck == ERROR_MESSAGE_INVALID_INDEX) {
+		return validEditCheck;
+	}
+	else {
+		lastEdit.deletedTask = lastEntry.lastTask;
+		addTask(newTask);
+		lastEdit.addedTask = lastEntry.lastTask;
+		lastEntry.lastCommand = COMMAND_EDIT;
+		generateAllOtherList();
+		LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
+		return editStatusToString();
+	}
 }
 
 

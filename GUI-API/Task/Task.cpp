@@ -49,7 +49,7 @@ void Task::addDetails(string details){
 		if (details.find("date") != string::npos){
 			processDate(details);
 		}
-		else{
+		else if (details.find("time") != string::npos){
 			processTime(details);
 		}
 		LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
