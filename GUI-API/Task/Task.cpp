@@ -361,10 +361,13 @@ string Task::modifyDetails(int n, string frequency, string details){
 	
 	switch (numOfDates){
 	case 1:
-//		modifyEndDate(endDate);
+		endDate = modifyDate(endDate, frequency);
 		break;
 	case 2:
 //		modifyStartAndEndDate(startDate, endDate);
+//		modifyDate(start,freq)
+//		modifyDate(end,freq)
+
 		break;
 	default:
 		break;
@@ -374,6 +377,59 @@ string Task::modifyDetails(int n, string frequency, string details){
 	//replace dateInfo in string
 
 	return details;
+}
+
+string Task::modifyDate(string date, string frequency){
+	string newDate;
+
+	if (frequency == "daily" || frequency == "Daily"){
+		newDate = processDailyRecur(date);
+	}
+	else if (frequency == "weekly" || frequency == "Weekly"){
+		newDate = processWeeklyRecur(date);
+	}
+	else if (frequency == "monthly" || frequency == "Monthly"){
+		newDate = processMonthlyRecur(date);
+	}
+	else if (frequency == "yearly" || frequency == "Yearly"){
+		newDate = processYearlyRecur(date);
+	}
+	
+	return newDate;
+}
+
+string Task::processDailyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+	
+	return date;
+}
+
+string Task::processWeeklyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	return date;
+}
+
+string Task::processMonthlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	return date;
+}
+
+string Task::processYearlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	return date;
+}
+
+void Task::splitDate(string endDate, int& day, int& month, int& year){
+	day = stoi(endDate.substr(0, 2));
+	month = stoi(endDate.substr(2, 2));
+	year = stoi(endDate.substr(4, 2));
 }
 
 int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){
