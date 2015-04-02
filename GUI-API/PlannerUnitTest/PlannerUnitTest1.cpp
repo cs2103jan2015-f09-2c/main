@@ -8,6 +8,27 @@ namespace PlannerUnitTest
 	TEST_CLASS(PlannerTest)
 	{
 	public:
+		TEST_METHOD(testAdd_floating_Task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			bool doesFunctionWork = false;
+			testTask1.addDetails("Test task 1"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2"); 
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3"); 
+			testPlanner.addTask(testTask3);
+			string s = testPlanner.toString("Home");
+			if (testPlanner.toString("Home") == "1. Test task 1 \r\n2. Test task 2 \r\n3. Test task 3 \r\n"){
+				doesFunctionWork = true;
+			}
+			else{
+				doesFunctionWork = false;
+			}
+
+			Assert::IsTrue(doesFunctionWork);
+		}
 		
 		TEST_METHOD(testAdd_oneTask)
 		{

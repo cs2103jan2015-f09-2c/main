@@ -452,7 +452,7 @@ string Planner::toString(string nameOfList){
 		finalString = doneListToString();
 		return finalString;
 	}
-	else return ERROR_MESSSAGE_INVALID_FILE_NAME;
+	else return ERROR_MESSSAGE_INVALID_LIST_NAME;
 }
 
 string Planner::AllToString(void){
@@ -904,7 +904,7 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 		}
 	}
 	//case 5: floating task
-	else if ((*it).getDateStart().year == -1 && (*it).getDateStart().month == -1 && (*it).getDateStart().day == -1){
+	if ((*it).getDateStart().year == -1 && (*it).getDateStart().month == -1 && (*it).getDateStart().day == -1){
 		if ((*it).getDateEnd().year == -1 && (*it).getDateEnd().month == -1 && (*it).getDateEnd().day == -1){
 			isWithinHome = true;
 		}
