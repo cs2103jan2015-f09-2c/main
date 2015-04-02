@@ -354,15 +354,20 @@ void Task::recurTask(string details){
 
 string Task::modifyDetails(int n, string frequency, string details){
 	int index, numOfDates;
-	string key, startDate, endDate, separator, dateInfo;
+	string keyword, startDate, endDate, separator, dateInfo, newDate;
+	ostringstream newDateInfo;
 
 	dateInfo = extractDateInfo(details);
-	numOfDates = extractDateInfoFields(dateInfo, key, startDate, endDate, separator);
+	numOfDates = extractDateInfoFields(dateInfo, keyword, startDate, endDate, separator);
 	
 	switch (numOfDates){
 	case 1:
 		endDate = modifyDate(endDate, frequency);
+		newDateInfo << keyword << " " << endDate;
+		newDate = newDateInfo.str();
+		details = insertNewDateInfo(details, newDate);
 		break;
+
 	case 2:
 //		modifyStartAndEndDate(startDate, endDate);
 //		modifyDate(start,freq)
@@ -373,8 +378,16 @@ string Task::modifyDetails(int n, string frequency, string details){
 		break;
 	}
 	
-	//to string function
-	//replace dateInfo in string
+	return details;
+}
+
+string Task::insertNewDateInfo(string details, string newDate){
+	int indexDateInfoStart, indexDateInfoEnd;
+	indexDateInfoStart = details.find_first_of(";");
+	indexDateInfoStart++;
+	indexDateInfoEnd = details.find_first_of(";", indexDateInfoStart);
+	details.replace(indexDateInfoStart, indexDateInfoEnd - indexDateInfoStart, "");		//deleting old date info
+	details.insert(indexDateInfoStart, newDate);
 
 	return details;
 }
@@ -423,6 +436,12 @@ string Task::processYearlyRecur(string date){
 	int day, month, year;
 	splitDate(date, day, month, year);
 
+	if (year+1 != 100){			//to ensure year is a 2 digit number
+		year++;
+	}
+
+	mergeDate(date, day, month, year);
+
 	return date;
 }
 
@@ -430,6 +449,32 @@ void Task::splitDate(string endDate, int& day, int& month, int& year){
 	day = stoi(endDate.substr(0, 2));
 	month = stoi(endDate.substr(2, 2));
 	year = stoi(endDate.substr(4, 2));
+}
+
+void Task::mergeDate(string& date, int day, int month, int year){
+	ostringstream mergedDate;
+	if (day < 10){
+		mergedDate << "0" << day;
+	}
+	else{
+		mergedDate << day;
+	}
+
+	if (month < 10){
+		mergedDate << "0" << month;
+	}
+	else{
+		mergedDate << month;
+	}
+
+	if (year < 10){
+		mergedDate << "0" << year;
+	}
+	else{
+		mergedDate << year;
+	}
+
+	date = mergedDate.str();
 }
 
 int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){

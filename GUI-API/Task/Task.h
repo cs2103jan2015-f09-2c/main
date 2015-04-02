@@ -37,11 +37,13 @@ private:
 	string extractDateInfo(string);
 	void modifyStartandEndDate(string, string, string);		//check if need
 	string modifyDate(string, string);
+	string insertNewDateInfo(string, string);
 	string processDailyRecur(string);
 	string processWeeklyRecur(string);
 	string processMonthlyRecur(string);
 	string processYearlyRecur(string);
 	void splitDate(string, int&, int&, int&);
+	void mergeDate(string&, int, int, int);
 	int extractDateInfoFields(string, string&, string&, string&, string&);
 	Log* LogData = Log::getInstance();
 
