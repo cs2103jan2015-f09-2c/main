@@ -321,6 +321,11 @@ bool Task::doneStatus(){
 
 
 
+
+//******************************************************************************************************************************
+
+
+
 void Task::recurTask(string details){
 	string frequency, taskDetails;
 	int numOfRecurrence, index;
@@ -348,6 +353,90 @@ void Task::recurTask(string details){
 }
 
 string Task::modifyDetails(int n, string frequency, string details){
+	int index, numOfDates;
+	string key, startDate, endDate, separator, dateInfo;
+
+	dateInfo = extractDateInfo(details);
+	numOfDates = extractDateInfoFields(dateInfo, key, startDate, endDate, separator);
+	
+	switch (numOfDates){
+	case 1:
+//		modifyEndDate(endDate);
+		break;
+	case 2:
+//		modifyStartAndEndDate(startDate, endDate);
+		break;
+	default:
+		break;
+	}
+	
+	//to string function
+	//replace dateInfo in string
 
 	return details;
 }
+
+int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){
+	int numOfDates, index;
+	istringstream in(dateInfo);
+	index = dateInfo.find("to");			// locate the word to in string
+	
+	if (index != string::npos){
+		in >> keyword;
+		in >> startDate;
+		in >> separator;
+		in >> endDate;
+		numOfDates = 2;
+	}
+	else{
+		in >> keyword;
+		in >> endDate;
+		storeEndDate(endDate);
+		numOfDates = 1;
+	}
+
+	return numOfDates;
+}
+
+string Task::extractDateInfo(string details){
+	int index;
+
+	index = details.find("date");
+	details = details.substr(index, details.size() - index);
+
+	//get rid of #impt if exists
+	index = details.find("#");						
+	if (index != string::npos){
+		details = details.substr(0, index);
+	}
+
+	//get rid of time if exists
+	index = details.find_first_of(";");			//find first delimiter
+	index++;
+	details = details.substr(0, details.size() - index);
+
+	return details;
+}
+
+/*
+string keyword, startDate, endDate, separator;
+int index;
+istringstream in(dateInfo);
+
+index = dateInfo.find("to");			// locate the word to in string
+if (index != string::npos){
+	in >> keyword;
+	in >> startDate;
+	in >> separator;
+	in >> endDate;
+	storeStartDate(startDate);
+	storeEndDate(endDate);
+	_numOfDates = 2;
+}
+else{
+	in >> keyword;
+	in >> endDate;
+	storeEndDate(endDate);
+	_numOfDates = 1;
+}
+*/

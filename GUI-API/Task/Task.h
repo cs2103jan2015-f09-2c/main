@@ -34,6 +34,8 @@ private:
 	void storeStartDate(string);				
 	void storeEndDate(string);
 	string modifyDetails(int, string, string);
+	string extractDateInfo(string);
+	int extractDateInfoFields(string, string&, string&, string&, string&);
 	Log* LogData = Log::getInstance();
 
 public:
