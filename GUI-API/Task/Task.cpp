@@ -321,6 +321,11 @@ bool Task::doneStatus(){
 
 
 
+
+//******************************************************************************************************************************
+
+
+
 void Task::recurTask(string details){
 	string frequency, taskDetails;
 	int numOfRecurrence, index;
@@ -348,6 +353,191 @@ void Task::recurTask(string details){
 }
 
 string Task::modifyDetails(int n, string frequency, string details){
+	int index, numOfDates;
+	string keyword, startDate, endDate, separator, dateInfo, newDate;
+	ostringstream newDateInfo;
+
+	dateInfo = extractDateInfo(details);
+	numOfDates = extractDateInfoFields(dateInfo, keyword, startDate, endDate, separator);
+	
+	switch (numOfDates){
+	case 1:
+		endDate = modifyDate(endDate, frequency);
+		newDateInfo << keyword << " " << endDate;
+		newDate = newDateInfo.str();
+		details = insertNewDateInfo(details, newDate);
+		break;
+
+	case 2:
+//		modifyStartAndEndDate(startDate, endDate);
+//		modifyDate(start,freq)
+//		modifyDate(end,freq)
+
+		break;
+	default:
+		break;
+	}
+	
+	return details;
+}
+
+string Task::insertNewDateInfo(string details, string newDate){
+	int indexDateInfoStart, indexDateInfoEnd;
+	indexDateInfoStart = details.find_first_of(";");
+	indexDateInfoStart++;
+	indexDateInfoEnd = details.find_first_of(";", indexDateInfoStart);
+	details.replace(indexDateInfoStart, indexDateInfoEnd - indexDateInfoStart, "");		//deleting old date info
+	details.insert(indexDateInfoStart, newDate);
 
 	return details;
 }
+
+string Task::modifyDate(string date, string frequency){
+	string newDate;
+
+	if (frequency == "daily" || frequency == "Daily"){
+		newDate = processDailyRecur(date);
+	}
+	else if (frequency == "weekly" || frequency == "Weekly"){
+		newDate = processWeeklyRecur(date);
+	}
+	else if (frequency == "monthly" || frequency == "Monthly"){
+		newDate = processMonthlyRecur(date);
+	}
+	else if (frequency == "yearly" || frequency == "Yearly"){
+		newDate = processYearlyRecur(date);
+	}
+	
+	return newDate;
+}
+
+string Task::processDailyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+	
+	return date;
+}
+
+string Task::processWeeklyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	return date;
+}
+
+string Task::processMonthlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	return date;
+}
+
+string Task::processYearlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	if (year+1 != 100){			//to ensure year is a 2 digit number
+		year++;
+	}
+
+	mergeDate(date, day, month, year);
+
+	return date;
+}
+
+void Task::splitDate(string endDate, int& day, int& month, int& year){
+	day = stoi(endDate.substr(0, 2));
+	month = stoi(endDate.substr(2, 2));
+	year = stoi(endDate.substr(4, 2));
+}
+
+void Task::mergeDate(string& date, int day, int month, int year){
+	ostringstream mergedDate;
+	if (day < 10){
+		mergedDate << "0" << day;
+	}
+	else{
+		mergedDate << day;
+	}
+
+	if (month < 10){
+		mergedDate << "0" << month;
+	}
+	else{
+		mergedDate << month;
+	}
+
+	if (year < 10){
+		mergedDate << "0" << year;
+	}
+	else{
+		mergedDate << year;
+	}
+
+	date = mergedDate.str();
+}
+
+int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){
+	int numOfDates, index;
+	istringstream in(dateInfo);
+	index = dateInfo.find("to");			// locate the word to in string
+	
+	if (index != string::npos){
+		in >> keyword;
+		in >> startDate;
+		in >> separator;
+		in >> endDate;
+		numOfDates = 2;
+	}
+	else{
+		in >> keyword;
+		in >> endDate;
+		storeEndDate(endDate);
+		numOfDates = 1;
+	}
+
+	return numOfDates;
+}
+
+string Task::extractDateInfo(string details){
+	int index;
+
+	index = details.find("date");
+	details = details.substr(index, details.size() - index);
+
+	//get rid of #impt if exists
+	index = details.find("#");						
+	if (index != string::npos){
+		details = details.substr(0, index);
+	}
+
+	//get rid of time if exists
+	index = details.find_first_of(";");			//find first delimiter
+	index++;
+	details = details.substr(0, details.size() - index);
+
+	return details;
+}
+
+/*
+string keyword, startDate, endDate, separator;
+int index;
+istringstream in(dateInfo);
+
+index = dateInfo.find("to");			// locate the word to in string
+if (index != string::npos){
+	in >> keyword;
+	in >> startDate;
+	in >> separator;
+	in >> endDate;
+	storeStartDate(startDate);
+	storeEndDate(endDate);
+	_numOfDates = 2;
+}
+else{
+	in >> keyword;
+	in >> endDate;
+	storeEndDate(endDate);
+	_numOfDates = 1;
+}
+*/
