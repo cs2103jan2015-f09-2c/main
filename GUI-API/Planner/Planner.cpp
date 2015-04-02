@@ -208,10 +208,35 @@ string Planner::addTask(Task newTask){
 	
 	lastEntry.lastCommand = COMMAND_ADD;
 	lastEntry.lastTask = newTask;
-
+	checkListForClashes();
 	generateAllOtherList();
 
 	return status;
+}
+
+void Planner::checkListForClashes(){
+	list<Task> ::iterator iter1, iter2;
+	iter1 = All.begin();
+	iter2 = All.begin();
+	iter2++;
+	while (iter2 != All.end()){
+		if (checkTaskForClashes((*iter1), (*iter2))){
+			(*iter1).markClashAsTrue();
+			(*iter2).markClashAsTrue();
+		}
+		iter1++;
+		iter2++;
+		
+	}
+	return;
+	
+}
+bool Planner::checkTaskForClashes(Task Task1, Task Task2){
+	//Date Same Time Same --> Single Times
+
+	//Date Same Time Overlap --> Single Double, Double Single, Double Double
+
+	return false;
 }
 bool Planner::isDuplicatePresent(Task newTask){
 	list<Task> ::iterator iter;
@@ -228,6 +253,7 @@ bool Planner::tasksAreTheSame(Task Task1, Task Task2){
 	bool same = true;
 	string s = Task1.getDescription();
 	string t = Task2.getDescription();
+	t = t.substr(0, t.end() - t.begin()-1);
 	if (s != t){// i dont know why but this does not work if i just put in the Task.getdescriptions, so i put 2 strings
 		
 		same = false;
@@ -391,7 +417,7 @@ void Planner::loadData(string data){
 	while (dataCopy.size()>0){
 		end = dataCopy.find_first_of("\n");
 		tempString = dataCopy.substr(start, end - start);
-		dataCopy = dataCopy.substr(end + 1, dataCopy.size() - end);
+		dataCopy = dataCopy.substr(end+1, dataCopy.size() - end);
 		tempTask = new Task;
 		(*tempTask).addDetails(tempString);
 		addTask(*tempTask);
@@ -603,6 +629,10 @@ string Planner::descriptionOfTaskToString(Task theTask){
 
 	if (theTask.doneStatus()==true){
 		out << " DONE";
+	}
+
+	if (theTask.clashStatus() == true){
+		out << "TASK CLASH!!!";
 	}
 	return out.str();
 }

@@ -17,6 +17,7 @@ Task::Task(){
 	_timeEnd = -1;
 	_isImpt = false;
 	_isDone = false;
+	_isClash = false;
 	_numOfDates = 0;
 	_numOfTimes = 0;
 }
@@ -532,6 +533,17 @@ bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
 	}
 	
 	return same;
+}
+
+void Task::markClashAsTrue(){
+	_isClash = true;
+}
+
+bool Task::clashStatus(){
+	if (_isClash == true){
+		return true;
+	}
+	else return false;
 }
 
 /*

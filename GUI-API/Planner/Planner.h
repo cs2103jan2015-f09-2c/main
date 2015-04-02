@@ -70,6 +70,10 @@ private:
 	//check duplicate function
 	bool isDuplicatePresent(Task newTask);
 	bool tasksAreTheSame(Task Task1, Task Task2);
+	//check clashes
+	bool isClashPresent(Task newTask);
+	void checkListForClashes();
+	bool checkTaskForClashes(Task Task1, Task Task2);
 	
 public:
 

@@ -23,6 +23,7 @@ private:
 	taskDate _dateEnd;
 	bool _isImpt;
 	bool _isDone;
+	bool _isClash;
 	int _idNumber;
 	int _numOfDates;
 	int _numOfTimes;
@@ -68,6 +69,8 @@ public:
 	void markIsDoneAsTrue();
 	list<Task> getRecurringTasks();
 	bool areDatesTheSame(taskDate,taskDate);
+	void markClashAsTrue();
+	bool clashStatus();
 };
 #endif
 
