@@ -67,6 +67,7 @@ public:
 	void storeIdNumber(int);
 	void markIsDoneAsTrue();
 	list<Task> getRecurringTasks();
+	bool areDatesTheSame(taskDate,taskDate);
 };
 #endif
 

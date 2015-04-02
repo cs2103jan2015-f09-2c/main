@@ -15,6 +15,8 @@ const string COMMAND_CLEAR = "clear";
 const string COMMAND_SAVE = "save";
 const string COMMAND_DONE = "done";
 
+const string DUPLICATE_STATUS = "duplicate";
+
 const string HOME_LIST = "Home";
 const string MISSED_LIST = "Missed";
 const string UPCOMING_LIST = "Upcoming";
@@ -51,6 +53,7 @@ const string STATUS_TO_STRING_UNDO_DELETE_MSG = "The following Task has been rem
 const string STATUS_TO_STRING_CLEAR_MSG = "All content cleared. \r\n";
 const string STATUS_TO_STRING_SAVE_MSG = "File has been saved. \r\n";
 const string STATUS_TO_STRING_DONE_MSG = "Task has been marked as done \r\n";
+const string STATUS_TO_STRING_DUPLICATE_MSG = "The following Task has a duplicate: ";
 
 
 
@@ -86,6 +89,9 @@ string Planner::addTask(Task newTask){
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 	newTask.storeIdNumber(id);
 
+	//check for duplicate
+	bool duplicatePresent = false;
+	duplicatePresent=isDuplicatePresent(newTask);
 	//check where to slot
 	list<Task>::iterator iter;
 
@@ -193,7 +199,13 @@ string Planner::addTask(Task newTask){
 	All.insert(iter, newTask);
 	
 	string status;
-	status = statusToString(COMMAND_ADD, newTask);
+	if (duplicatePresent){
+		status = statusToString(DUPLICATE_STATUS, newTask);
+	}
+	else {
+		status = statusToString(COMMAND_ADD, newTask);
+	}
+	
 	lastEntry.lastCommand = COMMAND_ADD;
 	lastEntry.lastTask = newTask;
 
@@ -201,12 +213,51 @@ string Planner::addTask(Task newTask){
 
 	return status;
 }
+bool Planner::isDuplicatePresent(Task newTask){
+	list<Task> ::iterator iter;
+	for (iter = All.begin(); iter != All.end(); ++iter){
+		if (tasksAreTheSame(newTask, (*iter))){
+			return true;
+		}
+	}
+	return false;
+
+}
+
+bool Planner::tasksAreTheSame(Task Task1, Task Task2){
+	bool same = true;
+	string s = Task1.getDescription();
+	string t = Task2.getDescription();
+	if (s != t){// i dont know why but this does not work if i just put in the Task.getdescriptions, so i put 2 strings
+		
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateStart(), Task2.getDateStart()))){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateEnd(), Task2.getDateEnd()))){
+		same = false;
+	}
+	if (Task1.getImportance() != Task2.getImportance()){
+		same = false;
+	}
+	if (Task1.getTimeEnd() != Task2.getTimeEnd()){
+		same = false;
+	}
+	if (Task1.getTimeStart() != Task2.getTimeStart()){
+		same = false;
+	}
+	
+	return same;
+}
+
 
 string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
 	int indexCount = 1;
 	string status;
 	list<Task> ::iterator iter;
+
 
 	if (nameOfList == HOME_LIST){
 		iter = HomeList.begin();
@@ -506,6 +557,10 @@ string Planner::statusToString(string command, Task theTask){
 		finalString = doneStatusToString();
 		return finalString;
 	}
+	else if (command == DUPLICATE_STATUS){
+		finalString = duplicateStatusToString(theTask);
+		return finalString;
+	}
 	else return ERROR_MESSSAGE_INVALID_COMMAND;
 }
 
@@ -599,6 +654,15 @@ string Planner::undoStatusToString(){
 
 string Planner::clearStatusToString(){
 	return STATUS_TO_STRING_CLEAR_MSG;
+}
+
+string Planner::duplicateStatusToString(Task theTask){
+	ostringstream out;
+	out << STATUS_TO_STRING_DUPLICATE_MSG;
+	out << descriptionOfTaskToString(theTask);
+	out << NEWLINE;
+	return out.str();
+	
 }
 
 string Planner::saveStatusToString(){

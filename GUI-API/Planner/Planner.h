@@ -43,6 +43,7 @@ private:
 	string saveStatusToString();
 	string searchStatusToString();
 	string doneStatusToString();
+	string duplicateStatusToString(Task theTask);
 	// List reurning functions
 	string HomeListToString(void);
 	string upcomingListToString();
@@ -64,8 +65,12 @@ private:
 	bool isHome(taskDate, list<Task>::iterator);
 	bool isMissed(taskDate, list<Task>::iterator);
 	bool isUpcoming(taskDate, list<Task>::iterator);
-
+	// mark done function
 	string markDoneIndex(int idNumber);
+	//check duplicate function
+	bool isDuplicatePresent(Task newTask);
+	bool tasksAreTheSame(Task Task1, Task Task2);
+	
 public:
 
 	Planner();

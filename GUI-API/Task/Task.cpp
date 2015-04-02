@@ -519,6 +519,21 @@ string Task::extractDateInfo(string details){
 	return details;
 }
 
+bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
+	bool same = true;
+	if (Date1.day!=Date2.day){
+		same = false;
+	}
+	if (Date1.month != Date2.month){
+		same = false;
+	}
+	if (Date1.year != Date2.year){
+		same = false;
+	}
+	
+	return same;
+}
+
 /*
 string keyword, startDate, endDate, separator;
 int index;
