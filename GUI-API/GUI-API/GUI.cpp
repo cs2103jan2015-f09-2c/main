@@ -269,7 +269,7 @@ void Logic::processCommandShowDone(string currentView){
 }
 
 void Logic::processCommandAll(){
-	//display = myPlanner.AllToString();
+	display = myPlanner.AllToString();
 	outcome = "All list";													//prompt for All (refactor needed)
 }
 
