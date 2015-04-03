@@ -28,37 +28,6 @@ Namespace SystemTests
     Partial Public Class UIMap
         
         '''<summary>
-        '''test for add with time and date, with time no date, with date no time, and no time no date
-        '''</summary>
-        Public Sub systemtest_add_time_date()
-            Dim uIUserInputEdit As WinEdit = Me.UIItemWindow.UIUserInputWindow.UIUserInputEdit
-
-            'Type 'add event a; date 030415 to 040415; time 0800 to 0900' in 'userInput' text box
-            uIUserInputEdit.Text = Me.systemtest_add_time_dateParams.UIUserInputEditText
-
-            'Type '{Enter}' in 'userInput' text box
-            Keyboard.SendKeys(uIUserInputEdit, Me.systemtest_add_time_dateParams.UIUserInputEditSendKeys, ModifierKeys.None)
-
-            'Type 'add event b; date 050415 to 060415' in 'userInput' text box
-            uIUserInputEdit.Text = Me.systemtest_add_time_dateParams.UIUserInputEditText1
-
-            'Type '{Enter}' in 'userInput' text box
-            Keyboard.SendKeys(uIUserInputEdit, Me.systemtest_add_time_dateParams.UIUserInputEditSendKeys1, ModifierKeys.None)
-
-            'Type 'add event c' in 'userInput' text box
-            uIUserInputEdit.Text = Me.systemtest_add_time_dateParams.UIUserInputEditText2
-
-            'Type '{Enter}' in 'userInput' text box
-            Keyboard.SendKeys(uIUserInputEdit, Me.systemtest_add_time_dateParams.UIUserInputEditSendKeys2, ModifierKeys.None)
-
-            'Type 'add event d; time 1000 to 1100' in 'userInput' text box
-            uIUserInputEdit.Text = Me.systemtest_add_time_dateParams.UIUserInputEditText3
-
-            'Type '{Enter}' in 'userInput' text box
-            Keyboard.SendKeys(uIUserInputEdit, Me.systemtest_add_time_dateParams.UIUserInputEditSendKeys3, ModifierKeys.None)
-        End Sub
-        
-        '''<summary>
         '''actions for add with time and date, no time have date, no date have time, and no date no time
         '''</summary>
         Public Sub userAdd_time_date()
@@ -116,14 +85,6 @@ Namespace SystemTests
         End Sub
         
         #Region "Properties"
-        Public Overridable ReadOnly Property systemtest_add_time_dateParams() As systemtest_add_time_dateParams
-            Get
-                If (Me.msystemtest_add_time_dateParams Is Nothing) Then
-                    Me.msystemtest_add_time_dateParams = New systemtest_add_time_dateParams()
-                End If
-                Return Me.msystemtest_add_time_dateParams
-            End Get
-        End Property
         
         Public Overridable ReadOnly Property userAdd_time_dateParams() As userAdd_time_dateParams
             Get
@@ -154,62 +115,12 @@ Namespace SystemTests
         #End Region
         
         #Region "Fields"
-        Private msystemtest_add_time_dateParams As systemtest_add_time_dateParams
         
         Private muserAdd_time_dateParams As userAdd_time_dateParams
         
         Private massert_userAdd_time_dateExpectedValues As assert_userAdd_time_dateExpectedValues
         
         Private mUIItemWindow As UIItemWindow
-        #End Region
-    End Class
-    
-    '''<summary>
-    '''Parameters to be passed into 'systemtest_add_time_date'
-    '''</summary>
-    <GeneratedCode("Coded UITest Builder", "12.0.31101.0")>  _
-    Public Class systemtest_add_time_dateParams
-        
-        #Region "Fields"
-        '''<summary>
-        '''Type 'add event a; date 030415 to 040415; time 0800 to 0900' in 'userInput' text box
-        '''</summary>
-        Public UIUserInputEditText As String = "add event a; date 030415 to 040415; time 0800 to 0900"
-        
-        '''<summary>
-        '''Type '{Enter}' in 'userInput' text box
-        '''</summary>
-        Public UIUserInputEditSendKeys As String = "{Enter}"
-        
-        '''<summary>
-        '''Type 'add event b; date 050415 to 060415' in 'userInput' text box
-        '''</summary>
-        Public UIUserInputEditText1 As String = "add event b; date 050415 to 060415"
-        
-        '''<summary>
-        '''Type '{Enter}' in 'userInput' text box
-        '''</summary>
-        Public UIUserInputEditSendKeys1 As String = "{Enter}"
-        
-        '''<summary>
-        '''Type 'add event c' in 'userInput' text box
-        '''</summary>
-        Public UIUserInputEditText2 As String = "add event c"
-        
-        '''<summary>
-        '''Type '{Enter}' in 'userInput' text box
-        '''</summary>
-        Public UIUserInputEditSendKeys2 As String = "{Enter}"
-        
-        '''<summary>
-        '''Type 'add event d; time 1000 to 1100' in 'userInput' text box
-        '''</summary>
-        Public UIUserInputEditText3 As String = "add event d; time 1000 to 1100"
-        
-        '''<summary>
-        '''Type '{Enter}' in 'userInput' text box
-        '''</summary>
-        Public UIUserInputEditSendKeys3 As String = "{Enter}"
         #End Region
     End Class
     

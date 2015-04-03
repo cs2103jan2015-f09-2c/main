@@ -19,6 +19,7 @@ struct undoEditData{
 class Planner{
 
 private:
+
 	// all the private lists
 	list<Task> All; // allTaskList 
 	list<Task> HomeList;
