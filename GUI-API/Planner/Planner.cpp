@@ -111,14 +111,14 @@ string Planner::addTask(Task newTask){
 	//case 2: when new task has no date and has time (either 1 or 2 times)
 	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
 		for (iter = All.begin(); iter != All.end(); ++iter){
-			if ((*iter).getTimeStart() > newTask.getTimeStart()){
+			if ((*iter).getTimeStart() > newTask.getTimeStart() || (*iter).getNumOfDates() > 0){
 				break;
 			}
 		}
 	}
 
-	//case 3:  when new task has 2 dates (0,1 or 2 times)
-	else if (newTask.getNumOfDates() ==2){
+	//case 3:  when new task has more than one date (0,1 or 2 times)
+	else if (newTask.getNumOfDates() >0){
 		for (iter = All.begin(); iter != All.end(); ++iter){
 			if ((*iter).getDateStart().year > newTask.getDateStart().year){
 				break;
@@ -145,35 +145,6 @@ string Planner::addTask(Task newTask){
 			} 
 		}
 	}
-
-	//case 4: when new task has 1 date (0,1 or 2 times)
-	else if (newTask.getNumOfDates() == 1){
-		for (iter = All.begin(); iter != All.end(); ++iter){
-			if ((*iter).getDateEnd().year > newTask.getDateEnd().year){
-				break;
-			}
-			else if ((*iter).getDateEnd().year == newTask.getDateEnd().year){
-				if ((*iter).getDateEnd().month > newTask.getDateEnd().month){
-					break;
-				}
-				else if ((*iter).getDateEnd().month == newTask.getDateEnd().month){
-					if ((*iter).getDateEnd().day > newTask.getDateEnd().day){
-						break;
-					}
-					else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
-						if ((*iter).getTimeStart() > newTask.getTimeStart()){
-							break;
-						}
-						else if ((*iter).getTimeStart() == newTask.getTimeStart()){
-							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-	}		
 
 	All.insert(iter, newTask);
 	
@@ -211,12 +182,76 @@ void Planner::checkListForClashes(){
 	
 }
 bool Planner::checkTaskForClashes(Task Task1, Task Task2){
+	bool isClash = false;
 	//Date Same Time Same --> Single Times
+	//2 date 1 time
+	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
+		if (Task1.getDateStart().month == Task2.getDateStart().month && Task1.getDateEnd().month == Task2.getDateEnd().month) {
+			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day) {
+				if (Task1.getTimeStart() == Task2.getTimeStart()){
+					isClash = true;
+				}
+			}
+		}
+	}
+	//2 date 2 time
+	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
+		if (Task1.getDateStart().month == Task2.getDateStart().month && Task1.getDateEnd().month == Task2.getDateEnd().month) {
+			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day) {
+				if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+					isClash = true;
+				}
+			}
+		}
+	}
+	//1 date 1 time
+	if (Task1.getDateEnd().year == Task2.getDateEnd().year) {
+		if (Task1.getDateEnd().month == Task2.getDateEnd().month) {
+			if (Task1.getDateEnd().day == Task2.getDateEnd().day) {
+				if (Task1.getTimeStart() == Task2.getTimeStart()){
+					isClash = true;
+				}
+			}
+		}
+	}
+	//1 date 2 time
+	if (Task1.getDateEnd().year == Task2.getDateEnd().year) {
+		if (Task1.getDateEnd().month == Task2.getDateEnd().month) {
+			if (Task1.getDateEnd().day == Task2.getDateEnd().day) {
+				if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+					isClash = true;
+				}
+			}
+		}
+	}
+	//no date 1 time
+	if (Task1.getTimeStart() == Task2.getTimeStart()){
+		isClash = true;
+	}
+	//task1 one date, task2 2 date, 1 time
+	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
+		if (Task1.getDateEnd().month <= Task2.getDateEnd().month && Task1.getDateEnd().month >= Task2.getDateEnd().month) {
+			if (Task1.getDateEnd().day <= Task2.getDateEnd().day && Task1.getDateEnd().day >= Task2.getDateEnd().day) {
+				if (Task1.getTimeStart() == Task2.getTimeStart()){
+					isClash = true;
+				}
+			}
+		}
+	}
+	//task1 one date, task2 2 date, 2 time
+	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
+		if (Task1.getDateEnd().month <= Task2.getDateEnd().month && Task1.getDateEnd().month >= Task2.getDateEnd().month) {
+			if (Task1.getDateEnd().day <= Task2.getDateEnd().day && Task1.getDateEnd().day >= Task2.getDateStart().day) {
+				if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+					isClash = true;
+				}
+			}
+		}
+	}				
 
-	//Date Same Time Overlap --> Single Double, Double Single, Double Double
-
-	return false;
+	return isClash;
 }
+
 bool Planner::isDuplicatePresent(Task newTask){
 	list<Task> ::iterator iter;
 	for (iter = All.begin(); iter != All.end(); ++iter){
@@ -598,10 +633,10 @@ string Planner::descriptionOfTaskToString(Task theTask){
 			length++;
 		}
 		if (length <= 4) {
-			out << setfill('0') << setw(4) << theTask.getTimeStart();
+			out << setfill('0') << setw(4) << theTask.getTimeStart() <<" ";
 		}
 		else {
-			out << theTask.getTimeStart();
+			out << theTask.getTimeStart() <<" ";
 		}
 		break;
 	case 2:
@@ -625,10 +660,10 @@ string Planner::descriptionOfTaskToString(Task theTask){
 			length++;
 		}
 		if (length == 3) {
-			out << setfill('0') << setw(4) << theTask.getTimeEnd();
+			out << setfill('0') << setw(4) << theTask.getTimeEnd() << " ";
 		}
 		else {
-			out << theTask.getTimeEnd();
+			out << theTask.getTimeEnd() << " ";
 		}
 		break;
 	default:
