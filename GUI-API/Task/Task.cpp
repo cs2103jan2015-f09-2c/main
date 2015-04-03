@@ -320,13 +320,11 @@ bool Task::doneStatus(){
 	return _isDone;
 }
 
+/************************************************************************************************
 
+Recur function
 
-
-
-//******************************************************************************************************************************
-
-
+************************************************************************************************/
 
 void Task::recurTask(string details){
 	string frequency, taskDetails;
@@ -349,15 +347,15 @@ void Task::recurTask(string details){
 		_recurringTasks.push_back(*recTaskPtr);
 		delete recTaskPtr;
 		recTaskPtr = NULL;
-		details = modifyDetails(i, frequency, details);
+		details = modifyDetails(frequency, details);
 	}
 
 }
 
-string Task::modifyDetails(int n, string frequency, string details){
+string Task::modifyDetails(string frequency, string details){
 	int index, numOfDates;
-	string keyword, startDate, endDate, separator, dateInfo, newDate;
-	ostringstream newDateInfo;
+	string keyword, startDate, endDate, separator, dateInfo, newDateInfo;
+	ostringstream updatedInfo;
 
 	dateInfo = extractDateInfo(details);
 	numOfDates = extractDateInfoFields(dateInfo, keyword, startDate, endDate, separator);
@@ -365,16 +363,18 @@ string Task::modifyDetails(int n, string frequency, string details){
 	switch (numOfDates){
 	case 1:
 		endDate = modifyDate(endDate, frequency);
-		newDateInfo << keyword << " " << endDate;
-		newDate = newDateInfo.str();
-		details = insertNewDateInfo(details, newDate);
+		updatedInfo << keyword << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
 		break;
 
 	case 2:
 //		modifyStartAndEndDate(startDate, endDate);
-//		modifyDate(start,freq)
-//		modifyDate(end,freq)
-
+		startDate = modifyDate(startDate, frequency);
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << keyword << " " << startDate << " " << separator << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
 		break;
 	default:
 		break;
@@ -417,12 +417,57 @@ string Task::processDailyRecur(string date){
 	int day, month, year;
 	splitDate(date, day, month, year);
 	
+	if (month == 2){						//case when it is Feb 28th
+		if (day == 28){
+			day = 1;
+			month++;
+		}
+	}
+	else if (is31DayMonth(month)){
+		if (day == 31){						//case when it is
+			if (month == 12){				//31st Dec
+				day = 1;
+				month = 1;
+				year++;
+			}
+			else{							//case when it is 31st but not Dec
+				day = 1;
+				month++;
+			}
+		}
+		else{								//case when it is month with 31 days and it is any day from 1-30
+			day++;
+		}
+	}
+	else{
+		if (day == 30){						//case when it is month with 30 days and day is 30th
+			day = 1;
+			month++;
+		}
+		else{								//case when it is month with 30 days and day is 1-29
+			day++;
+		}
+	}
+
+	mergeDate(date, day, month, year);
 	return date;
 }
 
+bool Task::is31DayMonth(int month){
+	bool is31DayMonth = false;
+
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+		is31DayMonth = true;
+	}
+
+	return is31DayMonth;
+}
+
 string Task::processWeeklyRecur(string date){
-	int day, month, year;
-	splitDate(date, day, month, year);
+
+	for (int i = 1; i <= 7; i++){				//since each week is 7 days, just loop processDailyRecur 7 times
+		date = processDailyRecur(date);
+	}
 
 	return date;
 }
@@ -430,7 +475,17 @@ string Task::processWeeklyRecur(string date){
 string Task::processMonthlyRecur(string date){
 	int day, month, year;
 	splitDate(date, day, month, year);
+	
+	if (month == 12){
+		month = 1;
+		year++;
+	}
+	else{
+		month++;
+	}
 
+	mergeDate(date, day, month, year);
+	
 	return date;
 }
 
@@ -515,8 +570,8 @@ string Task::extractDateInfo(string details){
 
 	//get rid of time if exists
 	index = details.find_first_of(";");			//find first delimiter
-	index++;
-	details = details.substr(0, details.size() - index);
+//	index++;
+	details = details.substr(0, index);
 
 	return details;
 }
@@ -546,26 +601,3 @@ bool Task::clashStatus(){
 	}
 	else return false;
 }
-
-/*
-string keyword, startDate, endDate, separator;
-int index;
-istringstream in(dateInfo);
-
-index = dateInfo.find("to");			// locate the word to in string
-if (index != string::npos){
-	in >> keyword;
-	in >> startDate;
-	in >> separator;
-	in >> endDate;
-	storeStartDate(startDate);
-	storeEndDate(endDate);
-	_numOfDates = 2;
-}
-else{
-	in >> keyword;
-	in >> endDate;
-	storeEndDate(endDate);
-	_numOfDates = 1;
-}
-*/

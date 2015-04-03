@@ -34,12 +34,12 @@ private:
 	void processTime(string);					
 	void storeStartDate(string);				
 	void storeEndDate(string);
-	string modifyDetails(int, string, string);
+	string modifyDetails(string, string);
 	string extractDateInfo(string);
-	void modifyStartandEndDate(string, string, string);		//check if need
 	string modifyDate(string, string);
 	string insertNewDateInfo(string, string);
 	string processDailyRecur(string);
+	bool is31DayMonth(int);
 	string processWeeklyRecur(string);
 	string processMonthlyRecur(string);
 	string processYearlyRecur(string);
