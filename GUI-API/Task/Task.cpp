@@ -429,7 +429,17 @@ string Task::processWeeklyRecur(string date){
 string Task::processMonthlyRecur(string date){
 	int day, month, year;
 	splitDate(date, day, month, year);
+	
+	if (month == 12){
+		month = 1;
+		year++;
+	}
+	else{
+		month++;
+	}
 
+	mergeDate(date, day, month, year);
+	
 	return date;
 }
 
@@ -514,8 +524,8 @@ string Task::extractDateInfo(string details){
 
 	//get rid of time if exists
 	index = details.find_first_of(";");			//find first delimiter
-	index++;
-	details = details.substr(0, details.size() - index);
+//	index++;
+	details = details.substr(0, index);
 
 	return details;
 }
@@ -545,26 +555,3 @@ bool Task::clashStatus(){
 	}
 	else return false;
 }
-
-/*
-string keyword, startDate, endDate, separator;
-int index;
-istringstream in(dateInfo);
-
-index = dateInfo.find("to");			// locate the word to in string
-if (index != string::npos){
-	in >> keyword;
-	in >> startDate;
-	in >> separator;
-	in >> endDate;
-	storeStartDate(startDate);
-	storeEndDate(endDate);
-	_numOfDates = 2;
-}
-else{
-	in >> keyword;
-	in >> endDate;
-	storeEndDate(endDate);
-	_numOfDates = 1;
-}
-*/
