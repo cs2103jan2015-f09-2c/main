@@ -127,6 +127,7 @@ void Task::processDate(string dateInfo){
 		in >> keyword;
 		in >> endDate;
 		storeEndDate(endDate);
+		storeStartDate(endDate);
 		_numOfDates = 1;
 	}
 

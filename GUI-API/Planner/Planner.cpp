@@ -94,8 +94,9 @@ string Planner::addTask(Task newTask){
 	bool duplicatePresent = false;
 	duplicatePresent=isDuplicatePresent(newTask);
 	//check where to slot
-	list<Task>::iterator iter;
-	list<Task>::iterator iter1, iter2;
+	list<Task>::iterator iter, iterTwoDate, iterOneDate;
+	bool twoDatePresent = false, oneDatePresent = false;
+
 
 	//case 1: when new task has no date and no time
 	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
@@ -117,7 +118,7 @@ string Planner::addTask(Task newTask){
 	}
 
 	//case 3:  when new task has 2 dates (0,1 or 2 times)
-	else if (newTask.getNumOfDates() == 2){
+	else if (newTask.getNumOfDates() ==2){
 		for (iter = All.begin(); iter != All.end(); ++iter){
 			if ((*iter).getDateStart().year > newTask.getDateStart().year){
 				break;
@@ -160,49 +161,20 @@ string Planner::addTask(Task newTask){
 						break;
 					}
 					else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
-					//	if ((*iter).getTimeStart() > newTask.getTimeStart()){
+						if ((*iter).getTimeStart() > newTask.getTimeStart()){
 							break;
-					//	}
-	/*					else if ((*iter).getTimeStart() == newTask.getTimeStart()){
+						}
+						else if ((*iter).getTimeStart() == newTask.getTimeStart()){
 							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
 								break;
 							}
-						}		*/
+						}
 					}
 				}
 			}
 		}
-	}
+	}		
 
-	//sort
-/*	iter = All.begin();
-	if (newTask.getNumOfDates() == 1){
-		for (iter = All.begin(); iter != All.end(); ++iter){
-			if ((*iter).getDateEnd().year > newTask.getDateEnd().year){
-				break;
-			}
-			else if ((*iter).getDateEnd().year == newTask.getDateEnd().year){
-				if ((*iter).getDateEnd().month > newTask.getDateEnd().month){
-					break;
-				}
-				else if ((*iter).getDateEnd().month == newTask.getDateEnd().month){
-					if ((*iter).getDateEnd().day > newTask.getDateEnd().day){
-						break;
-					}
-					else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
-					//	if ((*iter).getTimeStart() > newTask.getTimeStart()){
-							break;
-					//	}
-					else if ((*iter).getTimeStart() == newTask.getTimeStart()){
-							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
-								break;
-							}
-						}	
-					}
-				}
-			}
-		}
-	} */
 	All.insert(iter, newTask);
 	
 	string status;
@@ -626,7 +598,7 @@ string Planner::descriptionOfTaskToString(Task theTask){
 			length++;
 		}
 		if (length <= 4) {
-			out << setfill('0') << setw(5) << theTask.getTimeStart();
+			out << setfill('0') << setw(4) << theTask.getTimeStart();
 		}
 		else {
 			out << theTask.getTimeStart();
@@ -1002,6 +974,13 @@ void Planner::generateMissedList(void){
 		}
 	}
 }
+
+/************************************************************************************************
+
+										Generator Logic
+
+************************************************************************************************/
+
 //assumes 30 days in a month
 bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinHome = false;
