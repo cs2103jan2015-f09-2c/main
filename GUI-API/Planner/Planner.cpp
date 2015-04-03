@@ -173,18 +173,18 @@ string Planner::addTask(Task newTask){
 			int ImonthE = (*iter).getDateStart().month;
 			int IdayE = (*iter).getDateStart().day;
 
-			if ((*iter).getDateStart().year > newTask.getDateStart().year){
+			if ((*iter).getDateStart().year > newTask.getDateEnd().year){
 				break;
 			}
-			else if ((*iter).getDateStart().year == newTask.getDateStart().year){
+			else if ((*iter).getDateStart().year == newTask.getDateEnd().year){
 				if ((*iter).getDateStart().month > newTask.getDateStart().month){
 					break;
 				}
-				else if ((*iter).getDateStart().month == newTask.getDateStart().month){
-					if ((*iter).getDateStart().day > newTask.getDateStart().day){
+				else if ((*iter).getDateStart().month == newTask.getDateEnd().month){
+					if ((*iter).getDateStart().day > newTask.getDateEnd().day){
 						break;
 					}
-					else if ((*iter).getDateStart().day == newTask.getDateStart().day){
+					else if ((*iter).getDateStart().day == newTask.getDateEnd().day){
 						if ((*iter).getTimeStart() > newTask.getTimeStart()){
 							break;
 						}
@@ -527,7 +527,7 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	case 0:
 		break;
 	case 1:
-		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " ";
+		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
 		break;
 	case 2:
 		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
