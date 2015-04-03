@@ -84,14 +84,14 @@ void Task::process_TwoDelimiter(string details) {
 	if (durationInfo.find("date") != string::npos){
 		dateInfo = details.substr(0, semicolonPos);
 	}
-	else{
+	else if (durationInfo.find("time") != string::npos){
 		timeInfo = details.substr(0, semicolonPos);
 	}
 	semicolonPos++;
 	if (timeInfo.empty()){
 		timeInfo = details.substr(semicolonPos, details.size() - semicolonPos);
 	}
-	else{
+	else if (dateInfo.empty()){
 		dateInfo = details.substr(semicolonPos, details.size() - semicolonPos);
 	}
 	processDate(dateInfo);
@@ -111,23 +111,23 @@ void Task::processImportance(string& details){
 
 //stores description into task object and returns the remainder of user input
 void Task::processDescription(string& details){
-	int semicolonPos;
+	int descriptionEnd;
 
-	semicolonPos = details.find_first_of(";");
-	_description = details.substr(0, semicolonPos);
-	semicolonPos++;
-	details = details.substr(semicolonPos, details.size() - semicolonPos);				//cut out the description part to be left with the date and/or time part
+	descriptionEnd = details.find_first_of(";");
+	_description = details.substr(0, descriptionEnd);
+	descriptionEnd++;
+	details = details.substr(descriptionEnd, details.size() - descriptionEnd);				//cut out the description part to be left with the date and/or time part
 	LogData->addLog("UPDATE", "In addDetails(processDescription), Description stored successfully");
 }
 
 //Takes in date related information in a string and stores into the respective variables in Task object
 void Task::processDate(string dateInfo){
 	string keyword, startDate, endDate, separator;
-	int toPos;
+	int separatorPos;
 	istringstream in(dateInfo);
 
-	toPos = dateInfo.find("to");			// locate the word to in string
-	if (toPos != string::npos){
+	separatorPos = dateInfo.find("to");			// locate the word to in string
+	if (separatorPos != string::npos){
 		in >> keyword;
 		in >> startDate;
 		in >> separator;
@@ -173,13 +173,13 @@ void Task::storeEndDate(string dateEnd){
 //Takes in time related information in a string and stores into the respective variables in Task object
 void Task::processTime(string timeInfo){
 
-	int toPos;
+	int separatorPos;
 	string keyword, timeStart, timeEnd, separator;
 
 	istringstream in(timeInfo);
-	toPos = timeInfo.find("to");			// locate the word to in string
+	separatorPos = timeInfo.find("to");			// locate the word to in string
 
-	if (toPos != string::npos){
+	if (separatorPos != string::npos){
 		in >> keyword;
 		in >> timeStart;
 		in >> separator;
