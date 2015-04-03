@@ -45,7 +45,7 @@ namespace TaskUnitTest
 		//maybe?
 		//Whats the point of this test? When we enter add ;date 270315 to 290315; time 1300 to 1500
 		// the program says invalid, When we enter date 270315 to 290315; time 1300 to 1500 then it is taken as a string
-		TEST_METHOD(testAddDetails_Description_blank){
+/*		TEST_METHOD(testAddDetails_Description_blank){
 			Task testTask;
 			string testDescription = "No description";
 
@@ -53,7 +53,7 @@ namespace TaskUnitTest
 
 			//Check Description
 			Assert::AreEqual(testTask.getDescription(), testDescription);
-		}
+		}		*/
 
 		/************************************************************************************************
 
@@ -129,7 +129,7 @@ namespace TaskUnitTest
 
 		TEST_METHOD(testProcessDate_Date_oneDate){
 			Task testTask;
-			bool isOneDate;
+			bool isOneDate = false;
 
 			testTask.addDetails("Meeting in school; date 150315; time 1300 to 1500");
 

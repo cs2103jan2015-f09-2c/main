@@ -23,6 +23,7 @@ private:
 	taskDate _dateEnd;
 	bool _isImpt;
 	bool _isDone;
+	bool _isClash;
 	int _idNumber;
 	int _numOfDates;
 	int _numOfTimes;
@@ -34,6 +35,17 @@ private:
 	void storeStartDate(string);				
 	void storeEndDate(string);
 	string modifyDetails(int, string, string);
+	string extractDateInfo(string);
+	void modifyStartandEndDate(string, string, string);		//check if need
+	string modifyDate(string, string);
+	string insertNewDateInfo(string, string);
+	string processDailyRecur(string);
+	string processWeeklyRecur(string);
+	string processMonthlyRecur(string);
+	string processYearlyRecur(string);
+	void splitDate(string, int&, int&, int&);
+	void mergeDate(string&, int, int, int);
+	int extractDateInfoFields(string, string&, string&, string&, string&);
 	Log* LogData = Log::getInstance();
 
 public:
@@ -56,6 +68,9 @@ public:
 	void storeIdNumber(int);
 	void markIsDoneAsTrue();
 	list<Task> getRecurringTasks();
+	bool areDatesTheSame(taskDate,taskDate);
+	void markClashAsTrue();
+	bool clashStatus();
 };
 #endif
 

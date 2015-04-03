@@ -1,0 +1,13 @@
+﻿Build started 2/4/2015 4:31:15 PM.
+     1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\LogSystem.lib"
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Task.lib"
+         "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Planner.lib"
+         GUI-API.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib
+     1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.95
