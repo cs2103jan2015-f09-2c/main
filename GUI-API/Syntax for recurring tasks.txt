@@ -1,0 +1,4 @@
+recur meeting; date 170315; time 0800 to 0900; weekly; 5
+
+Keyword for the frequency of recurring is weekly, daily, monthly, yearly
+followed by the number of recurrences. If 5 is entered, it means that the same task appears 5 times in total. 
