@@ -1,6 +1,7 @@
 #include "Planner.h"
 #include "Log.h"
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <list>
 #include <ctime>
@@ -94,27 +95,9 @@ string Planner::addTask(Task newTask){
 	duplicatePresent=isDuplicatePresent(newTask);
 	//check where to slot
 	list<Task>::iterator iter;
+	list<Task>::iterator iter1, iter2;
 
-	/*	old logic
-
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		if (newTask.getDateStart().year <= (*iter).getDateStart().year)
-			if (newTask.getDateStart().month < (*iter).getDateStart().month)
-				break;
-			else
-				if (newTask.getDateStart().month == (*iter).getDateStart().month)
-					if (newTask.getDateStart().day < (*iter).getDateStart().day)
-						break;
-					else
-						if (newTask.getDateStart().day == (*iter).getDateStart().day){
-							if (newTask.getTimeStart() <= (*iter).getTimeStart())
-								break;
-						}
-	}
-
-*/
-
-	//case when new task has no date and no time
+	//case 1: when new task has no date and no time
 	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
 		//look for slot at the end of tasks with no date and no time
 		for (iter = All.begin(); iter != All.end(); ++iter){
@@ -124,21 +107,16 @@ string Planner::addTask(Task newTask){
 		}
 	}
 
-	//case when new task has no date and has time (either 1 or 2 times)
+	//case 2: when new task has no date and has time (either 1 or 2 times)
 	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
 		for (iter = All.begin(); iter != All.end(); ++iter){
 			if ((*iter).getTimeStart() > newTask.getTimeStart()){
 				break;
 			}
-			else if ((*iter).getTimeStart() == newTask.getTimeStart()){
-				if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
-					break;
-				}
-			}
 		}
 	}
 
-	//case when new task has 2 dates (0,1 or 2 times)
+	//case 3:  when new task has 2 dates (0,1 or 2 times)
 	else if (newTask.getNumOfDates() == 2){
 		for (iter = All.begin(); iter != All.end(); ++iter){
 			if ((*iter).getDateStart().year > newTask.getDateStart().year){
@@ -163,39 +141,68 @@ string Planner::addTask(Task newTask){
 						}
 					}
 				}
-			}
+			} 
 		}
 	}
 
-	//case when new task has 1 date (0,1 or 2 times)
+	//case 4: when new task has 1 date (0,1 or 2 times)
 	else if (newTask.getNumOfDates() == 1){
 		for (iter = All.begin(); iter != All.end(); ++iter){
-			if ((*iter).getDateStart().year > newTask.getDateEnd().year){
+			if ((*iter).getDateEnd().year > newTask.getDateEnd().year){
 				break;
 			}
-			else if ((*iter).getDateStart().year == newTask.getDateEnd().year){
-				if ((*iter).getDateStart().month > newTask.getDateEnd().month){
+			else if ((*iter).getDateEnd().year == newTask.getDateEnd().year){
+				if ((*iter).getDateEnd().month > newTask.getDateEnd().month){
 					break;
 				}
-				else if ((*iter).getDateStart().month == newTask.getDateEnd().month){
-					if ((*iter).getDateStart().day > newTask.getDateEnd().day){
+				else if ((*iter).getDateEnd().month == newTask.getDateEnd().month){
+					if ((*iter).getDateEnd().day > newTask.getDateEnd().day){
 						break;
 					}
-					else if ((*iter).getDateStart().day == newTask.getDateEnd().day){
-						if ((*iter).getTimeStart() > newTask.getTimeStart()){
+					else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
+					//	if ((*iter).getTimeStart() > newTask.getTimeStart()){
 							break;
-						}
-						else if ((*iter).getTimeStart() == newTask.getTimeStart()){
+					//	}
+	/*					else if ((*iter).getTimeStart() == newTask.getTimeStart()){
 							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
 								break;
 							}
-						}
+						}		*/
 					}
 				}
 			}
 		}
 	}
 
+	//sort
+/*	iter = All.begin();
+	if (newTask.getNumOfDates() == 1){
+		for (iter = All.begin(); iter != All.end(); ++iter){
+			if ((*iter).getDateEnd().year > newTask.getDateEnd().year){
+				break;
+			}
+			else if ((*iter).getDateEnd().year == newTask.getDateEnd().year){
+				if ((*iter).getDateEnd().month > newTask.getDateEnd().month){
+					break;
+				}
+				else if ((*iter).getDateEnd().month == newTask.getDateEnd().month){
+					if ((*iter).getDateEnd().day > newTask.getDateEnd().day){
+						break;
+					}
+					else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
+					//	if ((*iter).getTimeStart() > newTask.getTimeStart()){
+							break;
+					//	}
+					else if ((*iter).getTimeStart() == newTask.getTimeStart()){
+							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+								break;
+							}
+						}	
+					}
+				}
+			}
+		}
+	} */
 	All.insert(iter, newTask);
 	
 	string status;
@@ -593,6 +600,8 @@ string Planner::statusToString(string command, Task theTask){
 //Private Functions
 string Planner::descriptionOfTaskToString(Task theTask){
 	ostringstream out;
+	int length;
+	int x = theTask.getTimeStart();
 	out << theTask.getDescription() << " ";
 
 	switch (theTask.getNumOfDates()){
@@ -603,7 +612,7 @@ string Planner::descriptionOfTaskToString(Task theTask){
 		break;
 	case 2:
 		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
-		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year ;
+		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " " ;
 		break;
 	}
 
@@ -611,11 +620,44 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	case 0:
 		break;
 	case 1:
-		out << theTask.getTimeStart();
+		length = 1;
+		x = theTask.getTimeStart();
+		while (x /= 10) {
+			length++;
+		}
+		if (length <= 4) {
+			out << setfill('0') << setw(5) << theTask.getTimeStart();
+		}
+		else {
+			out << theTask.getTimeStart();
+		}
 		break;
 	case 2:
-		out << theTask.getTimeStart() << " to ";
-		out << theTask.getTimeEnd();
+		length = 1;
+		x = theTask.getTimeStart();
+		while (x /= 10) {
+			length++;
+		}
+		if (length ==3) {
+			out << setfill('0') << setw(4) << theTask.getTimeStart();
+		}
+		else {
+			out << theTask.getTimeStart();
+		}
+
+		out << " to ";
+
+		length = 1;
+		x = theTask.getTimeEnd();
+		while (x /= 10) {
+			length++;
+		}
+		if (length == 3) {
+			out << setfill('0') << setw(4) << theTask.getTimeEnd();
+		}
+		else {
+			out << theTask.getTimeEnd();
+		}
 		break;
 	default:
 		cout << ERROR_MESSAGE_FATAL;
@@ -997,6 +1039,40 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 			}
 		}
 	}
+	//case 1a: currentDate + 7 days = current month, same year
+	if (currentDate.day <= 23) {
+		if ((*it).getDateStart().month == (currentDate.month)) {
+			if ((*it).getDateStart().day <= (currentDate.day + 7) && (*it).getDateStart().day >= currentDate.day) {
+				if ((*it).getDateStart().year == currentDate.year) {
+					isWithinHome = true;
+				}
+			}
+		}
+	}
+	//case 2a: currentDate + 7 days = next month, task = current month, not december
+	else if ((*it).getDateStart().month == (currentDate.month)) {
+		if ((*it).getDateStart().year == currentDate.year) {
+			if ((*it).getDateStart().day <= 31 && (*it).getDateStart().day >= currentDate.day) {
+				isWithinHome = true;
+			}
+		}
+	}
+	//case 3a:  currentDate + 7 days = next month, task = next month, not december
+	else if ((*it).getDateStart().month == (currentDate.month + 1)) {
+		if ((*it).getDateStart().year == currentDate.year) {
+			if ((*it).getDateStart().day < (7 - (30 - currentDate.day))) {
+				isWithinHome = true;
+			}
+		}
+	}
+	//case 4a: current date + 7 days = next month, december
+	else if ((*it).getDateStart().year == (currentDate.year + 1)) {
+		if ((*it).getDateStart().month == 1) {
+			if ((*it).getDateStart().day < (7 - (30 - currentDate.day))) {
+				isWithinHome = true;
+			}
+		}
+	}
 	//case 5: floating task
 	if ((*it).getDateStart().year == -1 && (*it).getDateStart().month == -1 && (*it).getDateStart().day == -1){
 		if ((*it).getDateEnd().year == -1 && (*it).getDateEnd().month == -1 && (*it).getDateEnd().day == -1){
@@ -1083,6 +1159,40 @@ bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 		}
 	}
 
+	//case 1a: currentDate + 7 days = current month, same year
+	if (currentDate.day <= 23) {
+		if ((*it).getDateStart().month == (currentDate.month)) {
+			if ((*it).getDateStart().day <= (currentDate.day + 7) && (*it).getDateStart().day >= currentDate.day) {
+				if ((*it).getDateStart().year == currentDate.year) {
+					isWithinUpcoming = false;
+				}
+			}
+		}
+	}
+	//case 2a: currentDate + 7 days = next month, task = current month, not december
+	else if ((*it).getDateStart().month == (currentDate.month)) {
+		if ((*it).getDateStart().year == currentDate.year) {
+			if ((*it).getDateStart().day <= 31 && (*it).getDateStart().day >= currentDate.day) {
+				isWithinUpcoming = false;
+			}
+		}
+	}
+	//case 3a:  currentDate + 7 days = next month, task = next month, not december
+	else if ((*it).getDateStart().month == (currentDate.month + 1)) {
+		if ((*it).getDateStart().year == currentDate.year) {
+			if ((*it).getDateStart().day < (7 - (30 - currentDate.day))) {
+				isWithinUpcoming = false;
+			}
+		}
+	}
+	//case 4a: current date + 7 days = next month, december
+	else if ((*it).getDateStart().year == (currentDate.year + 1)) {
+		if ((*it).getDateStart().month == 1) {
+			if ((*it).getDateStart().day < (7 - (30 - currentDate.day))) {
+				isWithinUpcoming = false;
+			}
+		}
+	}
 	// case 5-7 to check if entry should be in missed
 
 	//case 5: passed year
