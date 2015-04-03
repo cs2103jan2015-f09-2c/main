@@ -40,6 +40,7 @@ private:
 	string modifyDate(string, string);
 	string insertNewDateInfo(string, string);
 	string processDailyRecur(string);
+	bool is31DayMonth(int);
 	string processWeeklyRecur(string);
 	string processMonthlyRecur(string);
 	string processYearlyRecur(string);

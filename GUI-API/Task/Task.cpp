@@ -417,7 +417,50 @@ string Task::processDailyRecur(string date){
 	int day, month, year;
 	splitDate(date, day, month, year);
 	
+	if (month == 2){						//case when it is Feb 28th
+		if (day == 28){
+			day = 1;
+			month++;
+		}
+	}
+	else if (is31DayMonth(month)){
+		if (day == 31){						//case when it is
+			if (month == 12){				//31st Dec
+				day = 1;
+				month = 1;
+				year++;
+			}
+			else{							//case when it is 31st but not Dec
+				day = 1;
+				month++;
+			}
+		}
+		else{								//case when it is month with 31 days and it is any day from 1-30
+			day++;
+		}
+	}
+	else{
+		if (day == 30){						//case when it is month with 30 days and day is 30th
+			day = 1;
+			month++;
+		}
+		else{								//case when it is month with 30 days and day is 1-29
+			day++;
+		}
+	}
+
+	mergeDate(date, day, month, year);
 	return date;
+}
+
+bool Task::is31DayMonth(int month){
+	bool is31DayMonth = false;
+
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+		is31DayMonth = true;
+	}
+
+	return is31DayMonth;
 }
 
 string Task::processWeeklyRecur(string date){
