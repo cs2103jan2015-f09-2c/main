@@ -75,6 +75,7 @@ private:
 	bool isClashPresent(Task newTask);
 	void checkListForClashes();
 	bool checkTaskForClashes(Task Task1, Task Task2);
+	bool Date2time(Task, Task);
 	
 public:
 

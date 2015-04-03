@@ -320,13 +320,11 @@ bool Task::doneStatus(){
 	return _isDone;
 }
 
+/************************************************************************************************
 
+Recur function
 
-
-
-//******************************************************************************************************************************
-
-
+************************************************************************************************/
 
 void Task::recurTask(string details){
 	string frequency, taskDetails;
@@ -349,15 +347,15 @@ void Task::recurTask(string details){
 		_recurringTasks.push_back(*recTaskPtr);
 		delete recTaskPtr;
 		recTaskPtr = NULL;
-		details = modifyDetails(i, frequency, details);
+		details = modifyDetails(frequency, details);
 	}
 
 }
 
-string Task::modifyDetails(int n, string frequency, string details){
+string Task::modifyDetails(string frequency, string details){
 	int index, numOfDates;
-	string keyword, startDate, endDate, separator, dateInfo, newDate;
-	ostringstream newDateInfo;
+	string keyword, startDate, endDate, separator, dateInfo, newDateInfo;
+	ostringstream updatedInfo;
 
 	dateInfo = extractDateInfo(details);
 	numOfDates = extractDateInfoFields(dateInfo, keyword, startDate, endDate, separator);
@@ -365,16 +363,18 @@ string Task::modifyDetails(int n, string frequency, string details){
 	switch (numOfDates){
 	case 1:
 		endDate = modifyDate(endDate, frequency);
-		newDateInfo << keyword << " " << endDate;
-		newDate = newDateInfo.str();
-		details = insertNewDateInfo(details, newDate);
+		updatedInfo << keyword << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
 		break;
 
 	case 2:
 //		modifyStartAndEndDate(startDate, endDate);
-//		modifyDate(start,freq)
-//		modifyDate(end,freq)
-
+		startDate = modifyDate(startDate, frequency);
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << keyword << " " << startDate << " " << separator << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
 		break;
 	default:
 		break;
@@ -464,8 +464,10 @@ bool Task::is31DayMonth(int month){
 }
 
 string Task::processWeeklyRecur(string date){
-	int day, month, year;
-	splitDate(date, day, month, year);
+
+	for (int i = 1; i <= 7; i++){				//since each week is 7 days, just loop processDailyRecur 7 times
+		date = processDailyRecur(date);
+	}
 
 	return date;
 }

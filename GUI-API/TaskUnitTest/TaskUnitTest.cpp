@@ -133,8 +133,7 @@ namespace TaskUnitTest
 
 			testTask.addDetails("Meeting in school; date 150315; time 1300 to 1500");
 
-			if (testTask.getDateStart().year == -1 && testTask.getDateStart().month == -1 && testTask.getDateStart().day == -1){
-				if (testTask.getDateEnd().year == 15 && testTask.getDateEnd().month == 3 && testTask.getDateEnd().day == 15)
+			if (testTask.getNumOfDates() == 1){
 				isOneDate = true;
 			}
 

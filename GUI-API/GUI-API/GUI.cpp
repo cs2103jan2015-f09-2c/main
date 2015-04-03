@@ -100,7 +100,7 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 	}
 
 	else
-	if (command == "Y" || command == "N"){
+	if (command == "Y" || command == "N" || command == "y" || command == "n"){
 		processCommandClear(command);
 	}
 
@@ -241,7 +241,7 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 }
 
 void Logic::processCommandClear(string command){
-	if (command == "Y") {
+	if (command == "Y" || command == "y") {
 		outcome = myPlanner.clear();
 	}
 	else {
@@ -269,7 +269,7 @@ void Logic::processCommandShowDone(string currentView){
 }
 
 void Logic::processCommandAll(){
-	//display = myPlanner.AllToString();
+	display = myPlanner.AllToString();
 	outcome = "All list";													//prompt for All (refactor needed)
 }
 

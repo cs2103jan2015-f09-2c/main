@@ -207,8 +207,8 @@ Namespace SystemTests
         '''4. event c 4/5/15 to 6/4/151000 to 1100
         ''''
         '''</summary>
-        Public UIDisplayWindowEditText As String = "1. event d "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"2. event a 3/4/15 to 4/4/15"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"3. event b 1000 to 1100"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"4. event c 4/5"& _ 
-            "/15 to 6/4/151000 to 1100"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
+        Public UIDisplayWindowEditText As String = "1. event d " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "2. event b 1000 to 1100 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "3. event a 3/4/15 to 4/4/15 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "4. event c 4/5" & _
+            "/15 to 6/4/15 1000 to 1100 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         #End Region
     End Class
     
