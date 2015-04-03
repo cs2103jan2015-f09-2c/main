@@ -169,7 +169,7 @@ namespace PlannerUnitTest
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
 			bool doesFunctionWork = false;
-			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testTask1.addDetails("Test task 1; date 010203; time 1100 #impt"); //assume Task.addDetail works
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315"); 
 			testPlanner.addTask(testTask2);
@@ -177,6 +177,8 @@ namespace PlannerUnitTest
 			testPlanner.addTask(testTask3);
 			string s = testPlanner.AllToString();
 			string t = testPlanner.toString("Missed");
+	//		+s	"1. Test task 3 1900 \r\n2. Test task 1 1/2/3 1100 #impt\r\n3. Test task 2 11/3/15 to 12/3/15 \r\n"	std::basic_string<char, std::char_traits<char>, std::allocator<char> >
+
 			if (testPlanner.AllToString() == "1. Test task 3 1900 \r\n2. Test task 1 1/2/3 1100 \r\n3. Test task 2 11/3/15 to 12/3/15 \r\n"){
 				doesFunctionWork = true;
 			}

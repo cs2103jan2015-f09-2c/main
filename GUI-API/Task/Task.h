@@ -5,7 +5,6 @@
 #include <string>
 #include <list>
 
-
 using namespace std;
 
 struct taskDate{
@@ -27,13 +26,21 @@ private:
 	int _idNumber;
 	int _numOfDates;
 	int _numOfTimes;
+	Log* LogData = Log::getInstance();
 	list<Task> _recurringTasks;
-	string processImportance(string);
-	string processDescription(string);			
+
+	void processImportance(string&);
+	void processDescription(string&);			
 	void processDate(string);					
-	void processTime(string);					
 	void storeStartDate(string);				
 	void storeEndDate(string);
+	void processTime(string);
+	void storeStartTime(string);
+	void storeEndTime(string);
+	void process_NoDelimiter(string);
+	void process_OneDelimiter(string);
+	void process_TwoDelimiter(string);
+
 	string modifyDetails(string, string);
 	string extractDateInfo(string);
 	string modifyDate(string, string);
@@ -45,8 +52,7 @@ private:
 	string processYearlyRecur(string);
 	void splitDate(string, int&, int&, int&);
 	void mergeDate(string&, int, int, int);
-	int extractDateInfoFields(string, string&, string&, string&, string&);
-	Log* LogData = Log::getInstance();
+	int extractDateInfoFields(string, string&, string&, string&, string&);	
 
 public:
 	Task();

@@ -117,7 +117,7 @@ namespace UI {
 			this->missedButton->TabIndex = 2;
 			this->missedButton->Text = L"Missed";
 			this->missedButton->UseVisualStyleBackColor = false;
-			this->missedButton->Click += gcnew System::EventHandler(this, &GUI::missedButton_Click);
+			this->missedButton->Click += gcnew System::EventHandler(this, &GUI::executeMissed);
 			// 
 			// homeButton
 			// 
@@ -130,7 +130,7 @@ namespace UI {
 			this->homeButton->TabIndex = 3;
 			this->homeButton->Text = L"Home";
 			this->homeButton->UseVisualStyleBackColor = false;
-			this->homeButton->Click += gcnew System::EventHandler(this, &GUI::homeButton_Click);
+			this->homeButton->Click += gcnew System::EventHandler(this, &GUI::executeHome);
 			// 
 			// upcomingButton
 			// 
@@ -143,7 +143,7 @@ namespace UI {
 			this->upcomingButton->TabIndex = 4;
 			this->upcomingButton->Text = L"Upcoming";
 			this->upcomingButton->UseVisualStyleBackColor = false;
-			this->upcomingButton->Click += gcnew System::EventHandler(this, &GUI::upcomingButton_Click);
+			this->upcomingButton->Click += gcnew System::EventHandler(this, &GUI::executeUpcoming);
 			// 
 			// prompt
 			// 
@@ -166,7 +166,7 @@ namespace UI {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
 			this->Name = L"GUI";
-			this->Load += gcnew System::EventHandler(this, &GUI::GUI_Load_1);
+			this->Load += gcnew System::EventHandler(this, &GUI::GUI_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -179,8 +179,8 @@ namespace UI {
 
 		************************************************************************************************/
 
-	private: System::Void GUI_Load_1(System::Object^  sender, System::EventArgs^  e) {
-		homeButton_Click(sender, e);
+	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
+		executeHome(sender, e);
 	}
 
 			 /************************************************************************************************
@@ -234,18 +234,6 @@ namespace UI {
 		}
 	}
 
-	private: System::Void executeHome(System::Object^  sender, System::EventArgs^  e) {
-		homeButton_Click(sender, e);
-	}
-
-	private: System::Void executeUpcoming(System::Object^  sender, System::EventArgs^  e) {
-		upcomingButton_Click(sender, e);
-	}
-
-	private: System::Void executeMissed(System::Object^  sender, System::EventArgs^  e) {
-		missedButton_Click(sender, e);
-	}
-
 	private: System::Void executeHelp() {
 		currentView = HELP;
 		processInput(userInput->Text, currentView);
@@ -283,7 +271,8 @@ namespace UI {
 	}
 
 	private: System::Void processInput(String^ managedInput, String^ managedView) {
-		String^ strOutput;
+		String^ strOutput = "";
+		String^ strPrompt = "";
 
 		string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
 		string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
@@ -292,7 +281,8 @@ namespace UI {
 
 		strOutput = gcnew String(plannerLogic->displayContent().c_str());
 		displayWindow->Text = strOutput;
-		prompt->Text = gcnew String(plannerLogic->displayOutcome().c_str());
+		strPrompt = gcnew String(plannerLogic->displayOutcome().c_str());
+		prompt->Text = strPrompt;
 	}
 
 			 /************************************************************************************************
@@ -330,19 +320,19 @@ namespace UI {
 		colourSwitch(currentView);
 	}
 
-	private: System::Void homeButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void executeHome(System::Object^  sender, System::EventArgs^  e) {
 		currentView = HOME;
 		switchView(currentView);
 		prompt->Text = HOME;
 	}
 
-	private: System::Void upcomingButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void executeUpcoming(System::Object^  sender, System::EventArgs^  e) {
 		currentView = UPCOMING;
 		switchView(currentView);
 		prompt->Text = UPCOMING;
 	}
 
-	private: System::Void missedButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void executeMissed(System::Object^  sender, System::EventArgs^  e) {
 		currentView = MISSED;
 		switchView(currentView);
 		prompt->Text = MISSED;
