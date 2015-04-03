@@ -12,6 +12,7 @@ private:
 	vector<string> _logList;
 	int _numLines;
 	void saveLog();
+//	int numOfLinesInFile();
 	//void loadLog();
 
 
