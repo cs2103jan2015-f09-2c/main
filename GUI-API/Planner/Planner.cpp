@@ -232,7 +232,7 @@ bool Planner::tasksAreTheSame(Task Task1, Task Task2){
 	bool same = true;
 	string s = Task1.getDescription();
 	string t = Task2.getDescription();
-	t = t.substr(0, t.end() - t.begin()-1);
+	t = t.substr(0, t.end() - t.begin());
 	if (s != t){// i dont know why but this does not work if i just put in the Task.getdescriptions, so i put 2 strings
 		
 		same = false;
