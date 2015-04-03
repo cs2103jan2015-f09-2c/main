@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskUnitTest", "TaskUnitTes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StorageUnitTest", "StorageUnitTest\StorageUnitTest.vcxproj", "{A0E224F8-8CAA-4DFA-9ADC-82CECCC0F958}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SystemTests", "SystemTests\SystemTests.vbproj", "{EBCB06C1-D391-4C17-9CB0-092820F19FDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,16 @@ Global
 		{A0E224F8-8CAA-4DFA-9ADC-82CECCC0F958}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{A0E224F8-8CAA-4DFA-9ADC-82CECCC0F958}.Release|Win32.ActiveCfg = Release|Win32
 		{A0E224F8-8CAA-4DFA-9ADC-82CECCC0F958}.Release|Win32.Build.0 = Release|Win32
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EBCB06C1-D391-4C17-9CB0-092820F19FDB}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
