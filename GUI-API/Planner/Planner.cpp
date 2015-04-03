@@ -239,15 +239,32 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 		}
 	}
 	//task1 one date, task2 2 date, 2 time
+	if (Task1.getNumOfDates() == 1 && Task2.getNumOfDates() == 2) {
+		isClash = Date2time(Task2, Task1);
+	}
+	else {
+		isClash = Date2time(Task1, Task2);
+	}
+
+	//floating
+	if (Task1.getNumOfDates() == 0 || Task2.getNumOfDates() == 0){
+		isClash = false;
+	}
+
+	return isClash;
+}
+
+bool Planner::Date2time(Task Task1, Task Task2){
+	bool isClash = false;
 	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
 		if (Task1.getDateEnd().month <= Task2.getDateEnd().month && Task1.getDateEnd().month >= Task2.getDateEnd().month) {
-			if (Task1.getDateEnd().day <= Task2.getDateEnd().day && Task1.getDateEnd().day >= Task2.getDateStart().day) {
+			if (Task2.getDateEnd().day <= Task1.getDateEnd().day && Task2.getDateEnd().day >= Task1.getDateStart().day) {
 				if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
 					isClash = true;
 				}
 			}
 		}
-	}				
+	}
 
 	return isClash;
 }
