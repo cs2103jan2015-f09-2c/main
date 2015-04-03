@@ -163,19 +163,28 @@ string Planner::addTask(Task newTask){
 
 	//case when new task has 1 date (0,1 or 2 times)
 	else if (newTask.getNumOfDates() == 1){
+		int numofTimes = newTask.getNumOfTimes();
+		int yearS = newTask.getDateStart().year;
+		int monthS = newTask.getDateStart().month;
+		int dayS = newTask.getDateStart().day;
+
 		for (iter = All.begin(); iter != All.end(); ++iter){
-			if ((*iter).getDateStart().year > newTask.getDateEnd().year){
+			int IyearE = (*iter).getDateStart().year;
+			int ImonthE = (*iter).getDateStart().month;
+			int IdayE = (*iter).getDateStart().day;
+
+			if ((*iter).getDateStart().year > newTask.getDateStart().year){
 				break;
 			}
-			else if ((*iter).getDateStart().year == newTask.getDateEnd().year){
-				if ((*iter).getDateStart().month > newTask.getDateEnd().month){
+			else if ((*iter).getDateStart().year == newTask.getDateStart().year){
+				if ((*iter).getDateStart().month > newTask.getDateStart().month){
 					break;
 				}
-				else if ((*iter).getDateStart().month == newTask.getDateEnd().month){
-					if ((*iter).getDateStart().day > newTask.getDateEnd().day){
+				else if ((*iter).getDateStart().month == newTask.getDateStart().month){
+					if ((*iter).getDateStart().day > newTask.getDateStart().day){
 						break;
 					}
-					else if ((*iter).getDateStart().day == newTask.getDateEnd().day){
+					else if ((*iter).getDateStart().day == newTask.getDateStart().day){
 						if ((*iter).getTimeStart() > newTask.getTimeStart()){
 							break;
 						}
@@ -518,7 +527,7 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	case 0:
 		break;
 	case 1:
-		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
+		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " ";
 		break;
 	case 2:
 		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
@@ -871,9 +880,9 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinHome = false;
 	//case 1: currentDate + 7 days = current month, same year
 	if (currentDate.day <= 23) {
-		if ((*it).getDateEnd().month == (currentDate.month)) {
-			if ((*it).getDateEnd().day <= (currentDate.day + 7) && (*it).getDateEnd().day >= currentDate.day) {
-				if ((*it).getDateEnd().year == currentDate.year) {
+		if ((*it).getDateStart().month == (currentDate.month)) {
+			if ((*it).getDateStart().day <= (currentDate.day + 7) && (*it).getDateStart().day >= currentDate.day) {
+				if ((*it).getDateStart().year == currentDate.year) {
 					isWithinHome = true;
 				}
 			}

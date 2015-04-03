@@ -69,6 +69,21 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 		}
 
+		TEST_METHOD(testAdd_manyTasks_differentDates_noTime)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			testTask1.addDetails("Test task 1; date 030415"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 040415");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 020415"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			string actualOutput = testPlanner.AllToString();
+			string expectedOutput = "1. Test task 3 2/4/15 \r\n2. Test task 1 3/4/15 \r\n3. Test task 2 4/4/15 \r\n";
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
 		TEST_METHOD(testClear)
 		{
 			Planner testPlanner;
