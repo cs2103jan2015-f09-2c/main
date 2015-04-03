@@ -320,13 +320,11 @@ bool Task::doneStatus(){
 	return _isDone;
 }
 
+/************************************************************************************************
 
+Recur function
 
-
-
-//******************************************************************************************************************************
-
-
+************************************************************************************************/
 
 void Task::recurTask(string details){
 	string frequency, taskDetails;
@@ -349,12 +347,12 @@ void Task::recurTask(string details){
 		_recurringTasks.push_back(*recTaskPtr);
 		delete recTaskPtr;
 		recTaskPtr = NULL;
-		details = modifyDetails(i, frequency, details);
+		details = modifyDetails(frequency, details);
 	}
 
 }
 
-string Task::modifyDetails(int n, string frequency, string details){
+string Task::modifyDetails(string frequency, string details){
 	int index, numOfDates;
 	string keyword, startDate, endDate, separator, dateInfo, newDateInfo;
 	ostringstream updatedInfo;
@@ -372,10 +370,11 @@ string Task::modifyDetails(int n, string frequency, string details){
 
 	case 2:
 //		modifyStartAndEndDate(startDate, endDate);
-//		startDate = modifyDate(startDate, frequency);
-//		endDate = modifyDate(endDate, frequency);
-//		updatedInfo<<keyword<<
-
+		startDate = modifyDate(startDate, frequency);
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << keyword << " " << startDate << " " << separator << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
 		break;
 	default:
 		break;
