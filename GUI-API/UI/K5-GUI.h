@@ -41,7 +41,7 @@ namespace UI {
 		String^ ALL = "All";
 		String^ DONE = "Done";
 		String^ SEARCH = "Search";
-		String^ CLEAR_PROMPT = "Are you sure you want to clear the entire planner? Enter <Y> to confirm or <N> to cancel";
+		String^ CLEAR_PROMPT = "Are you sure you want to clear? Enter <Y> to confirm or <N> to cancel";
 
 	public:
 		GUI(void){
@@ -259,7 +259,6 @@ namespace UI {
 	}
 
 	private: System::Void executeClear() {
-		currentView = SEARCH;
 		processInput(userInput->Text, currentView);
 		clearTrigger = false;
 	}
