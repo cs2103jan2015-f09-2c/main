@@ -562,6 +562,10 @@ void Task::markClashAsTrue(){
 	_isClash = true;
 }
 
+void Task::markClashAsFalse(){
+	_isClash = false;
+}
+
 bool Task::clashStatus(){
 	if (_isClash == true){
 		return true;

@@ -76,6 +76,7 @@ public:
 	list<Task> getRecurringTasks();
 	bool areDatesTheSame(taskDate,taskDate);
 	void markClashAsTrue();
+	void markClashAsFalse();
 	bool clashStatus();
 };
 #endif
