@@ -145,8 +145,6 @@ string Planner::addTask(Task newTask){
 			} 
 		}
 	}
-
-<<<<<<< HEAD
 	//case 4: when new task has 1 date (0,1 or 2 times)
 	else if (newTask.getNumOfDates() == 1){
 		int numofTimes = newTask.getNumOfTimes();
@@ -155,7 +153,6 @@ string Planner::addTask(Task newTask){
 		int dayS = newTask.getDateStart().day;
 
 		for (iter = All.begin(); iter != All.end(); ++iter){
-<<<<<<< HEAD
 			int IyearE = (*iter).getDateStart().year;
 			int ImonthE = (*iter).getDateStart().month;
 			int IdayE = (*iter).getDateStart().day;
@@ -165,36 +162,33 @@ string Planner::addTask(Task newTask){
 			}
 			else if ((*iter).getDateStart().year == newTask.getDateEnd().year){
 				if ((*iter).getDateStart().month > newTask.getDateStart().month){
-=======
-			if ((*iter).getDateEnd().year > newTask.getDateEnd().year){
-				break;
-			}
-			else if ((*iter).getDateEnd().year == newTask.getDateEnd().year){
-				if ((*iter).getDateEnd().month > newTask.getDateEnd().month){
->>>>>>> 65d9018df36401be37b639a8e75bed8a31d8adc5
-					break;
-				}
-				else if ((*iter).getDateEnd().month == newTask.getDateEnd().month){
-					if ((*iter).getDateEnd().day > newTask.getDateEnd().day){
+					if ((*iter).getDateEnd().year > newTask.getDateEnd().year){
 						break;
 					}
-					else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
-						if ((*iter).getTimeStart() > newTask.getTimeStart()){
+					else if ((*iter).getDateEnd().year == newTask.getDateEnd().year){
+						if ((*iter).getDateEnd().month > newTask.getDateEnd().month){
 							break;
 						}
-						else if ((*iter).getTimeStart() == newTask.getTimeStart()){
-							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+						else if ((*iter).getDateEnd().month == newTask.getDateEnd().month){
+							if ((*iter).getDateEnd().day > newTask.getDateEnd().day){
 								break;
+							}
+							else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
+								if ((*iter).getTimeStart() > newTask.getTimeStart()){
+									break;
+								}
+								else if ((*iter).getTimeStart() == newTask.getTimeStart()){
+									if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+										break;
+									}
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-	}		
-
-=======
->>>>>>> 50885ac40fece77848019c9efce8b60a89a5c3c3
+	}
 	All.insert(iter, newTask);
 	
 	string status;
