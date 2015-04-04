@@ -214,6 +214,12 @@ string Planner::addTask(Task newTask){
 }
 
 void Planner::checkListForClashes(){
+	list<Task> ::iterator it;
+	it = All.begin();
+	while (it != All.end()){
+		(*it).markClashAsFalse();
+		it++;
+	}
 	list<Task> ::iterator iter1, iter2;
 	iter1 = All.begin();
 	iter2 = All.begin();
@@ -415,7 +421,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 	stringstream message;
 	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
-	
+	checkListForClashes();
 	return status;
 }
 
@@ -432,7 +438,7 @@ string Planner::deleteIndex(int idNumber){
 	string status;
 	status = statusToString(COMMAND_DELETE, *iter2);
 	All.erase(iter2);
-
+	checkListForClashes();
 	generateAllOtherList();
 	//logging
 	stringstream message;
@@ -456,6 +462,7 @@ string Planner::undo(void){
 	}
 	string status;
 	status = undoStatusToString();
+	checkListForClashes();
 	generateAllOtherList();
 	return status;
 }
@@ -481,6 +488,7 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 		addTask(newTask);
 		lastEdit.addedTask = lastEntry.lastTask;
 		lastEntry.lastCommand = COMMAND_EDIT;
+		checkListForClashes();
 		generateAllOtherList();
 		LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
 		return editStatusToString();

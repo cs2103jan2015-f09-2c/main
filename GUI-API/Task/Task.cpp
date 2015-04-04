@@ -4,6 +4,8 @@
 #include <string>
 #include <sstream>
 
+const string FATAL_ERROR = "Fatal Error!";
+
 using namespace std;
 
 /************************************************************************************************
@@ -33,88 +35,99 @@ Task::~Task(){
 
 //Function takes in user input and stores the task details
 void Task::addDetails(string details){
-	int index, noOfDelimiters;
-	string dateInfo, timeInfo;
+	int noOfDelimiters;
 
-	details = processImportance(details);
+	processImportance(details);
 
 	noOfDelimiters = count(details.begin(), details.end(), ';');
 	switch (noOfDelimiters){
 	case 0:
-		LogData->addLog("UPDATE", "In addDetails, Case 0 was called");
-		_description = details;
-		LogData->addLog("UPDATE", "In addDetails, Case 0 was finished successfully");
+		process_NoDelimiter(details);
 		break;
 	case 1:
-		LogData->addLog("UPDATE", "In addDetails, Case 1 was called");
-		details = processDescription(details);
-		if (details.find("date") != string::npos){
-			processDate(details);
-		}
-		else if (details.find("time") != string::npos){
-			processTime(details);
-		}
-		
-		LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
+		process_OneDelimiter(details);
 		break;
 	case 2:
-		LogData->addLog("UPDATE", "In addDetails, Case 2 was called");
-		details = processDescription(details);
-		index = details.find(';');
-		if (details.substr(0, index).find("date") != string::npos){
-			dateInfo = details.substr(0, index);
-		}
-		else{
-			timeInfo = details.substr(0, index);
-		}
-		index = index + 1;
-		if (timeInfo.empty()){
-			timeInfo = details.substr(index, details.size() - index);
-		}
-		else{
-			dateInfo = details.substr(index, details.size() - index);
-		}
-		processDate(dateInfo);
-		processTime(timeInfo);
-		LogData->addLog("UPDATE", "In addDetails, Case 2 was finished successfully");
+		process_TwoDelimiter(details);
 		break;
 	default:
-		cout << "fatal error!" << endl;
+		cout << FATAL_ERROR << endl;
 	}
+}
+
+void Task::process_NoDelimiter(string details) {
+	LogData->addLog("UPDATE", "In addDetails, Case 0 was called");
+	_description = details;
+	LogData->addLog("UPDATE", "In addDetails, Case 0 was finished successfully");
+}
+
+void Task::process_OneDelimiter(string details) {
+	LogData->addLog("UPDATE", "In addDetails, Case 1 was called");
+	processDescription(details);
+	if (details.find("date") != string::npos){
+		processDate(details);
+	}
+	else {
+		processTime(details);
+	}
+	LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
+}
+
+void Task::process_TwoDelimiter(string details) {
+	int semicolonPos;
+	string durationInfo, dateInfo, timeInfo;
+	LogData->addLog("UPDATE", "In addDetails, Case 2 was called");
+
+	processDescription(details);
+	semicolonPos = details.find(';');
+	durationInfo = details.substr(0, semicolonPos);
+	if (durationInfo.find("date") != string::npos){
+		dateInfo = details.substr(0, semicolonPos);
+	}
+	else if (durationInfo.find("time") != string::npos){
+		timeInfo = details.substr(0, semicolonPos);
+	}
+	semicolonPos++;
+	if (timeInfo.empty()){
+		timeInfo = details.substr(semicolonPos, details.size() - semicolonPos);
+	}
+	else if (dateInfo.empty()){
+		dateInfo = details.substr(semicolonPos, details.size() - semicolonPos);
+	}
+	processDate(dateInfo);
+	processTime(timeInfo);
+	LogData->addLog("UPDATE", "In addDetails, Case 2 was finished successfully");
 }
 
 //Checks if task is important and returns the remainder of user input
-string Task::processImportance(string details){
-	int index;
-	index = details.find("#");						//to check if task is labelled important
-	if (index != string::npos){
+void Task::processImportance(string& details){
+	int hashPosition;
+	hashPosition = details.find("#");						//to check if task is labelled important
+	if (hashPosition != string::npos){
 		_isImpt = true;
-		details = details.substr(0, index);
+		details = details.substr(0, hashPosition);
 	}
-	return details;
 }
 
 //stores description into task object and returns the remainder of user input
-string Task::processDescription(string details){
-	int index;
+void Task::processDescription(string& details){
+	int descriptionEnd;
 
-	index = details.find_first_of(";");
-	_description = details.substr(0, index);
-	index = index + 1;
-	details = details.substr(index, details.size() - index);				//cut out the description part to be left with the date and/or time part
+	descriptionEnd = details.find_first_of(";");
+	_description = details.substr(0, descriptionEnd);
+	descriptionEnd++;
+	details = details.substr(descriptionEnd, details.size() - descriptionEnd);				//cut out the description part to be left with the date and/or time part
 	LogData->addLog("UPDATE", "In addDetails(processDescription), Description stored successfully");
-	return details;
-
 }
 
 //Takes in date related information in a string and stores into the respective variables in Task object
 void Task::processDate(string dateInfo){
 	string keyword, startDate, endDate, separator;
-	int index;
+	int separatorPos;
 	istringstream in(dateInfo);
 
-	index = dateInfo.find("to");			// locate the word to in string
-	if (index != string::npos){
+	separatorPos = dateInfo.find("to");			// locate the word to in string
+	if (separatorPos != string::npos){
 		in >> keyword;
 		in >> startDate;
 		in >> separator;
@@ -130,39 +143,8 @@ void Task::processDate(string dateInfo){
 		storeStartDate(endDate);
 		_numOfDates = 1;
 	}
-
-	
-	/*
-	int index;
-	string dateStart, dateEnd;
-
-	dateInfo.replace(0, 6, "");				//get rid of the word date at the start of the string
-
-	index = dateInfo.find("to");			// locate the word to in string
-
-	if (index != string::npos){
-		dateStart = dateInfo.substr(0, index - 1);
-		index = index + 3;
-		dateEnd = dateInfo.substr(index, dateInfo.size() - index);
-		storeStartDate(dateStart);
-		storeEndDate(dateEnd);
-		_numOfDates = 2;
-	}
-	else{
-		storeEndDate(dateInfo);
-		_numOfDates = 1;
-	}
-	*/
-
 	LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
 }
-
-/*
-void Task::processRecur(string recurInfo){
-	recurInfo.replace(0, 7, "");			//get rid of the word recur at the start of the string
-
-}
-*/
 
 //Splits the start date string into individual components and stores them in the relevant variables
 void Task::storeStartDate(string dateStart){
@@ -191,53 +173,45 @@ void Task::storeEndDate(string dateEnd){
 //Takes in time related information in a string and stores into the respective variables in Task object
 void Task::processTime(string timeInfo){
 
-	int index;
+	int separatorPos;
 	string keyword, timeStart, timeEnd, separator;
 
 	istringstream in(timeInfo);
-	index = timeInfo.find("to");			// locate the word to in string
+	separatorPos = timeInfo.find("to");			// locate the word to in string
 
-	if (index != string::npos){
+	if (separatorPos != string::npos){
 		in >> keyword;
 		in >> timeStart;
 		in >> separator;
 		in >> timeEnd;
 
-		_timeStart = stoi(timeStart);
-		_timeEnd = stoi(timeEnd);
+		storeStartTime(timeStart);
+		storeEndTime(timeEnd);
 		_numOfTimes = 2;
 	}
 	else{
 		in >> keyword;
 		in >> timeStart;
-		_timeStart = stoi(timeStart);
+		storeStartTime(timeStart);
 		_numOfTimes = 1;
 	}
-
-	/*
-	timeInfo.replace(0, 6, "");				//get rid of the word time at the start of the string
-
-	index = timeInfo.find("to");			// locate the word to in string
-
-	if (index != string::npos){
-		timeStart = timeInfo.substr(0, index - 1);
-		index = index + 3;
-		timeEnd = timeInfo.substr(index, timeInfo.size() - index);
-		_timeStart = stoi(timeStart);
-		_timeEnd = stoi(timeEnd);
-		_numOfTimes = 2;
-	}
-	else{
-		_timeStart = stoi(timeInfo);
-		_numOfTimes = 1;
-	}
-	*/
 	LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
+}
+
+void Task::storeStartTime(string time) {
+	_timeStart = stoi(time);
+}
+void Task::storeEndTime(string time) {
+	_timeEnd = stoi(time);
 }
 
 //Stores a unique ID number that is created by the Planner class
 void Task::storeIdNumber(int num){
 	_idNumber = num;
+}
+
+void Task::markIsDoneAsTrue(){
+	_isDone = true;
 }
 
 /************************************************************************************************
@@ -286,9 +260,13 @@ list<Task> Task::getRecurringTasks(){
 	return _recurringTasks;
 }
 
+bool Task::doneStatus(){
+	return _isDone;
+}
+
 /************************************************************************************************
 
-Search function
+										Search function
 
 ************************************************************************************************/
 
@@ -300,35 +278,25 @@ bool Task::isSearchTargetPresent(string target){
 	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
 	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
 
-	if (_description.find(target) == string::npos){
-		if (_description.find(targetWithUpperCase) == string::npos){			//for search to include the target with first letter in upper case
-			if (_description.find(targetWithLowerCase) == string::npos){		//for search to include the target with first letter in upper case
+	if ((_description.find(target) == string::npos) && 
+		(_description.find(targetWithUpperCase) == string::npos) &&		////for search to include the target with first letter in upper case
+		(_description.find(targetWithLowerCase) == string::npos)){		//for search to include the target with first letter in lower case
 				isFound = false;
 			}
-		}
-	}
 
 	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
 	return isFound;
 }
 
-void Task::markIsDoneAsTrue(){
-	_isDone = true;
-}
-
-bool Task::doneStatus(){
-	return _isDone;
-}
-
 /************************************************************************************************
 
-Recur function
+										Recur function
 
 ************************************************************************************************/
 
 void Task::recurTask(string details){
 	string frequency, taskDetails;
-	int numOfRecurrence, index;
+	int numOfRecurrence, semicolonPos;
 	char delimiter;
 	Task *recTaskPtr;
 
@@ -336,10 +304,10 @@ void Task::recurTask(string details){
 	in >> frequency;						//daily, weekly, monthly or yearly
 	in >> numOfRecurrence;					//no of times to recur
 	
-	index = details.find_first_of(";");
-	index++;
+	semicolonPos = details.find_first_of(";");
+	semicolonPos++;
 
-	details = details.substr(index, details.size() - index);		//to extract out relevant details for task
+	details = details.substr(semicolonPos, details.size() - semicolonPos);		//to extract out relevant details for task
 	
 	for (int i = 1; i <= numOfRecurrence; i++){
 		recTaskPtr = new Task;
@@ -349,7 +317,6 @@ void Task::recurTask(string details){
 		recTaskPtr = NULL;
 		details = modifyDetails(frequency, details);
 	}
-
 }
 
 string Task::modifyDetails(string frequency, string details){
@@ -595,9 +562,15 @@ void Task::markClashAsTrue(){
 	_isClash = true;
 }
 
+void Task::markClashAsFalse(){
+	_isClash = false;
+}
+
 bool Task::clashStatus(){
 	if (_isClash == true){
 		return true;
 	}
-	else return false;
+	else {
+		return false;
+	}
 }
