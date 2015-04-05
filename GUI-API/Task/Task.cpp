@@ -5,8 +5,7 @@
 #include <sstream>
 
 const string FATAL_ERROR = "Fatal Error!";
-const string ERROR_MESSAGE_INVALID_TIME = "Invalid time entered! Please re-enter entry.";
-const string ERROR_MESSAGE_INVALID_DATE = "Invalid date entered! Please re-enter entry.";
+const string ERROR_MESSAGE_INVALID_INPUT = "Invalid format entered! Please re-enter appropriate entry.";
 
 using namespace std;
 
@@ -53,7 +52,7 @@ void Task::addDetails(string details){
 		process_TwoDelimiter(details);
 		break;
 	default:
-		cout << FATAL_ERROR << endl;
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 }
 
@@ -66,11 +65,14 @@ void Task::process_NoDelimiter(string details) {
 void Task::process_OneDelimiter(string details) {
 	LogData->addLog("UPDATE", "In addDetails, Case 1 was called");
 	processDescription(details);
-	if (details.find("date") != string::npos){
+	if (details.find(" date") != string::npos){
 		processDate(details);
 	}
-	else {
+	else if (details.find(" time") != string::npos){
 		processTime(details);
+	}
+	else {
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 	LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
 }
@@ -83,11 +85,14 @@ void Task::process_TwoDelimiter(string details) {
 	processDescription(details);
 	semicolonPos = details.find(';');
 	durationInfo = details.substr(0, semicolonPos);
-	if (durationInfo.find("date") != string::npos){
+	if (durationInfo.find(" date") != string::npos){
 		dateInfo = details.substr(0, semicolonPos);
 	}
-	else if (durationInfo.find("time") != string::npos){
+	else if (durationInfo.find(" time") != string::npos){
 		timeInfo = details.substr(0, semicolonPos);
+	}
+	else {
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 	semicolonPos++;
 	if (timeInfo.empty()){
@@ -142,7 +147,7 @@ void Task::processDate(string dateInfo){
 			LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
 		}
 		else{
-			throw ERROR_MESSAGE_INVALID_DATE;
+			throw ERROR_MESSAGE_INVALID_INPUT;
 			LogData->addLog("UPDATE", "In addDetails(processDate), Date invalid");
 		}
 	}
@@ -157,7 +162,7 @@ void Task::processDate(string dateInfo){
 			LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
 		}
 		else{
-			throw ERROR_MESSAGE_INVALID_DATE;
+			throw ERROR_MESSAGE_INVALID_INPUT;
 			LogData->addLog("UPDATE", "In addDetails(processDate), Date invalid");
 		}
 	}
@@ -206,7 +211,7 @@ void Task::processTime(string timeInfo){
 		}
 		else {
 			LogData->addLog("UPDATE", "In addDetails(processTime), Time invalid");
-			throw ERROR_MESSAGE_INVALID_TIME;			
+			throw ERROR_MESSAGE_INVALID_INPUT;			
 		}
 	}
 	else{
@@ -220,7 +225,7 @@ void Task::processTime(string timeInfo){
 		}
 		else {
 			LogData->addLog("UPDATE", "In addDetails(processTime), Time invalid");
-			throw ERROR_MESSAGE_INVALID_TIME;			
+			throw ERROR_MESSAGE_INVALID_INPUT;			
 		}
 	}
 }
@@ -231,7 +236,7 @@ void Task::storeStartTime(string time) {
 		_timeStart = stoi(time);
 	}
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_TIME;
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 }
 
@@ -240,7 +245,7 @@ void Task::storeEndTime(string time) {
 		_timeEnd = stoi(time);
 	}
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_TIME;
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 }
 
@@ -481,7 +486,7 @@ void Task::splitDate(string endDate, int& day, int& month, int& year){
 		year = stoi(endDate.substr(4, 2));
 	}
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_DATE;
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 
 }
@@ -646,7 +651,7 @@ bool Task::areValidTimes(string timeStart, string timeEnd){
 		intTimeEnd = stoi(timeEnd);
 	}
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_TIME;
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 
 	if (isValidTime(intTimeStart) && (isValidTime(intTimeEnd))){

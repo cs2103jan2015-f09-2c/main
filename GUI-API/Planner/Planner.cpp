@@ -683,10 +683,10 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	case 0:
 		break;
 	case 1:
-		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
+		out << "Date: " << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
 		break;
 	case 2:
-		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
+		out << "Date: " << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
 		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " " ;
 		break;
 	}
@@ -695,44 +695,12 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	case 0:
 		break;
 	case 1:
-		length = 1;
-		x = theTask.getTimeStart();
-		while (x /= 10) {
-			length++;
-		}
-		if (length <= 4) {
-			out << setfill('0') << setw(4) << theTask.getTimeStart() <<" ";
-		}
-		else {
-			out << theTask.getTimeStart() <<" ";
-		}
+		out << "Time: " << setfill('0') << setw(4) << theTask.getTimeStart() << " ";
 		break;
 	case 2:
-		length = 1;
-		x = theTask.getTimeStart();
-		while (x /= 10) {
-			length++;
-		}
-		if (length ==3) {
-			out << setfill('0') << setw(4) << theTask.getTimeStart();
-		}
-		else {
-			out << theTask.getTimeStart();
-		}
-
+		out << "Time: " << setfill('0') << setw(4) << theTask.getTimeStart();
 		out << " to ";
-
-		length = 1;
-		x = theTask.getTimeEnd();
-		while (x /= 10) {
-			length++;
-		}
-		if (length == 3) {
-			out << setfill('0') << setw(4) << theTask.getTimeEnd() << " ";
-		}
-		else {
-			out << theTask.getTimeEnd() << " ";
-		}
+		out << setfill('0') << setw(4) << theTask.getTimeEnd() << " ";
 		break;
 	default:
 		cout << ERROR_MESSAGE_FATAL;
