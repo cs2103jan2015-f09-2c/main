@@ -233,6 +233,15 @@ void Planner::checkListForClashes(){
 }
 bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	bool isClash = false;
+	int numOfTask1Times, numOfTask2Times, numOfTask1Dates, numOfTask2Dates;
+	numOfTask1Times = Task1.getNumOfTimes();
+	numOfTask2Times = Task2.getNumOfTimes();
+	numOfTask1Dates = Task1.getNumOfDates();
+	numOfTask2Dates = Task2.getNumOfDates();
+
+	if (numOfTask1Times == 0 || numOfTask2Times == 0){
+		return isClash;
+	}
 	//Date Same Time Same --> Single Times
 	//2 date 1 time
 	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
