@@ -5,6 +5,7 @@
 #include <sstream>
 
 const string FATAL_ERROR = "Fatal Error!";
+const string ERROR_MESSAGE_INVALID_TIME = "Invalid time entered! Please re-enter entry.";
 
 using namespace std;
 
@@ -185,17 +186,31 @@ void Task::processTime(string timeInfo){
 		in >> separator;
 		in >> timeEnd;
 
-		storeStartTime(timeStart);
-		storeEndTime(timeEnd);
-		_numOfTimes = 2;
+		if (timesAreValid(timeStart, timeEnd)){
+			storeStartTime(timeStart);
+			storeEndTime(timeEnd);
+			_numOfTimes = 2;
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
+		}
+		else {
+			throw ERROR_MESSAGE_INVALID_TIME;
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time not stored");
+		}
 	}
 	else{
 		in >> keyword;
 		in >> timeStart;
-		storeStartTime(timeStart);
-		_numOfTimes = 1;
+
+		if (timesAreValid(timeStart, timeStart)){
+			storeStartTime(timeStart);
+			_numOfTimes = 1;
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
+		}
+		else {
+			throw ERROR_MESSAGE_INVALID_TIME;
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time not stored");
+		}
 	}
-	LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
 }
 
 void Task::storeStartTime(string time) {
@@ -262,30 +277,6 @@ list<Task> Task::getRecurringTasks(){
 
 bool Task::doneStatus(){
 	return _isDone;
-}
-
-/************************************************************************************************
-
-										Search function
-
-************************************************************************************************/
-
-//Checks if the target word is present in the task description
-bool Task::isSearchTargetPresent(string target){
-	LogData->addLog("UPDATE", "In isSearchTargetPresent, search initiated");
-	bool isFound = true;
-	string targetWithUpperCase = target, targetWithLowerCase = target;
-	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
-	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
-
-	if ((_description.find(target) == string::npos) && 
-		(_description.find(targetWithUpperCase) == string::npos) &&		////for search to include the target with first letter in upper case
-		(_description.find(targetWithLowerCase) == string::npos)){		//for search to include the target with first letter in lower case
-				isFound = false;
-			}
-
-	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
-	return isFound;
 }
 
 /************************************************************************************************
@@ -420,16 +411,6 @@ string Task::processDailyRecur(string date){
 	return date;
 }
 
-bool Task::is31DayMonth(int month){
-	bool is31DayMonth = false;
-
-	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
-		is31DayMonth = true;
-	}
-
-	return is31DayMonth;
-}
-
 string Task::processWeeklyRecur(string date){
 
 	for (int i = 1; i <= 7; i++){				//since each week is 7 days, just loop processDailyRecur 7 times
@@ -543,21 +524,6 @@ string Task::extractDateInfo(string details){
 	return details;
 }
 
-bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
-	bool same = true;
-	if (Date1.day!=Date2.day){
-		same = false;
-	}
-	if (Date1.month != Date2.month){
-		same = false;
-	}
-	if (Date1.year != Date2.year){
-		same = false;
-	}
-	
-	return same;
-}
-
 void Task::markClashAsTrue(){
 	_isClash = true;
 }
@@ -573,4 +539,94 @@ bool Task::clashStatus(){
 	else {
 		return false;
 	}
+}
+
+/************************************************************************************************
+
+									Checker Functions
+
+************************************************************************************************/
+bool Task::isValidDate(taskDate date) {
+	bool dateIsValid=false;
+
+	if (date.day >= 1 && date.day <= 31){
+		if (date.month >= 1 && date.month <= 12){
+			dateIsValid = true;
+		}
+	}
+
+	return dateIsValid;
+}
+
+bool Task::timesAreValid(string timeStart, string timeEnd){
+	bool areTimesValid = false;
+	int intTimeStart = stoi(timeStart);
+	int intTimeEnd = stoi(timeEnd);
+
+	if (isValidTime(intTimeStart) && (isValidTime(intTimeEnd))){
+		if (intTimeStart <= intTimeEnd){
+			areTimesValid = true;
+		}
+	}
+
+	return areTimesValid;
+}
+
+bool Task::isValidTime(int time){
+	bool timeIsValid = false;
+
+	if (time >= 0 && time <= 2359){
+		timeIsValid = true;
+	}
+
+	return timeIsValid;
+}
+
+bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
+	bool same = true;
+	if (Date1.day != Date2.day){
+		same = false;
+	}
+	if (Date1.month != Date2.month){
+		same = false;
+	}
+	if (Date1.year != Date2.year){
+		same = false;
+	}
+
+	return same;
+}
+
+bool Task::is31DayMonth(int month){
+	bool is31DayMonth = false;
+
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+		is31DayMonth = true;
+	}
+
+	return is31DayMonth;
+}
+
+/************************************************************************************************
+
+											Search function
+
+************************************************************************************************/
+
+//Checks if the target word is present in the task description
+bool Task::isSearchTargetPresent(string target){
+	LogData->addLog("UPDATE", "In isSearchTargetPresent, search initiated");
+	bool isFound = true;
+	string targetWithUpperCase = target, targetWithLowerCase = target;
+	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
+	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
+
+	if ((_description.find(target) == string::npos) &&
+		(_description.find(targetWithUpperCase) == string::npos) &&		////for search to include the target with first letter in upper case
+		(_description.find(targetWithLowerCase) == string::npos)){		//for search to include the target with first letter in lower case
+		isFound = false;
+	}
+
+	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
+	return isFound;
 }

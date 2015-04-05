@@ -76,7 +76,12 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 
 	else
 	if (command == "add"){
+		try{
 			processCommandAdd(taskDetail);
+		}
+		catch (const string error) {
+			throw error;
+		}
 	}
 
 	else
