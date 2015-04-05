@@ -373,8 +373,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 			indexCount++;
 		}
 		if (indexCount != serialNumber || HomeList.empty()) {
-			status = ERROR_MESSAGE_INVALID_INDEX;
-			return status;
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
 			idNumber = (*iter).getIdNumber();
@@ -388,8 +387,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 			indexCount++;
 		}
 		if (indexCount != serialNumber || MissedList.empty()) {
-			status = ERROR_MESSAGE_INVALID_INDEX;
-			return status;
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
 			idNumber = (*iter).getIdNumber();
@@ -403,15 +401,16 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 			indexCount++;
 		}
 		if (indexCount != serialNumber || UpcomingList.empty()) {
-			status = ERROR_MESSAGE_INVALID_INDEX;
-			return status;
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
 			idNumber = (*iter).getIdNumber();
 			status = deleteIndex(idNumber);
 		}
 	}
-	else cout << ERROR_MESSSAGE_INVALID_LIST_NAME << endl;
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
 	//logging
 	stringstream message;
 	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
@@ -526,35 +525,53 @@ string Planner::markDone(int serialNumber, string nameOfList){
 	int idNumber=0;
 	string status;
 	list<Task> ::iterator iter;
+	int indexCount = 1;
 
 	if (nameOfList == HOME_LIST){
 		iter = HomeList.begin();
-		for (int i = 1; i != serialNumber; i++){
+		for (int i = 1; i != serialNumber && i < HomeList.size(); i++){
 			iter++;
+			indexCount++;
 		}
-		
-		idNumber = (*iter).getIdNumber();
-		status = markDoneIndex(idNumber);
+		if (indexCount != serialNumber || HomeList.empty()) {
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
 	}
 	else if (nameOfList == MISSED_LIST){
 		iter = MissedList.begin();
-		for (int i = 1; i != serialNumber; i++){
+		for (int i = 1; i != serialNumber && i < MissedList.size(); i++){
 			iter++;
+			indexCount++;
 		}
-		
-		idNumber = (*iter).getIdNumber();
-		status = markDoneIndex(idNumber);
+		if (indexCount != serialNumber || MissedList.empty()) {
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
 		iter = UpcomingList.begin();
-		for (int i = 1; i != serialNumber; i++){
+		for (int i = 1; i != serialNumber && i < UpcomingList.size(); i++){
 			iter++;
+			indexCount++;
 		}
-		idNumber = (*iter).getIdNumber();
-
-		status = markDoneIndex(idNumber);
+		if (indexCount != serialNumber || UpcomingList.empty()) {
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
 	}
-	else cout << ERROR_MESSSAGE_INVALID_LIST_NAME << endl;
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
 	//logging
 	stringstream message;
 	message << LOG_FILE_MARK_DONE_MSG << idNumber;
@@ -707,7 +724,7 @@ string Planner::descriptionOfTaskToString(Task theTask){
 		out << setfill('0') << setw(4) << theTask.getTimeEnd() << " ";
 		break;
 	default:
-		cout << ERROR_MESSAGE_FATAL;
+		throw ERROR_MESSAGE_FATAL;
 	}
 
 
@@ -964,7 +981,7 @@ string Planner::saveDataToString(){
 				out << (*it).getTimeEnd();
 				break;
 			default:
-				cout << ERROR_MESSAGE_FATAL;
+				throw ERROR_MESSAGE_FATAL;
 			}
 
 
