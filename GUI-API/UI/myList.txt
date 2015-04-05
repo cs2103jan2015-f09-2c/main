@@ -1,4 +1,0 @@
-D:\testsave.txt
-D:\hello.txt
-D:\leminhthu.txt
-D:\test.txt

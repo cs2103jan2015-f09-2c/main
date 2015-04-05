@@ -17,10 +17,10 @@ namespace StorageUnitTest{
 		//save content to a valid file address
 			Storage* myTestStorage;
 			myTestStorage = Storage::getInstanceOfStorage();
-			string saveAddress = "D:\hello.txt";
+			string saveAddress = "testSaveFile.txt";
 			string expectedContent = "test";
 			string actualOutcome = myTestStorage->saveWithFileAddress(saveAddress, expectedContent);
-			string expectedOutcome = "saved successfully to this address: D:\hello.txt";
+			string expectedOutcome = "saved successfully to this address: testSaveFile.txt";
 			Assert::AreEqual(expectedOutcome, actualOutcome);
 
 			ifstream read(saveAddress);
@@ -38,11 +38,11 @@ namespace StorageUnitTest{
 		//file address specified exist
 			Storage* myTestStorage;
 			myTestStorage = Storage::getInstanceOfStorage();
-			string saveAddress = "D:\hello.txt";
+			string saveAddress = "testSaveFile.txt";
 			string expectedContent = "test\n";
 			string actualContent;
 			string actualOutcome = myTestStorage->load(saveAddress, actualContent);
-			string expectedOutcome = "D:\hello.txt loaded successfully";
+			string expectedOutcome = "testSaveFile.txt loaded successfully";
 			Assert::AreEqual(expectedOutcome, actualOutcome);
 		}
 
@@ -50,11 +50,11 @@ namespace StorageUnitTest{
 			//file address specified exist
 			Storage* myTestStorage;
 			myTestStorage = Storage::getInstanceOfStorage();
-			string saveAddress = "D:\hello.txt";
+			string saveAddress = "testSaveFile.txt";
 			string expectedContent = "test\n";
 			string actualContent;
 			string actualOutcome = myTestStorage->load(saveAddress, actualContent);
-			string expectedOutcome = "D:\hello.txt loaded successfully";
+			string expectedOutcome = "testSaveFile.txt loaded successfully";
 			Assert::AreEqual(expectedContent, actualContent);
 		}
 
@@ -63,7 +63,7 @@ namespace StorageUnitTest{
 			Storage* myTestStorage;
 			myTestStorage = Storage::getInstanceOfStorage();
 			string actualContent;
-			string saveAddress = "D:\wrong.txt";
+			string saveAddress = "testWrongFileName.txt";
 			string actualOutcome = myTestStorage->load(saveAddress, actualContent);
 			string expectedOutcome = "file not found";
 			Assert::AreEqual(expectedOutcome, actualOutcome);
