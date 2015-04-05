@@ -39,6 +39,7 @@ const string ERROR_MESSSAGE_INVALID_LIST_NAME = "Error!! Name of list is invalid
 const string ERROR_MESSSAGE_INVALID_FILE_NAME = "Error!! Name of file is invalid!!";
 const string ERROR_MESSSAGE_INVALID_COMMAND = "Error!! Command is invalid!!";
 const string ERROR_MESSAGE_INVALID_INDEX = "Invalid index!";
+const string ERROR_MESSAGE_INVALID_UNDO = "Nothing to undo!";
 
 const string EMPTY_LIST_MESSAGE = "The list is empty";
 const string NO_RESULTS_MESSAGE = "No results found!";
@@ -443,6 +444,7 @@ string Planner::deleteIndex(int idNumber){
 }
 
 string Planner::undo(void){
+	string status = "";
 	if (lastEntry.lastCommand == COMMAND_ADD){
 		int lastEntryID = getIdOfLastEntry() - 1;
 		deleteIndex(lastEntryID);
@@ -454,7 +456,9 @@ string Planner::undo(void){
 		deleteIndex(lastEdit.addedTask.getIdNumber());
 		addTask(lastEdit.deletedTask);
 	}
-	string status;
+	else {
+		throw ERROR_MESSAGE_INVALID_UNDO;
+	}
 	status = undoStatusToString();
 	checkListForClashes();
 	generateAllOtherList();
@@ -763,6 +767,9 @@ string Planner::undoStatusToString(){
 		out << descriptionOfTaskToString(lastEdit.addedTask);
 		out << STATUS_TO_STRING_EDIT_MID;
 		out << descriptionOfTaskToString(lastEdit.deletedTask);
+	}
+	else{
+		throw ERROR_MESSAGE_INVALID_UNDO;
 	}
 	return out.str();
 }

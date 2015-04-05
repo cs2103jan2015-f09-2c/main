@@ -7,7 +7,7 @@
 using namespace std;
 
 struct undoData{
-	string lastCommand;
+	string lastCommand = "";
 	Task lastTask;
 };
 
