@@ -193,7 +193,7 @@ namespace PlannerUnitTest
 		{
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
-			testTask1.addDetails("Test task 1; date 030415"); //assume Task.addDetail works
+			testTask1.addDetails("Test task 1; date 666666"); //assume Task.addDetail works
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 040415");
 			testPlanner.addTask(testTask2);

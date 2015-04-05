@@ -6,6 +6,7 @@
 
 const string FATAL_ERROR = "Fatal Error!";
 const string ERROR_MESSAGE_INVALID_TIME = "Invalid time entered! Please re-enter entry.";
+const string ERROR_MESSAGE_INVALID_DATE = "Invalid date entered! Please re-enter entry.";
 
 using namespace std;
 
@@ -133,42 +134,53 @@ void Task::processDate(string dateInfo){
 		in >> startDate;
 		in >> separator;
 		in >> endDate;
-		storeStartDate(startDate);
-		storeEndDate(endDate);
-		_numOfDates = 2;
+
+		if (areValidDates(startDate, endDate)){
+			storeStartDate(startDate);
+			storeEndDate(endDate);
+			_numOfDates = 2;
+			LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
+		}
+		else{
+			throw ERROR_MESSAGE_INVALID_DATE;
+			LogData->addLog("UPDATE", "In addDetails(processDate), Date invalid");
+		}
 	}
 	else{
 		in >> keyword;
 		in >> endDate;
-		storeEndDate(endDate);
-		storeStartDate(endDate);
-		_numOfDates = 1;
+
+		if (areValidDates(endDate, endDate)){
+			storeEndDate(endDate);
+			storeStartDate(endDate);
+			_numOfDates = 1;
+			LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
+		}
+		else{
+			throw ERROR_MESSAGE_INVALID_DATE;
+			LogData->addLog("UPDATE", "In addDetails(processDate), Date invalid");
+		}
 	}
-	LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
 }
 
 //Splits the start date string into individual components and stores them in the relevant variables
-void Task::storeStartDate(string dateStart){
-	string day, month, year;
-	day = dateStart.substr(0, 2);					// These are all in string form
-	month = dateStart.substr(2, 2);
-	year = dateStart.substr(4, 2);
+void Task::storeStartDate(string dateStart){	
+	int day, month, year;
+	splitDate(dateStart, day, month, year);
 
-	_dateStart.day = stoi(day);						// To convert the strings to integer
-	_dateStart.month = stoi(month);
-	_dateStart.year = stoi(year);
+	_dateStart.day = day;		
+	_dateStart.month = month;
+	_dateStart.year = year;
 }
 
 //Splits the end date string into individual components and stores them in the relevant variables
 void Task::storeEndDate(string dateEnd){
-	string day, month, year;
-	day = dateEnd.substr(0, 2);						// These are all in string form
-	month = dateEnd.substr(2, 2);
-	year = dateEnd.substr(4, 2);
+	int day, month, year;
+	splitDate(dateEnd, day, month, year);
 
-	_dateEnd.day = stoi(day);						// To convert the strings to integer
-	_dateEnd.month = stoi(month);
-	_dateEnd.year = stoi(year);
+	_dateEnd.day = day;
+	_dateEnd.month = month;
+	_dateEnd.year = year;
 }
 
 //Takes in time related information in a string and stores into the respective variables in Task object
@@ -186,38 +198,50 @@ void Task::processTime(string timeInfo){
 		in >> separator;
 		in >> timeEnd;
 
-		if (timesAreValid(timeStart, timeEnd)){
+		if (areValidTimes(timeStart, timeEnd)){
 			storeStartTime(timeStart);
 			storeEndTime(timeEnd);
 			_numOfTimes = 2;
 			LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
 		}
 		else {
-			throw ERROR_MESSAGE_INVALID_TIME;
-			LogData->addLog("UPDATE", "In addDetails(processTime), Time not stored");
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time invalid");
+			throw ERROR_MESSAGE_INVALID_TIME;			
 		}
 	}
 	else{
 		in >> keyword;
 		in >> timeStart;
 
-		if (timesAreValid(timeStart, timeStart)){
+		if (areValidTimes(timeStart, timeStart)){
 			storeStartTime(timeStart);
 			_numOfTimes = 1;
 			LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
 		}
 		else {
-			throw ERROR_MESSAGE_INVALID_TIME;
-			LogData->addLog("UPDATE", "In addDetails(processTime), Time not stored");
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time invalid");
+			throw ERROR_MESSAGE_INVALID_TIME;			
 		}
 	}
 }
 
 void Task::storeStartTime(string time) {
-	_timeStart = stoi(time);
+
+	try {
+		_timeStart = stoi(time);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_TIME;
+	}
 }
+
 void Task::storeEndTime(string time) {
-	_timeEnd = stoi(time);
+	try {
+		_timeEnd = stoi(time);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_TIME;
+	}
 }
 
 //Stores a unique ID number that is created by the Planner class
@@ -451,42 +475,48 @@ string Task::processYearlyRecur(string date){
 }
 
 void Task::splitDate(string endDate, int& day, int& month, int& year){
-	day = stoi(endDate.substr(0, 2));
-	month = stoi(endDate.substr(2, 2));
-	year = stoi(endDate.substr(4, 2));
+	try {
+		day = stoi(endDate.substr(0, 2));
+		month = stoi(endDate.substr(2, 2));
+		year = stoi(endDate.substr(4, 2));
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_DATE;
+	}
+
 }
 
 void Task::mergeDate(string& date, int day, int month, int year){
 	ostringstream mergedDate;
-	if (day < 10){
-		mergedDate << "0" << day;
-	}
-	else{
-		mergedDate << day;
-	}
+if (day < 10){
+	mergedDate << "0" << day;
+}
+else{
+	mergedDate << day;
+}
 
-	if (month < 10){
-		mergedDate << "0" << month;
-	}
-	else{
-		mergedDate << month;
-	}
+if (month < 10){
+	mergedDate << "0" << month;
+}
+else{
+	mergedDate << month;
+}
 
-	if (year < 10){
-		mergedDate << "0" << year;
-	}
-	else{
-		mergedDate << year;
-	}
+if (year < 10){
+	mergedDate << "0" << year;
+}
+else{
+	mergedDate << year;
+}
 
-	date = mergedDate.str();
+date = mergedDate.str();
 }
 
 int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){
 	int numOfDates, index;
 	istringstream in(dateInfo);
 	index = dateInfo.find("to");			// locate the word to in string
-	
+
 	if (index != string::npos){
 		in >> keyword;
 		in >> startDate;
@@ -511,14 +541,14 @@ string Task::extractDateInfo(string details){
 	details = details.substr(index, details.size() - index);
 
 	//get rid of #impt if exists
-	index = details.find("#");						
+	index = details.find("#");
 	if (index != string::npos){
 		details = details.substr(0, index);
 	}
 
 	//get rid of time if exists
 	index = details.find_first_of(";");			//find first delimiter
-//	index++;
+	//	index++;
 	details = details.substr(0, index);
 
 	return details;
@@ -545,12 +575,61 @@ bool Task::clashStatus(){
 
 									Checker Functions
 
-************************************************************************************************/
-bool Task::isValidDate(taskDate date) {
-	bool dateIsValid=false;
+									************************************************************************************************/
 
-	if (date.day >= 1 && date.day <= 31){
-		if (date.month >= 1 && date.month <= 12){
+bool Task::areValidDates(string startDate, string endDate){
+	bool areDatesValid = false;	
+	
+	if (correctDateLength(startDate) && correctDateLength(endDate)){
+		if (isValidDate(startDate) && isValidDate(endDate)){
+			if (startDateBeforeEndDate(startDate, endDate)){
+				areDatesValid = true;
+			}
+		}
+	}
+
+	return areDatesValid;
+}
+
+bool Task::correctDateLength(string date){
+	bool isCorrectDateLength = false;
+
+	if (date.size() == 6){
+		isCorrectDateLength = true;
+	}
+	return isCorrectDateLength;
+}
+
+bool Task::startDateBeforeEndDate(string startDate, string endDate) {
+	bool isStartBeforeEnd = true;
+	int startDay, startMonth, startYear;
+	int endDay, endMonth, endYear;
+
+	splitDate(startDate, startDay, startMonth, startYear);
+	splitDate(endDate, endDay, endMonth, endYear);
+
+	if (startYear > endYear){
+		isStartBeforeEnd = false;
+	}
+	else if (startMonth > endMonth){
+		isStartBeforeEnd = false;
+	}
+	else if (startDay > endDay){
+		isStartBeforeEnd = false;
+	}
+
+	return isStartBeforeEnd;
+}
+
+bool Task::isValidDate(string date) {
+	bool dateIsValid=false;
+	int day, month, year;
+
+	splitDate(date, day, month, year);
+
+
+	if (day >= 1 && day <= 31){
+		if (month >= 1 && month <= 12){
 			dateIsValid = true;
 		}
 	}
@@ -558,13 +637,20 @@ bool Task::isValidDate(taskDate date) {
 	return dateIsValid;
 }
 
-bool Task::timesAreValid(string timeStart, string timeEnd){
+bool Task::areValidTimes(string timeStart, string timeEnd){
 	bool areTimesValid = false;
-	int intTimeStart = stoi(timeStart);
-	int intTimeEnd = stoi(timeEnd);
+	int intTimeStart, intTimeEnd;
+
+	try {
+		intTimeStart = stoi(timeStart);
+		intTimeEnd = stoi(timeEnd);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_TIME;
+	}
 
 	if (isValidTime(intTimeStart) && (isValidTime(intTimeEnd))){
-		if (intTimeStart <= intTimeEnd){
+		if (startTimeBeforeEndTime(intTimeStart, intTimeEnd)){
 			areTimesValid = true;
 		}
 	}
@@ -582,8 +668,19 @@ bool Task::isValidTime(int time){
 	return timeIsValid;
 }
 
+bool Task::startTimeBeforeEndTime(int startTime, int endTime){
+	bool isStartTimeBeforeEndTime = false;
+
+	if (startTime <= endTime){
+		isStartTimeBeforeEndTime = true;
+	}
+
+	return isStartTimeBeforeEndTime;
+}
+
 bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
 	bool same = true;
+
 	if (Date1.day != Date2.day){
 		same = false;
 	}
