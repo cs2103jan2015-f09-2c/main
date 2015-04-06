@@ -46,17 +46,40 @@ string Storage::retrieveFirstAddress(){
 
 string Storage::saveWithFileAddress(string saveAddress, string content){
 	//check if the address is in the list
-	bool doesExist = doesAddressAlrdExist(saveAddress);
-	if (!doesExist){
-		listOfFileAddress.push_front(saveAddress);
-		updateMyList();
+	bool doesExist = false;
+	doesExist = doesAddressAlrdExist(saveAddress);
+	bool isValid = false;
+	string status;
+
+	//if a file address exists in the list, it is a valid address
+	if (doesExist) {
+		isValid = true;
+	}
+	else {
+		isValid = isAddressValid(saveAddress);
 	}
 
-	fileAddress = saveAddress;
-	string status = save(content);
+	if (isValid){
+		if (!doesExist){
+			listOfFileAddress.push_front(saveAddress);
+			updateMyList();
+		}
+
+		fileAddress = saveAddress;
+		status = save(content);
+	}
+
+	else{
+		status = STATUS_MESSAGE_INVALID_FILE_ADDRESS;
+	}
+	
 	return status;
 }
 
+bool Storage::isAddressValid(string saveAddress){
+	bool isValid = false;
+	return isValid;
+}
 string Storage::save(string content){
 	updateContent(content);
 	ofstream write(fileAddress/*, ios_base::app*/);

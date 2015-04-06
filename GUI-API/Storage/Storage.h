@@ -6,6 +6,7 @@ using namespace std;
 const string STATUS_MESSAGE_SAVED_SUCCESSFULLY = "saved successfully to this address: ";
 const string DEFAULT_FILE_NAME = "myPlanner.txt";
 const string STATUS_MESSAGE_FILE_NOT_FOUND = "file not found";
+const string STATUS_MESSAGE_INVALID_FILE_ADDRESS = "invalid save address";
 
 class Storage{
 private:
@@ -22,6 +23,7 @@ private:
 	bool doesAddressAlrdExist(string);
 	void updateContent(string);
 	void updateMyList();
+	
 
 public:
 	static Storage* getInstanceOfStorage();
@@ -31,5 +33,6 @@ public:
 	string save(string);
 	string load();
 	string load(string, string&);
+	bool isAddressValid(string); // supposed to be private function
 };
 
