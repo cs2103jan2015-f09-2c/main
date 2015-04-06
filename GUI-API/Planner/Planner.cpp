@@ -94,6 +94,7 @@ string Planner::addTask(Task newTask){
 	//check for duplicate
 	bool duplicatePresent = false;
 	duplicatePresent=isDuplicatePresent(newTask);
+	
 	//check where to slot
 	list<Task>::iterator iter, iterTwoDate, iterOneDate;
 	bool twoDatePresent = false, oneDatePresent = false;
@@ -484,7 +485,7 @@ string Planner::deleteIndex(int idNumber){
 	string status;
 	status = statusToString(COMMAND_DELETE, *iter2);
 	All.erase(iter2);
-	
+	checkListForClashes();
 	generateAllOtherList();
 	//logging
 	stringstream message;
