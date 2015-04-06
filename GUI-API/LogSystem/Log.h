@@ -11,14 +11,15 @@ private:
 	static Log *theOne;
 	vector<string> _logList;
 	int _numLines;
+	int _maxLines = 1000;
 	void saveLog();
-//	int numOfLinesInFile();
+	int numOfLinesInFile();
 	//void loadLog();
 
 
 public:
 	static Log* getInstance();
 	void addLog(string type, string message);
-	void clearLog();
+	void clearLogFile();
 };
 
