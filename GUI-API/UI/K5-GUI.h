@@ -247,6 +247,7 @@ namespace UI {
 
 	private: System::Void executeAll() {
 		currentView = ALL;
+		colourSwitch(currentView);
 		processInput(userInput->Text, currentView);
 	}
 
@@ -260,6 +261,8 @@ namespace UI {
 	}
 
 	private: System::Void executeClear() {
+		currentView = HOME;
+		switchView(currentView);
 		processInput(userInput->Text, currentView);
 		clearTrigger = false;
 	}

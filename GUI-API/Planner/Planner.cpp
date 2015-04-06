@@ -367,21 +367,29 @@ bool Planner::tasksAreTheSame(Task Task1, Task Task2){
 	return same;
 }
 
+bool Planner::indexChecker(list<Task>::iterator& iter, int serialNumber, list<Task>& targetList){
+	int indexCount = 1;
+	bool isValidIndex = true;
+
+	iter = targetList.begin();
+	for (int i = 1; i != serialNumber && i < targetList.size(); i++){
+		iter++;
+		indexCount++;
+	}
+	if (indexCount != serialNumber || targetList.empty()) {
+		isValidIndex = false;
+	}
+
+	return isValidIndex;
+}
 
 string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
-	int indexCount = 1;
 	string status;
 	list<Task> ::iterator iter;
 
-
 	if (nameOfList == HOME_LIST){
-		iter = HomeList.begin();
-		for (int i = 1; i != serialNumber && i < HomeList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || HomeList.empty()) {
+		if (indexChecker(iter, serialNumber, HomeList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -390,12 +398,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == MISSED_LIST){
-		iter = MissedList.begin();
-		for (int i = 1; i != serialNumber && i < MissedList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || MissedList.empty()) {
+		if (indexChecker(iter, serialNumber, MissedList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -404,12 +407,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		iter = UpcomingList.begin();
-		for (int i = 1; i != serialNumber && i < UpcomingList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || UpcomingList.empty()) {
+		if (indexChecker(iter, serialNumber, UpcomingList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -534,15 +532,9 @@ string Planner::markDone(int serialNumber, string nameOfList){
 	int idNumber=0;
 	string status;
 	list<Task> ::iterator iter;
-	int indexCount = 1;
 
 	if (nameOfList == HOME_LIST){
-		iter = HomeList.begin();
-		for (int i = 1; i != serialNumber && i < HomeList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || HomeList.empty()) {
+		if (indexChecker(iter, serialNumber, HomeList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -551,12 +543,7 @@ string Planner::markDone(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == MISSED_LIST){
-		iter = MissedList.begin();
-		for (int i = 1; i != serialNumber && i < MissedList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || MissedList.empty()) {
+		if (indexChecker(iter, serialNumber, MissedList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -565,12 +552,7 @@ string Planner::markDone(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		iter = UpcomingList.begin();
-		for (int i = 1; i != serialNumber && i < UpcomingList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || UpcomingList.empty()) {
+		if (indexChecker(iter, serialNumber, UpcomingList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {

@@ -285,12 +285,12 @@ namespace PlannerUnitTest
 			Planner testPlanner;
 			Task testTask1, testTask2, testTask3;
 			bool doesFunctionWork = false;
-			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+/*			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 110315 to 120315");
 			testPlanner.addTask(testTask2);
 			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
-			testPlanner.addTask(testTask3);
+			testPlanner.addTask(testTask3);		*/
 			testPlanner.undo();
 			if (testPlanner.toString("Missed") == "1. Test task 1 1/2/3 1100 \r\n2. Test task 2 11/3/15 to 12/3/15 \r\n"){
 				doesFunctionWork = true;
