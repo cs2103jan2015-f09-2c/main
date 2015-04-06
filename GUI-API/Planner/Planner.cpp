@@ -216,18 +216,18 @@ void Planner::checkListForClashes(){
 		it++;
 	}
 	list<Task> ::iterator iter1, iter2;
-	iter1 = All.begin();
-	iter2 = All.begin();
-	iter2++;
-	while (iter2 != All.end()){
-		if (checkTaskForClashes((*iter1), (*iter2))){
-			(*iter1).markClashAsTrue();
-			(*iter2).markClashAsTrue();
-		}
-		iter1++;
-		iter2++;
-		
+	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
+			for (iter2 = iter1; iter2 != All.end(); ++iter2){
+				if (iter1 != iter2){
+					if (checkTaskForClashes((*iter1), (*iter2))){
+						(*iter1).markClashAsTrue();
+						(*iter2).markClashAsTrue();
+					}
+				}
+			}
 	}
+
+	
 	return;
 	
 }
