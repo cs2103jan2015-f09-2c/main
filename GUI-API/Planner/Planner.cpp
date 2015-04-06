@@ -45,6 +45,8 @@ const string EMPTY_LIST_MESSAGE = "The list is empty";
 const string NO_RESULTS_MESSAGE = "No results found!";
 const string NEWLINE = "\r\n";
 const string IMPORTANCE_SYMBOL = "#impt";
+const string DONE_KEYWORD = "DONE";
+const string CLASH_KEYWORD = " TASK CLASH !!!";
 
 const string STATUS_TO_STRING_ADD_INTRO = "Task added: ";
 const string STATUS_TO_STRING_DELETE_INTRO = "Task deleted:";
@@ -66,7 +68,7 @@ using namespace std;
 										Initialization
 
 ************************************************************************************************/
-
+//@author A0111361Y
 Planner::Planner(){
 	time_t t = time(0);   // get time now
 	struct tm * now = localtime(&t);
@@ -80,7 +82,7 @@ Planner::Planner(){
 									Planner4Life operations
 
 ************************************************************************************************/
-
+//@author A0111361Y
 string Planner::addTask(Task newTask){
 	//create new task
 	int id = getIdOfLastEntry(); // use static to actually create id
@@ -209,6 +211,7 @@ string Planner::addTask(Task newTask){
 	return status;
 }
 
+//@author A0111361Y
 void Planner::checkListForClashes(){
 	list<Task> ::iterator it;
 	it = All.begin();
@@ -232,7 +235,7 @@ void Planner::checkListForClashes(){
 	return;
 	
 }
-
+//THYE JIE
 bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
 	bool areEqual = false;
 
@@ -245,7 +248,7 @@ bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
 	}
 	return areEqual;
 }
-
+//THYE JIE
 bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
 	bool dateIsEqual = false;
 
@@ -259,7 +262,7 @@ bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
 
 	return dateIsEqual;
 }
-
+//THYE JIE
 bool Planner::isOneDateTaskbetweenTwoDateTask(Task taskWithOneDate, Task taskWithTwoDates){
 	bool isInBetween = false;
 
@@ -272,7 +275,7 @@ bool Planner::isOneDateTaskbetweenTwoDateTask(Task taskWithOneDate, Task taskWit
 	}
 	return isInBetween;
 }
-
+//THYE JIE
 bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	bool isClash = false;
 	int numOfTask1Times, numOfTask2Times, numOfTask1Dates, numOfTask2Dates, task1StartTime, task2StartTime;
@@ -359,6 +362,7 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 }
 
 //should this be  end1 year <= end2 year && end1 >= start2
+//THYE JIE
 bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2){
 	bool isClash = false;
 	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
@@ -374,6 +378,7 @@ bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2
 	return isClash;
 }
 
+//@author A0111361Y
 bool Planner::isDuplicatePresent(Task newTask){
 	list<Task> ::iterator iter;
 	for (iter = All.begin(); iter != All.end(); ++iter){
@@ -385,6 +390,7 @@ bool Planner::isDuplicatePresent(Task newTask){
 
 }
 
+//@author A0111361Y
 bool Planner::tasksAreTheSame(Task Task1, Task Task2){
 	bool same = true;
 	string s = Task1.getDescription();
@@ -429,6 +435,7 @@ bool Planner::indexChecker(list<Task>::iterator& iter, int serialNumber, list<Ta
 	return isValidIndex;
 }
 
+//@author A0111361Y
 string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
 	string status;
@@ -472,6 +479,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 	return status;
 }
 
+//@author A0111361Y
 string Planner::deleteIndex(int idNumber){
 	list<Task> ::iterator iter1, iter2;
 	iter1 = All.begin();
@@ -495,6 +503,7 @@ string Planner::deleteIndex(int idNumber){
 	return status;
 }
 
+//@author A0111361Y
 string Planner::undo(void){
 	string status = "";
 	if (lastEntry.lastCommand == COMMAND_ADD){
@@ -517,6 +526,7 @@ string Planner::undo(void){
 	return status;
 }
 
+//@author A0111361Y
 string Planner::clear(void){
 	All.clear();
 	generateAllOtherList();
@@ -524,6 +534,7 @@ string Planner::clear(void){
 	return clearStatusToString();
 }
 
+//@author A0111361Y
 string Planner::editTask(int serialNumber, string nameOfList, string input){
 	Task newTask;
 	string validEditCheck;
@@ -545,25 +556,36 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	}
 }
 
-
+//@author A0111361Y
 void Planner::loadData(string data){
 	Task* tempTask;
-	string tempString, dataCopy = data;
+	string tempString1, dataCopy = data;
+	string doneKeyword = DONE_KEYWORD;
+	bool isTaskMarkedAsDone = false;
 	size_t start = 0, end = 0;
 	All.clear();
 
 	while (dataCopy.size()>0){
 		end = dataCopy.find_first_of("\n");
-		tempString = dataCopy.substr(start, end - start);
+		tempString1 = dataCopy.substr(start, end - start);
+		if (tempString1.find(doneKeyword) != std::string::npos){
+			isTaskMarkedAsDone = true;
+			tempString1 = tempString1.substr(0, tempString1.size() - 5);
+		}
 		dataCopy = dataCopy.substr(end+1, dataCopy.size() - end);
 		tempTask = new Task;
-		(*tempTask).addDetails(tempString);
+		(*tempTask).addDetails(tempString1);
+		if (isTaskMarkedAsDone){
+			(*tempTask).markIsDoneAsTrue();
+			isTaskMarkedAsDone = false;
+		}
 		addTask(*tempTask);
 		delete tempTask;
 		tempTask = NULL;
 	}
 }
 
+//@author A0111361Y
 int Planner::getIdOfLastEntry(void){// act this function returns id not last entry, need to change name
 
 	static int idGeneratror;
@@ -574,6 +596,7 @@ int Planner::getIdOfLastEntry(void){// act this function returns id not last ent
 	return idGeneratror;
 }
 
+//@author A0111361Y
 string Planner::markDone(int serialNumber, string nameOfList){
 	int idNumber=0;
 	string status;
@@ -618,6 +641,7 @@ string Planner::markDone(int serialNumber, string nameOfList){
 
 }
 
+//@author A0111361Y
 string Planner::markDoneIndex(int idNumber){
 	list<Task> ::iterator iter1;
 	iter1 = All.begin();
@@ -645,7 +669,7 @@ string Planner::markDoneIndex(int idNumber){
 										Printing functions
 
 ************************************************************************************************/
-
+//@author A0111361Y
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
@@ -672,6 +696,7 @@ string Planner::toString(string nameOfList){
 	else return ERROR_MESSSAGE_INVALID_LIST_NAME;
 }
 
+//@author A0111361Y
 string Planner::AllToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -693,6 +718,7 @@ string Planner::AllToString(void){
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::statusToString(string command, Task theTask){
 	string finalString;
 	if (command == COMMAND_ADD){
@@ -731,6 +757,8 @@ string Planner::statusToString(string command, Task theTask){
 }
 
 //Private Functions
+
+//@author A0111361Y
 string Planner::descriptionOfTaskToString(Task theTask){
 	ostringstream out;
 	int length;
@@ -771,15 +799,16 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	}
 
 	if (theTask.doneStatus()==true){
-		out << " DONE";
+		//out << DONE_KEYWORD;
 	}
 
 	if (theTask.clashStatus() == true){
-		out << "TASK CLASH!!!";
+		out <<CLASH_KEYWORD;
 	}
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::addStatusToString(Task theTask){
 	ostringstream out;
 	out << STATUS_TO_STRING_ADD_INTRO;
@@ -788,6 +817,7 @@ string Planner::addStatusToString(Task theTask){
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::deleteStatusToString(Task theTask){
 	ostringstream out;
 	out << STATUS_TO_STRING_DELETE_INTRO;
@@ -796,6 +826,7 @@ string Planner::deleteStatusToString(Task theTask){
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::editStatusToString(){ // to be completed after undo edit works
 	ostringstream out;
 	out <<STATUS_TO_STRING_EDIT_INTRO;
@@ -805,6 +836,7 @@ string Planner::editStatusToString(){ // to be completed after undo edit works
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::undoStatusToString(){ 
 	ostringstream out;
 
@@ -828,10 +860,12 @@ string Planner::undoStatusToString(){
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::clearStatusToString(){
 	return STATUS_TO_STRING_CLEAR_MSG;
 }
 
+//@author A0111361Y
 string Planner::duplicateStatusToString(Task theTask){
 	ostringstream out;
 	out << STATUS_TO_STRING_DUPLICATE_MSG;
@@ -841,18 +875,22 @@ string Planner::duplicateStatusToString(Task theTask){
 	
 }
 
+//@author A0111361Y
 string Planner::saveStatusToString(){
 	return STATUS_TO_STRING_SAVE_MSG;
 }
 
+//@author A0111361Y
 string Planner::doneStatusToString(){
 	return STATUS_TO_STRING_DONE_MSG;
 }
 
+//@author A0111361Y
 string Planner::searchStatusToString(){
 	return SEARCH_RESULTS_MSG;
 }
 
+//@author A0111361Y
 string Planner::HomeListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -871,6 +909,7 @@ string Planner::HomeListToString(void){
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::upcomingListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -889,6 +928,7 @@ string Planner::upcomingListToString(void){
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::missedListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -907,6 +947,7 @@ string Planner::missedListToString(void){
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::doneListToString(){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -924,6 +965,7 @@ string Planner::doneListToString(){
 	return out.str();
 }
 
+//@author A0111361Y
 string Planner::searchListToString(void){
 
 	ostringstream out;
@@ -943,8 +985,7 @@ string Planner::searchListToString(void){
 	return out.str();
 }
 
-
-
+//@author A0111361Y
 string Planner::saveDataToString(){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -1022,6 +1063,9 @@ string Planner::saveDataToString(){
 			}
 
 
+			if ((*it).doneStatus() == true){
+				out << DONE_KEYWORD;
+			}
 
 			if ((*it).getImportance()){
 				out << IMPORTANCE_SYMBOL;
@@ -1043,6 +1087,7 @@ string Planner::saveDataToString(){
 
 ************************************************************************************************/
 
+//@author A0111361Y
 void Planner::generateAllOtherList(void){
 	HomeList.clear();
 	MissedList.clear();
@@ -1053,7 +1098,7 @@ void Planner::generateAllOtherList(void){
 	generateUpcomingList();
 	generateDoneList();
 }
-
+//@author A0111361Y
 string Planner::generateSearchList(string target){
 	list<Task> ::iterator iter;
 	Task tempTask;
@@ -1068,6 +1113,7 @@ string Planner::generateSearchList(string target){
 
 	return searchStatusToString();
 }
+//@author A0111361Y
 void Planner::generateDoneList(void){
 	list<Task> ::iterator it;
 
@@ -1077,6 +1123,7 @@ void Planner::generateDoneList(void){
 		}
 	}
 }
+//THYE JIE
 void Planner::generateHomeList(void){
 	list<Task> ::iterator it;
 
@@ -1086,7 +1133,7 @@ void Planner::generateHomeList(void){
 		}
 	}
 }
-
+//THYE JIE
 void Planner::generateUpcomingList(void){
 	list<Task> ::iterator iter;
 
@@ -1096,7 +1143,7 @@ void Planner::generateUpcomingList(void){
 		}
 	}
 }
-
+//THYE JIE
 void Planner::generateMissedList(void){
 	list<Task> ::iterator iter;
 
@@ -1114,6 +1161,8 @@ void Planner::generateMissedList(void){
 ************************************************************************************************/
 
 //assumes 30 days in a month
+
+//THYE JIE
 bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinHome = false;
 	//case 1: currentDate + 7 days = current month, same year
@@ -1196,6 +1245,7 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	return isWithinHome;
 }
 
+//THYE JIE
 bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinMissed = false;
 	//case 1: passed year
@@ -1226,6 +1276,7 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 	return isWithinMissed;
 }
 
+//THYE JIE
 bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 	bool isWithinUpcoming = true;
 

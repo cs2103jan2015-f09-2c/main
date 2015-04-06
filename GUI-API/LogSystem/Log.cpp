@@ -9,6 +9,7 @@
 bool Log::instanceFlag = false;
 Log* Log::theOne = NULL;
 
+//@author A0111361Y
 Log* Log::getInstance(){
 	if (!instanceFlag)
 	{
@@ -21,14 +22,17 @@ Log* Log::getInstance(){
 		return theOne;
 	}
 }
+
+//@author A0111361Y
 Log::Log(void){
 	_numLines = 0;
 }
 
-
+//@author A0111361Y
 Log::~Log(){
 }
 
+//@author A0111361Y
 void Log::addLog(string type, string message){
 	
 	ostringstream out;
@@ -42,6 +46,7 @@ void Log::addLog(string type, string message){
 	
 	}
 
+//KARTHIK
 void Log::saveLog(void){
 	ofstream outFile;
 	
@@ -49,7 +54,7 @@ void Log::saveLog(void){
 		clearLogFile();
 		_numLines++;
 	}
-//	_numLines++;
+
 
 	outFile.open("Planner4Life_Log_File.txt", std::ios::app);
 	/*
@@ -59,7 +64,7 @@ void Log::saveLog(void){
 	outFile.close();
 }
 
-
+//KARTHIK
 int Log::numOfLinesInFile(){
 	int numOfLines=0;
 	string line;
@@ -72,7 +77,7 @@ int Log::numOfLinesInFile(){
 	return numOfLines;
 }
 
-
+//@author A0111361Y
 void Log::clearLogFile(){
 	ofstream outFile("Planner4Life_Log_File.txt");
 	outFile << "";
@@ -80,39 +85,3 @@ void Log::clearLogFile(){
 	_numLines = 0;
 }
 
-/*void Log::loadLog(void){
-	ifstream readFile("Planner4Life_log_File.txt");
-	string line;
-
-	while (!_logList.empty()){
-		_logList.pop_back();
-	}
-
-	while (getline(readFile, line)){
-		_logList.push_back(line);
-	}
-
-	vector<string>::iterator iter;
-	for (iter = _logList.begin(); iter != _logList.end(); ++iter){
-		if (*iter == ""){
-			iter = _logList.erase(iter);
-			if (iter == _logList.end()){
-				break;
-			}
-		}
-	}
-	
-	vector<string>::iterator iter1;
-	int i = 0;
-	for (iter1 = _logList.begin(); iter1 != _logList.end(); ++iter1){
-		i++;
-		if (i <= 9){
-			(*iter1).erase(0, 2);
-		}
-		else {
-			(*iter1).erase(0, 3);
-		}
-	}
-
-	_numLines = _logList.size();
-}*/

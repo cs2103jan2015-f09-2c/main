@@ -8,6 +8,7 @@ namespace PlannerUnitTest
 	TEST_CLASS(PlannerTest)
 	{
 	public:
+		//@author A0111361Y
 		TEST_METHOD(testAdd_floating_Task)
 		{
 			Planner testPlanner;
@@ -30,7 +31,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testClash_2date2time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -49,7 +50,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testClash_2date1time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -68,7 +69,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testClash_1date1time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -87,7 +88,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testClash_1date2time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -106,7 +107,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testClash_12date1time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -126,7 +127,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testClash_12date2time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -147,7 +148,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		
+		//@author A0111361Y
 		TEST_METHOD(testAdd_oneTask)
 		{
 			Planner testPlanner;
@@ -164,6 +165,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
+		//@author A0111361Y
 		TEST_METHOD(testAdd_manyTasks)
 		{
 			Planner testPlanner;
@@ -188,7 +190,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testAdd_manyTasks_differentDates_noTime)
 		{
 			Planner testPlanner;
@@ -203,7 +205,7 @@ namespace PlannerUnitTest
 			string expectedOutput = "1. Test task 3 2/4/15 \r\n2. Test task 1 3/4/15 \r\n3. Test task 2 4/4/15 \r\n";
 			Assert::AreEqual(expectedOutput, actualOutput);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testClear)
 		{
 			Planner testPlanner;
@@ -225,7 +227,7 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testDelete_Missed_Delete_Task_2)
 		{
 			Planner testPlanner;
@@ -243,6 +245,7 @@ namespace PlannerUnitTest
 			}
 			Assert::IsTrue(doesFunctionWork);
 		}
+		//@author A0111361Y
 		TEST_METHOD(testDelete_Missed_Delete_Task_1)
 		{
 			Planner testPlanner;
@@ -260,6 +263,7 @@ namespace PlannerUnitTest
 			}
 			Assert::IsTrue(doesFunctionWork);
 		}
+		//@author A0111361Y
 		TEST_METHOD(testEdit)
 		{
 			Planner testPlanner;
@@ -279,7 +283,7 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testUndo_Add)
 		{
 			Planner testPlanner;
@@ -298,7 +302,7 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testUndo_Delete)
 		{
 			Planner testPlanner;
@@ -319,7 +323,7 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 			
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testUndo_Edit)
 		{
 			Planner testPlanner;
@@ -340,7 +344,7 @@ namespace PlannerUnitTest
 			Assert::IsTrue(doesFunctionWork);
 
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testLoad_Planner)
 		{
 			Planner testPlanner;
@@ -354,7 +358,7 @@ namespace PlannerUnitTest
 			}
 			Assert::IsTrue(doesFunctionWork);
 		}
-
+		//@author A0111361Y
 		TEST_METHOD(testMark_Done_effect_on_missed_list_1_task)
 		{
 			Planner testPlanner;
@@ -373,6 +377,7 @@ namespace PlannerUnitTest
 		}
 			Assert::IsTrue(doesFunctionWork);
 		}
+		//@author A0111361Y
 		TEST_METHOD(testMark_Done_effect_on_done_list_1_task)
 		{
 			Planner testPlanner;
@@ -390,6 +395,7 @@ namespace PlannerUnitTest
 			}
 			Assert::IsTrue(doesFunctionWork);
 		}
+		//@author A0111361Y
 		TEST_METHOD(testMark_Done_effect_on_done_list_2_task)
 		{
 			Planner testPlanner;
