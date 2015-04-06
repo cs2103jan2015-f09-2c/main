@@ -259,98 +259,106 @@ bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
 	return dateIsEqual;
 }
 
+bool Planner::isOneDateTaskbetweenTwoDateTask(Task taskWithOneDate, Task taskWithTwoDates){
+	bool isInBetween = false;
+
+	if (taskWithOneDate.getDateEnd().year <= taskWithTwoDates.getDateEnd().year && taskWithOneDate.getDateEnd().year >= taskWithTwoDates.getDateEnd().year) {
+		if (taskWithOneDate.getDateEnd().month <= taskWithTwoDates.getDateEnd().month && taskWithOneDate.getDateEnd().month >= taskWithTwoDates.getDateEnd().month) {
+			if (taskWithOneDate.getDateEnd().day <= taskWithTwoDates.getDateEnd().day && taskWithOneDate.getDateEnd().day >= taskWithTwoDates.getDateEnd().day){
+				isInBetween = true;
+			}
+		}
+	}
+	return isInBetween;
+}
+
 bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	bool isClash = false;
-	int numOfTask1Times, numOfTask2Times, numOfTask1Dates, numOfTask2Dates;
+	int numOfTask1Times, numOfTask2Times, numOfTask1Dates, numOfTask2Dates, task1StartTime, task2StartTime;
+	
 	numOfTask1Times = Task1.getNumOfTimes();
 	numOfTask2Times = Task2.getNumOfTimes();
 	numOfTask1Dates = Task1.getNumOfDates();
 	numOfTask2Dates = Task2.getNumOfDates();
 
+	task1StartTime = Task1.getTimeStart();
+	task2StartTime = Task2.getTimeStart();
+	
 	if (numOfTask1Times == 0 || numOfTask2Times == 0){
 		return isClash;
 	}
 
 	//Both tasks have 2 dates and 1 time
-	if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
 		if (isTwoDatesTasksSameDates(Task1, Task2)){
-			if (Task1.getTimeStart() == Task2.getTimeStart()){
+			if (task1StartTime == task2StartTime){
 				isClash = true;
-				return isClash;
 			}
 		}
 	}
+	
 
 	//Both tasks have 2 dates 2 times
-	if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
 		if (isTwoDatesTasksSameDates(Task1, Task2)){
-			if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+			if ((Task1.getTimeEnd() >= task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
 				isClash = true;
-				return isClash;
 			}
 		}
 	}
 
 	//Both tasks have 1 date 1 time
-	if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 1){
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 1){
 		if (isOneDateTasksSameDates(Task1, Task2)){
-			if (Task1.getTimeStart() == Task2.getTimeStart()){
+			if (task1StartTime == task2StartTime){
 				isClash = true;
-				return isClash;
 			}
 		}
 	}
 	
 	//Both tasks have 1 date 2 time
-	if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
 		if (isOneDateTasksSameDates(Task1, Task2)){
-			if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+			if ((Task1.getTimeEnd() > task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
 				isClash = true;
-				return isClash;
 			}
 		}
 	}
 
-	if (Task1.getDateEnd().year == Task2.getDateEnd().year) {
-		if (Task1.getDateEnd().month == Task2.getDateEnd().month) {
-			if (Task1.getDateEnd().day == Task2.getDateEnd().day) {
-				if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
-					isClash = true;
-				}
+	//Both tasks have no date 1 time
+	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (task1StartTime == task2StartTime){
+			isClash = true;
+		}
+	}
+
+	//Task1 has 1 date 1 time and Task2 has 2 dates, 1 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
 			}
 		}
 	}
-	//no date 1 time
-	if (Task1.getTimeStart() == Task2.getTimeStart()){
-		isClash = true;
+	
+	//Floating tasks
+	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 0 && numOfTask2Times == 0){
+		isClash = false;
 	}
-	//task1 one date, task2 2 date, 1 time
-	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
-		if (Task1.getDateEnd().month <= Task2.getDateEnd().month && Task1.getDateEnd().month >= Task2.getDateEnd().month) {
-			if (Task1.getDateEnd().day <= Task2.getDateEnd().day && Task1.getDateEnd().day >= Task2.getDateEnd().day) {
-				if (Task1.getTimeStart() == Task2.getTimeStart()){
-					isClash = true;
-				}
-			}
-		}
-	}
-	//task1 one date, task2 2 date, 2 time
-	if (Task1.getNumOfDates() == 1 && Task2.getNumOfDates() == 2) {
-		isClash = Date2time(Task2, Task1);
+
+	//Task1 has 1 date 1 time and Task2 has 2 dates, 2 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 2){
+		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task2, Task1);
 	}
 	else {
-		isClash = Date2time(Task1, Task2);
-	}
-
-	//floating
-	if (Task1.getNumOfDates() == 0 || Task2.getNumOfDates() == 0){
-		isClash = false;
+		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task1, Task2);
 	}
 
 	return isClash;
 }
 
-bool Planner::Date2time(Task Task1, Task Task2){
+//should this be  end1 year <= end2 year && end1 >= start2
+bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2){
 	bool isClash = false;
 	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
 		if (Task1.getDateEnd().month <= Task2.getDateEnd().month && Task1.getDateEnd().month >= Task2.getDateEnd().month) {
