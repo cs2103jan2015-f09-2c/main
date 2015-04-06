@@ -68,5 +68,41 @@ namespace StorageUnitTest{
 			string expectedOutcome = "file not found";
 			Assert::AreEqual(expectedOutcome, actualOutcome);
 		}
+
+		TEST_METHOD(testSave_valid_address){
+			//file address specified does not exist
+			Storage* myTestStorage;
+			myTestStorage = Storage::getInstanceOfStorage();
+			string saveAddress = "D:\\testsave.txt";
+			bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
+			Assert::IsTrue(actualOutcome);
+		}
+
+		TEST_METHOD(testSave_valid_nonexisting_address_1){
+			//file address specified is not used before
+			Storage* myTestStorage;
+			myTestStorage = Storage::getInstanceOfStorage();
+			string saveAddress = "C:\\";
+			bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
+			Assert::IsTrue(actualOutcome);
+		}
+
+		TEST_METHOD(testSave_valid_nonexisting_address_2){
+			//check whether file address is case sensitive
+			Storage* myTestStorage;
+			myTestStorage = Storage::getInstanceOfStorage();
+			string saveAddress = "d:\\";
+			bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
+			Assert::IsTrue(actualOutcome);
+		}
+
+		TEST_METHOD(testSave_valid_nonexisting_address_3){
+			//check whether file name is removed successfully from directory
+			Storage* myTestStorage;
+			myTestStorage = Storage::getInstanceOfStorage();
+			string saveAddress = "d:\\filenameTobeRemoved.txt";
+			bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
+			Assert::IsTrue(actualOutcome);
+		}
 	};
 }

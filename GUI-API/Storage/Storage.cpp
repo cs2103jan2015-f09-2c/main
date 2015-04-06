@@ -78,15 +78,24 @@ string Storage::saveWithFileAddress(string saveAddress, string content){
 
 bool Storage::isAddressValid(string saveAddress){
 	bool isValid = false;
-	int lengthOfCharArray = saveAddress.length() + 1;
+	string directory = extractDirectoryFolder(saveAddress);
+
+	int lengthOfCharArray = directory.length() + 1;
 	char * pointerToAddress = new char[lengthOfCharArray];
-	strcpy_s(pointerToAddress, lengthOfCharArray, saveAddress.c_str());
+	strcpy_s(pointerToAddress, lengthOfCharArray, directory.c_str());
 
 	CString address = _T(pointerToAddress);
 	if (PathFileExists(address)){
 		isValid = true;
 	}
 	return isValid;
+}
+
+string Storage::extractDirectoryFolder(string saveAddress){
+	size_t backwardSlashPosition = saveAddress.find_last_of("\\");
+	string directory = saveAddress.substr(0, backwardSlashPosition+1);
+
+	return directory;
 }
 string Storage::save(string content){
 	updateContent(content);
