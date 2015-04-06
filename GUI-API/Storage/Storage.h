@@ -27,7 +27,9 @@ private:
 	bool doesAddressAlrdExist(string);
 	void updateContent(string);
 	void updateMyList();
-	string extractDirectoryFolder(string);
+	string extractDirectoryFolder(string&);
+	bool isFileNameValid(string);
+	
 
 public:
 	static Storage* getInstanceOfStorage();
@@ -37,6 +39,6 @@ public:
 	string save(string);
 	string load();
 	string load(string, string&);
-	bool isAddressValid(string); // supposed to be private function
+	bool isAddressValid(string); //supposed to be in private
 };
 
