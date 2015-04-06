@@ -178,6 +178,7 @@ void Logic::processCommandAdd(string taskDetail){
 	outcome = myPlanner.addTask(currentTask);
 }
 
+//@author A0111361Y
 void Logic::processCommandRecur(string taskDetail){
 
 	Task currentTask;
