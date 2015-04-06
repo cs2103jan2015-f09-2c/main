@@ -39,6 +39,7 @@ const string ERROR_MESSSAGE_INVALID_LIST_NAME = "Error!! Name of list is invalid
 const string ERROR_MESSSAGE_INVALID_FILE_NAME = "Error!! Name of file is invalid!!";
 const string ERROR_MESSSAGE_INVALID_COMMAND = "Error!! Command is invalid!!";
 const string ERROR_MESSAGE_INVALID_INDEX = "Invalid index!";
+const string ERROR_MESSAGE_INVALID_UNDO = "Nothing to undo!";
 
 const string EMPTY_LIST_MESSAGE = "The list is empty";
 const string NO_RESULTS_MESSAGE = "No results found!";
@@ -145,7 +146,50 @@ string Planner::addTask(Task newTask){
 			} 
 		}
 	}
+	//case 4: when new task has 1 date (0,1 or 2 times)
+	else if (newTask.getNumOfDates() == 1){
+		int numofTimes = newTask.getNumOfTimes();
+		int yearS = newTask.getDateStart().year;
+		int monthS = newTask.getDateStart().month;
+		int dayS = newTask.getDateStart().day;
 
+		for (iter = All.begin(); iter != All.end(); ++iter){
+			int IyearE = (*iter).getDateStart().year;
+			int ImonthE = (*iter).getDateStart().month;
+			int IdayE = (*iter).getDateStart().day;
+
+			if ((*iter).getDateStart().year > newTask.getDateEnd().year){
+				break;
+			}
+			else if ((*iter).getDateStart().year == newTask.getDateEnd().year){
+				if ((*iter).getDateStart().month > newTask.getDateStart().month){
+					if ((*iter).getDateEnd().year > newTask.getDateEnd().year){
+						break;
+					}
+					else if ((*iter).getDateEnd().year == newTask.getDateEnd().year){
+						if ((*iter).getDateEnd().month > newTask.getDateEnd().month){
+							break;
+						}
+						else if ((*iter).getDateEnd().month == newTask.getDateEnd().month){
+							if ((*iter).getDateEnd().day > newTask.getDateEnd().day){
+								break;
+							}
+							else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
+								if ((*iter).getTimeStart() > newTask.getTimeStart()){
+									break;
+								}
+								else if ((*iter).getTimeStart() == newTask.getTimeStart()){
+									if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	All.insert(iter, newTask);
 	
 	string status;
@@ -187,80 +231,134 @@ void Planner::checkListForClashes(){
 	return;
 	
 }
-bool Planner::checkTaskForClashes(Task Task1, Task Task2){
-	bool isClash = false;
-	//Date Same Time Same --> Single Times
-	//2 date 1 time
+
+bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
+	bool areEqual = false;
+
 	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
 		if (Task1.getDateStart().month == Task2.getDateStart().month && Task1.getDateEnd().month == Task2.getDateEnd().month) {
-			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day) {
-				if (Task1.getTimeStart() == Task2.getTimeStart()){
-					isClash = true;
-				}
+			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day){
+				areEqual = true;
 			}
 		}
 	}
-	//2 date 2 time
-	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
-		if (Task1.getDateStart().month == Task2.getDateStart().month && Task1.getDateEnd().month == Task2.getDateEnd().month) {
-			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day) {
-				if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
-					isClash = true;
-				}
-			}
-		}
-	}
-	//1 date 1 time
+	return areEqual;
+}
+
+bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
+	bool dateIsEqual = false;
+
 	if (Task1.getDateEnd().year == Task2.getDateEnd().year) {
 		if (Task1.getDateEnd().month == Task2.getDateEnd().month) {
 			if (Task1.getDateEnd().day == Task2.getDateEnd().day) {
-				if (Task1.getTimeStart() == Task2.getTimeStart()){
-					isClash = true;
-				}
+				dateIsEqual = true;
 			}
 		}
-	}
-	//1 date 2 time
-	if (Task1.getDateEnd().year == Task2.getDateEnd().year) {
-		if (Task1.getDateEnd().month == Task2.getDateEnd().month) {
-			if (Task1.getDateEnd().day == Task2.getDateEnd().day) {
-				if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
-					isClash = true;
-				}
-			}
-		}
-	}
-	//no date 1 time
-	if (Task1.getTimeStart() == Task2.getTimeStart()){
-		isClash = true;
-	}
-	//task1 one date, task2 2 date, 1 time
-	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
-		if (Task1.getDateEnd().month <= Task2.getDateEnd().month && Task1.getDateEnd().month >= Task2.getDateEnd().month) {
-			if (Task1.getDateEnd().day <= Task2.getDateEnd().day && Task1.getDateEnd().day >= Task2.getDateEnd().day) {
-				if (Task1.getTimeStart() == Task2.getTimeStart()){
-					isClash = true;
-				}
-			}
-		}
-	}
-	//task1 one date, task2 2 date, 2 time
-	if (Task1.getNumOfDates() == 1 && Task2.getNumOfDates() == 2) {
-		isClash = Date2time(Task2, Task1);
-	}
-	else {
-		isClash = Date2time(Task1, Task2);
 	}
 
-	//floating
-	if (Task1.getNumOfDates() == 0 || Task2.getNumOfDates() == 0){
+	return dateIsEqual;
+}
+
+bool Planner::isOneDateTaskbetweenTwoDateTask(Task taskWithOneDate, Task taskWithTwoDates){
+	bool isInBetween = false;
+
+	if (taskWithOneDate.getDateEnd().year <= taskWithTwoDates.getDateEnd().year && taskWithOneDate.getDateEnd().year >= taskWithTwoDates.getDateEnd().year) {
+		if (taskWithOneDate.getDateEnd().month <= taskWithTwoDates.getDateEnd().month && taskWithOneDate.getDateEnd().month >= taskWithTwoDates.getDateEnd().month) {
+			if (taskWithOneDate.getDateEnd().day <= taskWithTwoDates.getDateEnd().day && taskWithOneDate.getDateEnd().day >= taskWithTwoDates.getDateEnd().day){
+				isInBetween = true;
+			}
+		}
+	}
+	return isInBetween;
+}
+
+bool Planner::checkTaskForClashes(Task Task1, Task Task2){
+	bool isClash = false;
+	int numOfTask1Times, numOfTask2Times, numOfTask1Dates, numOfTask2Dates, task1StartTime, task2StartTime;
+	
+	numOfTask1Times = Task1.getNumOfTimes();
+	numOfTask2Times = Task2.getNumOfTimes();
+	numOfTask1Dates = Task1.getNumOfDates();
+	numOfTask2Dates = Task2.getNumOfDates();
+
+	task1StartTime = Task1.getTimeStart();
+	task2StartTime = Task2.getTimeStart();
+	
+	if (numOfTask1Times == 0 || numOfTask2Times == 0){
+		return isClash;
+	}
+
+	//Both tasks have 2 dates and 1 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isTwoDatesTasksSameDates(Task1, Task2)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
+			}
+		}
+	}
+	
+
+	//Both tasks have 2 dates 2 times*******check sign here and refactor out
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (isTwoDatesTasksSameDates(Task1, Task2)){
+			if ((Task1.getTimeEnd() >= task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+				isClash = true;
+			}
+		}
+	}
+
+	//Both tasks have 1 date 1 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
+			}
+		}
+	}
+	
+	//Both tasks have 1 date 2 time********check sign here and refactor out
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			if ((Task1.getTimeEnd() > task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+				isClash = true;
+			}
+		}
+	}
+
+	//Both tasks have no date 1 time
+	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (task1StartTime == task2StartTime){
+			isClash = true;
+		}
+	}
+
+	//Task1 has 1 date 1 time and Task2 has 2 dates, 1 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
+			}
+		}
+	}
+	
+	//Floating tasks
+	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 0 && numOfTask2Times == 0){
 		isClash = false;
+	}
+
+	//Task1 has 1 date 1 time and Task2 has 2 dates, 2 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 2){
+		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task2, Task1);
+	}
+	else {
+		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task1, Task2);
 	}
 
 	return isClash;
 }
 
-bool Planner::Date2time(Task Task1, Task Task2){
+//should this be  end1 year <= end2 year && end1 >= start2
+bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2){
 	bool isClash = false;
 	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
 		if (Task1.getDateEnd().month <= Task2.getDateEnd().month && Task1.getDateEnd().month >= Task2.getDateEnd().month) {
@@ -314,23 +412,30 @@ bool Planner::tasksAreTheSame(Task Task1, Task Task2){
 	return same;
 }
 
+bool Planner::indexChecker(list<Task>::iterator& iter, int serialNumber, list<Task>& targetList){
+	int indexCount = 1;
+	bool isValidIndex = true;
+
+	iter = targetList.begin();
+	for (int i = 1; i != serialNumber && i < targetList.size(); i++){
+		iter++;
+		indexCount++;
+	}
+	if (indexCount != serialNumber || targetList.empty()) {
+		isValidIndex = false;
+	}
+
+	return isValidIndex;
+}
 
 string Planner::deleteTask(int serialNumber, string nameOfList){
 	int idNumber;
-	int indexCount = 1;
 	string status;
 	list<Task> ::iterator iter;
 
-
 	if (nameOfList == HOME_LIST){
-		iter = HomeList.begin();
-		for (int i = 1; i != serialNumber && i < HomeList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || HomeList.empty()) {
-			status = ERROR_MESSAGE_INVALID_INDEX;
-			return status;
+		if (indexChecker(iter, serialNumber, HomeList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
 			idNumber = (*iter).getIdNumber();
@@ -338,14 +443,8 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == MISSED_LIST){
-		iter = MissedList.begin();
-		for (int i = 1; i != serialNumber && i < MissedList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || MissedList.empty()) {
-			status = ERROR_MESSAGE_INVALID_INDEX;
-			return status;
+		if (indexChecker(iter, serialNumber, MissedList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
 			idNumber = (*iter).getIdNumber();
@@ -353,21 +452,17 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		iter = UpcomingList.begin();
-		for (int i = 1; i != serialNumber && i < UpcomingList.size(); i++){
-			iter++;
-			indexCount++;
-		}
-		if (indexCount != serialNumber || UpcomingList.empty()) {
-			status = ERROR_MESSAGE_INVALID_INDEX;
-			return status;
+		if (indexChecker(iter, serialNumber, UpcomingList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
 			idNumber = (*iter).getIdNumber();
 			status = deleteIndex(idNumber);
 		}
 	}
-	else cout << ERROR_MESSSAGE_INVALID_LIST_NAME << endl;
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
 	//logging
 	stringstream message;
 	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
@@ -400,6 +495,7 @@ string Planner::deleteIndex(int idNumber){
 }
 
 string Planner::undo(void){
+	string status = "";
 	if (lastEntry.lastCommand == COMMAND_ADD){
 		int lastEntryID = getIdOfLastEntry() - 1;
 		deleteIndex(lastEntryID);
@@ -411,7 +507,9 @@ string Planner::undo(void){
 		deleteIndex(lastEdit.addedTask.getIdNumber());
 		addTask(lastEdit.deletedTask);
 	}
-	string status;
+	else {
+		throw ERROR_MESSAGE_INVALID_UNDO;
+	}
 	status = undoStatusToString();
 	checkListForClashes();
 	generateAllOtherList();
@@ -481,33 +579,35 @@ string Planner::markDone(int serialNumber, string nameOfList){
 	list<Task> ::iterator iter;
 
 	if (nameOfList == HOME_LIST){
-		iter = HomeList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
+		if (indexChecker(iter, serialNumber, HomeList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
-		
-		idNumber = (*iter).getIdNumber();
-		status = markDoneIndex(idNumber);
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
 	}
 	else if (nameOfList == MISSED_LIST){
-		iter = MissedList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
+		if (indexChecker(iter, serialNumber, MissedList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
-		
-		idNumber = (*iter).getIdNumber();
-		status = markDoneIndex(idNumber);
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		iter = UpcomingList.begin();
-		for (int i = 1; i != serialNumber; i++){
-			iter++;
+		if (indexChecker(iter, serialNumber, UpcomingList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
-		idNumber = (*iter).getIdNumber();
-
-		status = markDoneIndex(idNumber);
+		else {
+			idNumber = (*iter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
 	}
-	else cout << ERROR_MESSSAGE_INVALID_LIST_NAME << endl;
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
 	//logging
 	stringstream message;
 	message << LOG_FILE_MARK_DONE_MSG << idNumber;
@@ -640,10 +740,10 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	case 0:
 		break;
 	case 1:
-		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
+		out << "Date: " << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
 		break;
 	case 2:
-		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
+		out << "Date: " << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
 		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " " ;
 		break;
 	}
@@ -652,47 +752,15 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	case 0:
 		break;
 	case 1:
-		length = 1;
-		x = theTask.getTimeStart();
-		while (x /= 10) {
-			length++;
-		}
-		if (length <= 4) {
-			out << setfill('0') << setw(4) << theTask.getTimeStart() <<" ";
-		}
-		else {
-			out << theTask.getTimeStart() <<" ";
-		}
+		out << "Time: " << setfill('0') << setw(4) << theTask.getTimeStart() << " ";
 		break;
 	case 2:
-		length = 1;
-		x = theTask.getTimeStart();
-		while (x /= 10) {
-			length++;
-		}
-		if (length ==3) {
-			out << setfill('0') << setw(4) << theTask.getTimeStart();
-		}
-		else {
-			out << theTask.getTimeStart();
-		}
-
+		out << "Time: " << setfill('0') << setw(4) << theTask.getTimeStart();
 		out << " to ";
-
-		length = 1;
-		x = theTask.getTimeEnd();
-		while (x /= 10) {
-			length++;
-		}
-		if (length == 3) {
-			out << setfill('0') << setw(4) << theTask.getTimeEnd() << " ";
-		}
-		else {
-			out << theTask.getTimeEnd() << " ";
-		}
+		out << setfill('0') << setw(4) << theTask.getTimeEnd() << " ";
 		break;
 	default:
-		cout << ERROR_MESSAGE_FATAL;
+		throw ERROR_MESSAGE_FATAL;
 	}
 
 
@@ -752,6 +820,9 @@ string Planner::undoStatusToString(){
 		out << descriptionOfTaskToString(lastEdit.addedTask);
 		out << STATUS_TO_STRING_EDIT_MID;
 		out << descriptionOfTaskToString(lastEdit.deletedTask);
+	}
+	else{
+		throw ERROR_MESSAGE_INVALID_UNDO;
 	}
 	return out.str();
 }
@@ -946,7 +1017,7 @@ string Planner::saveDataToString(){
 				out << (*it).getTimeEnd();
 				break;
 			default:
-				cout << ERROR_MESSAGE_FATAL;
+				throw ERROR_MESSAGE_FATAL;
 			}
 
 
@@ -1046,9 +1117,9 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinHome = false;
 	//case 1: currentDate + 7 days = current month, same year
 	if (currentDate.day <= 23) {
-		if ((*it).getDateEnd().month == (currentDate.month)) {
-			if ((*it).getDateEnd().day <= (currentDate.day + 7) && (*it).getDateEnd().day >= currentDate.day) {
-				if ((*it).getDateEnd().year == currentDate.year) {
+		if ((*it).getDateStart().month == (currentDate.month)) {
+			if ((*it).getDateStart().day <= (currentDate.day + 7) && (*it).getDateStart().day >= currentDate.day) {
+				if ((*it).getDateStart().year == currentDate.year) {
 					isWithinHome = true;
 				}
 			}

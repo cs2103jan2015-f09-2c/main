@@ -76,7 +76,12 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 
 	else
 	if (command == "add"){
+		try{
 			processCommandAdd(taskDetail);
+		}
+		catch (const string error) {
+			throw error;
+		}
 	}
 
 	else
@@ -236,7 +241,7 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 
 	//in >> taskDetails;
 	int sizeToSubstr = userInput.size() - 2;
-	taskDetails = userInput.substr(2, sizeToSubstr);
+	taskDetails = userInput.substr(3, sizeToSubstr);
 	outcome = myPlanner.editTask(taskIndex, currentView, taskDetails);
 }
 

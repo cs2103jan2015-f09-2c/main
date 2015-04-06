@@ -5,6 +5,7 @@
 #include <sstream>
 
 const string FATAL_ERROR = "Fatal Error!";
+const string ERROR_MESSAGE_INVALID_INPUT = "Invalid format entered! Please re-enter appropriate entry.";
 
 using namespace std;
 
@@ -51,7 +52,7 @@ void Task::addDetails(string details){
 		process_TwoDelimiter(details);
 		break;
 	default:
-		cout << FATAL_ERROR << endl;
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 }
 
@@ -64,11 +65,14 @@ void Task::process_NoDelimiter(string details) {
 void Task::process_OneDelimiter(string details) {
 	LogData->addLog("UPDATE", "In addDetails, Case 1 was called");
 	processDescription(details);
-	if (details.find("date") != string::npos){
+	if (details.find(" date") != string::npos){
 		processDate(details);
 	}
-	else {
+	else if (details.find(" time") != string::npos){
 		processTime(details);
+	}
+	else {
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 	LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
 }
@@ -81,11 +85,14 @@ void Task::process_TwoDelimiter(string details) {
 	processDescription(details);
 	semicolonPos = details.find(';');
 	durationInfo = details.substr(0, semicolonPos);
-	if (durationInfo.find("date") != string::npos){
+	if (durationInfo.find(" date") != string::npos){
 		dateInfo = details.substr(0, semicolonPos);
 	}
-	else if (durationInfo.find("time") != string::npos){
+	else if (durationInfo.find(" time") != string::npos){
 		timeInfo = details.substr(0, semicolonPos);
+	}
+	else {
+		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
 	semicolonPos++;
 	if (timeInfo.empty()){
@@ -132,42 +139,53 @@ void Task::processDate(string dateInfo){
 		in >> startDate;
 		in >> separator;
 		in >> endDate;
-		storeStartDate(startDate);
-		storeEndDate(endDate);
-		_numOfDates = 2;
+
+		if (areValidDates(startDate, endDate)){
+			storeStartDate(startDate);
+			storeEndDate(endDate);
+			_numOfDates = 2;
+			LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
+		}
+		else{
+			throw ERROR_MESSAGE_INVALID_INPUT;
+			LogData->addLog("UPDATE", "In addDetails(processDate), Date invalid");
+		}
 	}
 	else{
 		in >> keyword;
 		in >> endDate;
-		storeEndDate(endDate);
-		storeStartDate(endDate);
-		_numOfDates = 1;
+
+		if (areValidDates(endDate, endDate)){
+			storeEndDate(endDate);
+			storeStartDate(endDate);
+			_numOfDates = 1;
+			LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
+		}
+		else{
+			throw ERROR_MESSAGE_INVALID_INPUT;
+			LogData->addLog("UPDATE", "In addDetails(processDate), Date invalid");
+		}
 	}
-	LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
 }
 
 //Splits the start date string into individual components and stores them in the relevant variables
-void Task::storeStartDate(string dateStart){
-	string day, month, year;
-	day = dateStart.substr(0, 2);					// These are all in string form
-	month = dateStart.substr(2, 2);
-	year = dateStart.substr(4, 2);
+void Task::storeStartDate(string dateStart){	
+	int day, month, year;
+	splitDate(dateStart, day, month, year);
 
-	_dateStart.day = stoi(day);						// To convert the strings to integer
-	_dateStart.month = stoi(month);
-	_dateStart.year = stoi(year);
+	_dateStart.day = day;		
+	_dateStart.month = month;
+	_dateStart.year = year;
 }
 
 //Splits the end date string into individual components and stores them in the relevant variables
 void Task::storeEndDate(string dateEnd){
-	string day, month, year;
-	day = dateEnd.substr(0, 2);						// These are all in string form
-	month = dateEnd.substr(2, 2);
-	year = dateEnd.substr(4, 2);
+	int day, month, year;
+	splitDate(dateEnd, day, month, year);
 
-	_dateEnd.day = stoi(day);						// To convert the strings to integer
-	_dateEnd.month = stoi(month);
-	_dateEnd.year = stoi(year);
+	_dateEnd.day = day;
+	_dateEnd.month = month;
+	_dateEnd.year = year;
 }
 
 //Takes in time related information in a string and stores into the respective variables in Task object
@@ -185,24 +203,50 @@ void Task::processTime(string timeInfo){
 		in >> separator;
 		in >> timeEnd;
 
-		storeStartTime(timeStart);
-		storeEndTime(timeEnd);
-		_numOfTimes = 2;
+		if (areValidTimes(timeStart, timeEnd)){
+			storeStartTime(timeStart);
+			storeEndTime(timeEnd);
+			_numOfTimes = 2;
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
+		}
+		else {
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time invalid");
+			throw ERROR_MESSAGE_INVALID_INPUT;			
+		}
 	}
 	else{
 		in >> keyword;
 		in >> timeStart;
-		storeStartTime(timeStart);
-		_numOfTimes = 1;
+
+		if (areValidTimes(timeStart, timeStart)){
+			storeStartTime(timeStart);
+			_numOfTimes = 1;
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
+		}
+		else {
+			LogData->addLog("UPDATE", "In addDetails(processTime), Time invalid");
+			throw ERROR_MESSAGE_INVALID_INPUT;			
+		}
 	}
-	LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
 }
 
 void Task::storeStartTime(string time) {
-	_timeStart = stoi(time);
+
+	try {
+		_timeStart = stoi(time);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_INPUT;
+	}
 }
+
 void Task::storeEndTime(string time) {
-	_timeEnd = stoi(time);
+	try {
+		_timeEnd = stoi(time);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_INPUT;
+	}
 }
 
 //Stores a unique ID number that is created by the Planner class
@@ -266,30 +310,6 @@ bool Task::doneStatus(){
 
 /************************************************************************************************
 
-										Search function
-
-************************************************************************************************/
-
-//Checks if the target word is present in the task description
-bool Task::isSearchTargetPresent(string target){
-	LogData->addLog("UPDATE", "In isSearchTargetPresent, search initiated");
-	bool isFound = true;
-	string targetWithUpperCase = target, targetWithLowerCase = target;
-	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
-	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
-
-	if ((_description.find(target) == string::npos) && 
-		(_description.find(targetWithUpperCase) == string::npos) &&		////for search to include the target with first letter in upper case
-		(_description.find(targetWithLowerCase) == string::npos)){		//for search to include the target with first letter in lower case
-				isFound = false;
-			}
-
-	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
-	return isFound;
-}
-
-/************************************************************************************************
-
 										Recur function
 
 ************************************************************************************************/
@@ -330,7 +350,7 @@ string Task::modifyDetails(string frequency, string details){
 	switch (numOfDates){
 	case 1:
 		endDate = modifyDate(endDate, frequency);
-		updatedInfo << keyword << " " << endDate;
+		updatedInfo << " " << keyword << " " << endDate;
 		newDateInfo = updatedInfo.str();
 		details = insertNewDateInfo(details, newDateInfo);
 		break;
@@ -339,7 +359,7 @@ string Task::modifyDetails(string frequency, string details){
 //		modifyStartAndEndDate(startDate, endDate);
 		startDate = modifyDate(startDate, frequency);
 		endDate = modifyDate(endDate, frequency);
-		updatedInfo << keyword << " " << startDate << " " << separator << " " << endDate;
+		updatedInfo << " " << keyword << " " << startDate << " " << separator << " " << endDate;
 		newDateInfo = updatedInfo.str();
 		details = insertNewDateInfo(details, newDateInfo);
 		break;
@@ -420,16 +440,6 @@ string Task::processDailyRecur(string date){
 	return date;
 }
 
-bool Task::is31DayMonth(int month){
-	bool is31DayMonth = false;
-
-	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
-		is31DayMonth = true;
-	}
-
-	return is31DayMonth;
-}
-
 string Task::processWeeklyRecur(string date){
 
 	for (int i = 1; i <= 7; i++){				//since each week is 7 days, just loop processDailyRecur 7 times
@@ -470,42 +480,48 @@ string Task::processYearlyRecur(string date){
 }
 
 void Task::splitDate(string endDate, int& day, int& month, int& year){
-	day = stoi(endDate.substr(0, 2));
-	month = stoi(endDate.substr(2, 2));
-	year = stoi(endDate.substr(4, 2));
+	try {
+		day = stoi(endDate.substr(0, 2));
+		month = stoi(endDate.substr(2, 2));
+		year = stoi(endDate.substr(4, 2));
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_INPUT;
+	}
+
 }
 
 void Task::mergeDate(string& date, int day, int month, int year){
 	ostringstream mergedDate;
-	if (day < 10){
-		mergedDate << "0" << day;
-	}
-	else{
-		mergedDate << day;
-	}
+if (day < 10){
+	mergedDate << "0" << day;
+}
+else{
+	mergedDate << day;
+}
 
-	if (month < 10){
-		mergedDate << "0" << month;
-	}
-	else{
-		mergedDate << month;
-	}
+if (month < 10){
+	mergedDate << "0" << month;
+}
+else{
+	mergedDate << month;
+}
 
-	if (year < 10){
-		mergedDate << "0" << year;
-	}
-	else{
-		mergedDate << year;
-	}
+if (year < 10){
+	mergedDate << "0" << year;
+}
+else{
+	mergedDate << year;
+}
 
-	date = mergedDate.str();
+date = mergedDate.str();
 }
 
 int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){
 	int numOfDates, index;
 	istringstream in(dateInfo);
 	index = dateInfo.find("to");			// locate the word to in string
-	
+
 	if (index != string::npos){
 		in >> keyword;
 		in >> startDate;
@@ -530,32 +546,17 @@ string Task::extractDateInfo(string details){
 	details = details.substr(index, details.size() - index);
 
 	//get rid of #impt if exists
-	index = details.find("#");						
+	index = details.find("#");
 	if (index != string::npos){
 		details = details.substr(0, index);
 	}
 
 	//get rid of time if exists
 	index = details.find_first_of(";");			//find first delimiter
-//	index++;
+	//	index++;
 	details = details.substr(0, index);
 
 	return details;
-}
-
-bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
-	bool same = true;
-	if (Date1.day!=Date2.day){
-		same = false;
-	}
-	if (Date1.month != Date2.month){
-		same = false;
-	}
-	if (Date1.year != Date2.year){
-		same = false;
-	}
-	
-	return same;
 }
 
 void Task::markClashAsTrue(){
@@ -573,4 +574,161 @@ bool Task::clashStatus(){
 	else {
 		return false;
 	}
+}
+
+/************************************************************************************************
+
+									Checker Functions
+
+************************************************************************************************/
+
+bool Task::areValidDates(string startDate, string endDate){
+	bool areDatesValid = false;	
+	
+	if (correctDateLength(startDate) && correctDateLength(endDate)){
+		if (isValidDate(startDate) && isValidDate(endDate)){
+			if (startDateBeforeEndDate(startDate, endDate)){
+				areDatesValid = true;
+			}
+		}
+	}
+
+	return areDatesValid;
+}
+
+bool Task::correctDateLength(string date){
+	bool isCorrectDateLength = false;
+
+	if (date.size() == 6){
+		isCorrectDateLength = true;
+	}
+	return isCorrectDateLength;
+}
+
+bool Task::startDateBeforeEndDate(string startDate, string endDate) {
+	bool isStartBeforeEnd = true;
+	int startDay, startMonth, startYear;
+	int endDay, endMonth, endYear;
+
+	splitDate(startDate, startDay, startMonth, startYear);
+	splitDate(endDate, endDay, endMonth, endYear);
+
+	if (startYear > endYear){
+		isStartBeforeEnd = false;
+	}
+	else if (startMonth > endMonth){
+		isStartBeforeEnd = false;
+	}
+	else if (startDay > endDay){
+		isStartBeforeEnd = false;
+	}
+
+	return isStartBeforeEnd;
+}
+
+bool Task::isValidDate(string date) {
+	bool dateIsValid=false;
+	int day, month, year;
+
+	splitDate(date, day, month, year);
+
+
+	if (day >= 1 && day <= 31){
+		if (month >= 1 && month <= 12){
+			dateIsValid = true;
+		}
+	}
+
+	return dateIsValid;
+}
+
+bool Task::areValidTimes(string timeStart, string timeEnd){
+	bool areTimesValid = false;
+	int intTimeStart, intTimeEnd;
+
+	try {
+		intTimeStart = stoi(timeStart);
+		intTimeEnd = stoi(timeEnd);
+	}
+	catch (invalid_argument& error){
+		throw ERROR_MESSAGE_INVALID_INPUT;
+	}
+
+	if (isValidTime(intTimeStart) && (isValidTime(intTimeEnd))){
+		if (startTimeBeforeEndTime(intTimeStart, intTimeEnd)){
+			areTimesValid = true;
+		}
+	}
+
+	return areTimesValid;
+}
+
+bool Task::isValidTime(int time){
+	bool timeIsValid = false;
+
+	if (time >= 0 && time <= 2359){
+		timeIsValid = true;
+	}
+
+	return timeIsValid;
+}
+
+bool Task::startTimeBeforeEndTime(int startTime, int endTime){
+	bool isStartTimeBeforeEndTime = false;
+
+	if (startTime <= endTime){
+		isStartTimeBeforeEndTime = true;
+	}
+
+	return isStartTimeBeforeEndTime;
+}
+
+bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
+	bool same = true;
+
+	if (Date1.day != Date2.day){
+		same = false;
+	}
+	if (Date1.month != Date2.month){
+		same = false;
+	}
+	if (Date1.year != Date2.year){
+		same = false;
+	}
+
+	return same;
+}
+
+bool Task::is31DayMonth(int month){
+	bool is31DayMonth = false;
+
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+		is31DayMonth = true;
+	}
+
+	return is31DayMonth;
+}
+
+/************************************************************************************************
+
+											Search function
+
+************************************************************************************************/
+
+//Checks if the target word is present in the task description
+bool Task::isSearchTargetPresent(string target){
+	LogData->addLog("UPDATE", "In isSearchTargetPresent, search initiated");
+	bool isFound = true;
+	string targetWithUpperCase = target, targetWithLowerCase = target;
+	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
+	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
+
+	if ((_description.find(target) == string::npos) &&
+		(_description.find(targetWithUpperCase) == string::npos) &&		////for search to include the target with first letter in upper case
+		(_description.find(targetWithLowerCase) == string::npos)){		//for search to include the target with first letter in lower case
+		isFound = false;
+	}
+
+	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
+	return isFound;
 }

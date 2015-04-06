@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+﻿Build started 2/4/2015 4:31:15 PM.
+     1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+=======
 ﻿Build started 4/4/2015 9:55:59 AM.
      1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -12,15 +17,23 @@
      1>c:\users\user\desktop\cs2103 project\gui-api\gui-api\gui.cpp(224): warning C4101: 'error' : unreferenced local variable
      1>c:\users\user\desktop\cs2103 project\gui-api\gui-api\gui.cpp(233): warning C4101: 'error' : unreferenced local variable
        Lib:
+>>>>>>> f940d85d5f760ccdad43ef80bb7a1843bbd9d857
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib" /NOLOGO Debug\GUI.obj
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\LogSystem.lib"
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Task.lib"
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Planner.lib"
          GUI-API.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib
+<<<<<<< HEAD
+=======
        BscMake:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.bsc" /n Debug\GUI.sbr
+>>>>>>> f940d85d5f760ccdad43ef80bb7a1843bbd9d857
      1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\GUI-API\GUI-API.vcxproj" (Build target(s)).
 
 Build succeeded.
 
+<<<<<<< HEAD
+Time Elapsed 00:00:00.95
+=======
 Time Elapsed 00:00:04.84
+>>>>>>> f940d85d5f760ccdad43ef80bb7a1843bbd9d857

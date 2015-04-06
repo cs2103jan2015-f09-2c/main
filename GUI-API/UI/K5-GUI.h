@@ -41,7 +41,7 @@ namespace UI {
 		String^ ALL = "All";
 		String^ DONE = "Done";
 		String^ SEARCH = "Search";
-		String^ CLEAR_PROMPT = "Are you sure you want to clear the entire planner? Enter <Y> to confirm or <N> to cancel";
+		String^ CLEAR_PROMPT = "Are you sure you want to clear? Enter <Y> to confirm or <N> to cancel";
 
 	public:
 		GUI(void){
@@ -181,6 +181,7 @@ namespace UI {
 
 	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
 		executeHome(sender, e);
+		prompt->Text = gcnew String(plannerLogic->displayOutcome().c_str());
 	}
 
 			 /************************************************************************************************
@@ -246,6 +247,7 @@ namespace UI {
 
 	private: System::Void executeAll() {
 		currentView = ALL;
+		colourSwitch(currentView);
 		processInput(userInput->Text, currentView);
 	}
 
@@ -259,7 +261,8 @@ namespace UI {
 	}
 
 	private: System::Void executeClear() {
-		currentView = SEARCH;
+		currentView = HOME;
+		switchView(currentView);
 		processInput(userInput->Text, currentView);
 		clearTrigger = false;
 	}

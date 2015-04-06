@@ -44,19 +44,22 @@ void Log::addLog(string type, string message){
 
 void Log::saveLog(void){
 	ofstream outFile;
+	
+	if (numOfLinesInFile() > _maxLines){
+		clearLogFile();
+		_numLines++;
+	}
+//	_numLines++;
+
 	outFile.open("Planner4Life_Log_File.txt", std::ios::app);
 	/*
-	if (numOfLinesInFile() > 10){
-		clearLog();
-	}
-	_numLines++;
 	*/
-	outFile << _numLines << "." << _logList[_numLines-1] << endl;
+	outFile << /*_numLines << "." <<*/ _logList[_numLines-1] << endl;
 	
 	outFile.close();
 }
 
-/*
+
 int Log::numOfLinesInFile(){
 	int numOfLines=0;
 	string line;
@@ -68,7 +71,14 @@ int Log::numOfLinesInFile(){
 
 	return numOfLines;
 }
-*/
+
+
+void Log::clearLogFile(){
+	ofstream outFile("Planner4Life_Log_File.txt");
+	outFile << "";
+	outFile.close();
+	_numLines = 0;
+}
 
 /*void Log::loadLog(void){
 	ifstream readFile("Planner4Life_log_File.txt");
@@ -106,13 +116,3 @@ int Log::numOfLinesInFile(){
 
 	_numLines = _logList.size();
 }*/
-
-void Log::clearLog(){
-	while (!_logList.empty()){
-		_logList.pop_back();
-	}
-	_numLines = _logList.size();
-	ofstream outFile("Planner4Life_Log_File.txt");
-	outFile << "";
-	outFile.close();
-}

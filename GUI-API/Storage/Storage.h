@@ -15,7 +15,7 @@ private:
 	list<string> listOfFileAddress;
 	Storage();
 	static Storage* myStorage;
-	const string myList = "myList.txt";
+	const string myList = "saveLocationList.txt";
 	void retrieveList();
 	bool isListEmpty() const;
 	string retrieveFirstAddress();

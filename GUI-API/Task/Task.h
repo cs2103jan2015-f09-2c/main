@@ -54,6 +54,14 @@ private:
 	void mergeDate(string&, int, int, int);
 	int extractDateInfoFields(string, string&, string&, string&, string&);	
 
+	bool areValidDates(string, string);
+	bool isValidDate(string);
+	bool startDateBeforeEndDate(string, string);
+	bool correctDateLength(string);
+	bool areValidTimes(string, string);
+	bool isValidTime(int);
+	bool startTimeBeforeEndTime(int, int);
+
 public:
 	Task();
 	~Task();

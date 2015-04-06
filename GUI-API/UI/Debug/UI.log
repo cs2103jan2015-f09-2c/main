@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+﻿Build started 2/4/2015 4:31:16 PM.
+     1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+=======
 ﻿Build started 4/4/2015 9:56:04 AM.
      1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -7,6 +12,7 @@
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Storage /I..\LogSystem /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /TP /analyze- /errorReport:prompt "C:\Users\User\AppData\Local\Temp\.NETFramework,Version=v4.5.AssemblyAttributes.cpp"
          .NETFramework,Version=v4.5.AssemblyAttributes.cpp
        Link:
+>>>>>>> f940d85d5f760ccdad43ef80bb7a1843bbd9d857
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.exe" /INCREMENTAL /NOLOGO /ASSEMBLYRESOURCE:"Debug\UI.K5-GUI.resources" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"main" /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 "Debug\K5-GUI.obj"
          "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.obj"
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\LogSystem.lib"
@@ -15,11 +21,21 @@
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\Storage.lib"
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib"
      1>LogSystem.lib(Log.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+<<<<<<< HEAD
+     1>K5-GUI.obj : warning LNK4099: PDB 'vc120.pdb' was not found with 'K5-GUI.obj' or at 'C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\vc120.pdb'; linking object as if no debug info
+     1>GUI-API.lib(GUI.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'GUI-API.lib(GUI.obj)' or at 'C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\vc120.pdb'; linking object as if no debug info
+         UI.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.exe
+=======
          UI.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.exe
        BscMake:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.bsc" /n "Debug\K5-GUI.sbr" "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.sbr"
+>>>>>>> f940d85d5f760ccdad43ef80bb7a1843bbd9d857
      1>Done Building Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" (Build target(s)).
 
 Build succeeded.
 
+<<<<<<< HEAD
+Time Elapsed 00:00:03.79
+=======
 Time Elapsed 00:00:18.31
+>>>>>>> f940d85d5f760ccdad43ef80bb7a1843bbd9d857
