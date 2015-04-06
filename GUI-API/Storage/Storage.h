@@ -1,6 +1,10 @@
 #pragma once
+#include <windows.h>
 #include <string>
 #include <list>
+#include <Shlwapi.h>
+#include <atlstr.h>
+
 using namespace std;
 
 const string STATUS_MESSAGE_SAVED_SUCCESSFULLY = "saved successfully to this address: ";
@@ -23,7 +27,7 @@ private:
 	bool doesAddressAlrdExist(string);
 	void updateContent(string);
 	void updateMyList();
-	
+	string extractDirectoryFolder(string);
 
 public:
 	static Storage* getInstanceOfStorage();
