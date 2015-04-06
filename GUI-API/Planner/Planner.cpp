@@ -45,6 +45,8 @@ const string EMPTY_LIST_MESSAGE = "The list is empty";
 const string NO_RESULTS_MESSAGE = "No results found!";
 const string NEWLINE = "\r\n";
 const string IMPORTANCE_SYMBOL = "#impt";
+const string DONE_KEYWORD = "DONE";
+const string CLASH_KEYWORD = " TASK CLASH !!!";
 
 const string STATUS_TO_STRING_ADD_INTRO = "Task added: ";
 const string STATUS_TO_STRING_DELETE_INTRO = "Task deleted:";
@@ -548,16 +550,26 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 
 void Planner::loadData(string data){
 	Task* tempTask;
-	string tempString, dataCopy = data;
+	string tempString1, dataCopy = data;
+	string doneKeyword = DONE_KEYWORD;
+	bool isTaskMarkedAsDone = false;
 	size_t start = 0, end = 0;
 	All.clear();
 
 	while (dataCopy.size()>0){
 		end = dataCopy.find_first_of("\n");
-		tempString = dataCopy.substr(start, end - start);
+		tempString1 = dataCopy.substr(start, end - start);
+		if (tempString1.find(doneKeyword) != std::string::npos){
+			isTaskMarkedAsDone = true;
+			tempString1 = tempString1.substr(0, tempString1.size() - 5);
+		}
 		dataCopy = dataCopy.substr(end+1, dataCopy.size() - end);
 		tempTask = new Task;
-		(*tempTask).addDetails(tempString);
+		(*tempTask).addDetails(tempString1);
+		if (isTaskMarkedAsDone){
+			(*tempTask).markIsDoneAsTrue();
+			isTaskMarkedAsDone = false;
+		}
 		addTask(*tempTask);
 		delete tempTask;
 		tempTask = NULL;
@@ -771,11 +783,11 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	}
 
 	if (theTask.doneStatus()==true){
-		out << " DONE";
+		//out << DONE_KEYWORD;
 	}
 
 	if (theTask.clashStatus() == true){
-		out << "TASK CLASH!!!";
+		out <<CLASH_KEYWORD;
 	}
 	return out.str();
 }
@@ -944,7 +956,6 @@ string Planner::searchListToString(void){
 }
 
 
-
 string Planner::saveDataToString(){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -1022,6 +1033,9 @@ string Planner::saveDataToString(){
 			}
 
 
+			if ((*it).doneStatus() == true){
+				out << DONE_KEYWORD;
+			}
 
 			if ((*it).getImportance()){
 				out << IMPORTANCE_SYMBOL;
