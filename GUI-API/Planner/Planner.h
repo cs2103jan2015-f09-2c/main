@@ -76,6 +76,8 @@ private:
 	void checkListForClashes();
 	bool checkTaskForClashes(Task Task1, Task Task2);
 	bool Date2time(Task, Task);
+	bool isTwoDatesTasksSameDates(Task, Task);
+	bool isOneDateTasksSameDates(Task, Task);
 
 	bool indexChecker(list<Task>::iterator&, int, list<Task>&);
 	

@@ -350,7 +350,7 @@ string Task::modifyDetails(string frequency, string details){
 	switch (numOfDates){
 	case 1:
 		endDate = modifyDate(endDate, frequency);
-		updatedInfo << keyword << " " << endDate;
+		updatedInfo << " " << keyword << " " << endDate;
 		newDateInfo = updatedInfo.str();
 		details = insertNewDateInfo(details, newDateInfo);
 		break;
@@ -359,7 +359,7 @@ string Task::modifyDetails(string frequency, string details){
 //		modifyStartAndEndDate(startDate, endDate);
 		startDate = modifyDate(startDate, frequency);
 		endDate = modifyDate(endDate, frequency);
-		updatedInfo << keyword << " " << startDate << " " << separator << " " << endDate;
+		updatedInfo << " " << keyword << " " << startDate << " " << separator << " " << endDate;
 		newDateInfo = updatedInfo.str();
 		details = insertNewDateInfo(details, newDateInfo);
 		break;
@@ -580,7 +580,7 @@ bool Task::clashStatus(){
 
 									Checker Functions
 
-									************************************************************************************************/
+************************************************************************************************/
 
 bool Task::areValidDates(string startDate, string endDate){
 	bool areDatesValid = false;	
