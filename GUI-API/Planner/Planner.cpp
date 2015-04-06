@@ -298,7 +298,7 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	}
 	
 
-	//Both tasks have 2 dates 2 times
+	//Both tasks have 2 dates 2 times*******check sign here and refactor out
 	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
 		if (isTwoDatesTasksSameDates(Task1, Task2)){
 			if ((Task1.getTimeEnd() >= task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
@@ -316,7 +316,7 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 		}
 	}
 	
-	//Both tasks have 1 date 2 time
+	//Both tasks have 1 date 2 time********check sign here and refactor out
 	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
 		if (isOneDateTasksSameDates(Task1, Task2)){
 			if ((Task1.getTimeEnd() > task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
