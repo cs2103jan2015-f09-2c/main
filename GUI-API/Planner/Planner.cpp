@@ -16,8 +16,6 @@ const string COMMAND_CLEAR = "clear";
 const string COMMAND_SAVE = "save";
 const string COMMAND_DONE = "done";
 
-const string DUPLICATE_STATUS = "duplicate";
-
 const string HOME_LIST = "Home";
 const string MISSED_LIST = "Missed";
 const string UPCOMING_LIST = "Upcoming";
@@ -47,6 +45,7 @@ const string NEWLINE = "\r\n";
 const string IMPORTANCE_SYMBOL = "#impt";
 const string DONE_KEYWORD = "DONE";
 const string CLASH_KEYWORD = " TASK CLASH !!!";
+const string DUPLICATE_STATUS = "duplicate";
 
 const string STATUS_TO_STRING_ADD_INTRO = "Task added: ";
 const string STATUS_TO_STRING_DELETE_INTRO = "Task deleted:";
@@ -498,7 +497,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 	list<Task> ::iterator iter;
 
 	if (nameOfList == HOME_LIST){
-		if (indexChecker(iter, serialNumber, HomeList) == false){
+		if (indexChecker(iter, serialNumber, homeList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -507,7 +506,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == MISSED_LIST){
-		if (indexChecker(iter, serialNumber, MissedList) == false){
+		if (indexChecker(iter, serialNumber, missedList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -516,7 +515,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		if (indexChecker(iter, serialNumber, UpcomingList) == false){
+		if (indexChecker(iter, serialNumber, upcomingList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -659,7 +658,7 @@ string Planner::markDone(int serialNumber, string nameOfList){
 	list<Task> ::iterator iter;
 
 	if (nameOfList == HOME_LIST){
-		if (indexChecker(iter, serialNumber, HomeList) == false){
+		if (indexChecker(iter, serialNumber, homeList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -668,7 +667,7 @@ string Planner::markDone(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == MISSED_LIST){
-		if (indexChecker(iter, serialNumber, MissedList) == false){
+		if (indexChecker(iter, serialNumber, missedList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -677,7 +676,7 @@ string Planner::markDone(int serialNumber, string nameOfList){
 		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		if (indexChecker(iter, serialNumber, UpcomingList) == false){
+		if (indexChecker(iter, serialNumber, upcomingList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
@@ -730,7 +729,7 @@ string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
 	if (nameOfList == HOME_LIST){
-		finalString = HomeListToString();
+		finalString = homeListToString();
 		return finalString;
 	}
 	else if (nameOfList == UPCOMING_LIST){
@@ -947,13 +946,13 @@ string Planner::searchStatusToString(){
 }
 
 //@author A0111361Y
-string Planner::HomeListToString(void){
+string Planner::homeListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
-	it = HomeList.begin();
+	it = homeList.begin();
 	int serialNumber = 1;
-	if (!HomeList.empty()){
-		for (it = HomeList.begin(); it != HomeList.end(); ++it){
+	if (!homeList.empty()){
+		for (it = homeList.begin(); it != homeList.end(); ++it){
 			out << serialNumber << ". ";
 			out << descriptionOfTaskToString(*(it));
 			out << NEWLINE;
@@ -969,10 +968,10 @@ string Planner::HomeListToString(void){
 string Planner::upcomingListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
-	it = UpcomingList.begin();
+	it = upcomingList.begin();
 	int serialNumber = 1;
-	if (!UpcomingList.empty()){
-		for (it = UpcomingList.begin(); it != UpcomingList.end(); ++it){
+	if (!upcomingList.empty()){
+		for (it = upcomingList.begin(); it != upcomingList.end(); ++it){
 			out << serialNumber << ". " ;
 			out << descriptionOfTaskToString(*(it));
 			out << NEWLINE;
@@ -988,10 +987,10 @@ string Planner::upcomingListToString(void){
 string Planner::missedListToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
-	it = MissedList.begin();
+	it = missedList.begin();
 	int serialNumber = 1;
-	if (!MissedList.empty()){
-		for (it = MissedList.begin(); it != MissedList.end(); ++it){
+	if (!missedList.empty()){
+		for (it = missedList.begin(); it != missedList.end(); ++it){
 			out << serialNumber << ". " ;
 			out << descriptionOfTaskToString(*(it));
 			out << NEWLINE;
@@ -1145,9 +1144,9 @@ string Planner::saveDataToString(){
 
 //@author A0111361Y
 void Planner::generateAllOtherList(void){
-	HomeList.clear();
-	MissedList.clear();
-	UpcomingList.clear();
+	homeList.clear();
+	missedList.clear();
+	upcomingList.clear();
 	doneList.clear();
 	generateHomeList();
 	generateMissedList();
@@ -1185,7 +1184,7 @@ void Planner::generateHomeList(void){
 
 	for (it = All.begin(); it != All.end(); ++it){
 		if (isHome(currentDate, it)) {
-			HomeList.push_back(*it);
+			homeList.push_back(*it);
 		}
 	}
 }
@@ -1195,7 +1194,7 @@ void Planner::generateUpcomingList(void){
 
 	for (iter = All.begin(); iter != All.end(); ++iter){
 		if (isUpcoming(currentDate, iter)) {
-			UpcomingList.push_back(*iter);
+			upcomingList.push_back(*iter);
 		}
 	}
 }
@@ -1205,7 +1204,7 @@ void Planner::generateMissedList(void){
 
 	for (iter = All.begin(); iter != All.end(); ++iter){
 		if (isMissed(currentDate, iter)) {
-			MissedList.push_back(*iter);
+			missedList.push_back(*iter);
 		}
 	}
 }
