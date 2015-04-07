@@ -20,20 +20,24 @@ class Planner{
 
 private:
 
-	// all the private lists
-	list<Task> All; // allTaskList 
-	list<Task> HomeList;
-	list<Task> UpcomingList;
-	list<Task> MissedList;
+	// All the private lists present in Planner
+	list<Task> All; // Master List of all the Tasks
+	list<Task> homeList;
+	list<Task> upcomingList;
+	list<Task> missedList;
 	list<Task> searchList;
 	list<Task> doneList;
+	
 	// List of all the Log Data
 	Log* LogData = Log::getInstance();
+	
 	//Undo Structures
 	undoData lastEntry;
 	undoEditData lastEdit;
+	
 	//Time Structure
 	taskDate currentDate;
+	
 	//status returning functions
 	string descriptionOfTaskToString(Task theTask);
 	string addStatusToString(Task theTask);
@@ -45,8 +49,8 @@ private:
 	string searchStatusToString();
 	string doneStatusToString();
 	string duplicateStatusToString(Task theTask);
-	// List reurning functions
-	string HomeListToString(void);
+	// List returning functions
+	string homeListToString(void);
 	string upcomingListToString();
 	string missedListToString();
 	string searchListToString();
@@ -83,7 +87,7 @@ private:
 	bool indexChecker(list<Task>::iterator&, int, list<Task>&);
 	
 public:
-
+	// Initialization 
 	Planner();
 	//command functions to be called by Logic
 	string addTask(Task content);
