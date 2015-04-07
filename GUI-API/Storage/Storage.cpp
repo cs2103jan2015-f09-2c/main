@@ -46,15 +46,75 @@ string Storage::retrieveFirstAddress(){
 
 string Storage::saveWithFileAddress(string saveAddress, string content){
 	//check if the address is in the list
-	bool doesExist = doesAddressAlrdExist(saveAddress);
-	if (!doesExist){
-		listOfFileAddress.push_front(saveAddress);
-		updateMyList();
+	bool doesExist = false;
+	doesExist = doesAddressAlrdExist(saveAddress);
+	bool isValid = false;
+	string status;
+
+	//if a file address exists in the list, it is a valid address
+	if (doesExist) {
+		isValid = true;
+	}
+	else {
+		isValid = isAddressValid(saveAddress);
 	}
 
-	fileAddress = saveAddress;
-	string status = save(content);
+	if (isValid){
+		if (!doesExist){
+			listOfFileAddress.push_front(saveAddress);
+			updateMyList();
+		}
+
+		fileAddress = saveAddress;
+		status = save(content);
+	}
+
+	else{
+		status = STATUS_MESSAGE_INVALID_FILE_ADDRESS;
+	}
+	
 	return status;
+}
+
+bool Storage::isAddressValid(string saveAddress){
+	bool isValid = false;
+	string directory = extractDirectoryFolder(saveAddress);
+	string fileName = saveAddress;
+
+	int lengthOfCharArray = directory.length() + 1;
+	char * pointerToAddress = new char[lengthOfCharArray];
+	strcpy_s(pointerToAddress, lengthOfCharArray, directory.c_str());
+
+	CString address = _T(pointerToAddress);
+	if (PathFileExists(address)){
+		if (isFileNameValid(fileName)){
+			isValid = true;
+		}
+	}
+	return isValid;
+}
+
+string Storage::extractDirectoryFolder(string &saveAddress){
+	size_t backwardSlashPosition = saveAddress.find_last_of("\\");
+	size_t sizeOfDirectory = backwardSlashPosition + 1;
+	string directory = saveAddress.substr(0, sizeOfDirectory);
+	
+	size_t fileNameStartPos = sizeOfDirectory;
+	size_t sizeofSaveAddress = saveAddress.size();
+	size_t sizeOfFileName = sizeofSaveAddress - sizeOfDirectory;
+	string fileName = saveAddress.substr(fileNameStartPos, sizeOfFileName);
+	saveAddress = fileName;
+	return directory;
+}
+
+bool Storage::isFileNameValid(string fileName){
+	bool isValid = false;
+	size_t txtPosition = fileName.find(".txt");
+	if (txtPosition != string::npos){
+		isValid = true;
+	}
+
+	return isValid;
 }
 
 string Storage::save(string content){
