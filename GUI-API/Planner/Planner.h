@@ -83,6 +83,8 @@ private:
 	bool isTwoDatesTasksSameDates(Task, Task);
 	bool isOneDateTasksSameDates(Task, Task);
 	bool isOneDateTaskbetweenTwoDateTask(Task, Task);
+	bool taskTimesOverlap(Task, Task);
+	bool isOneTimeTaskBetweenTwoTimesTask(Task, Task);
 
 	bool indexChecker(list<Task>::iterator&, int, list<Task>&);
 	

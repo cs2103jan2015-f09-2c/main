@@ -234,51 +234,12 @@ void Planner::checkListForClashes(){
 	return;
 	
 }
-//THYE JIE
-bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
-	bool areEqual = false;
 
-	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
-		if (Task1.getDateStart().month == Task2.getDateStart().month && Task1.getDateEnd().month == Task2.getDateEnd().month) {
-			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day){
-				areEqual = true;
-			}
-		}
-	}
-	return areEqual;
-}
-//THYE JIE
-bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
-	bool dateIsEqual = false;
-
-	if (Task1.getDateEnd().year == Task2.getDateEnd().year) {
-		if (Task1.getDateEnd().month == Task2.getDateEnd().month) {
-			if (Task1.getDateEnd().day == Task2.getDateEnd().day) {
-				dateIsEqual = true;
-			}
-		}
-	}
-
-	return dateIsEqual;
-}
-//THYE JIE
-bool Planner::isOneDateTaskbetweenTwoDateTask(Task taskWithOneDate, Task taskWithTwoDates){
-	bool isInBetween = false;
-
-	if (taskWithOneDate.getDateEnd().year <= taskWithTwoDates.getDateEnd().year && taskWithOneDate.getDateEnd().year >= taskWithTwoDates.getDateEnd().year) {
-		if (taskWithOneDate.getDateEnd().month <= taskWithTwoDates.getDateEnd().month && taskWithOneDate.getDateEnd().month >= taskWithTwoDates.getDateEnd().month) {
-			if (taskWithOneDate.getDateEnd().day <= taskWithTwoDates.getDateEnd().day && taskWithOneDate.getDateEnd().day >= taskWithTwoDates.getDateEnd().day){
-				isInBetween = true;
-			}
-		}
-	}
-	return isInBetween;
-}
-//THYE JIE
+//THYE JIE/KARTHIK
 bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	bool isClash = false;
 	int numOfTask1Times, numOfTask2Times, numOfTask1Dates, numOfTask2Dates, task1StartTime, task2StartTime;
-	
+
 	numOfTask1Times = Task1.getNumOfTimes();
 	numOfTask2Times = Task2.getNumOfTimes();
 	numOfTask1Dates = Task1.getNumOfDates();
@@ -286,9 +247,11 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 
 	task1StartTime = Task1.getTimeStart();
 	task2StartTime = Task2.getTimeStart();
-	
-	if (numOfTask1Times == 0 || numOfTask2Times == 0){
-		return isClash;
+
+
+	//Floating tasks and tasks with no times specified
+	if ((numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 0 && numOfTask2Times == 0) || (numOfTask1Times == 0 || numOfTask2Times == 0)){
+		isClash = false;
 	}
 
 	//Both tasks have 2 dates and 1 time
@@ -299,12 +262,11 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 			}
 		}
 	}
-	
 
-	//Both tasks have 2 dates 2 times*******check sign here and refactor out
+	//Both tasks have 2 dates 2 times
 	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
 		if (isTwoDatesTasksSameDates(Task1, Task2)){
-			if ((Task1.getTimeEnd() >= task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+			if (taskTimesOverlap(Task1, Task2)){
 				isClash = true;
 			}
 		}
@@ -318,11 +280,11 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 			}
 		}
 	}
-	
-	//Both tasks have 1 date 2 time********check sign here and refactor out
+
+	//Both tasks have 1 date 2 times
 	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
 		if (isOneDateTasksSameDates(Task1, Task2)){
-			if ((Task1.getTimeEnd() > task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
+			if (taskTimesOverlap(Task1, Task2)){
 				isClash = true;
 			}
 		}
@@ -335,6 +297,11 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 		}
 	}
 
+	//Both tasks have no date 2 times
+	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (taskTimesOverlap(Task1, Task2));
+	}
+
 	//Task1 has 1 date 1 time and Task2 has 2 dates, 1 time
 	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
 		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
@@ -344,33 +311,122 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 		}
 	}
 	
-	//Floating tasks
-	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 0 && numOfTask2Times == 0){
-		isClash = false;
+	//opposite of above: Task1 has 2 dates 1 time, task2 has 1 date and 1 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isOneDateTaskbetweenTwoDateTask(Task2, Task1)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
+			}
+		}
 	}
 
 	//Task1 has 1 date 1 time and Task2 has 2 dates, 2 time
 	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 2){
-		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task2, Task1);
-	}
-	else {
 		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task1, Task2);
+	}
+
+	//opp of above: Task1 has 2 dates 2 times, task2 has 1 date 1 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 1){
+		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task2, Task1);
 	}
 
 	return isClash;
 }
 
-//should this be  end1 year <= end2 year && end1 >= start2
-//THYE JIE
+//THYE JIE/KARTHIK
+bool Planner::taskTimesOverlap(Task Task1, Task Task2){
+	int task1StartTime, task2StartTime, task1EndTime, task2EndTime;
+	bool isOverlap = false;
+
+	task1StartTime = Task1.getTimeStart();
+	task2StartTime = Task2.getTimeStart();
+	task1EndTime = Task1.getTimeEnd();
+	task2EndTime = Task2.getTimeEnd();
+
+	if ((task1EndTime > task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime < task2EndTime && task1EndTime >= task2EndTime)){
+		isOverlap = true;
+	}
+	return isOverlap;
+}
+
+//THYE JIE/KARTHIK
+bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
+	bool areEqual = false;
+
+	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
+		if (Task1.getDateStart().month == Task2.getDateStart().month && Task1.getDateEnd().month == Task2.getDateEnd().month) {
+			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day){
+				areEqual = true;
+			}
+		}
+	}
+	return areEqual;
+}
+
+//THYE JIE/KARTHIK
+bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
+	bool dateIsEqual = false;
+
+	if (Task1.getDateEnd().year == Task2.getDateEnd().year) {
+		if (Task1.getDateEnd().month == Task2.getDateEnd().month) {
+			if (Task1.getDateEnd().day == Task2.getDateEnd().day) {
+				dateIsEqual = true;
+			}
+		}
+	}
+
+	return dateIsEqual;
+}
+
+//THYE JIE/KARTHIK
+bool Planner::isOneTimeTaskBetweenTwoTimesTask(Task Task1, Task Task2){
+	int task1StartTime, task2StartTime, task1EndTime, task2EndTime;
+	bool isInBetween = false;
+
+	task1StartTime = Task1.getTimeStart();
+	task2StartTime = Task2.getTimeStart();
+	task2EndTime = Task2.getTimeEnd();
+
+	if (task1StartTime < task2EndTime && task1StartTime >= task2StartTime){
+		isInBetween = true;
+	}
+	return isInBetween;
+}
+
+//KARTHIK/THYE JIE
+bool Planner::isOneDateTaskbetweenTwoDateTask(Task Task1, Task Task2){
+	bool isInBetween = false;
+	taskDate task1StartDate, task1EndDate, task2StartDate, task2EndDate;
+	int task1StartTime, task1EndTime, task2StartTime, task2EndTime;
+
+	task1StartDate = Task1.getDateStart();
+	task1EndDate = Task1.getDateEnd();
+	task1StartTime = Task1.getTimeStart();
+	task1EndTime = Task1.getTimeEnd();
+
+	task2StartDate = Task2.getDateStart();
+	task2EndDate = Task2.getDateEnd();
+	task2StartTime = Task2.getTimeStart();
+	task2EndTime = Task2.getTimeEnd();
+
+	if (task1EndDate.year <= task2EndDate.year && task1EndDate.year >= task2StartDate.year) {
+		if (task1EndDate.month <= task2EndDate.month && task1EndDate.month >= task2StartDate.month) {
+			if (task1EndDate.day <= task2EndDate.day && task1EndDate.day >= task2StartDate.day) {
+				isInBetween = true;
+			}
+		}
+	}
+	
+	return isInBetween;
+}
+
+//THYE JIE/KARTHIK
 bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2){
 	bool isClash = false;
-	if (Task1.getDateEnd().year <= Task2.getDateEnd().year && Task1.getDateEnd().year >= Task2.getDateEnd().year) {
-		if (Task1.getDateEnd().month <= Task2.getDateEnd().month && Task1.getDateEnd().month >= Task2.getDateEnd().month) {
-			if (Task2.getDateEnd().day <= Task1.getDateEnd().day && Task2.getDateEnd().day >= Task1.getDateStart().day) {
-				if ((Task1.getTimeEnd() >= Task2.getTimeStart() && Task1.getTimeStart() <= Task2.getTimeStart()) || (Task1.getTimeStart() <= Task2.getTimeEnd() && Task1.getTimeEnd() >= Task2.getTimeEnd())){
-					isClash = true;
-				}
-			}
+
+	if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
+		if (isOneTimeTaskBetweenTwoTimesTask(Task1, Task2)){
+			isClash = true;
 		}
 	}
 
