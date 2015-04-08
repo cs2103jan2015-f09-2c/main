@@ -315,7 +315,7 @@ namespace PlannerUnitTest
 
 		************************************************************************************************/
 
-		//THYE JIE
+		//@author A0111314A
 		TEST_METHOD(testClash_2date2time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -334,7 +334,8 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		//THYE JIE
+
+		//@author A0111314A
 		TEST_METHOD(testClash_2date1time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -353,7 +354,8 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		//THYE JIE
+
+		//@author A0111314A
 		TEST_METHOD(testClash_1date1time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -372,7 +374,8 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		//THYE JIE
+
+		//@author A0111314A
 		TEST_METHOD(testClash_1date2time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -391,7 +394,8 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		//THYE JIE
+
+		//@author A0111314A
 		TEST_METHOD(testClash_12date1time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;
@@ -411,7 +415,8 @@ namespace PlannerUnitTest
 
 			Assert::IsTrue(doesFunctionWork);
 		}
-		//THYE JIE
+
+		//@author A0111314A
 		TEST_METHOD(testClash_12date2time) {
 			Planner testPlanner;
 			Task testTask1, testTask2;

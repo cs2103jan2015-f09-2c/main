@@ -14,7 +14,7 @@ namespace TaskUnitTest
 											Description Unit Tests
 
 		************************************************************************************************/
-
+		//@author A0111314A
 		TEST_METHOD(testAddDetails_Description_normal){
 			Task testTask;
 			string testDescription = "Meeting in school";
@@ -41,19 +41,6 @@ namespace TaskUnitTest
 
 			Assert::AreEqual(testTask.getDescription(), testDescription);
 		}
-
-		//maybe?
-		//Whats the point of this test? When we enter add ;date 270315 to 290315; time 1300 to 1500
-		// the program says invalid, When we enter date 270315 to 290315; time 1300 to 1500 then it is taken as a string
-/*		TEST_METHOD(testAddDetails_Description_blank){
-			Task testTask;
-			string testDescription = "No description";
-
-			testTask.addDetails("date 270315 to 290315; time 1300 to 1500");
-
-			//Check Description
-			Assert::AreEqual(testTask.getDescription(), testDescription);
-		}		*/
 
 		/************************************************************************************************
 
@@ -219,6 +206,7 @@ namespace TaskUnitTest
 
 		************************************************************************************************/
 
+		//@author karthik
 		TEST_METHOD(testIsSearchTargetPresent_Positive){
 			Task testTask;
 			string positiveSearchTarget = "meeting", negativeSearchTarget = "class";

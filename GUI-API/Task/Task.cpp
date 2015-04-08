@@ -47,6 +47,7 @@ Task::~Task(){
 
 ************************************************************************************************/
 
+//@author karthik
 //Function takes in user input and stores the task details
 void Task::addDetails(string details){
 	int noOfDelimiters;
@@ -143,6 +144,8 @@ void Task::processDescription(string& details){
 	LogData->addLog(UPDATE, ADD_DETAILS_DESCRIPTION_SUCCESSFUL);
 }
 
+//@author A0111314A
+//Function processes input that contains a start and end date. Also checks if date is valid before storing and setting _numOfDates.
 void Task::processTwoDates(string startDate, string endDate){
 
 	if (areValidDates(startDate, endDate)){
@@ -157,6 +160,9 @@ void Task::processTwoDates(string startDate, string endDate){
 	}
 }
 
+//@author A0111314A
+//Function processes input that contains only one date. Same date is stored in start and end date variables for consistency. 
+// Also checks if date is valid before storing and setting _numOfDates.
 void Task::processOneDate(string endDate){
 	if (areValidDates(endDate, endDate)){
 		storeEndDate(endDate);
@@ -170,6 +176,7 @@ void Task::processOneDate(string endDate){
 	}
 }
 
+//@author karthik
 //Takes in date related information in a string and stores into the respective variables in Task object
 void Task::processDate(string dateInfo){
 	string keyword, startDate, endDate, separator;
@@ -255,7 +262,8 @@ void Task::processTime(string timeInfo){
 	}
 }
 
-//Takes in start time as a string and converts it to integer before storing into relevant attributes in Task object
+//@author A0111314A
+//Takes in start time as a string, checks validity, and converts it to integer before storing into relevant attributes in Task object
 void Task::storeStartTime(string time) {
 
 	try {
@@ -266,7 +274,8 @@ void Task::storeStartTime(string time) {
 	}
 }
 
-//Takes in end time as a string and converts it to integer before storing into relevant attributes in Task object
+//@author A0111314A
+//Takes in end time as a string, checks validity, and converts it to integer before storing into relevant attributes in Task object
 void Task::storeEndTime(string time) {
 	try {
 		_timeEnd = stoi(time);
@@ -276,6 +285,7 @@ void Task::storeEndTime(string time) {
 	}
 }
 
+//@author karthik
 //Stores a unique ID number that is created by the Planner class
 void Task::storeIdNumber(int num){
 	_idNumber = num;
@@ -332,7 +342,6 @@ list<Task> Task::getRecurringTasks(){
 	return _recurringTasks;
 }
 
-//@author A0111361Y
 bool Task::doneStatus(){
 	return _isDone;
 }
@@ -587,17 +596,17 @@ string Task::extractDateInfo(string details){
 	return details;
 }
 
-//@author A0111361Y
+
 void Task::markClashAsTrue(){
 	_isClash = true;
 }
 
-//@author A0111361Y
+
 void Task::markClashAsFalse(){
 	_isClash = false;
 }
 
-//@author A0111361Y
+
 bool Task::clashStatus(){
 	if (_isClash == true){
 		return true;
@@ -613,6 +622,8 @@ bool Task::clashStatus(){
 
 ************************************************************************************************/
 
+//@author A0111314A
+//Parent function for date validity checking. Checks for date length, relative start and end dates and valid date figures. 
 bool Task::areValidDates(string startDate, string endDate){
 	bool areDatesValid = false;	
 	
@@ -627,6 +638,8 @@ bool Task::areValidDates(string startDate, string endDate){
 	return areDatesValid;
 }
 
+//@author A0111314A
+//Function to check for valid date length (6 digit format)
 bool Task::correctDateLength(string date){
 	bool isCorrectDateLength = false;
 
@@ -636,6 +649,8 @@ bool Task::correctDateLength(string date){
 	return isCorrectDateLength;
 }
 
+//@author A0111314A
+//Function to check that entered start date comes before entered end date.
 bool Task::startDateBeforeEndDate(string startDate, string endDate) {
 	bool isStartBeforeEnd = true;
 	int startDay, startMonth, startYear;
@@ -657,22 +672,33 @@ bool Task::startDateBeforeEndDate(string startDate, string endDate) {
 	return isStartBeforeEnd;
 }
 
+//@author A0111314A
+//Function to check that date is valid in calendar (max 31 days, 12 months etc)
 bool Task::isValidDate(string date) {
 	bool dateIsValid=false;
 	int day, month, year;
 
 	splitDate(date, day, month, year);
 
-
+	//every case
 	if (day >= 1 && day <= 31){
 		if (month >= 1 && month <= 12){
 			dateIsValid = true;
 		}
 	}
 
+	//case for february
+	if (month == 2){
+		if (day > 28){
+			dateIsValid = false;
+		}
+	}
+
 	return dateIsValid;
 }
 
+//@author A0111314A
+//Function to check validity of start and end times. Checks for valid integer values and relative start and end times.
 bool Task::areValidTimes(string timeStart, string timeEnd){
 	bool areTimesValid = false;
 	int intTimeStart, intTimeEnd;
@@ -694,6 +720,8 @@ bool Task::areValidTimes(string timeStart, string timeEnd){
 	return areTimesValid;
 }
 
+//@author A0111314A
+// Function that checks that time entered is between 0000 and 2359. 2400 is considered as 0000
 bool Task::isValidTime(int time){
 	bool timeIsValid = false;
 
@@ -704,6 +732,8 @@ bool Task::isValidTime(int time){
 	return timeIsValid;
 }
 
+//@author A0111314A
+//Function that checks that designated start time is before designated end time
 bool Task::startTimeBeforeEndTime(int startTime, int endTime){
 	bool isStartTimeBeforeEndTime = false;
 
@@ -714,6 +744,7 @@ bool Task::startTimeBeforeEndTime(int startTime, int endTime){
 	return isStartTimeBeforeEndTime;
 }
 
+//@author A0111361Y
 bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
 	bool same = true;
 
@@ -729,6 +760,7 @@ bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
 
 	return same;
 }
+
 
 bool Task::is31DayMonth(int month){
 	bool is31DayMonth = false;

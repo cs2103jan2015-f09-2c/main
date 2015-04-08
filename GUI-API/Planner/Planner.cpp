@@ -67,7 +67,7 @@ using namespace std;
 										Initialization
 
 ************************************************************************************************/
-//@author A0111361Y
+//@author A0111314A
 Planner::Planner(){
 	time_t t = time(0);   // get time now
 	struct tm * now = localtime(&t);
@@ -960,7 +960,7 @@ bool Planner::isOneDateTaskbetweenTwoDateTask(Task Task1, Task Task2){
 	return isInBetween;
 }
 
-//THYE JIE/KARTHIK
+//@author A0111314A
 bool Planner::indexChecker(list<Task>::iterator& iter, int serialNumber, list<Task>& targetList){
 	int indexCount = 1;
 	bool isValidIndex = true;
@@ -1131,7 +1131,7 @@ void Planner::generateAllOtherList(void){
 	generateTheLists();
 }
 
-//THYE JIE
+//@author A0111314A
 void Planner::generateHomeList(void){
 	list<Task> ::iterator it;
 
@@ -1142,7 +1142,7 @@ void Planner::generateHomeList(void){
 	}
 }
 
-//THYE JIE
+//@author A0111314A
 void Planner::generateUpcomingList(void){
 	list<Task> ::iterator iter;
 
@@ -1153,7 +1153,7 @@ void Planner::generateUpcomingList(void){
 	}
 }
 
-//THYE JIE
+//@author A0111314A
 void Planner::generateMissedList(void){
 	list<Task> ::iterator iter;
 
@@ -1199,7 +1199,7 @@ void Planner::generateTheLists(void){
 //Private Functions
 //assumes 30 days in a month
 
-//THYE JIE
+//@author A0111314A
 bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinHome = false;
 	//case 1: currentDate + 7 days = current month, same year
@@ -1282,7 +1282,7 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	return isWithinHome;
 }
 
-//THYE JIE
+//@author A0111314A
 bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinMissed = false;
 	//case 1: passed year
@@ -1313,7 +1313,7 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 	return isWithinMissed;
 }
 
-//THYE JIE
+//@author A0111314A
 bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 	bool isWithinUpcoming = true;
 
