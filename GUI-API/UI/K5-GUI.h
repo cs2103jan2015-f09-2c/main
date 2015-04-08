@@ -85,18 +85,13 @@ namespace UI {
 			this->displayWindow->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->displayWindow->Size = System::Drawing::Size(339, 291);
 			this->displayWindow->TabIndex = 0;
+			this->displayWindow->TextChanged += gcnew System::EventHandler(this, &GUI::displayWindow_TextChanged);
 			// 
 			// userInput
 			// 
-			this->userInput->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(8) {
-				L"add",
-					L"delete",
-					L"edit",
-					L"clear",
-					L"exit",
-					L"search",
-					L"undo",
-					L"help"
+			this->userInput->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(10) {
+				L"add", L"delete", L"edit",
+					L"clear", L"exit", L"search", L"done", L"show done", L"undo", L"help"
 			});
 			this->userInput->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
 			this->userInput->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
@@ -341,5 +336,7 @@ namespace UI {
 		prompt->Text = MISSED;
 	}
 
-	};
+	private: System::Void displayWindow_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+	}
+};
 }

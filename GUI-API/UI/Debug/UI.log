@@ -1,4 +1,4 @@
-﻿Build started 7/4/2015 3:23:08 PM.
+﻿Build started 8/4/2015 10:54:13 AM.
      1>Project "C:\Users\User\Desktop\CS2103 Project\GUI-API\UI\UI.vcxproj" on node 3 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\Storage /I..\LogSystem /I..\GUI /I"..\GUI-API" /I..\Task /I..\Planner /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Drawing.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib "K5-GUI.cpp"
@@ -14,6 +14,7 @@
          "C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\GUI-API.lib"
      1>LogSystem.lib(Log.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
      1>.NETFramework,Version=v4.5.AssemblyAttributes.obj : warning LNK4099: PDB 'vc120.pdb' was not found with '.NETFramework,Version=v4.5.AssemblyAttributes.obj' or at 'C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\vc120.pdb'; linking object as if no debug info
+     1>GUI-API.lib(GUI.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'GUI-API.lib(GUI.obj)' or at 'C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\vc120.pdb'; linking object as if no debug info
          UI.vcxproj -> C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.exe
        BscMake:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\User\Desktop\CS2103 Project\GUI-API\Debug\UI.bsc" /n "Debug\K5-GUI.sbr" "Debug\.NETFramework,Version=v4.5.AssemblyAttributes.sbr"
@@ -21,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:21.34
+Time Elapsed 00:00:19.84
