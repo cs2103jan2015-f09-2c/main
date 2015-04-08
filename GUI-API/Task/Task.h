@@ -31,7 +31,9 @@ private:
 
 	void processImportance(string&);
 	void processDescription(string&);			
-	void processDate(string);					
+	void processDate(string);
+	void processTwoDates(string, string);
+	void processOneDate(string);
 	void storeStartDate(string);				
 	void storeEndDate(string);
 	void processTime(string);

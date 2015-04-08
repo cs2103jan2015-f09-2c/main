@@ -143,6 +143,33 @@ void Task::processDescription(string& details){
 	LogData->addLog(UPDATE, ADD_DETAILS_DESCRIPTION_SUCCESSFUL);
 }
 
+void Task::processTwoDates(string startDate, string endDate){
+
+	if (areValidDates(startDate, endDate)){
+		storeStartDate(startDate);
+		storeEndDate(endDate);
+		_numOfDates = 2;
+		LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
+	}
+	else{
+		throw ERROR_MESSAGE_INVALID_INPUT;
+		LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
+	}
+}
+
+void Task::processOneDate(string endDate){
+	if (areValidDates(endDate, endDate)){
+		storeEndDate(endDate);
+		storeStartDate(endDate);
+		_numOfDates = 1;
+		LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
+	}
+	else{
+		throw ERROR_MESSAGE_INVALID_INPUT;
+		LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
+	}
+}
+
 //Takes in date related information in a string and stores into the respective variables in Task object
 void Task::processDate(string dateInfo){
 	string keyword, startDate, endDate, separator;
@@ -156,31 +183,13 @@ void Task::processDate(string dateInfo){
 		in >> separator;
 		in >> endDate;
 
-		if (areValidDates(startDate, endDate)){
-			storeStartDate(startDate);
-			storeEndDate(endDate);
-			_numOfDates = 2;
-			LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
-		}
-		else{
-			throw ERROR_MESSAGE_INVALID_INPUT;
-			LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
-		}
+		processTwoDates(startDate, endDate);
 	}
 	else{
 		in >> keyword;
 		in >> endDate;
 
-		if (areValidDates(endDate, endDate)){
-			storeEndDate(endDate);
-			storeStartDate(endDate);
-			_numOfDates = 1;
-			LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
-		}
-		else{
-			throw ERROR_MESSAGE_INVALID_INPUT;
-			LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
-		}
+		processOneDate(endDate);
 	}
 }
 
