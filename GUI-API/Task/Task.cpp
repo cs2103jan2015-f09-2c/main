@@ -6,6 +6,18 @@
 
 const string FATAL_ERROR = "Fatal Error!";
 const string ERROR_MESSAGE_INVALID_INPUT = "Invalid format entered! Please re-enter appropriate entry.";
+const string UPDATE = "UPDATE";
+const string ADD_DETAILS_CASE_0_CALLED = "In addDetails, Case 0 was called";
+const string ADD_DETAILS_CASE_0_SUCCESSFUL = "In addDetails, Case 0 was finished successfully";
+const string ADD_DETAILS_CASE_1_CALLED = "In addDetails, Case 1 was called";
+const string ADD_DETAILS_CASE_1_SUCCESSFUL = "In addDetails, Case 1 was finished successfully";
+const string ADD_DETAILS_CASE_2_CALLED = "In addDetails, Case 2 was called";
+const string ADD_DETAILS_CASE_2_SUCCESSFUL = "In addDetails, Case 2 was finished successfully";
+const string ADD_DETAILS_DESCRIPTION_SUCCESSFUL = "In addDetails(processDescription), Description stored successfully";
+const string ADD_DETAILS_DATE_SUCCESSFUL = "In addDetails(processDate), Date stored successfully";
+const string ADD_DETAILS_DATE_INVALID = "In addDetails(processDate), Date invalid";
+const string ADD_DETAILS_TIME_SUCCESSFUL = "In addDetails(processTime), Time stored successfully";
+const string ADD_DETAILS_TIME_INVALID = "In addDetails(processTime), Time invalid";
 
 using namespace std;
 
@@ -14,7 +26,7 @@ using namespace std;
 										Initialization
 
 ************************************************************************************************/
-
+//Constructor
 Task::Task(){
 	_timeStart = -1;
 	_timeEnd = -1;
@@ -25,6 +37,7 @@ Task::Task(){
 	_numOfTimes = 0;
 }
 
+//Destructor
 Task::~Task(){
 }
 
@@ -56,14 +69,16 @@ void Task::addDetails(string details){
 	}
 }
 
+//For the case when there is only description and no other information fields; stores the task details
 void Task::process_NoDelimiter(string details) {
-	LogData->addLog("UPDATE", "In addDetails, Case 0 was called");
+	LogData->addLog(UPDATE, ADD_DETAILS_CASE_0_CALLED);
 	_description = details;
-	LogData->addLog("UPDATE", "In addDetails, Case 0 was finished successfully");
+	LogData->addLog(UPDATE, ADD_DETAILS_CASE_0_SUCCESSFUL);
 }
 
+//For the case when there is description and one other info field (either date or time) separated by a delimiter; stores the task details
 void Task::process_OneDelimiter(string details) {
-	LogData->addLog("UPDATE", "In addDetails, Case 1 was called");
+	LogData->addLog(UPDATE, ADD_DETAILS_CASE_1_CALLED);
 	processDescription(details);
 	if (details.find(" date") != string::npos){
 		processDate(details);
@@ -74,13 +89,14 @@ void Task::process_OneDelimiter(string details) {
 	else {
 		throw ERROR_MESSAGE_INVALID_INPUT;
 	}
-	LogData->addLog("UPDATE", "In addDetails, Case 1 was finished successfully");
+	LogData->addLog(UPDATE, ADD_DETAILS_CASE_1_SUCCESSFUL);
 }
 
+//For the case when there is description and 2 other information fields (date and time) separated by delimiters; stores task details
 void Task::process_TwoDelimiter(string details) {
 	int semicolonPos;
 	string durationInfo, dateInfo, timeInfo;
-	LogData->addLog("UPDATE", "In addDetails, Case 2 was called");
+	LogData->addLog(UPDATE, ADD_DETAILS_CASE_2_CALLED);
 
 	processDescription(details);
 	semicolonPos = details.find(';');
@@ -103,13 +119,13 @@ void Task::process_TwoDelimiter(string details) {
 	}
 	processDate(dateInfo);
 	processTime(timeInfo);
-	LogData->addLog("UPDATE", "In addDetails, Case 2 was finished successfully");
+	LogData->addLog(UPDATE, ADD_DETAILS_CASE_2_SUCCESSFUL);
 }
 
 //Checks if task is important and returns the remainder of user input
 void Task::processImportance(string& details){
 	int hashPosition;
-	hashPosition = details.find("#");						//to check if task is labelled important
+	hashPosition = details.find("#");
 	if (hashPosition != string::npos){
 		_isImpt = true;
 		details = details.substr(0, hashPosition);
@@ -124,7 +140,7 @@ void Task::processDescription(string& details){
 	_description = details.substr(0, descriptionEnd);
 	descriptionEnd++;
 	details = details.substr(descriptionEnd, details.size() - descriptionEnd);				//cut out the description part to be left with the date and/or time part
-	LogData->addLog("UPDATE", "In addDetails(processDescription), Description stored successfully");
+	LogData->addLog(UPDATE, ADD_DETAILS_DESCRIPTION_SUCCESSFUL);
 }
 
 //Takes in date related information in a string and stores into the respective variables in Task object
@@ -144,11 +160,11 @@ void Task::processDate(string dateInfo){
 			storeStartDate(startDate);
 			storeEndDate(endDate);
 			_numOfDates = 2;
-			LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
+			LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
 		}
 		else{
 			throw ERROR_MESSAGE_INVALID_INPUT;
-			LogData->addLog("UPDATE", "In addDetails(processDate), Date invalid");
+			LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
 		}
 	}
 	else{
@@ -159,11 +175,11 @@ void Task::processDate(string dateInfo){
 			storeEndDate(endDate);
 			storeStartDate(endDate);
 			_numOfDates = 1;
-			LogData->addLog("UPDATE", "In addDetails(processDate), Date stored successfully");
+			LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
 		}
 		else{
 			throw ERROR_MESSAGE_INVALID_INPUT;
-			LogData->addLog("UPDATE", "In addDetails(processDate), Date invalid");
+			LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
 		}
 	}
 }
@@ -207,10 +223,10 @@ void Task::processTime(string timeInfo){
 			storeStartTime(timeStart);
 			storeEndTime(timeEnd);
 			_numOfTimes = 2;
-			LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
+			LogData->addLog(UPDATE, ADD_DETAILS_TIME_SUCCESSFUL);
 		}
 		else {
-			LogData->addLog("UPDATE", "In addDetails(processTime), Time invalid");
+			LogData->addLog(UPDATE, ADD_DETAILS_TIME_INVALID);
 			throw ERROR_MESSAGE_INVALID_INPUT;			
 		}
 	}
@@ -221,15 +237,16 @@ void Task::processTime(string timeInfo){
 		if (areValidTimes(timeStart, timeStart)){
 			storeStartTime(timeStart);
 			_numOfTimes = 1;
-			LogData->addLog("UPDATE", "In addDetails(processTime), Time stored successfully");
+			LogData->addLog(UPDATE, ADD_DETAILS_TIME_SUCCESSFUL);
 		}
 		else {
-			LogData->addLog("UPDATE", "In addDetails(processTime), Time invalid");
+			LogData->addLog(UPDATE, ADD_DETAILS_TIME_INVALID);
 			throw ERROR_MESSAGE_INVALID_INPUT;			
 		}
 	}
 }
 
+//Takes in start time as a string and converts it to integer before storing into relevant attributes in Task object
 void Task::storeStartTime(string time) {
 
 	try {
@@ -240,6 +257,7 @@ void Task::storeStartTime(string time) {
 	}
 }
 
+//Takes in end time as a string and converts it to integer before storing into relevant attributes in Task object
 void Task::storeEndTime(string time) {
 	try {
 		_timeEnd = stoi(time);
@@ -254,6 +272,7 @@ void Task::storeIdNumber(int num){
 	_idNumber = num;
 }
 
+//Marks a particular task as done
 void Task::markIsDoneAsTrue(){
 	_isDone = true;
 }
@@ -357,7 +376,6 @@ string Task::modifyDetails(string frequency, string details){
 		break;
 
 	case 2:
-//		modifyStartAndEndDate(startDate, endDate);
 		startDate = modifyDate(startDate, frequency);
 		endDate = modifyDate(endDate, frequency);
 		updatedInfo << " " << keyword << " " << startDate << " " << separator << " " << endDate;
@@ -721,7 +739,7 @@ bool Task::is31DayMonth(int month){
 
 //Checks if the target word is present in the task description
 bool Task::isSearchTargetPresent(string target){
-	LogData->addLog("UPDATE", "In isSearchTargetPresent, search initiated");
+	LogData->addLog(UPDATE, "In isSearchTargetPresent, search initiated");
 	bool isFound = true;
 	string targetWithUpperCase = target, targetWithLowerCase = target;
 	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
@@ -733,6 +751,6 @@ bool Task::isSearchTargetPresent(string target){
 		isFound = false;
 	}
 
-	LogData->addLog("UPDATE", "In isSearchTargetPresent, search completed");
+	LogData->addLog(UPDATE, "In isSearchTargetPresent, search completed");
 	return isFound;
 }
