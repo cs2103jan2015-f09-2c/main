@@ -39,7 +39,7 @@ const string ERROR_MESSSAGE_INVALID_COMMAND = "Error!! Command is invalid!!";
 const string ERROR_MESSAGE_INVALID_INDEX = "Invalid index!";
 const string ERROR_MESSAGE_INVALID_UNDO = "Nothing to undo!";
 
-const string EMPTY_LIST_MESSAGE = "The list is empty";
+const string EMPTY_LIST_MESSAGE = "There are no tasks here";
 const string NO_RESULTS_MESSAGE = "No results found!";
 const string NEWLINE = "\r\n";
 const string IMPORTANCE_SYMBOL = "#impt";
