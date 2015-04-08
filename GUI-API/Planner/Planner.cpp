@@ -92,7 +92,7 @@ Planner::Planner(){
 string Planner::addTask(Task newTask){
 	
 	//create new task
-	int id = getIdOfLastEntry(); // use static to actually create id
+	int id = getNewId(); // use static to actually create id
 
 	newTask.storeIdNumber(id);
 
@@ -274,7 +274,7 @@ string Planner::deleteTask(int serialNumber, string nameOfView){
 string Planner::undo(void){
 	string status = "";
 	if (lastEntry.lastCommand == COMMAND_ADD){
-		int lastEntryID = getIdOfLastEntry() - 1;
+		int lastEntryID = getNewId() - 1;
 		deleteIndex(lastEntryID);
 	}
 	else if (lastEntry.lastCommand == COMMAND_DELETE){
@@ -402,6 +402,7 @@ string Planner::generateSearchList(string target){
 //Public Functions
 
 //@author A0111361Y
+//returns the requested list in string form
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
@@ -429,6 +430,7 @@ string Planner::toString(string nameOfList){
 }
 
 //@author A0111361Y
+//returns the All list in string form
 string Planner::AllToString(void){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -458,6 +460,7 @@ string Planner::AllToString(void){
 //Public Functions
 
 //@author A0111361Y
+//returns the status after each command is successfully executed
 string Planner::statusToString(string command, Task theTask){
 	string finalString;
 	if (command == COMMAND_ADD){
@@ -496,6 +499,7 @@ string Planner::statusToString(string command, Task theTask){
 }
 
 //@author A0111361Y
+//converts and returns all of the tasks in All to input format
 string Planner::saveDataToString(){
 	ostringstream out;
 	list<Task> ::iterator it;
@@ -599,6 +603,8 @@ string Planner::saveDataToString(){
 //Public Functions
 
 //@author A0111361Y
+//reads in all the tasks from the text file
+//adds in all the tasks into All
 void Planner::loadData(string data){
 	Task* tempTask;
 	string tempString1, dataCopy = data;
@@ -635,7 +641,8 @@ void Planner::loadData(string data){
 //Private Functions
 
 //@author A0111361Y
-int Planner::getIdOfLastEntry(void){// act this function returns id not last entry, need to change name
+//generates and ID to attach to task
+int Planner::getNewId(void){
 
 	static int idGeneratror;
 	if (All.empty()){
@@ -680,6 +687,8 @@ string Planner::deleteIndex(int idNumber){
 ************************************************************************************************/
 //Private Functions
 
+//@author A0111361Y
+//Updates the lastEntry Structure
 void Planner::updateLastEntryStructure(string command, Task theTask){
 	
 	lastEntry.lastCommand = command;
@@ -691,7 +700,7 @@ void Planner::updateLastEntryStructure(string command, Task theTask){
 
 ************************************************************************************************/
 //Private Functions
-//REFACTORED @Sakib
+
 //@author A0111361Y
 string Planner::markDoneIndex(int idNumber){
 	list<Task> ::iterator iter1;
@@ -723,7 +732,7 @@ string Planner::markDoneIndex(int idNumber){
 
 ************************************************************************************************/
 //Private Functions
-//REFACTORED @Sakib
+
 //@author A0111361Y
 bool Planner::isDuplicatePresent(Task newTask){
 	list<Task> ::iterator iter;

@@ -39,7 +39,7 @@ private:
 	taskDate currentDate;
 	
 	// delete helper functions
-	int getIdOfLastEntry(void);
+	int getNewId(void);
 	string deleteIndex(int idNumber);
 	//undo helper functons
 	void updateLastEntryStructure(string, Task);
