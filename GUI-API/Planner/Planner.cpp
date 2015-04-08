@@ -85,6 +85,10 @@ Planner::Planner(){
 //Public Functions
 
 //@author A0111361Y
+//Task is added to the Planner in this function
+//Before the actual addition of the task, function checks for:
+//duplicates, place to slot in and clashes
+//function ends by generating all the other dependent lists
 string Planner::addTask(Task newTask){
 	
 	//create new task
@@ -202,10 +206,12 @@ string Planner::addTask(Task newTask){
 		status = statusToString(COMMAND_ADD, newTask);
 	}
 	
-	lastEntry.lastCommand = COMMAND_ADD;
-	lastEntry.lastTask = newTask;
+	updateLastEntryStructure(COMMAND_ADD, newTask);
+	
+	
 	checkListForClashes();
 	generateAllOtherList();
+	
 	//logging
 	stringstream message;
 	message << LOG_FILE_ADD_TASK_INTRO_MSG << id;
@@ -216,12 +222,15 @@ string Planner::addTask(Task newTask){
 }
 
 //@author A0111361Y
-string Planner::deleteTask(int serialNumber, string nameOfList){
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then deleted
+string Planner::deleteTask(int serialNumber, string nameOfView){
 	int idNumber;
 	string status;
 	list<Task> ::iterator iter;
 
-	if (nameOfList == HOME_LIST){
+	if (nameOfView == HOME_LIST){
 		if (indexChecker(iter, serialNumber, homeList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
@@ -230,7 +239,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 			status = deleteIndex(idNumber);
 		}
 	}
-	else if (nameOfList == MISSED_LIST){
+	else if (nameOfView == MISSED_LIST){
 		if (indexChecker(iter, serialNumber, missedList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
@@ -239,7 +248,7 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 			status = deleteIndex(idNumber);
 		}
 	}
-	else if (nameOfList == UPCOMING_LIST){
+	else if (nameOfView == UPCOMING_LIST){
 		if (indexChecker(iter, serialNumber, upcomingList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
@@ -260,6 +269,8 @@ string Planner::deleteTask(int serialNumber, string nameOfList){
 }
 
 //@author A0111361Y
+//The function checks the lastEntry structure for the command and entry,
+//then performs the reverse of the command
 string Planner::undo(void){
 	string status = "";
 	if (lastEntry.lastCommand == COMMAND_ADD){
@@ -276,13 +287,16 @@ string Planner::undo(void){
 	else {
 		throw ERROR_MESSAGE_INVALID_UNDO;
 	}
+	
 	status = undoStatusToString();
 	checkListForClashes();
 	generateAllOtherList();
+	
 	return status;
 }
 
 //@author A0111361Y
+//Clears the All list and generates all other lists
 string Planner::clear(void){
 	All.clear();
 	generateAllOtherList();
@@ -313,6 +327,9 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 }
 
 //@author A0111361Y
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then marked as done
 string Planner::markDone(int serialNumber, string nameOfList){
 	int idNumber = 0;
 	string status;
@@ -348,6 +365,7 @@ string Planner::markDone(int serialNumber, string nameOfList){
 	else{
 		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
 	}
+
 	//logging
 	stringstream message;
 	message << LOG_FILE_MARK_DONE_MSG << idNumber;
@@ -358,6 +376,9 @@ string Planner::markDone(int serialNumber, string nameOfList){
 }
 
 //@author A0111361Y
+//Function takes in the search target
+//passes the target to every task and checks if the target is present in the task
+//generates a list of all the tasks that return true
 string Planner::generateSearchList(string target){
 	list<Task> ::iterator iter;
 	Task tempTask;
@@ -634,8 +655,9 @@ string Planner::deleteIndex(int idNumber){
 			iter2 = iter1;
 		}
 	}
-	lastEntry.lastTask = *iter2;
-	lastEntry.lastCommand = COMMAND_DELETE;
+
+	updateLastEntryStructure(COMMAND_DELETE, *iter2);
+	
 	string status;
 	status = statusToString(COMMAND_DELETE, *iter2);
 	All.erase(iter2);
@@ -653,7 +675,19 @@ string Planner::deleteIndex(int idNumber){
 
 /************************************************************************************************
 
-									Mark Done Helper Functions
+									"Undo" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+void Planner::updateLastEntryStructure(string command, Task theTask){
+	
+	lastEntry.lastCommand = command;
+	lastEntry.lastTask = theTask;
+}
+/************************************************************************************************
+
+									"Mark Done" Helper Functions
 
 ************************************************************************************************/
 //Private Functions

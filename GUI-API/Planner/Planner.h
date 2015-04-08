@@ -41,6 +41,8 @@ private:
 	// delete helper functions
 	int getIdOfLastEntry(void);
 	string deleteIndex(int idNumber);
+	//undo helper functons
+	void updateLastEntryStructure(string, Task);
 	// mark done helper function
 	string markDoneIndex(int idNumber);
 	//check duplicate helper function
