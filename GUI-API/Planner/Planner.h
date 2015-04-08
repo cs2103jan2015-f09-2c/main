@@ -38,6 +38,25 @@ private:
 	//Time Structure
 	taskDate currentDate;
 	
+	// delete helper functions
+	int getIdOfLastEntry(void);
+	string deleteIndex(int idNumber);
+	// mark done helper function
+	string markDoneIndex(int idNumber);
+	//check duplicate helper function
+	bool isDuplicatePresent(Task newTask);
+	bool tasksAreTheSame(Task Task1, Task Task2);
+	//Clash Helper Functions
+	//bool isClashPresent(Task newTask);
+	void checkListForClashes();
+	bool checkTaskForClashes(Task Task1, Task Task2);
+	bool isClashTaskSingleDateTimeTaskDoubleDateTime(Task, Task);
+	bool isTwoDatesTasksSameDates(Task, Task);
+	bool isOneDateTasksSameDates(Task, Task);
+	bool isOneDateTaskbetweenTwoDateTask(Task, Task);
+	bool taskTimesOverlap(Task, Task);
+	bool isOneTimeTaskBetweenTwoTimesTask(Task, Task);
+	bool indexChecker(list<Task>::iterator&, int, list<Task>&);
 	//status returning functions
 	string descriptionOfTaskToString(Task theTask);
 	string addStatusToString(Task theTask);
@@ -49,58 +68,41 @@ private:
 	string searchStatusToString();
 	string doneStatusToString();
 	string duplicateStatusToString(Task theTask);
-	// List returning functions
-	string homeListToString(void);
-	string upcomingListToString();
-	string missedListToString();
-	string searchListToString();
-	string doneListToString();
-	// delete helper functions
-	int getIdOfLastEntry(void);
-	string deleteIndex(int idNumber);
-	//save helper function
-	
 	//list generating functions
 	void generateAllOtherList(void);
 	void generateHomeList(void);
 	void generateUpcomingList(void);
 	void generateMissedList(void);
 	void generateDoneList(void);
-	// list boolean functions
+	void clearTheLists(void);
+	void generateTheLists(void);
+	// Generator Logic Functions
 	bool isHome(taskDate, list<Task>::iterator);
 	bool isMissed(taskDate, list<Task>::iterator);
 	bool isUpcoming(taskDate, list<Task>::iterator);
-	// mark done function
-	string markDoneIndex(int idNumber);
-	//check duplicate function
-	bool isDuplicatePresent(Task newTask);
-	bool tasksAreTheSame(Task Task1, Task Task2);
-	//check clashes
-	bool isClashPresent(Task newTask);
-	void checkListForClashes();
-	bool checkTaskForClashes(Task Task1, Task Task2);
-	bool isClashTaskSingleDateTimeTaskDoubleDateTime(Task, Task);
-	bool isTwoDatesTasksSameDates(Task, Task);
-	bool isOneDateTasksSameDates(Task, Task);
-	bool isOneDateTaskbetweenTwoDateTask(Task, Task);
-	bool taskTimesOverlap(Task, Task);
-	bool isOneTimeTaskBetweenTwoTimesTask(Task, Task);
+	// List returning functions
+	string homeListToString(void);
+	string upcomingListToString();
+	string missedListToString();
+	string searchListToString();
+	string doneListToString();
+	
+	
 
-	bool indexChecker(list<Task>::iterator&, int, list<Task>&);
+	
 	
 public:
 	// Initialization 
 	Planner();
-	//command functions to be called by Logic
+	//Command Functions
 	string addTask(Task content);
 	string deleteTask(int serialNumber, string nameOfList);
 	string undo(void);
 	string clear(void);
 	string editTask(int serialNumber, string nameOfList, string input);
 	string markDone(int serialNumber, string nameOfList);
-	//string save(string);
 	string generateSearchList(string target);
-	// string of list returning function
+	// Functions that returns Lists in string form
 	string toString(string nameOfList);
 	string AllToString(void);
 	//string of status returning function
