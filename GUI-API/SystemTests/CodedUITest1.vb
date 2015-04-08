@@ -9,7 +9,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
 <CodedUITest()>
 Public Class CodedUITest1
-
+    '   //@author A0111314A
     <TestMethod()>
     Public Sub systemAddTest_twoDate_twoTime()
         '            
@@ -19,13 +19,14 @@ Public Class CodedUITest1
         Me.UIMap.assert_userAdd_time_date()
 
     End Sub
+    '   //@author A0111314A
     <TestMethod()>
     Public Sub systemAddTest1_oneDate_oneTime()
         '            
         ' To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
         '
     End Sub
-
+    '   //@author generated
 #Region "Additional test attributes"
         '
         ' You can use the following additional attributes as you write your tests:

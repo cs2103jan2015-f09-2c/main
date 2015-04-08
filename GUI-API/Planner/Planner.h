@@ -78,7 +78,9 @@ private:
 	void generateTheLists(void);
 	// Generator Logic Functions
 	bool isHome(taskDate, list<Task>::iterator);
+	bool checkHomeDate(taskDate, int, int, int);
 	bool isMissed(taskDate, list<Task>::iterator);
+	bool checkMissedDate(taskDate, int, int, int);
 	bool isUpcoming(taskDate, list<Task>::iterator);
 	// List returning functions
 	string homeListToString(void);

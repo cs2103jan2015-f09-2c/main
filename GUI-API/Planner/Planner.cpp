@@ -68,11 +68,12 @@ using namespace std;
 
 ************************************************************************************************/
 //@author A0111314A
+//variable currentDate is initialized to the system date when Planner4Life is opened
 Planner::Planner(){
-	time_t t = time(0);   // get time now
-	struct tm * now = localtime(&t);
-	currentDate.year = (now->tm_year - 100);
-	currentDate.month = (now->tm_mon + 1);
+	time_t t = time(0);  
+	struct tm * now = localtime(&t);			//get local time
+	currentDate.year = (now->tm_year - 100);	//last 2 digits of year
+	currentDate.month = (now->tm_mon + 1);		//month: jan = 1, feb = 2 etc
 	currentDate.day = (now->tm_mday);
 }
 
@@ -961,6 +962,7 @@ bool Planner::isOneDateTaskbetweenTwoDateTask(Task Task1, Task Task2){
 }
 
 //@author A0111314A
+//Function checks if an index is valid (exists and has been assigned to a task) and returns true if it is
 bool Planner::indexChecker(list<Task>::iterator& iter, int serialNumber, list<Task>& targetList){
 	int indexCount = 1;
 	bool isValidIndex = true;
@@ -1132,6 +1134,8 @@ void Planner::generateAllOtherList(void){
 }
 
 //@author A0111314A
+//Function generates an iterator that goes through all tasks and checks if it belongs in HomeList. 
+//if yes, it pushes it into the list. 
 void Planner::generateHomeList(void){
 	list<Task> ::iterator it;
 
@@ -1143,6 +1147,8 @@ void Planner::generateHomeList(void){
 }
 
 //@author A0111314A
+//Function generates an iterator that goes through all tasks and checks if it belongs in UpcomingList. 
+//if yes, it pushes it into the list. 
 void Planner::generateUpcomingList(void){
 	list<Task> ::iterator iter;
 
@@ -1154,6 +1160,8 @@ void Planner::generateUpcomingList(void){
 }
 
 //@author A0111314A
+//Function generates an iterator that goes through all tasks and checks if it belongs in MissedList. 
+//if yes, it pushes it into the list. 
 void Planner::generateMissedList(void){
 	list<Task> ::iterator iter;
 
@@ -1200,81 +1208,36 @@ void Planner::generateTheLists(void){
 //assumes 30 days in a month
 
 //@author A0111314A
+//Function checks if task should be included in Home view and returns true if it is.
 bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	bool isWithinHome = false;
-	//case 1: currentDate + 7 days = current month, same year
-	if (currentDate.day <= 23) {
-		if ((*it).getDateStart().month == (currentDate.month)) {
-			if ((*it).getDateStart().day <= (currentDate.day + 7) && (*it).getDateStart().day >= currentDate.day) {
-				if ((*it).getDateStart().year == currentDate.year) {
-					isWithinHome = true;
-				}
-			}
-		}
+
+	int startDay, startMonth, startYear;
+	int endDay, endMonth, endYear;
+
+	startDay = (*it).getDateStart().day;
+	startMonth = (*it).getDateStart().month;
+	startYear = (*it).getDateEnd().year;
+	endDay = (*it).getDateEnd().day;
+	endMonth = (*it).getDateEnd().month;
+	endYear = (*it).getDateEnd().year;
+
+	//case 1: accept if start date is within the next 7 days
+	if (checkHomeDate(currentDate, startDay, startMonth, startYear)){
+		isWithinHome = true;
 	}
-	//case 2: currentDate + 7 days = next month, task = current month, not december
-	else if ((*it).getDateEnd().month == (currentDate.month)) {
-		if ((*it).getDateEnd().year == currentDate.year) {
-			if ((*it).getDateEnd().day <= 31 && (*it).getDateEnd().day >= currentDate.day) {
-				isWithinHome = true;
-			}
-		}
+
+	//case 2: accept if end date is within the next 7 days
+	if (checkHomeDate(currentDate, endDay, endMonth, endYear)){
+		isWithinHome = true;
 	}
-	//case 3:  currentDate + 7 days = next month, task = next month, not december
-	else if ((*it).getDateEnd().month == (currentDate.month + 1)) {
-		if ((*it).getDateEnd().year == currentDate.year) {
-			if ((*it).getDateEnd().day < (7 - (30 - currentDate.day))) {
-				isWithinHome = true;
-			}
-		}
-	}
-	//case 4: current date + 7 days = next month, december
-	else if ((*it).getDateEnd().year == (currentDate.year + 1)) {
-		if ((*it).getDateEnd().month == 1) {
-			if ((*it).getDateEnd().day < (7 - (30 - currentDate.day))) {
-				isWithinHome = true;
-			}
-		}
-	}
-	//case 1a: currentDate + 7 days = current month, same year
-	if (currentDate.day <= 23) {
-		if ((*it).getDateStart().month == (currentDate.month)) {
-			if ((*it).getDateStart().day <= (currentDate.day + 7) && (*it).getDateStart().day >= currentDate.day) {
-				if ((*it).getDateStart().year == currentDate.year) {
-					isWithinHome = true;
-				}
-			}
-		}
-	}
-	//case 2a: currentDate + 7 days = next month, task = current month, not december
-	else if ((*it).getDateStart().month == (currentDate.month)) {
-		if ((*it).getDateStart().year == currentDate.year) {
-			if ((*it).getDateStart().day <= 31 && (*it).getDateStart().day >= currentDate.day) {
-				isWithinHome = true;
-			}
-		}
-	}
-	//case 3a:  currentDate + 7 days = next month, task = next month, not december
-	else if ((*it).getDateStart().month == (currentDate.month + 1)) {
-		if ((*it).getDateStart().year == currentDate.year) {
-			if ((*it).getDateStart().day < (7 - (30 - currentDate.day))) {
-				isWithinHome = true;
-			}
-		}
-	}
-	//case 4a: current date + 7 days = next month, december
-	else if ((*it).getDateStart().year == (currentDate.year + 1)) {
-		if ((*it).getDateStart().month == 1) {
-			if ((*it).getDateStart().day < (7 - (30 - currentDate.day))) {
-				isWithinHome = true;
-			}
-		}
-	}
-	//case 5: floating task
+
+	//case 3: floating task
 	if ((*it).getNumOfDates() == 0) {
 		isWithinHome = true;
 	}
 
+	//case 4: reject if task is done
 	if ((*it).doneStatus()){
 		isWithinHome = false;
 	}
@@ -1283,29 +1246,70 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 }
 
 //@author A0111314A
-bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
-	bool isWithinMissed = false;
-	//case 1: passed year
-	if ((*it).getDateEnd().year < currentDate.year) {
-		isWithinMissed = true;
-	}
-	//case 2: same year, passed month
-	else if ((*it).getDateEnd().year == currentDate.year) {
-		if ((*it).getDateEnd().month < currentDate.month) {
-			isWithinMissed = true;
-		}//case 3: same year, same month, passed day
-		else if ((*it).getDateEnd().month == currentDate.month) {
-			if ((*it).getDateEnd().day < currentDate.day) {
-				isWithinMissed = true;
+//Function checks that task date is within 7 days of current date
+bool Planner::checkHomeDate(taskDate currentDate, int day, int month, int year){
+	bool isWithinHome = false;
+
+	//case 1: currentDate + 7 days = current month, same year (date end)
+	if (currentDate.day <= 23) {
+		if (month == (currentDate.month)) {
+			if (day <= (currentDate.day + 7) && day >= currentDate.day) {
+				if (year == currentDate.year) {
+					isWithinHome = true;
+				}
 			}
 		}
 	}
+	//case 2: currentDate + 7 days = next month, task = current month, not december (date end)
+	else if (month == (currentDate.month)) {
+		if (year == currentDate.year) {
+			if (day <= 31 && day >= currentDate.day) {
+				isWithinHome = true;
+			}
+		}
+	}
+	//case 3:  currentDate + 7 days = next month, task = next month, not december (date end)
+	else if (month == (currentDate.month + 1)) {
+		if (year == currentDate.year) {
+			if (day < (7 - (30 - currentDate.day))) {
+				isWithinHome = true;
+			}
+		}
+	}
+	//case 4: current date + 7 days = next month, december (date end)
+	else if (year == (currentDate.year + 1)) {
+		if (month == 1) {
+			if (day < (7 - (30 - currentDate.day))) {
+				isWithinHome = true;
+			}
+		}
+	}
+
+	return isWithinHome;
+}
+
+//@author A0111314A
+//Function checks if tsk should be in Missed view and returns true if it is
+bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
+	bool isWithinMissed = false;
+
+	int endDay, endMonth, endYear;
+
+	endDay = (*it).getDateEnd().day;
+	endMonth = (*it).getDateEnd().month;
+	endYear = (*it).getDateEnd().year;
+
+	//case 1: reject if date has not passed
+	if (checkMissedDate(currentDate, endDay, endMonth, endYear)){
+		isWithinMissed = true;
+	}
 	
-	//case 3: reject floating tasks
+	//case 2: reject floating tasks
 	if ((*it).getNumOfDates() == 0) {
 			isWithinMissed = false;
 		}
 
+	//case 3: reject tasks that are already done
 	if ((*it).doneStatus()){
 		isWithinMissed = false;
 	}
@@ -1314,98 +1318,50 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 }
 
 //@author A0111314A
+//Function checks if task date has passed
+bool Planner::checkMissedDate(taskDate currentDate, int endDay, int endMonth, int endYear){
+	bool isWithinMissed = false;
+
+	//case 1: passed year
+	if (endYear < currentDate.year) {
+		isWithinMissed = true;
+	}
+	//case 2: same year, passed month
+	else if (endYear == currentDate.year) {
+		if (endMonth < currentDate.month) {
+			isWithinMissed = true;
+		}//case 3: same year, same month, passed day
+		else if (endMonth == currentDate.month) {
+			if (endDay < currentDate.day) {
+				isWithinMissed = true;
+			}
+		}
+	}
+
+	return isWithinMissed;
+}
+
+//@author A0111314A
+//Function checks if task should be in Upcoming view and returns true if it is.
 bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
 	bool isWithinUpcoming = true;
 
-	//case 1-4 to check if entry should be within home
+	//case 1: reject if task is in home
+	if (isHome(currentDate, it)){
+		isWithinUpcoming = false;
+	}		
 
-	//case 1: currentDate + 7 days = current month, same year
-	if (currentDate.day <= 23) {
-		if ((*it).getDateEnd().month == (currentDate.month)) {
-			if ((*it).getDateEnd().day <= (currentDate.day + 7) && (*it).getDateEnd().day >= currentDate.day) {
-				if ((*it).getDateEnd().year == currentDate.year) {
-					isWithinUpcoming = false;
-				}
-			}
-		}
-	}
-	//case 2: currentDate + 7 days = next month, task = current month, not december
-	else if ((*it).getDateEnd().month == (currentDate.month)) {
-		if ((*it).getDateEnd().year == currentDate.year) {
-			if ((*it).getDateEnd().day <= 31 && (*it).getDateEnd().day >= currentDate.day) {
-				isWithinUpcoming = false;
-			}
-		}
-	}
-	//case 3:  currentDate + 7 days = next month, task = next month, not december
-	else if ((*it).getDateEnd().month == (currentDate.month + 1)) {
-		if ((*it).getDateEnd().year == currentDate.year) {
-			if ((*it).getDateEnd().day < (7 - (30 - currentDate.day))) {
-				isWithinUpcoming = false;
-			}
-		}
-	}
-	//case 4: current date + 7 days = next month, december
-	else if ((*it).getDateEnd().year == (currentDate.year + 1)) {
-		if ((*it).getDateEnd().month == 1) {
-			if ((*it).getDateEnd().day < (7 - (30 - currentDate.day))) {
-				isWithinUpcoming = false;
-			}
-		}
-	}
-
-	//case 1a: currentDate + 7 days = current month, same year
-	if (currentDate.day <= 23) {
-		if ((*it).getDateStart().month == (currentDate.month)) {
-			if ((*it).getDateStart().day <= (currentDate.day + 7) && (*it).getDateStart().day >= currentDate.day) {
-				if ((*it).getDateStart().year == currentDate.year) {
-					isWithinUpcoming = false;
-				}
-			}
-		}
-	}
-	//case 2a: currentDate + 7 days = next month, task = current month, not december
-	else if ((*it).getDateStart().month == (currentDate.month)) {
-		if ((*it).getDateStart().year == currentDate.year) {
-			if ((*it).getDateStart().day <= 31 && (*it).getDateStart().day >= currentDate.day) {
-				isWithinUpcoming = false;
-			}
-		}
-	}
-	//case 3a:  currentDate + 7 days = next month, task = next month, not december
-	else if ((*it).getDateStart().month == (currentDate.month + 1)) {
-		if ((*it).getDateStart().year == currentDate.year) {
-			if ((*it).getDateStart().day < (7 - (30 - currentDate.day))) {
-				isWithinUpcoming = false;
-			}
-		}
-	}
-	//case 4a: current date + 7 days = next month, december
-	else if ((*it).getDateStart().year == (currentDate.year + 1)) {
-		if ((*it).getDateStart().month == 1) {
-			if ((*it).getDateStart().day < (7 - (30 - currentDate.day))) {
-				isWithinUpcoming = false;
-			}
-		}
-	}
-	// case 5-7 to check if entry should be in missed
-
-	//case 5: passed year
-	if ((*it).getDateEnd().year < currentDate.year) {
+	//case 2: reject if task is in missed
+	if (isMissed(currentDate, it)){
 		isWithinUpcoming = false;
 	}
-	//case 6: same year, passed month
-	else if ((*it).getDateEnd().year == currentDate.year) {
-		if ((*it).getDateEnd().month < currentDate.month) {
-			isWithinUpcoming = false;
-		}//case 7: same year, same month, passed day
-		else if ((*it).getDateEnd().month == currentDate.month) {
-			if ((*it).getDateEnd().day < currentDate.day) {
-				isWithinUpcoming = false;
-			}
-		}
+
+	//case 3: reject floating tasks
+	if ((*it).getNumOfDates() == 0) {
+		isWithinUpcoming = false;
 	}
 
+	//case 4: reject tasks that are already done
 	if ((*it).doneStatus()){
 		isWithinUpcoming = false;
 	}
