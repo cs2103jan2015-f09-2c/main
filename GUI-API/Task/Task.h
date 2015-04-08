@@ -29,6 +29,7 @@ private:
 	Log* LogData = Log::getInstance();
 	list<Task> _recurringTasks;
 
+	//Helper functions for AddDetails
 	void processImportance(string&);
 	void processDescription(string&);			
 	void processDate(string);
@@ -43,6 +44,8 @@ private:
 	void process_OneDelimiter(string);
 	void process_TwoDelimiter(string);
 
+	//Helper functions for Recur
+	void processRecur(string, string, int);
 	string modifyDetails(string, string);
 	string extractDateInfo(string);
 	string modifyDate(string, string);
@@ -54,8 +57,10 @@ private:
 	string processYearlyRecur(string);
 	void splitDate(string, int&, int&, int&);
 	void mergeDate(string&, int, int, int);
-	int extractDateInfoFields(string, string&, string&, string&, string&);	
+	int extractDateInfoFields(string, string&, string&, string&, string&);
+	string extractTaskDetailsFromUserInput(string);
 
+	//Helper functions for general exception handling
 	bool areValidDates(string, string);
 	bool isValidDate(string);
 	bool startDateBeforeEndDate(string, string);

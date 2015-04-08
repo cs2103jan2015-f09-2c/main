@@ -18,6 +18,8 @@ const string ADD_DETAILS_DATE_SUCCESSFUL = "In addDetails(processDate), Date sto
 const string ADD_DETAILS_DATE_INVALID = "In addDetails(processDate), Date invalid";
 const string ADD_DETAILS_TIME_SUCCESSFUL = "In addDetails(processTime), Time stored successfully";
 const string ADD_DETAILS_TIME_INVALID = "In addDetails(processTime), Time invalid";
+const string RECUR_TASK_ADD_SUCCESSFUL = "Recurring task has been added successfully";
+const string RECUR_TASK_MODIFY_DETAILS_SUCCESSFUL = "Details for recurring task modified successfully";
 
 using namespace std;
 
@@ -353,20 +355,37 @@ bool Task::doneStatus(){
 ************************************************************************************************/
 
 void Task::recurTask(string details){
-	string frequency, taskDetails;
-	int numOfRecurrence, semicolonPos;
+	string frequency;
+	int numOfRecurrence;
 	char delimiter;
-	Task *recTaskPtr;
+	
 
 	istringstream in(details);
 	in >> frequency;						//daily, weekly, monthly or yearly
 	in >> numOfRecurrence;					//no of times to recur
 	
+	details = extractTaskDetailsFromUserInput(details);
+	
+	processRecur(details, frequency, numOfRecurrence);
+	
+	LogData->addLog(UPDATE, RECUR_TASK_ADD_SUCCESSFUL);
+}
+
+string Task::extractTaskDetailsFromUserInput(string details){
+	int semicolonPos;
+	string taskDetails;
+
 	semicolonPos = details.find_first_of(";");
 	semicolonPos++;
 
-	details = details.substr(semicolonPos, details.size() - semicolonPos);		//to extract out relevant details for task
-	
+	taskDetails = details.substr(semicolonPos, details.size() - semicolonPos);
+
+	return taskDetails;
+}
+
+void Task::processRecur(string details, string frequency, int numOfRecurrence){
+	Task *recTaskPtr;
+
 	for (int i = 1; i <= numOfRecurrence; i++){
 		recTaskPtr = new Task;
 		(*recTaskPtr).addDetails(details);
@@ -404,6 +423,8 @@ string Task::modifyDetails(string frequency, string details){
 		break;
 	}
 	
+	LogData->addLog(UPDATE, RECUR_TASK_MODIFY_DETAILS_SUCCESSFUL);
+
 	return details;
 }
 
