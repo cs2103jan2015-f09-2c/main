@@ -341,7 +341,7 @@ int Task::getNumOfTimes(){
 list<Task> Task::getRecurringTasks(){
 	return _recurringTasks;
 }
-
+//@author A0111361Y
 bool Task::doneStatus(){
 	return _isDone;
 }
@@ -596,17 +596,17 @@ string Task::extractDateInfo(string details){
 	return details;
 }
 
-
+//@author A0111361Y
 void Task::markClashAsTrue(){
 	_isClash = true;
 }
 
-
+//@author A0111361Y
 void Task::markClashAsFalse(){
 	_isClash = false;
 }
 
-
+//@author A0111361Y
 bool Task::clashStatus(){
 	if (_isClash == true){
 		return true;
