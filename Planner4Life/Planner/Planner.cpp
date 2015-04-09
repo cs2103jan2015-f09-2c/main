@@ -640,9 +640,9 @@ string Planner::deleteIndex(int idNumber){
 	}
 
 	updateLastEntryStructure(COMMAND_DELETE, *deleteTargetIter);
-
+	Task temp = *deleteTargetIter;
 	All.erase(deleteTargetIter);
-	status = statusToString(COMMAND_DELETE, *deleteTargetIter);
+	status = statusToString(COMMAND_DELETE, temp);
 	
 	checkListForClashes();
 	generateAllOtherList();
