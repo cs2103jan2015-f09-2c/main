@@ -410,21 +410,17 @@ namespace PlannerUnitTest
 			Planner testPlanner;
 			Task testTask1, testTask2;
 			bool doesFunctionWork;
+			string finalOutput, hardcodedOutput;
 
 			testTask1.addDetails("Test task 1; date 060415; time 1000 to 1200");
 			testPlanner.addTask(testTask1);
 			testTask2.addDetails("Test task 2; date 050415 to 070415; time 1100 to 1300");
 			testPlanner.addTask(testTask2);
-			//									"1. Test task 2 5/4/15 to 7/4/15 1100 to 1300 \r\n2. Test task 1 6/4/15 1000 to 1200 \r\n"
 
-			if (testPlanner.toString("Home") == "1. Test task 2 5/4/15 to 7/4/15 1100 to 1300 TASK CLASH!!!\r\n2. Test task 1 6/4/15 1000 to 1200 TASK CLASH!!!\r\n"){
-				doesFunctionWork = true;
-			}
-			else{
-				doesFunctionWork = false;
-			}
+			finalOutput = testPlanner.toString("Missed");
+			hardcodedOutput = "1. Test task 2 Date: 5/4/15 to 7/4/15 Time: 1200  TASK CLASH !!!\r\n2. Test task 1 Date: 6/4/15 Time: 1200  TASK CLASH !!!\r\n";
+			Assert::AreEqual(hardcodedOutput, finalOutput);
 
-			Assert::IsTrue(doesFunctionWork);
 		}
 	};
 }
