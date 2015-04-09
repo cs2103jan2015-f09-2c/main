@@ -427,40 +427,19 @@ string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string displayString;
 	if (nameOfList == HOME_LIST){
-<<<<<<< HEAD
-		displayString = homeListToString();
+		displayString = ListToString(homeList);
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		displayString = upcomingListToString();
+		displayString = ListToString(upcomingList);
 	}
 	else if (nameOfList == MISSED_LIST){
-		displayString = missedListToString();
+		displayString = ListToString(missedList);
 	}
 	else if (nameOfList == SEARCH_LIST){
-		displayString = searchListToString();
+		displayString = ListToString(searchList);
 	}
 	else if (nameOfList == DONE_LIST){
-		displayString = doneListToString();
-=======
-		finalString = ListToString(homeList);
-		return finalString;
-	}
-	else if (nameOfList == UPCOMING_LIST){
-		finalString = ListToString(upcomingList);
-		return finalString;
-	}
-	else if (nameOfList == MISSED_LIST){
-		finalString = ListToString(missedList);
-		return finalString;
-	}
-	else if (nameOfList == SEARCH_LIST){
-		finalString = ListToString(searchList);
-		return finalString;
-	}
-	else if (nameOfList == DONE_LIST){
-		finalString = ListToString(doneList);
-		return finalString;
->>>>>>> bd866cc7c92c5f3c1dc204e749d9a48f0018abb0
+		displayString = ListToString(doneList);
 	}
 	else displayString = ERROR_MESSSAGE_INVALID_LIST_NAME;														//UNHANDLED EXCEPTION **********************************************		
 
