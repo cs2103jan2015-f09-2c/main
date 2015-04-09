@@ -376,6 +376,9 @@ string Task::extractTaskDetailsFromUserInput(string details){
 	string taskDetails;
 
 	semicolonPos = details.find_first_of(";");
+	if (semicolonPos == string::npos){
+		throw ERROR_MESSAGE_INVALID_INPUT;
+	}
 	semicolonPos++;
 
 	taskDetails = details.substr(semicolonPos, details.size() - semicolonPos);
@@ -398,11 +401,10 @@ void Task::processRecur(string details, string frequency, int numOfRecurrence){
 
 string Task::modifyDetails(string frequency, string details){
 	int index, numOfDates;
-	string keyword, startDate, endDate, separator, dateInfo, newDateInfo;
+	string keyword, startDate, endDate, separator, newDateInfo;
 	ostringstream updatedInfo;
 
-	dateInfo = extractDateInfo(details);
-	numOfDates = extractDateInfoFields(dateInfo, keyword, startDate, endDate, separator);
+	numOfDates = extractDateInfoFields(details, keyword, startDate, endDate, separator);
 	
 	switch (numOfDates){
 	case 1:
@@ -428,9 +430,12 @@ string Task::modifyDetails(string frequency, string details){
 	return details;
 }
 
-int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){
+int Task::extractDateInfoFields(string details, string& keyword, string& startDate, string& endDate, string& separator){
 	int numOfDates, index;
-	
+	string dateInfo;
+
+	dateInfo = extractDateInfo(details);
+
 	istringstream in(dateInfo);
 	index = dateInfo.find("to");			// locate the word to in string
 
@@ -453,8 +458,15 @@ int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startD
 
 string Task::extractDateInfo(string details){
 	int index;
-
+	
+//	index = details.find("date");
+	
 	index = details.find("date");
+	
+	if (index == string::npos){
+		throw ERROR_MESSAGE_INVALID_INPUT;
+	}
+
 	details = details.substr(index, details.size() - index);
 
 	//get rid of #impt if exists
