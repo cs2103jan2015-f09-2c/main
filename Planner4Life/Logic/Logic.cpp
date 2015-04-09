@@ -124,8 +124,8 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 		}
 	}
 
-	else if (command == "Y" || command == "N" || command == "y" || command == "n"){
-		processCommandClear(command);
+	else if (command == COMMAND_CLEAR){
+		processCommandClear(taskDetail);
 	}
 
 	else if (command == COMMAND_SEARCH){
@@ -220,6 +220,7 @@ void Logic::processCommandDelete(string taskIndex, string currentView) throw (in
 	try {
 		index = stoi(taskIndex);
 	}
+
 	catch (invalid_argument& error){
 		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
 	}
@@ -233,6 +234,7 @@ void Logic::processCommandDone(string taskIndex, string currentView)throw (inval
 	try {
 		index = stoi(taskIndex);
 	}
+
 	catch (invalid_argument& error){
 		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
 	}
@@ -250,6 +252,7 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 			throw bad_cast();
 		}
 	}
+
 	catch (bad_cast& error){
 		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
 	}
@@ -259,6 +262,7 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 			throw bad_cast();
 		}
 	}
+
 	catch (bad_cast& error){
 		throw ERROR_MESSAGE_MISSING_COLON;
 	}
@@ -283,12 +287,12 @@ void Logic::processCommandUndo(){
 
 void Logic::processCommandSearch(string taskDetail){
 	status = myPlanner.generateSearchList(taskDetail);
-	display = myPlanner.toString("Search");
+	display = myPlanner.toString(SEARCH_VIEW);
 }
 
 void Logic::processCommandHelp(){
 	display = HELP_MESSAGE;
-	status = "Help window";												// prompt for help (refactor needed)
+	status = "Help window";
 }
 
 void Logic::processCommandShowDone(string currentView){
@@ -302,7 +306,7 @@ void Logic::processCommandAll(){
 }
 
 void Logic::updateDisplay(string viewType) {
-	if (viewType == "Help" || viewType == "All" || viewType == "Search"){
+	if (viewType == HELP_VIEW || viewType == ALL_VIEW || viewType == SEARCH_VIEW){
 		return;
 	}
 
@@ -321,6 +325,7 @@ string Logic::displayContent(){
 //Function checks the Missed list to see if there are any tasks there. If there are, return true. 
 bool Logic::checkMissedStatus(){
 	bool missedPresent = false;
+
 	if (!myPlanner.isMissedEmpty()){
 		missedPresent = true;
 	}
