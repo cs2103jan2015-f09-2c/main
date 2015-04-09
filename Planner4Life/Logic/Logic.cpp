@@ -306,7 +306,7 @@ void Logic::processCommandShowDone(string currentView){
 
 void Logic::processCommandAll(){
 	display = myPlanner.AllToString();
-	status = "All list";													//prompt for All (refactor needed)
+	status = "All list";
 }
 
 void Logic::updateDisplay(string viewType) {
