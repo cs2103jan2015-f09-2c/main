@@ -197,7 +197,7 @@ namespace UI {
 		************************************************************************************************/
 		//Function to initialize beginning state of Planner4Life to home screen with loadFile prompt
 	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
-		string strStatus = plannerLogic->displayOutcome();
+		string strStatus = plannerLogic->displayStatus();
 
 		executeHome(sender, e);
 		status->Text = gcnew String(strStatus.c_str());
@@ -271,7 +271,7 @@ namespace UI {
 		missedAlertCheck();
 
 		string strDisplay = plannerLogic->displayContent();
-		string strStatus = plannerLogic->displayOutcome();
+		string strStatus = plannerLogic->displayStatus();
 
 		StrDisplay = gcnew String(strDisplay.c_str());
 		displayWindow->Text = StrDisplay;

@@ -12,35 +12,34 @@ using namespace std;
 
 class Logic{
 private:
-	string outcome; //feedback prompt
+	string status;
 	string display;
 	string saveAddress;
 	Planner myPlanner;
 	Storage* myStorage;
 
-	string extractCommand(std::string& userInput);
-	void processCommand(string command, string taskDetail, string currentView);
-	void processCommandAdd(string taskDetail);
-	void processCommandDelete(string taskIndex, string currentView);
-	void processCommandEdit(string userInput, string currentView);
-	void processCommandClear(string command);
+	string extractCommand(std::string&);
+	void processCommand(string, string, string);
+	void processCommandAdd(string);
+	void processCommandDelete(string, string);
+	void processCommandEdit(string, string);
+	void processCommandClear(string);
 	void processCommandUndo();
-	void processCommandSearch(string taskDetail);
-	void processCommandLoad(string fileName);
-	void processCommandSave(string taskDetail);
+	void processCommandSearch(string);
+	void processCommandLoad(string);
+	void processCommandSave(string);
 	void processCommandHelp();
 	void processCommandAll();
-	void processCommandRecur(string taskDetail);
-	void processCommandDone(string taskIndex, string currentView);
-	void processCommandShowDone(string currentView);
+	void processCommandRecur(string);
+	void processCommandDone(string, string);
+	void processCommandShowDone(string);
 
 public:
 	Logic();
 	~Logic();
-	void processUserInput(string userInput, string currentView);
-	void updateDisplay(string viewType);
-	//void save(string fileName);
-	string displayOutcome();
+	void processUserInput(string, string);
+	void updateDisplay(string);
+	string displayStatus();
 	string displayContent();
 	bool checkMissedStatus();
 };

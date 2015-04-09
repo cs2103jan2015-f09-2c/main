@@ -91,113 +91,19 @@ Command Functions
 //duplicates, place to slot in and clashes
 //function ends by generating all the other dependent lists
 string Planner::addTask(Task newTask){
-
-	//create new task
-	int id = getNewId(); // use static to actually create id
+	int id = getNewId();
+	bool duplicatePresent = false;
+	list<Task>::iterator listIter;
+	bool twoDatePresent = false, oneDatePresent = false;
 
 	newTask.storeIdNumber(id);
 
 	//check for duplicate
-	bool duplicatePresent = false;
 	duplicatePresent = isDuplicatePresent(newTask);
 
 	//check where to slot
-	list<Task>::iterator iter, iterTwoDate, iterOneDate;
-	bool twoDatePresent = false, oneDatePresent = false;
-
-
-	//case 1: when new task has no date and no time
-	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
-		//look for slot at the end of tasks with no date and no time
-		for (iter = All.begin(); iter != All.end(); ++iter){
-			if ((*iter).getNumOfDates() > 0 || (*iter).getNumOfTimes() > 0){
-				break;
-			}
-		}
-	}
-
-	//case 2: when new task has no date and has time (either 1 or 2 times)
-	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
-		for (iter = All.begin(); iter != All.end(); ++iter){
-			if ((*iter).getTimeStart() > newTask.getTimeStart() || (*iter).getNumOfDates() > 0){
-				break;
-			}
-		}
-	}
-
-	//case 3:  when new task has more than one date (0,1 or 2 times)
-	else if (newTask.getNumOfDates() >0){
-		for (iter = All.begin(); iter != All.end(); ++iter){
-			if ((*iter).getDateStart().year > newTask.getDateStart().year){
-				break;
-			}
-			else if ((*iter).getDateStart().year == newTask.getDateStart().year){
-				if ((*iter).getDateStart().month > newTask.getDateStart().month){
-					break;
-				}
-				else if ((*iter).getDateStart().month == newTask.getDateStart().month){
-					if ((*iter).getDateStart().day > newTask.getDateStart().day){
-						break;
-					}
-					else if ((*iter).getDateStart().day == newTask.getDateStart().day){
-						if ((*iter).getTimeStart() > newTask.getTimeStart()){
-							break;
-						}
-						else if ((*iter).getTimeStart() == newTask.getTimeStart()){
-							if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	//case 4: when new task has 1 date (0,1 or 2 times)
-	else if (newTask.getNumOfDates() == 1){
-		int numofTimes = newTask.getNumOfTimes();
-		int yearS = newTask.getDateStart().year;
-		int monthS = newTask.getDateStart().month;
-		int dayS = newTask.getDateStart().day;
-
-		for (iter = All.begin(); iter != All.end(); ++iter){
-			int IyearE = (*iter).getDateStart().year;
-			int ImonthE = (*iter).getDateStart().month;
-			int IdayE = (*iter).getDateStart().day;
-
-			if ((*iter).getDateStart().year > newTask.getDateEnd().year){
-				break;
-			}
-			else if ((*iter).getDateStart().year == newTask.getDateEnd().year){
-				if ((*iter).getDateStart().month > newTask.getDateStart().month){
-					if ((*iter).getDateEnd().year > newTask.getDateEnd().year){
-						break;
-					}
-					else if ((*iter).getDateEnd().year == newTask.getDateEnd().year){
-						if ((*iter).getDateEnd().month > newTask.getDateEnd().month){
-							break;
-						}
-						else if ((*iter).getDateEnd().month == newTask.getDateEnd().month){
-							if ((*iter).getDateEnd().day > newTask.getDateEnd().day){
-								break;
-							}
-							else if ((*iter).getDateEnd().day == newTask.getDateEnd().day){
-								if ((*iter).getTimeStart() > newTask.getTimeStart()){
-									break;
-								}
-								else if ((*iter).getTimeStart() == newTask.getTimeStart()){
-									if (((*iter).getTimeEnd() - (*iter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	All.insert(iter, newTask);
+	placeToSlotAddedTask(listIter, newTask);
+	All.insert(listIter, newTask);
 
 	string status;
 	if (duplicatePresent){
@@ -208,8 +114,6 @@ string Planner::addTask(Task newTask){
 	}
 
 	updateLastEntryStructure(COMMAND_ADD, newTask);
-
-
 	checkListForClashes();
 	generateAllOtherList();
 
@@ -218,8 +122,60 @@ string Planner::addTask(Task newTask){
 	message << LOG_FILE_ADD_TASK_INTRO_MSG << id;
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 
-
 	return status;
+}
+
+//@author A0111361Y
+//check where to slot
+void Planner::placeToSlotAddedTask(list<Task>::iterator& listIter, Task newTask){
+	
+	//case 1: when new task has no date and no time
+	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
+		//look for slot at the end of tasks with no date and no time
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getNumOfDates() > 0 || (*listIter).getNumOfTimes() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 2: when new task has no date and has time (either 1 or 2 times)
+	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getTimeStart() > newTask.getTimeStart() || (*listIter).getNumOfDates() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 3:  when new task has more than one date (0,1 or 2 times)
+	else if (newTask.getNumOfDates() >0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getDateStart().year > newTask.getDateStart().year){
+				break;
+			}
+			else if ((*listIter).getDateStart().year == newTask.getDateStart().year){
+				if ((*listIter).getDateStart().month > newTask.getDateStart().month){
+					break;
+				}
+				else if ((*listIter).getDateStart().month == newTask.getDateStart().month){
+					if ((*listIter).getDateStart().day > newTask.getDateStart().day){
+						break;
+					}
+					else if ((*listIter).getDateStart().day == newTask.getDateStart().day){
+						if ((*listIter).getTimeStart() > newTask.getTimeStart()){
+							break;
+						}
+						else if ((*listIter).getTimeStart() == newTask.getTimeStart()){
+							if (((*listIter).getTimeEnd() - (*listIter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 //@author A0111361Y
@@ -306,6 +262,7 @@ string Planner::clear(void){
 	
 	All.clear();
 	generateAllOtherList();
+	lastEntry.lastCommand = COMMAND_CLEAR;
 	
 	//logging
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
