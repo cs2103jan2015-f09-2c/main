@@ -183,6 +183,7 @@ namespace UI {
 	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
 		executeHome(sender, e);
 		prompt->Text = gcnew String(plannerLogic->displayOutcome().c_str());
+		missedAlertCheck();
 	}
 
 			 /************************************************************************************************
