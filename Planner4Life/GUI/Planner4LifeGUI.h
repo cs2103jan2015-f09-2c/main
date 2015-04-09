@@ -77,11 +77,7 @@ namespace UI {
 		~GUI(){
 			if (components)	{
 				delete components;
-<<<<<<< HEAD
-				//delete plannerLogic;
-=======
-			//	delete plannerLogic;
->>>>>>> 1c11d224b6e2d6b38fd5121affdfe36ebd81ffef
+				delete plannerLogic;
 				delete currentView;
 			}
 		}

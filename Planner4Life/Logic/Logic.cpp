@@ -45,6 +45,9 @@ Logic::Logic(){
 	myPlanner.loadData(allTasks);
 }
 
+Logic::~Logic(){
+}
+
 void Logic::processUserInput(string userInput, string currentView) {
 	//check whether currentView is empty or invalid views 
 	assert(currentView == DONE_VIEW || currentView == HOME_VIEW || currentView == MISSED_VIEW || currentView == UPCOMING_VIEW || currentView == HELP_VIEW || currentView == ALL_VIEW || currentView == SEARCH_VIEW);
@@ -161,7 +164,7 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 	}
 													
 	else {
-		throw ERROR_MESSAGE_INVALID_COMMAND;
+		throw exception(ERROR_MESSAGE_INVALID_COMMAND);
 	}
 	
 	//retrieve content to be saved in txt file
@@ -222,7 +225,7 @@ void Logic::processCommandDelete(string taskIndex, string currentView) throw (in
 	}
 
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
+		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
 	}
 
 	status = myPlanner.deleteTask(index, currentView);
@@ -236,7 +239,7 @@ void Logic::processCommandDone(string taskIndex, string currentView)throw (inval
 	}
 
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
+		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
 	}
 
 	status = myPlanner.markDone(index, currentView);
@@ -254,7 +257,7 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 	}
 
 	catch (bad_cast& error){
-		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
+		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
 	}
 
 	try {
@@ -264,7 +267,7 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 	}
 
 	catch (bad_cast& error){
-		throw ERROR_MESSAGE_MISSING_COLON;
+		throw exception(ERROR_MESSAGE_MISSING_COLON);
 	}
 
 	int sizeToSubstr = userInput.size() - 2;
