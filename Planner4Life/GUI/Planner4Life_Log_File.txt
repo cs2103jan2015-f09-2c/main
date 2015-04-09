@@ -1,0 +1,24 @@
+UPDATE: In addDetails, Case 0 was called; Thu Apr 09 18:50:09 2015
+
+UPDATE: In addDetails, Case 0 was finished successfully; Thu Apr 09 18:50:09 2015
+
+UPDATE: ID of new entry is 10001; Thu Apr 09 18:50:09 2015
+
+UPDATE: In addDetails, Case 0 was called; Thu Apr 09 18:50:13 2015
+
+UPDATE: In addDetails, Case 0 was finished successfully; Thu Apr 09 18:50:13 2015
+
+UPDATE: ID of deleted entry is 10001; Thu Apr 09 18:50:13 2015
+
+UPDATE: ID of deleted entry is 10001; Thu Apr 09 18:50:13 2015
+
+UPDATE: ID of new entry is 10001; Thu Apr 09 18:50:13 2015
+
+UPDATE: Edit Taken Place ; Thu Apr 09 18:50:13 2015
+
+UPDATE: In addDetails, Case 0 was called; Thu Apr 09 18:50:56 2015
+
+UPDATE: In addDetails, Case 0 was finished successfully; Thu Apr 09 18:50:56 2015
+
+UPDATE: ID of new entry is 10001; Thu Apr 09 18:50:56 2015
+

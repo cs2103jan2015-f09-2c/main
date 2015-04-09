@@ -67,11 +67,12 @@ using namespace std;
 Initialization
 
 ************************************************************************************************/
+//Public Function
 //@author A0111314A
 //variable currentDate is initialized to the system date when Planner4Life is opened
 Planner::Planner(){
-	time_t t = time(0);
-	struct tm * now = localtime(&t);			//get local time
+	time_t currentTime = time(0);
+	struct tm * now = localtime(&currentTime);			//get local time
 	currentDate.year = (now->tm_year - 100);	//last 2 digits of year
 	currentDate.month = (now->tm_mon + 1);		//month: jan = 1, feb = 2 etc
 	currentDate.day = (now->tm_mday);
@@ -228,38 +229,39 @@ string Planner::addTask(Task newTask){
 string Planner::deleteTask(int serialNumber, string nameOfView){
 	int idNumber;
 	string status;
-	list<Task> ::iterator iter;
-
+	list<Task> ::iterator taskIter;
+	
 	if (nameOfView == HOME_LIST){
-		if (indexChecker(iter, serialNumber, homeList) == false){
+		if (indexChecker(taskIter, serialNumber, homeList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
-			idNumber = (*iter).getIdNumber();
+			idNumber = (*taskIter).getIdNumber();
 			status = deleteIndex(idNumber);
 		}
 	}
 	else if (nameOfView == MISSED_LIST){
-		if (indexChecker(iter, serialNumber, missedList) == false){
+		if (indexChecker(taskIter, serialNumber, missedList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
-			idNumber = (*iter).getIdNumber();
+			idNumber = (*taskIter).getIdNumber();
 			status = deleteIndex(idNumber);
 		}
 	}
 	else if (nameOfView == UPCOMING_LIST){
-		if (indexChecker(iter, serialNumber, upcomingList) == false){
+		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
-			idNumber = (*iter).getIdNumber();
+			idNumber = (*taskIter).getIdNumber();
 			status = deleteIndex(idNumber);
 		}
 	}
 	else{
 		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
 	}
+	
 	//logging
 	stringstream message;
 	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
@@ -272,15 +274,17 @@ string Planner::deleteTask(int serialNumber, string nameOfView){
 //The function checks the lastEntry structure for the command and entry,
 //then performs the reverse of the command
 string Planner::undo(void){
-	string status = "";
-	if (lastEntry.lastCommand == COMMAND_ADD){
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD){
 		int lastEntryID = getNewId() - 1;
 		deleteIndex(lastEntryID);
 	}
-	else if (lastEntry.lastCommand == COMMAND_DELETE){
+	else if (command == COMMAND_DELETE){
 		addTask(lastEntry.lastTask);
 	}
-	else if (lastEntry.lastCommand == COMMAND_EDIT){
+	else if (command == COMMAND_EDIT){
 		deleteIndex(lastEdit.addedTask.getIdNumber());
 		addTask(lastEdit.deletedTask);
 	}
@@ -298,31 +302,44 @@ string Planner::undo(void){
 //@author A0111361Y
 //Clears the All list and generates all other lists
 string Planner::clear(void){
+	string status;
+	
 	All.clear();
 	generateAllOtherList();
+	
+	//logging
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
-	return clearStatusToString();
+	status = clearStatusToString();
+	
+	return status;
 }
 
 //@author A0111361Y
 string Planner::editTask(int serialNumber, string nameOfList, string input){
 	Task newTask;
 	string validEditCheck;
-	newTask.addDetails(input);
-	validEditCheck = deleteTask(serialNumber, nameOfList);
+	string status;
 
+	newTask.addDetails(input);
+	
+	validEditCheck = deleteTask(serialNumber, nameOfList);
 	if (validEditCheck == ERROR_MESSAGE_INVALID_INDEX) {
-		return validEditCheck;
+		return ERROR_MESSAGE_INVALID_INDEX;														//UNHANDLED EXCEPTION****************************************************************************
 	}
 	else {
 		lastEdit.deletedTask = lastEntry.lastTask;
 		addTask(newTask);
-		lastEdit.addedTask = lastEntry.lastTask;
+		lastEdit.addedTask = newTask;
 		lastEntry.lastCommand = COMMAND_EDIT;
 
 		generateAllOtherList();
+		
+		//logging
 		LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
-		return editStatusToString();
+
+		status = editStatusToString();
+
+		return status;
 	}
 }
 
@@ -333,32 +350,32 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 string Planner::markDone(int serialNumber, string nameOfList){
 	int idNumber = 0;
 	string status;
-	list<Task> ::iterator iter;
+	list<Task> ::iterator taskIter;
 
 	if (nameOfList == HOME_LIST){
-		if (indexChecker(iter, serialNumber, homeList) == false){
+		if (indexChecker(taskIter, serialNumber, homeList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
-			idNumber = (*iter).getIdNumber();
+			idNumber = (*taskIter).getIdNumber();
 			status = markDoneIndex(idNumber);
 		}
 	}
 	else if (nameOfList == MISSED_LIST){
-		if (indexChecker(iter, serialNumber, missedList) == false){
+		if (indexChecker(taskIter, serialNumber, missedList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
-			idNumber = (*iter).getIdNumber();
+			idNumber = (*taskIter).getIdNumber();
 			status = markDoneIndex(idNumber);
 		}
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		if (indexChecker(iter, serialNumber, upcomingList) == false){
+		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
 		}
 		else {
-			idNumber = (*iter).getIdNumber();
+			idNumber = (*taskIter).getIdNumber();
 			status = markDoneIndex(idNumber);
 		}
 	}
@@ -380,18 +397,21 @@ string Planner::markDone(int serialNumber, string nameOfList){
 //passes the target to every task and checks if the target is present in the task
 //generates a list of all the tasks that return true
 string Planner::generateSearchList(string target){
-	list<Task> ::iterator iter;
-	Task tempTask;
+	list<Task> ::iterator taskIter;
+	Task targetTask;
 	string status;
+
 	searchList.clear();
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		tempTask = *iter;
-		if (tempTask.isSearchTargetPresent(target)){
-			searchList.push_back(tempTask);
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		targetTask = *taskIter;
+		if (targetTask.isSearchTargetPresent(target)){
+			searchList.push_back(targetTask);
 		}
 	}
 
-	return searchStatusToString();
+	status = searchStatusToString();
+
+	return status;
 }
 
 /************************************************************************************************
@@ -405,51 +425,52 @@ Functions that returns Lists in string form
 //returns the requested list in string form
 string Planner::toString(string nameOfList){
 	//convert the list to a string and return
-	string finalString;
+	string displayString;
 	if (nameOfList == HOME_LIST){
-		finalString = ListToString(homeList);
-		return finalString;
+		displayString = ListToString(homeList);
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		finalString = ListToString(upcomingList);
-		return finalString;
+		displayString = ListToString(upcomingList);
 	}
 	else if (nameOfList == MISSED_LIST){
-		finalString = ListToString(missedList);
-		return finalString;
+		displayString = ListToString(missedList);
 	}
 	else if (nameOfList == SEARCH_LIST){
-		finalString = ListToString(searchList);
-		return finalString;
+		displayString = ListToString(searchList);
 	}
 	else if (nameOfList == DONE_LIST){
-		finalString = ListToString(doneList);
-		return finalString;
+		displayString = ListToString(doneList);
 	}
-	else return ERROR_MESSSAGE_INVALID_LIST_NAME;
+	else displayString = ERROR_MESSSAGE_INVALID_LIST_NAME;														//UNHANDLED EXCEPTION **********************************************		
+
+	return displayString;
 }
 
 //@author A0111361Y
 //returns the All list in string form
 string Planner::AllToString(void){
 	ostringstream out;
-	list<Task> ::iterator it;
-	it = All.begin();
-	int serialNumber = 1;
-	int entryCount = 0;
+	list<Task> ::iterator taskIter;
+	string displayString;
+	taskIter = All.begin();
+	int serialNumber = STARTING_SERIAL_NUMBER;
+	
 	if (!All.empty()){
-		for (it = All.begin(); it != All.end(); ++it){
-			out << serialNumber << ". ";
-			out << descriptionOfTaskToString(*(it));
+		for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+			out << serialNumber;
+			out<< ". ";
+			out << descriptionOfTaskToString(*(taskIter));
 			out << NEWLINE;
-			serialNumber = serialNumber + 1;
-			entryCount++;
+			serialNumber++;
 		}
 	}
 	else {
 		out << EMPTY_LIST_MESSAGE << endl;
 	}
-	return out.str();
+
+	displayString = out.str();
+
+	return displayString;
 }
 
 /************************************************************************************************
@@ -462,40 +483,34 @@ Status Returning Functions
 //@author A0111361Y
 //returns the status after each command is successfully executed
 string Planner::statusToString(string command, Task theTask){
-	string finalString;
+	string displayString;
 	if (command == COMMAND_ADD){
-		finalString = addStatusToString(theTask);
-		return finalString;
+		displayString = addStatusToString(theTask);
 	}
 	else if (command == COMMAND_DELETE){
-		finalString = deleteStatusToString(theTask);
-		return finalString;
+		displayString = deleteStatusToString(theTask);
 	}
 	else if (command == COMMAND_EDIT){
-		finalString = editStatusToString();
-		return finalString;
+		displayString = editStatusToString();
 	}
 	else if (command == COMMAND_UNDO){
-		finalString = undoStatusToString();
-		return finalString;
+		displayString = undoStatusToString();
 	}
 	else if (command == COMMAND_CLEAR){
-		finalString = clearStatusToString();
-		return finalString;
+		displayString = clearStatusToString();
 	}
 	else if (command == COMMAND_SAVE){
-		finalString = saveStatusToString();
-		return finalString;
+		displayString = saveStatusToString();
 	}
 	else if (command == COMMAND_DONE){
-		finalString = doneStatusToString();
-		return finalString;
+		displayString = doneStatusToString();
 	}
 	else if (command == DUPLICATE_STATUS){
-		finalString = duplicateStatusToString(theTask);
-		return finalString;
+		displayString = duplicateStatusToString(theTask);
 	}
-	else return ERROR_MESSSAGE_INVALID_COMMAND;
+	else displayString = ERROR_MESSSAGE_INVALID_COMMAND;										//	UNHANDLED EXCEPTION*********************************************
+
+	return displayString;
 }
 
 //@author A0111361Y
@@ -606,30 +621,33 @@ Load Functions
 //reads in all the tasks from the text file
 //adds in all the tasks into All
 void Planner::loadData(string data){
-	Task* tempTask;
-	string tempString1, dataCopy = data;
+	Task* loadTaskPtr;
+	string extractedSingleLine;
 	string doneKeyword = DONE_KEYWORD;
 	bool isTaskMarkedAsDone = false;
 	size_t start = 0, end = 0;
+	
 	All.clear();
 
-	while (dataCopy.size()>0){
-		end = dataCopy.find_first_of("\n");
-		tempString1 = dataCopy.substr(start, end - start);
-		if (tempString1.find(doneKeyword) != std::string::npos){
+	while (data.size()>0){
+		end = data.find_first_of("\n");
+		extractedSingleLine = data.substr(start, end - start);
+		if (extractedSingleLine.find(doneKeyword) != std::string::npos){
 			isTaskMarkedAsDone = true;
-			tempString1 = tempString1.substr(0, tempString1.size() - 5);
+			extractedSingleLine = extractedSingleLine.substr(0, extractedSingleLine.size() - 5);
 		}
-		dataCopy = dataCopy.substr(end + 1, dataCopy.size() - end);
-		tempTask = new Task;
-		(*tempTask).addDetails(tempString1);
+		data = data.substr(end + 1, data.size() - end);
+		loadTaskPtr = new Task;
+		(*loadTaskPtr).addDetails(extractedSingleLine);
 		if (isTaskMarkedAsDone){
-			(*tempTask).markIsDoneAsTrue();
+			(*loadTaskPtr).markIsDoneAsTrue();
 			isTaskMarkedAsDone = false;
 		}
-		addTask(*tempTask);
-		delete tempTask;
-		tempTask = NULL;
+
+		addTask(*loadTaskPtr);
+		
+		delete loadTaskPtr;
+		loadTaskPtr = NULL;
 	}
 }
 
@@ -644,31 +662,31 @@ Delete Helper Functions
 //generates and ID to attach to task
 int Planner::getNewId(void){
 
-	static int idGeneratror;
+	static int generatedID;
 	if (All.empty()){
-		idGeneratror = 10001;
+		generatedID = 10001;
 	}
-	else idGeneratror++;
-	return idGeneratror;
+	else generatedID++;
+	return generatedID;
 }
 
 //@author A0111361Y
 string Planner::deleteIndex(int idNumber){
-	list<Task> ::iterator iter1, iter2;
+	list<Task> ::iterator taskIter, deleteTargetIter;
+	string status;
 
-	iter1 = All.begin();
-	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
-		if ((*iter1).getIdNumber() == idNumber){
-			iter2 = iter1;
+	taskIter = All.begin();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			deleteTargetIter = taskIter;
 		}
 	}
 
-	updateLastEntryStructure(COMMAND_DELETE, *iter2);
+	updateLastEntryStructure(COMMAND_DELETE, *deleteTargetIter);
 
-	string status;
-	status = statusToString(COMMAND_DELETE, *iter2);
-	All.erase(iter2);
-
+	All.erase(deleteTargetIter);
+	status = statusToString(COMMAND_DELETE, *deleteTargetIter);
+	
 	checkListForClashes();
 	generateAllOtherList();
 
@@ -694,6 +712,7 @@ void Planner::updateLastEntryStructure(string command, Task theTask){
 	lastEntry.lastCommand = command;
 	lastEntry.lastTask = theTask;
 }
+
 /************************************************************************************************
 
 "Mark Done" Helper Functions
@@ -703,13 +722,13 @@ void Planner::updateLastEntryStructure(string command, Task theTask){
 
 //@author A0111361Y
 string Planner::markDoneIndex(int idNumber){
-	list<Task> ::iterator iter1;
-	iter1 = All.begin();
+	list<Task> ::iterator taskIter;
 	string status;
-	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
-		if ((*iter1).getIdNumber() == idNumber){
-			(*iter1).markIsDoneAsTrue();
-			status = statusToString(COMMAND_DONE, (*iter1));
+	
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			(*taskIter).markIsDoneAsTrue();
+			status = statusToString(COMMAND_DONE, (*taskIter));
 			break;
 		}
 	}
@@ -723,7 +742,6 @@ string Planner::markDoneIndex(int idNumber){
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 
 	return status;
-
 }
 
 /************************************************************************************************
@@ -735,14 +753,13 @@ Duplicate Helper Functions
 
 //@author A0111361Y
 bool Planner::isDuplicatePresent(Task newTask){
-	list<Task> ::iterator iter;
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		if (tasksAreTheSame(newTask, (*iter))){
+	list<Task> ::iterator taskIter;
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (tasksAreTheSame(newTask, (*taskIter))){
 			return true;
 		}
 	}
 	return false;
-
 }
 
 //@author A0111361Y
@@ -750,8 +767,7 @@ bool Planner::tasksAreTheSame(Task Task1, Task Task2){
 	bool same = true;
 	string descriptionOfTask1 = Task1.getDescription();
 	string descriptionOfTask2 = Task2.getDescription();
-	descriptionOfTask2 = descriptionOfTask2.substr(0, descriptionOfTask2.end() - descriptionOfTask2.begin());
-
+	
 	if (descriptionOfTask1 != descriptionOfTask2){
 		same = false;
 	}
@@ -782,31 +798,36 @@ Clash Helper Functions
 //Private Functions
 
 //@author A0111361Y
-void Planner::checkListForClashes(){
-	list<Task> ::iterator it;
-	it = All.begin();
-	while (it != All.end()){
-		(*it).markClashAsFalse();
-		it++;
+void Planner::clearClashList(){
+	list<Task> ::iterator taskIter;
+
+	taskIter = All.begin();
+	while (taskIter != All.end()){
+		(*taskIter).markClashAsFalse();
+		taskIter++;
 	}
-	list<Task> ::iterator iter1, iter2;
-	for (iter1 = All.begin(); iter1 != All.end(); ++iter1){
-		for (iter2 = iter1; iter2 != All.end(); ++iter2){
-			if (iter1 != iter2){
-				if (checkTaskForClashes((*iter1), (*iter2))){
-					(*iter1).markClashAsTrue();
-					(*iter2).markClashAsTrue();
+}
+
+//@author A0111361Y
+void Planner::checkListForClashes(){
+	list<Task> ::iterator taskIter1, taskIter2;
+	
+	clearClashList();
+
+	for (taskIter1 = All.begin(); taskIter1 != All.end(); ++taskIter1){
+		for (taskIter2 = taskIter1; taskIter2 != All.end(); ++taskIter2){
+			if (taskIter1 != taskIter2){
+				if (checkTaskForClashes((*taskIter1), (*taskIter2))){
+					(*taskIter1).markClashAsTrue();
+					(*taskIter2).markClashAsTrue();
 				}
 			}
 		}
 	}
 
-
-	return;
-
 }
 
-//THYE JIE/KARTHIK
+//@author A0111061E
 bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	bool isClash = false;
 	int numOfTask1Times, numOfTask2Times, numOfTask1Dates, numOfTask2Dates, task1StartTime, task2StartTime;
@@ -906,7 +927,7 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	return isClash;
 }
 
-//THYE JIE/KARTHIK
+//@author A0111061E
 bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2){
 	bool isClash = false;
 
@@ -919,7 +940,7 @@ bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2
 	return isClash;
 }
 
-//THYE JIE/KARTHIK
+//@author A0111061E
 bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
 	bool areEqual = false;
 
@@ -933,7 +954,7 @@ bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
 	return areEqual;
 }
 
-//THYE JIE/KARTHIK
+//@author A0111061E
 bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
 	bool dateIsEqual = false;
 
@@ -948,7 +969,7 @@ bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
 	return dateIsEqual;
 }
 
-//THYE JIE/KARTHIK
+//@author A0111061E
 bool Planner::isOneTimeTaskBetweenTwoTimesTask(Task Task1, Task Task2){
 	int task1StartTime, task2StartTime, task2EndTime;
 	bool isInBetween = false;
@@ -963,7 +984,7 @@ bool Planner::isOneTimeTaskBetweenTwoTimesTask(Task Task1, Task Task2){
 	return isInBetween;
 }
 
-//THYE JIE/KARTHIK
+//@author A0111061E
 bool Planner::taskTimesOverlap(Task Task1, Task Task2){
 	int task1StartTime, task2StartTime, task1EndTime, task2EndTime;
 	bool isOverlap = false;
@@ -979,7 +1000,7 @@ bool Planner::taskTimesOverlap(Task Task1, Task Task2){
 	return isOverlap;
 }
 
-//KARTHIK/THYE JIE
+//@author A0111061E
 bool Planner::isOneDateTaskbetweenTwoDateTask(Task Task1, Task Task2){
 	bool isInBetween = false;
 	taskDate task1StartDate, task1EndDate, task2StartDate, task2EndDate;
@@ -1008,15 +1029,16 @@ bool Planner::isOneDateTaskbetweenTwoDateTask(Task Task1, Task Task2){
 
 //@author A0111314A
 //Function checks if an index is valid (exists and has been assigned to a task) and returns true if it is
-bool Planner::indexChecker(list<Task>::iterator& iter, int serialNumber, list<Task>& targetList){
-	int indexCount = 1;
+bool Planner::indexChecker(list<Task>::iterator& taskIter, int serialNumber, list<Task>& targetList){
+	int indexCount = STARTING_SERIAL_NUMBER;
 	bool isValidIndex = true;
 
-	iter = targetList.begin();
+	taskIter = targetList.begin();
 	for (size_t i = 1; i != serialNumber && i < targetList.size(); i++){
-		iter++;
+		taskIter++;
 		indexCount++;
 	}
+
 	if (indexCount != serialNumber || targetList.empty()) {
 		isValidIndex = false;
 	}
@@ -1030,7 +1052,7 @@ Status Returning functions
 
 ************************************************************************************************/
 //Private Functions
-//REFACTORED @Sakib
+
 //@author A0111361Y FOLLOW KARTHIKS const STRING STANDARDS
 string Planner::descriptionOfTaskToString(Task theTask){
 	ostringstream out;
