@@ -37,7 +37,8 @@ private:
 
 	//Time Structure
 	taskDate currentDate;
-
+	//add helper function
+	void placeToSlotAddedTask(list<Task>::iterator& listIter, Task newTask);
 	// delete helper functions
 	int getNewId(void);
 	string deleteIndex(int idNumber);
