@@ -85,11 +85,7 @@ private:
 	bool checkMissedDate(taskDate, int, int, int);
 	bool isUpcoming(taskDate, list<Task>::iterator);
 	// List returning functions
-	string homeListToString(void);
-	string upcomingListToString();
-	string missedListToString();
-	string searchListToString();
-	string doneListToString();
+	string ListToString(list<Task>);
 
 
 

@@ -58,7 +58,7 @@ const string STATUS_TO_STRING_SAVE_MSG = "File has been saved. \r\n";
 const string STATUS_TO_STRING_DONE_MSG = "Task has been marked as done \r\n";
 const string STATUS_TO_STRING_DUPLICATE_MSG = "The following Task has a duplicate: ";
 
-
+const int STARTING_SERIAL_NUMBER = 1;
 
 using namespace std;
 
@@ -407,23 +407,23 @@ string Planner::toString(string nameOfList){
 	//convert the list to a string and return
 	string finalString;
 	if (nameOfList == HOME_LIST){
-		finalString = homeListToString();
+		finalString = ListToString(homeList);
 		return finalString;
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		finalString = upcomingListToString();
+		finalString = ListToString(upcomingList);
 		return finalString;
 	}
 	else if (nameOfList == MISSED_LIST){
-		finalString = missedListToString();
+		finalString = ListToString(missedList);
 		return finalString;
 	}
 	else if (nameOfList == SEARCH_LIST){
-		finalString = searchListToString();
+		finalString = ListToString(searchList);
 		return finalString;
 	}
 	else if (nameOfList == DONE_LIST){
-		finalString = doneListToString();
+		finalString = ListToString(doneList);
 		return finalString;
 	}
 	else return ERROR_MESSSAGE_INVALID_LIST_NAME;
@@ -1034,18 +1034,24 @@ Status Returning functions
 //@author A0111361Y FOLLOW KARTHIKS const STRING STANDARDS
 string Planner::descriptionOfTaskToString(Task theTask){
 	ostringstream out;
-	int x = theTask.getTimeStart();
+	string displayString;
+
 	out << theTask.getDescription() << " ";
 
 	switch (theTask.getNumOfDates()){
 	case 0:
 		break;
 	case 1:
-		out << "Date: " << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
+		out << "Date: ";
+		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year;
+		out << " ";
 		break;
 	case 2:
-		out << "Date: " << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year << " to ";
-		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year << " ";
+		out << "Date: ";
+		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year;
+		out << " to ";
+		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year;
+		out << " ";
 		break;
 	}
 
@@ -1053,12 +1059,16 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	case 0:
 		break;
 	case 1:
-		out << "Time: " << setfill('0') << setw(4) << theTask.getTimeStart() << " ";
+		out << "Time: ";
+		out << setfill('0') << setw(4) << theTask.getTimeStart();
+		out << " ";
 		break;
 	case 2:
-		out << "Time: " << setfill('0') << setw(4) << theTask.getTimeStart();
+		out << "Time: ";
+		out << setfill('0') << setw(4) << theTask.getTimeStart();
 		out << " to ";
-		out << setfill('0') << setw(4) << theTask.getTimeEnd() << " ";
+		out << setfill('0') << setw(4) << theTask.getTimeEnd();
+		out << " ";
 		break;
 	default:
 		throw ERROR_MESSAGE_FATAL;
@@ -1073,7 +1083,10 @@ string Planner::descriptionOfTaskToString(Task theTask){
 	if (theTask.clashStatus() == true){
 		out << CLASH_KEYWORD;
 	}
-	return out.str();
+
+	displayString = out.str();
+
+	return displayString;
 }
 
 //@author A0111361Y
@@ -1082,7 +1095,6 @@ string Planner::addStatusToString(Task theTask){
 
 	out << STATUS_TO_STRING_ADD_INTRO;
 	out << descriptionOfTaskToString(theTask);
-	out << NEWLINE;
 
 	return out.str();
 }
@@ -1093,7 +1105,6 @@ string Planner::deleteStatusToString(Task theTask){
 
 	out << STATUS_TO_STRING_DELETE_INTRO;
 	out << descriptionOfTaskToString(theTask);
-	out << NEWLINE;
 
 	return out.str();
 }
@@ -1113,25 +1124,25 @@ string Planner::editStatusToString(){
 //@author A0111361Y
 string Planner::undoStatusToString(){
 	ostringstream out;
+	string status;
+	string command = lastEntry.lastCommand;
 
-	if (lastEntry.lastCommand == COMMAND_ADD){
-		out << STATUS_TO_STRING_UNDO_ADD_MSG;
-		out << descriptionOfTaskToString(lastEntry.lastTask);
+	if (command == COMMAND_ADD) {
+		out << addStatusToString(lastEntry.lastTask);
 	}
-	else if (lastEntry.lastCommand == COMMAND_DELETE){
-		out << STATUS_TO_STRING_UNDO_DELETE_MSG;
-		out << descriptionOfTaskToString(lastEntry.lastTask);
+	else if (command == COMMAND_DELETE) {
+		out << deleteStatusToString(lastEntry.lastTask);
 	}
-	else if (lastEntry.lastCommand == COMMAND_EDIT){
-		out << STATUS_TO_STRING_EDIT_INTRO;
-		out << descriptionOfTaskToString(lastEdit.addedTask);
-		out << STATUS_TO_STRING_EDIT_MID;
-		out << descriptionOfTaskToString(lastEdit.deletedTask);
+	else if (command == COMMAND_EDIT) {
+		out << editStatusToString();
 	}
 	else{
 		throw ERROR_MESSAGE_INVALID_UNDO;
 	}
-	return out.str();
+
+	status = out.str();
+
+	return status;
 }
 
 //@author A0111361Y
@@ -1157,10 +1168,14 @@ string Planner::doneStatusToString(){
 //@author A0111361Y
 string Planner::duplicateStatusToString(Task theTask){
 	ostringstream out;
+	string status;
+
 	out << STATUS_TO_STRING_DUPLICATE_MSG;
 	out << descriptionOfTaskToString(theTask);
 	out << NEWLINE;
-	return out.str();
+
+	status = out.str();
+	return status;
 
 }
 
@@ -1170,7 +1185,6 @@ Lists Generating Functions
 
 ************************************************************************************************/
 //Private Functions 
-//REFACTORED @ Sakib
 //@author A0111361Y
 void Planner::generateAllOtherList(void){
 	clearTheLists();
@@ -1181,11 +1195,11 @@ void Planner::generateAllOtherList(void){
 //Function generates an iterator that goes through all tasks and checks if it belongs in HomeList. 
 //if yes, it pushes it into the list. 
 void Planner::generateHomeList(void){
-	list<Task> ::iterator it;
+	list<Task> ::iterator taskIter;
 
-	for (it = All.begin(); it != All.end(); ++it){
-		if (isHome(currentDate, it)) {
-			homeList.push_back(*it);
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (isHome(currentDate, taskIter)) {
+			homeList.push_back(*taskIter);
 		}
 	}
 }
@@ -1194,11 +1208,11 @@ void Planner::generateHomeList(void){
 //Function generates an iterator that goes through all tasks and checks if it belongs in UpcomingList. 
 //if yes, it pushes it into the list. 
 void Planner::generateUpcomingList(void){
-	list<Task> ::iterator iter;
+	list<Task> ::iterator taskIter;
 
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		if (isUpcoming(currentDate, iter)) {
-			upcomingList.push_back(*iter);
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (isUpcoming(currentDate, taskIter)) {
+			upcomingList.push_back(*taskIter);
 		}
 	}
 }
@@ -1207,22 +1221,22 @@ void Planner::generateUpcomingList(void){
 //Function generates an iterator that goes through all tasks and checks if it belongs in MissedList. 
 //if yes, it pushes it into the list. 
 void Planner::generateMissedList(void){
-	list<Task> ::iterator iter;
+	list<Task> ::iterator taskIter;
 
-	for (iter = All.begin(); iter != All.end(); ++iter){
-		if (isMissed(currentDate, iter)) {
-			missedList.push_back(*iter);
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (isMissed(currentDate, taskIter)) {
+			missedList.push_back(*taskIter);
 		}
 	}
 }
 
 //@author A0111361Y
 void Planner::generateDoneList(void){
-	list<Task> ::iterator it;
+	list<Task> ::iterator taskIter;
 
-	for (it = All.begin(); it != All.end(); ++it){
-		if ((*it).doneStatus() == true) {
-			doneList.push_back(*it);
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).doneStatus() == true) {
+			doneList.push_back(*taskIter);
 		}
 	}
 }
@@ -1249,22 +1263,19 @@ Generator Logic Functions
 
 ************************************************************************************************/
 //Private Functions
-//assumes 30 days in a month
-
 //@author A0111314A
 //Function checks if task should be included in Home view and returns true if it is.
-bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
+bool Planner::isHome(taskDate currentDate, list<Task>::iterator taskIter) {
 	bool isWithinHome = false;
-
 	int startDay, startMonth, startYear;
 	int endDay, endMonth, endYear;
 
-	startDay = (*it).getDateStart().day;
-	startMonth = (*it).getDateStart().month;
-	startYear = (*it).getDateEnd().year;
-	endDay = (*it).getDateEnd().day;
-	endMonth = (*it).getDateEnd().month;
-	endYear = (*it).getDateEnd().year;
+	startDay = (*taskIter).getDateStart().day;
+	startMonth = (*taskIter).getDateStart().month;
+	startYear = (*taskIter).getDateEnd().year;
+	endDay = (*taskIter).getDateEnd().day;
+	endMonth = (*taskIter).getDateEnd().month;
+	endYear = (*taskIter).getDateEnd().year;
 
 	//case 1: accept if start date is within the next 7 days
 	if (checkHomeDate(currentDate, startDay, startMonth, startYear)){
@@ -1277,12 +1288,12 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 	}
 
 	//case 3: floating task
-	if ((*it).getNumOfDates() == 0) {
+	if ((*taskIter).getNumOfDates() == 0) {
 		isWithinHome = true;
 	}
 
 	//case 4: reject if task is done
-	if ((*it).doneStatus()){
+	if ((*taskIter).doneStatus()){
 		isWithinHome = false;
 	}
 
@@ -1290,13 +1301,13 @@ bool Planner::isHome(taskDate currentDate, list<Task>::iterator it) {
 }
 
 //@author A0111314A
-//Function checks that task date is within 7 days of current date
+//Function checks that task date is within 7 days of current date. Assume 30 days in a month
 bool Planner::checkHomeDate(taskDate currentDate, int day, int month, int year){
 	bool isWithinHome = false;
 
-	//case 1: currentDate + 7 days = current month, same year (date end)
+	//case 1: currentDate + 7 days = same month, same year
 	if (currentDate.day <= 23) {
-		if (month == (currentDate.month)) {
+		if (month == currentDate.month) {
 			if (day <= (currentDate.day + 7) && day >= currentDate.day) {
 				if (year == currentDate.year) {
 					isWithinHome = true;
@@ -1304,15 +1315,17 @@ bool Planner::checkHomeDate(taskDate currentDate, int day, int month, int year){
 			}
 		}
 	}
-	//case 2: currentDate + 7 days = next month, task = current month, not december (date end)
-	else if (month == (currentDate.month)) {
+
+	//case 2: currentDate + 7 days = next month, task = current month, not in december
+	else if (month == currentDate.month) {
 		if (year == currentDate.year) {
-			if (day <= 31 && day >= currentDate.day) {
+			if (day <= 30 && day >= currentDate.day) {
 				isWithinHome = true;
 			}
 		}
 	}
-	//case 3:  currentDate + 7 days = next month, task = next month, not december (date end)
+
+	//case 3:  currentDate + 7 days = next month, task = next month, not december
 	else if (month == (currentDate.month + 1)) {
 		if (year == currentDate.year) {
 			if (day < (7 - (30 - currentDate.day))) {
@@ -1320,7 +1333,8 @@ bool Planner::checkHomeDate(taskDate currentDate, int day, int month, int year){
 			}
 		}
 	}
-	//case 4: current date + 7 days = next month, december (date end)
+
+	//case 4: current date + 7 days = next month, december
 	else if (year == (currentDate.year + 1)) {
 		if (month == 1) {
 			if (day < (7 - (30 - currentDate.day))) {
@@ -1334,14 +1348,13 @@ bool Planner::checkHomeDate(taskDate currentDate, int day, int month, int year){
 
 //@author A0111314A
 //Function checks if tsk should be in Missed view and returns true if it is
-bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
+bool Planner::isMissed(taskDate currentDate, list<Task>::iterator taskIter) {
 	bool isWithinMissed = false;
-
 	int endDay, endMonth, endYear;
 
-	endDay = (*it).getDateEnd().day;
-	endMonth = (*it).getDateEnd().month;
-	endYear = (*it).getDateEnd().year;
+	endDay = (*taskIter).getDateEnd().day;
+	endMonth = (*taskIter).getDateEnd().month;
+	endYear = (*taskIter).getDateEnd().year;
 
 	//case 1: reject if date has not passed
 	if (checkMissedDate(currentDate, endDay, endMonth, endYear)){
@@ -1349,12 +1362,12 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 	}
 
 	//case 2: reject floating tasks
-	if ((*it).getNumOfDates() == 0) {
+	if ((*taskIter).getNumOfDates() == 0) {
 		isWithinMissed = false;
 	}
 
 	//case 3: reject tasks that are already done
-	if ((*it).doneStatus()){
+	if ((*taskIter).doneStatus()){
 		isWithinMissed = false;
 	}
 
@@ -1366,15 +1379,17 @@ bool Planner::isMissed(taskDate currentDate, list<Task>::iterator it) {
 bool Planner::checkMissedDate(taskDate currentDate, int endDay, int endMonth, int endYear){
 	bool isWithinMissed = false;
 
-	//case 1: passed year
+	//case 1: accept if passed year
 	if (endYear < currentDate.year) {
 		isWithinMissed = true;
 	}
-	//case 2: same year, passed month
+
+	//case 2: accept if same year, passed month
 	else if (endYear == currentDate.year) {
 		if (endMonth < currentDate.month) {
 			isWithinMissed = true;
-		}//case 3: same year, same month, passed day
+
+		}//case 3: accept if same year, same month, passed day
 		else if (endMonth == currentDate.month) {
 			if (endDay < currentDate.day) {
 				isWithinMissed = true;
@@ -1387,26 +1402,26 @@ bool Planner::checkMissedDate(taskDate currentDate, int endDay, int endMonth, in
 
 //@author A0111314A
 //Function checks if task should be in Upcoming view and returns true if it is.
-bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator it){
+bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator taskIter){
 	bool isWithinUpcoming = true;
 
 	//case 1: reject if task is in home
-	if (isHome(currentDate, it)){
+	if (isHome(currentDate, taskIter)){
 		isWithinUpcoming = false;
 	}
 
 	//case 2: reject if task is in missed
-	if (isMissed(currentDate, it)){
+	if (isMissed(currentDate, taskIter)){
 		isWithinUpcoming = false;
 	}
 
 	//case 3: reject floating tasks
-	if ((*it).getNumOfDates() == 0) {
+	if ((*taskIter).getNumOfDates() == 0) {
 		isWithinUpcoming = false;
 	}
 
 	//case 4: reject tasks that are already done
-	if ((*it).doneStatus()){
+	if ((*taskIter).doneStatus()){
 		isWithinUpcoming = false;
 	}
 
@@ -1419,100 +1434,29 @@ List Returning Functions
 
 ************************************************************************************************/
 //Private Functions
-// REFACTORED @ Sakib
 //@author A0111361Y
-string Planner::homeListToString(void){
+string Planner::ListToString(list<Task> targetList){
 	ostringstream out;
-	list<Task> ::iterator it;
-	it = homeList.begin();
-	int serialNumber = 1;
-	if (!homeList.empty()){
-		for (it = homeList.begin(); it != homeList.end(); ++it){
-			out << serialNumber << ". ";
-			out << descriptionOfTaskToString(*(it));
+	list<Task> ::iterator taskIter;
+	int serialNumber = STARTING_SERIAL_NUMBER;
+	string displayString;
+
+	taskIter = targetList.begin();
+
+	if (!targetList.empty()){
+		for (taskIter = targetList.begin(); taskIter != targetList.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
 			out << NEWLINE;
-			serialNumber = serialNumber + 1;
+			serialNumber++;
 		}
 	}
 	else out << EMPTY_LIST_MESSAGE << endl;
 
-	return out.str();
-}
+	displayString = out.str();
 
-//@author A0111361Y
-string Planner::upcomingListToString(void){
-	ostringstream out;
-	list<Task> ::iterator it;
-	it = upcomingList.begin();
-	int serialNumber = 1;
-	if (!upcomingList.empty()){
-		for (it = upcomingList.begin(); it != upcomingList.end(); ++it){
-			out << serialNumber << ". ";
-			out << descriptionOfTaskToString(*(it));
-			out << NEWLINE;
-			serialNumber = serialNumber + 1;
-		}
-	}
-	else out << EMPTY_LIST_MESSAGE << endl;
-
-	return out.str();
-}
-
-//@author A0111361Y
-string Planner::missedListToString(void){
-	ostringstream out;
-	list<Task> ::iterator it;
-	it = missedList.begin();
-	int serialNumber = 1;
-	if (!missedList.empty()){
-		for (it = missedList.begin(); it != missedList.end(); ++it){
-			out << serialNumber << ". ";
-			out << descriptionOfTaskToString(*(it));
-			out << NEWLINE;
-			serialNumber = serialNumber + 1;
-		}
-	}
-	else out << EMPTY_LIST_MESSAGE << endl;
-
-	return out.str();
-}
-
-//@author A0111361Y
-string Planner::searchListToString(void){
-
-	ostringstream out;
-	list<Task> ::iterator it;
-	it = searchList.begin();
-	int serialNumber = 1;
-	if (!searchList.empty()){
-		for (it = searchList.begin(); it != searchList.end(); ++it){
-			out << serialNumber << ". ";
-			out << descriptionOfTaskToString(*(it));
-			out << NEWLINE;
-			serialNumber = serialNumber + 1;
-		}
-	}
-	else out << NO_RESULTS_MESSAGE << endl;
-
-	return out.str();
-}
-
-//@author A0111361Y
-string Planner::doneListToString(){
-	ostringstream out;
-	list<Task> ::iterator it;
-	it = doneList.begin();
-	int serialNumber = 1;
-	if (!doneList.empty()){
-		for (it = doneList.begin(); it != doneList.end(); ++it){
-			out << serialNumber << ". ";
-			out << descriptionOfTaskToString(*(it));
-			out << NEWLINE;
-			serialNumber = serialNumber + 1;
-		}
-	}
-	else out << EMPTY_LIST_MESSAGE << endl;
-	return out.str();
+	return displayString;
 }
 
 //@author A0111314A
