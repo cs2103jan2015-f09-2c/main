@@ -16,7 +16,7 @@ const string HELP_MESSAGE = "Add\tadd entries\r\n\r\nEdit\tedit task contents\r\
 Logic::Logic(){
 	myStorage = Storage::getInstanceOfStorage();
 	saveAddress = myStorage->retrieveSaveAddress();
-	outcome = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
+	status = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
 	string allTasks = myStorage->load();
 	myPlanner.loadData(allTasks);
 }
@@ -39,11 +39,11 @@ void Logic::processUserInput(string userInput, string currentView) {
 			processCommand(command, userInput, currentView);
 		}
 		catch (const string error){
-			outcome = error;
+			status = error;
 		}
 	}
 	catch (const string error) {
-		outcome = error;
+		status = error;
 	}
 
 	updateDisplay(currentView);
@@ -69,7 +69,7 @@ string Logic::extractCommand(string& userInput){
 }
 
 void Logic::processCommand(std::string command, std::string taskDetail, string currentView) throw (const string) {
-	outcome = "";
+	status = "";
 	if (command == "load"){
 		processCommandLoad(taskDetail);
 	}
@@ -151,7 +151,7 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 
 void Logic::processCommandLoad(string saveAddress){
 	string allTasks;
-	outcome = myStorage->load(saveAddress, allTasks);
+	status = myStorage->load(saveAddress, allTasks);
 
 	if (allTasks.empty()){
 		return;
@@ -164,18 +164,18 @@ void Logic::processCommandSave(string taskDetail) {
 	string fileContent = myPlanner.saveDataToString();
 	if (!taskDetail.empty()){
 		saveAddress = taskDetail; // need to check whether the save address entered by user is valid
-		outcome = myStorage->saveWithFileAddress(saveAddress, fileContent);
+		status = myStorage->saveWithFileAddress(saveAddress, fileContent);
 	}
 
 	else {
-		outcome = myStorage->save(fileContent);
+		status = myStorage->save(fileContent);
 	}
 }
 
 void Logic::processCommandAdd(string taskDetail){
 	Task currentTask;
 	currentTask.addDetails(taskDetail);
-	outcome = myPlanner.addTask(currentTask);
+	status = myPlanner.addTask(currentTask);
 }
 
 //@author A0111361Y
@@ -187,7 +187,7 @@ void Logic::processCommandRecur(string taskDetail){
 	listOfTasks = currentTask.getRecurringTasks();
 	list<Task>::iterator iter;
 	for (iter = listOfTasks.begin(); iter != listOfTasks.end(); iter++){
-		string outcome = myPlanner.addTask((*iter)); //edit this to inform users that recurring tasks added
+		string status = myPlanner.addTask((*iter)); //edit this to inform users that recurring tasks added
 	}
 }
 
@@ -201,7 +201,7 @@ void Logic::processCommandDelete(string taskIndex, string currentView) throw (in
 		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
 	}
 
-	outcome = myPlanner.deleteTask(index, currentView);
+	status = myPlanner.deleteTask(index, currentView);
 }
 
 void Logic::processCommandDone(string taskIndex, string currentView)throw (invalid_argument&) {
@@ -214,7 +214,7 @@ void Logic::processCommandDone(string taskIndex, string currentView)throw (inval
 		throw ERROR_MESSAGE_INVALID_SERIAL_NO;
 	}
 
-	outcome = myPlanner.markDone(index, currentView);
+	status = myPlanner.markDone(index, currentView);
 }
 
 void Logic::processCommandEdit(string userInput, string currentView) throw (bad_cast&) {
@@ -240,43 +240,42 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 		throw ERROR_MESSAGE_MISSING_COLON;
 	}
 
-	//in >> taskDetails;
 	int sizeToSubstr = userInput.size() - 2;
 	taskDetails = userInput.substr(3, sizeToSubstr);
-	outcome = myPlanner.editTask(taskIndex, currentView, taskDetails);
+	status = myPlanner.editTask(taskIndex, currentView, taskDetails);
 }
 
 void Logic::processCommandClear(string command){
 	if (command == "Y" || command == "y") {
-		outcome = myPlanner.clear();
+		status = myPlanner.clear();
 	}
 	else {
-		outcome = CLEAR_CANCELLED;
+		status = CLEAR_CANCELLED;
 	}
 }
 
 void Logic::processCommandUndo(){
-	outcome = myPlanner.undo();
+	status = myPlanner.undo();
 }
 
 void Logic::processCommandSearch(string taskDetail){
-	outcome = myPlanner.generateSearchList(taskDetail);
+	status = myPlanner.generateSearchList(taskDetail);
 	display = myPlanner.toString("Search");
 }
 
 void Logic::processCommandHelp(){
 	display = HELP_MESSAGE;
-	outcome = "Help window";												// prompt for help (refactor needed)
+	status = "Help window";												// prompt for help (refactor needed)
 }
 
 void Logic::processCommandShowDone(string currentView){
 	display = myPlanner.toString(currentView);
-	outcome = "Done list";
+	status = "Done list";
 }
 
 void Logic::processCommandAll(){
 	display = myPlanner.AllToString();
-	outcome = "All list";													//prompt for All (refactor needed)
+	status = "All list";													//prompt for All (refactor needed)
 }
 
 void Logic::updateDisplay(string viewType) {
@@ -287,12 +286,8 @@ void Logic::updateDisplay(string viewType) {
 	display = myPlanner.toString(viewType);
 }
 
-/*void Logic::save(string fileName){
-myPlanner.save(fileName);
-} */
-
-string Logic::displayOutcome(){
-	return outcome;
+string Logic::displayStatus(){
+	return status;
 }
 
 string Logic::displayContent(){
