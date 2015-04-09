@@ -20,6 +20,7 @@ const string ADD_DETAILS_TIME_SUCCESSFUL = "In addDetails(processTime), Time sto
 const string ADD_DETAILS_TIME_INVALID = "In addDetails(processTime), Time invalid";
 const string RECUR_TASK_ADD_SUCCESSFUL = "Recurring task has been added successfully";
 const string RECUR_TASK_MODIFY_DETAILS_SUCCESSFUL = "Details for recurring task modified successfully";
+const string ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT = "Invalid date: Number of years to recur exceed Planner limit";
 
 using namespace std;
 
@@ -459,8 +460,6 @@ int Task::extractDateInfoFields(string details, string& keyword, string& startDa
 string Task::extractDateInfo(string details){
 	int index;
 	
-//	index = details.find("date");
-	
 	index = details.find("date");
 	
 	if (index == string::npos){
@@ -589,6 +588,9 @@ string Task::processYearlyRecur(string date){
 
 	if (year+1 != 100){			//to ensure year is a 2 digit number
 		year++;
+	}
+	else{
+		throw ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT;
 	}
 
 	mergeDate(date, day, month, year);
