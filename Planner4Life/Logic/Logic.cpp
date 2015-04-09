@@ -238,8 +238,8 @@ void Logic::processCommandDone(string taskIndex, string currentView)throw (inval
 		index = stoi(taskIndex);
 	}
 
-	catch (invalid_argument& error){
-		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
+	catch (invalid_argument &error){
+		throw exception (ERROR_MESSAGE_INVALID_SERIAL_NO);
 	}
 
 	status = myPlanner.markDone(index, currentView);
@@ -261,13 +261,14 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 	}
 
 	try {
-		if (!(in >> colon)){
-			throw bad_cast();
+		in >> colon;
+		if (colon != ':'){
+			throw exception(ERROR_MESSAGE_MISSING_COLON);
 		}
 	}
 
-	catch (bad_cast& error){
-		throw exception(ERROR_MESSAGE_MISSING_COLON);
+	catch (exception const& error){
+		throw;
 	}
 
 	int sizeToSubstr = userInput.size() - 2;

@@ -11,6 +11,7 @@ const string STATUS_MESSAGE_SAVED_SUCCESSFULLY = "saved successfully to this add
 const string DEFAULT_FILE_NAME = "myPlanner.txt";
 const string STATUS_MESSAGE_FILE_NOT_FOUND = "file not found";
 const string STATUS_MESSAGE_INVALID_FILE_ADDRESS = "invalid save address";
+const string STATUS_MESSAGE_LOADED_SUCCESSFULLY = " loaded successfully";
 
 class Storage{
 private:

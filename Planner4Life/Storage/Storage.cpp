@@ -119,7 +119,7 @@ bool Storage::isFileNameValid(string fileName){
 
 string Storage::save(string content){
 	updateContent(content);
-	ofstream write(fileAddress/*, ios_base::app*/);
+	ofstream write(fileAddress);
 	write << fileContent;
 	write.close();
 	string status = STATUS_MESSAGE_SAVED_SUCCESSFULLY + fileAddress;
@@ -135,12 +135,12 @@ string Storage::retrieveSaveAddress() {
 }
 
 bool Storage::doesAddressAlrdExist(string saveAddress){
-	list<string>::iterator iter;
+	list<string>::iterator listIter;
 
 	bool isSame = false;
 
-	for (iter = listOfFileAddress.begin(); !isSame && iter != listOfFileAddress.end(); ++iter){
-		if ((*iter) == saveAddress){
+	for (listIter = listOfFileAddress.begin(); !isSame && listIter != listOfFileAddress.end(); ++listIter){
+		if ((*listIter) == saveAddress){
 			isSame = true;
 		}
 	}
@@ -150,10 +150,10 @@ bool Storage::doesAddressAlrdExist(string saveAddress){
 void Storage::updateMyList(){
 	ofstream write(myList);
 	if (!listOfFileAddress.empty()){
-		list<string>::iterator iter;
+		list<string>::iterator listIter;
 
-		for (iter = listOfFileAddress.begin(); iter != listOfFileAddress.end(); ++iter){
-			write << (*iter) << "\n";
+		for (listIter = listOfFileAddress.begin(); listIter != listOfFileAddress.end(); ++listIter){
+			write << (*listIter) << "\n";
 		}
 	}
 
@@ -178,6 +178,6 @@ string Storage::load(string saveAddress, string& allTasks){
 
 	fileAddress = saveAddress;
 	allTasks = load();
-	string outcome = fileAddress + " loaded successfully";
+	string outcome = fileAddress + STATUS_MESSAGE_LOADED_SUCCESSFULLY;
 	return outcome;
 }
