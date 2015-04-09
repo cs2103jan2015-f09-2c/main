@@ -23,9 +23,9 @@ namespace UI {
 
 	private:
 		//UI operation elements
-		Logic* plannerLogic;
-		String^ currentView;
-		bool clearTrigger;
+		Logic* _plannerLogic;
+		String^ _currentView;
+		bool _clearTrigger;
 
 		//GUI elements
 		System::Windows::Forms::TextBox^  displayWindow;
@@ -67,9 +67,9 @@ namespace UI {
 		GUI(void){
 			InitializeComponent();
 			//Add the constructor code here
-			plannerLogic = new Logic;
-			currentView = VIEWTYPE_HOME;
-			clearTrigger = false;
+			_plannerLogic = new Logic;
+			_currentView = VIEWTYPE_HOME;
+			_clearTrigger = false;
 		}
 
 	protected:
@@ -77,8 +77,8 @@ namespace UI {
 		~GUI(){
 			if (components)	{
 				delete components;
-				delete plannerLogic;
-				delete currentView;
+				delete _plannerLogic;
+				delete _currentView;
 			}
 		}
 
@@ -197,7 +197,7 @@ namespace UI {
 		************************************************************************************************/
 		//Function to initialize beginning state of Planner4Life to home screen with loadFile prompt
 	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
-		string strStatus = plannerLogic->displayStatus();
+		string strStatus = _plannerLogic->displayStatus();
 
 		executeHome(sender, e);
 		status->Text = gcnew String(strStatus.c_str());
@@ -244,14 +244,14 @@ namespace UI {
 			else if (input == COMMAND_CLEAR) {
 				activateCleartrigger();
 			}
-			else if ((input == COMMAND_Y || input == COMMAND_N || input == COMMAND_y || input == COMMAND_n) && clearTrigger == true) {
+			else if ((input == COMMAND_Y || input == COMMAND_N || input == COMMAND_y || input == COMMAND_n) && _clearTrigger == true) {
 				executeClear();
 			}
 			else if (searchCheck.find("search") != string::npos) {
 				executeSearch();
 			}
 			else {
-				processInput(input, currentView);
+				processInput(input, _currentView);
 			}
 
 			userInput->Text = "";
@@ -267,11 +267,11 @@ namespace UI {
 		string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
 		string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
 
-		plannerLogic->processUserInput(unmanagedInput, unmanagedView);
+		_plannerLogic->processUserInput(unmanagedInput, unmanagedView);
 		missedAlertCheck();
 
-		string strDisplay = plannerLogic->displayContent();
-		string strStatus = plannerLogic->displayStatus();
+		string strDisplay = _plannerLogic->displayContent();
+		string strStatus = _plannerLogic->displayStatus();
 
 		StrDisplay = gcnew String(strDisplay.c_str());
 		displayWindow->Text = StrDisplay;
@@ -281,23 +281,23 @@ namespace UI {
 
 			 //Function to execute 'help' command'
 	private: System::Void executeHelp() {
-		currentView = VIEWTYPE_HELP;
-		processInput(userInput->Text, currentView);
-		colourSwitch(currentView);
+		_currentView = VIEWTYPE_HELP;
+		processInput(userInput->Text, _currentView);
+		colourSwitch(_currentView);
 	}
 
 			 //Function to execute 'show done' command
 	private: System::Void executeDone() {
-		currentView = VIEWTYPE_DONE;
-		processInput(userInput->Text, currentView);
-		colourSwitch(currentView);
+		_currentView = VIEWTYPE_DONE;
+		processInput(userInput->Text, _currentView);
+		colourSwitch(_currentView);
 	}
 
 			 // Function to execute 'all' command
 	private: System::Void executeAll() {
-		currentView = VIEWTYPE_ALL;
-		processInput(userInput->Text, currentView);
-		colourSwitch(currentView);
+		_currentView = VIEWTYPE_ALL;
+		processInput(userInput->Text, _currentView);
+		colourSwitch(_currentView);
 	}
 
 			 //Function to execute 'exit' command
@@ -308,26 +308,26 @@ namespace UI {
 			 //Function to set up preliminary action for 'clear' operation - warns user and sets the UI state to allow 'clear' command
 	private: System::Void activateCleartrigger() {
 		status->Text = STATUS_CLEAR_PROMPT;
-		clearTrigger = true;
+		_clearTrigger = true;
 	}
 
 			 //Function to execute 'clear' operation. Thereafter resets UI state to disallow immediate 'clear' on command. 
 	private: System::Void executeClear() {
-		currentView = VIEWTYPE_HOME;
-		switchView(currentView);
+		_currentView = VIEWTYPE_HOME;
+		switchView(_currentView);
 
 		String^ StrDecision = "clear ";
 		StrDecision = StrDecision + userInput->Text;
 
-		processInput(StrDecision, currentView);
-		clearTrigger = false;
+		processInput(StrDecision, _currentView);
+		_clearTrigger = false;
 	}
 
 			 //Function to execute 'search' operation
 	private: System::Void executeSearch() {
-		currentView = VIEWTYPE_SEARCH;
-		processInput(userInput->Text, currentView);
-		colourSwitch(currentView);
+		_currentView = VIEWTYPE_SEARCH;
+		processInput(userInput->Text, _currentView);
+		colourSwitch(_currentView);
 	}
 
 			 /************************************************************************************************
@@ -338,18 +338,18 @@ namespace UI {
 
 			 //Function to control the colour of buttons depending on the view type. Views that are not Home, Upcoming or Missed
 			 // are not specially highlighted.
-	private: System::Void colourSwitch(String^ currentView) {
-		if (currentView == VIEWTYPE_HOME) {
+	private: System::Void colourSwitch(String^ _currentView) {
+		if (_currentView == VIEWTYPE_HOME) {
 			homeButton->BackColor = Color::LightSkyBlue;
 			missedButton->BackColor = Color::SteelBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
 		}
-		else if (currentView == VIEWTYPE_UPCOMING) {
+		else if (_currentView == VIEWTYPE_UPCOMING) {
 			upcomingButton->BackColor = Color::LightSkyBlue;
 			missedButton->BackColor = Color::SteelBlue;
 			homeButton->BackColor = Color::SteelBlue;
 		}
-		else if (currentView == VIEWTYPE_MISSED) {
+		else if (_currentView == VIEWTYPE_MISSED) {
 			missedButton->BackColor = Color::LightSkyBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
 			homeButton->BackColor = Color::SteelBlue;
@@ -363,7 +363,7 @@ namespace UI {
 
 			 //Function to check if there are any missed tasks. If there are, "Missed" button text becomes red to alert user
 	private: System::Void missedAlertCheck(){
-		bool areMissedTasks = plannerLogic->checkMissedStatus();
+		bool areMissedTasks = _plannerLogic->checkMissedStatus();
 
 		if (areMissedTasks){
 			missedButton->ForeColor = Color::IndianRed;
@@ -377,31 +377,31 @@ namespace UI {
 	private: System::Void switchView(String^ viewType) {
 		string unmanagedView = msclr::interop::marshal_as<std::string>(viewType);
 
-		plannerLogic->updateDisplay(unmanagedView);
+		_plannerLogic->updateDisplay(unmanagedView);
 
-		string strDisplay = plannerLogic->displayContent();
+		string strDisplay = _plannerLogic->displayContent();
 		displayWindow->Text = gcnew String(strDisplay.c_str());
-		colourSwitch(currentView);
+		colourSwitch(_currentView);
 	}
 
 			 //Function to execute view change to Home view
 	private: System::Void executeHome(System::Object^  sender, System::EventArgs^  e) {
-		currentView = VIEWTYPE_HOME;
-		switchView(currentView);
+		_currentView = VIEWTYPE_HOME;
+		switchView(_currentView);
 		status->Text = VIEWTYPE_HOME;
 	}
 
 			 //Function to execute view change to Upcoming view
 	private: System::Void executeUpcoming(System::Object^  sender, System::EventArgs^  e) {
-		currentView = VIEWTYPE_UPCOMING;
-		switchView(currentView);
+		_currentView = VIEWTYPE_UPCOMING;
+		switchView(_currentView);
 		status->Text = VIEWTYPE_UPCOMING;
 	}
 
 			 //Function to execute view change to Missed view
 	private: System::Void executeMissed(System::Object^  sender, System::EventArgs^  e) {
-		currentView = VIEWTYPE_MISSED;
-		switchView(currentView);
+		_currentView = VIEWTYPE_MISSED;
+		switchView(_currentView);
 		status->Text = VIEWTYPE_MISSED;
 	}
 	};

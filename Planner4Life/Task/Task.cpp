@@ -5,7 +5,7 @@
 #include <sstream>
 
 const string FATAL_ERROR = "Fatal Error!";
-const string ERROR_MESSAGE_INVALID_INPUT = "Invalid format entered! Please re-enter appropriate entry.";
+const char* ERROR_MESSAGE_INVALID_INPUT = "Invalid format entered! Please re-enter appropriate entry.";
 const string UPDATE = "UPDATE";
 const string ADD_DETAILS_CASE_0_CALLED = "In addDetails, Case 0 was called";
 const string ADD_DETAILS_CASE_0_SUCCESSFUL = "In addDetails, Case 0 was finished successfully";
@@ -20,7 +20,7 @@ const string ADD_DETAILS_TIME_SUCCESSFUL = "In addDetails(processTime), Time sto
 const string ADD_DETAILS_TIME_INVALID = "In addDetails(processTime), Time invalid";
 const string RECUR_TASK_ADD_SUCCESSFUL = "Recurring task has been added successfully";
 const string RECUR_TASK_MODIFY_DETAILS_SUCCESSFUL = "Details for recurring task modified successfully";
-const string ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT = "Invalid date: Number of years to recur exceed Planner limit";
+const char* ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT = "Invalid date: Number of years to recur exceed Planner limit";
 
 using namespace std;
 
@@ -69,7 +69,7 @@ void Task::addDetails(string details){
 		process_TwoDelimiter(details);
 		break;
 	default:
-		throw ERROR_MESSAGE_INVALID_INPUT;
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
 	}
 }
 
@@ -84,14 +84,19 @@ void Task::process_NoDelimiter(string details) {
 void Task::process_OneDelimiter(string details) {
 	LogData->addLog(UPDATE, ADD_DETAILS_CASE_1_CALLED);
 	processDescription(details);
-	if (details.find(" date") != string::npos){
-		processDate(details);
+	try{
+		if (details.find(" date") != string::npos){
+			processDate(details);
+		}
+		else if (details.find(" time") != string::npos){
+			processTime(details);
+		}
+		else {
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
 	}
-	else if (details.find(" time") != string::npos){
-		processTime(details);
-	}
-	else {
-		throw ERROR_MESSAGE_INVALID_INPUT;
+	catch (exception const& error){
+		throw;
 	}
 	LogData->addLog(UPDATE, ADD_DETAILS_CASE_1_SUCCESSFUL);
 }
@@ -105,15 +110,22 @@ void Task::process_TwoDelimiter(string details) {
 	processDescription(details);
 	semicolonPos = details.find(';');
 	durationInfo = details.substr(0, semicolonPos);
-	if (durationInfo.find(" date") != string::npos){
-		dateInfo = details.substr(0, semicolonPos);
+
+	try{
+		if (durationInfo.find(" date") != string::npos){
+			dateInfo = details.substr(0, semicolonPos);
+		}
+		else if (durationInfo.find(" time") != string::npos){
+			timeInfo = details.substr(0, semicolonPos);
+		}
+		else {
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
 	}
-	else if (durationInfo.find(" time") != string::npos){
-		timeInfo = details.substr(0, semicolonPos);
+	catch (exception const& error){
+		throw;
 	}
-	else {
-		throw ERROR_MESSAGE_INVALID_INPUT;
-	}
+
 	semicolonPos++;
 	if (timeInfo.empty()){
 		timeInfo = details.substr(semicolonPos, details.size() - semicolonPos);
@@ -150,16 +162,20 @@ void Task::processDescription(string& details){
 //@author A0111314A
 //Function processes input that contains a start and end date. Also checks if date is valid before storing and setting _numOfDates.
 void Task::processTwoDates(string startDate, string endDate){
-
-	if (areValidDates(startDate, endDate)){
-		storeStartDate(startDate);
-		storeEndDate(endDate);
-		_numOfDates = 2;
-		LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
+	try{
+		if (areValidDates(startDate, endDate)){
+			storeStartDate(startDate);
+			storeEndDate(endDate);
+			_numOfDates = 2;
+			LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
+		}
+		else{
+			LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);			
+		}
 	}
-	else{
-		throw ERROR_MESSAGE_INVALID_INPUT;
-		LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
+	catch (exception const& error){
+		throw;
 	}
 }
 
@@ -167,15 +183,20 @@ void Task::processTwoDates(string startDate, string endDate){
 //Function processes input that contains only one date. Same date is stored in start and end date variables for consistency. 
 // Also checks if date is valid before storing and setting _numOfDates.
 void Task::processOneDate(string endDate){
-	if (areValidDates(endDate, endDate)){
-		storeEndDate(endDate);
-		storeStartDate(endDate);
-		_numOfDates = 1;
-		LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
+	try{
+		if (areValidDates(endDate, endDate)){
+			storeEndDate(endDate);
+			storeStartDate(endDate);
+			_numOfDates = 1;
+			LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
+		}
+		else{
+			LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);			
+		}
 	}
-	else{
-		throw ERROR_MESSAGE_INVALID_INPUT;
-		LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
+	catch (exception const& error){
+		throw;
 	}
 }
 
@@ -238,29 +259,39 @@ void Task::processTime(string timeInfo){
 		in >> separator;
 		in >> timeEnd;
 
-		if (areValidTimes(timeStart, timeEnd)){
-			storeStartTime(timeStart);
-			storeEndTime(timeEnd);
-			_numOfTimes = 2;
-			LogData->addLog(UPDATE, ADD_DETAILS_TIME_SUCCESSFUL);
+		try{
+			if (areValidTimes(timeStart, timeEnd)){
+				storeStartTime(timeStart);
+				storeEndTime(timeEnd);
+				_numOfTimes = 2;
+				LogData->addLog(UPDATE, ADD_DETAILS_TIME_SUCCESSFUL);
+			}
+			else {
+				LogData->addLog(UPDATE, ADD_DETAILS_TIME_INVALID);
+				throw exception(ERROR_MESSAGE_INVALID_INPUT);
+			}
 		}
-		else {
-			LogData->addLog(UPDATE, ADD_DETAILS_TIME_INVALID);
-			throw ERROR_MESSAGE_INVALID_INPUT;
+		catch (exception const& error){
+			throw;
 		}
 	}
 	else{
 		in >> keyword;
 		in >> timeStart;
 
-		if (areValidTimes(timeStart, timeStart)){
-			storeStartTime(timeStart);
-			_numOfTimes = 1;
-			LogData->addLog(UPDATE, ADD_DETAILS_TIME_SUCCESSFUL);
+		try{
+			if (areValidTimes(timeStart, timeStart)){
+				storeStartTime(timeStart);
+				_numOfTimes = 1;
+				LogData->addLog(UPDATE, ADD_DETAILS_TIME_SUCCESSFUL);
+			}
+			else {
+				LogData->addLog(UPDATE, ADD_DETAILS_TIME_INVALID);
+				throw exception(ERROR_MESSAGE_INVALID_INPUT);
+			}
 		}
-		else {
-			LogData->addLog(UPDATE, ADD_DETAILS_TIME_INVALID);
-			throw ERROR_MESSAGE_INVALID_INPUT;
+		catch (exception const& error){
+			throw;
 		}
 	}
 }
@@ -273,7 +304,7 @@ void Task::storeStartTime(string time) {
 		_timeStart = stoi(time);
 	}
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_INPUT;
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
 	}
 }
 
@@ -284,7 +315,7 @@ void Task::storeEndTime(string time) {
 		_timeEnd = stoi(time);
 	}
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_INPUT;
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
 	}
 }
 
@@ -375,9 +406,16 @@ string Task::extractTaskDetailsFromUserInput(string details){
 	string taskDetails;
 
 	semicolonPos = details.find_first_of(";");
-	if (semicolonPos == string::npos){
-		throw ERROR_MESSAGE_INVALID_INPUT;
+
+	try{
+		if (semicolonPos == string::npos){
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
 	}
+	catch (exception const& error){
+		throw;
+	}
+
 	semicolonPos++;
 
 	taskDetails = details.substr(semicolonPos, details.size() - semicolonPos);
@@ -460,8 +498,13 @@ string Task::extractDateInfo(string details){
 
 	index = details.find("date");
 
-	if (index == string::npos){
-		throw ERROR_MESSAGE_INVALID_INPUT;
+	try{
+		if (index == string::npos){
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
 	}
 
 	details = details.substr(index, details.size() - index);
@@ -584,11 +627,16 @@ string Task::processYearlyRecur(string date){
 	int day, month, year;
 	splitDate(date, day, month, year);
 
-	if (year + 1 != 100){			//to ensure year is a 2 digit number
-		year++;
+	try{
+		if (year + 1 != 100){			//to ensure year is a 2 digit number
+			year++;
+		}
+		else{
+			throw exception(ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT);
+		}
 	}
-	else{
-		throw ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT;
+	catch (exception const& error){
+		throw;
 	}
 
 	mergeDate(date, day, month, year);
@@ -603,7 +651,7 @@ void Task::splitDate(string endDate, int& day, int& month, int& year){
 		year = stoi(endDate.substr(4, 2));
 	}
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_INPUT;
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
 	}
 
 }
@@ -752,7 +800,7 @@ bool Task::areValidTimes(string timeStart, string timeEnd){
 		intTimeEnd = stoi(timeEnd);
 	}
 	catch (invalid_argument& error){
-		throw ERROR_MESSAGE_INVALID_INPUT;
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
 	}
 
 	if (isValidTime(intTimeStart) && (isValidTime(intTimeEnd))){

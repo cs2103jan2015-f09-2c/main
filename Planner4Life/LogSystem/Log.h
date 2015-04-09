@@ -12,7 +12,7 @@ private:
 	vector<string> _logList;
 	int _numLines;
 	int _maxLines = 1000;
-	void saveLog();
+	void saveLog(string);
 	int numOfLinesInFile();
 	//void loadLog();
 
