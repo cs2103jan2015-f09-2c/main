@@ -60,7 +60,7 @@ private:
 	int extractDateInfoFields(string, string&, string&, string&, string&);
 	string extractTaskDetailsFromUserInput(string);
 
-	//Helper functions for general exception handling
+	//Checker functions for general exception handling
 	bool areValidDates(string, string);
 	bool isValidDate(string);
 	bool startDateBeforeEndDate(string, string);
