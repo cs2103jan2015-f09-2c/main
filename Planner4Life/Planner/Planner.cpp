@@ -128,7 +128,7 @@ string Planner::addTask(Task newTask){
 //@author A0111361Y
 //check where to slot
 void Planner::placeToSlotAddedTask(list<Task>::iterator& listIter, Task newTask){
-	
+
 	//case 1: when new task has no date and no time
 	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
 		//look for slot at the end of tasks with no date and no time
@@ -186,7 +186,7 @@ string Planner::deleteTask(int serialNumber, string nameOfView){
 	int idNumber;
 	string status;
 	list<Task> ::iterator taskIter;
-	
+
 	if (nameOfView == HOME_LIST){
 		if (indexChecker(taskIter, serialNumber, homeList) == false){
 			throw ERROR_MESSAGE_INVALID_INDEX;
@@ -217,7 +217,7 @@ string Planner::deleteTask(int serialNumber, string nameOfView){
 	else{
 		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
 	}
-	
+
 	//logging
 	stringstream message;
 	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
@@ -259,15 +259,15 @@ string Planner::undo(void){
 //Clears the All list and generates all other lists
 string Planner::clear(void){
 	string status;
-	
+
 	All.clear();
 	generateAllOtherList();
 	lastEntry.lastCommand = COMMAND_CLEAR;
-	
+
 	//logging
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
 	status = clearStatusToString();
-	
+
 	return status;
 }
 
@@ -278,7 +278,7 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	string status;
 
 	newTask.addDetails(input);
-	
+
 	validEditCheck = deleteTask(serialNumber, nameOfList);
 	if (validEditCheck == ERROR_MESSAGE_INVALID_INDEX) {
 		return ERROR_MESSAGE_INVALID_INDEX;														//UNHANDLED EXCEPTION****************************************************************************
@@ -290,7 +290,7 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 		lastEntry.lastCommand = COMMAND_EDIT;
 
 		generateAllOtherList();
-		
+
 		//logging
 		LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
 
@@ -411,11 +411,11 @@ string Planner::AllToString(void){
 	string displayString;
 	taskIter = All.begin();
 	int serialNumber = STARTING_SERIAL_NUMBER;
-	
+
 	if (!All.empty()){
 		for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
 			out << serialNumber;
-			out<< ". ";
+			out << ". ";
 			out << descriptionOfTaskToString(*(taskIter));
 			out << NEWLINE;
 			serialNumber++;
@@ -583,7 +583,7 @@ void Planner::loadData(string data){
 	string doneKeyword = DONE_KEYWORD;
 	bool isTaskMarkedAsDone = false;
 	size_t start = 0, end = 0;
-	
+
 	All.clear();
 
 	while (data.size()>0){
@@ -602,7 +602,7 @@ void Planner::loadData(string data){
 		}
 
 		addTask(*loadTaskPtr);
-		
+
 		delete loadTaskPtr;
 		loadTaskPtr = NULL;
 	}
@@ -643,7 +643,7 @@ string Planner::deleteIndex(int idNumber){
 	Task temp = *deleteTargetIter;
 	All.erase(deleteTargetIter);
 	status = statusToString(COMMAND_DELETE, temp);
-	
+
 	checkListForClashes();
 	generateAllOtherList();
 
@@ -681,7 +681,7 @@ void Planner::updateLastEntryStructure(string command, Task theTask){
 string Planner::markDoneIndex(int idNumber){
 	list<Task> ::iterator taskIter;
 	string status;
-	
+
 	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
 		if ((*taskIter).getIdNumber() == idNumber){
 			(*taskIter).markIsDoneAsTrue();
@@ -724,7 +724,7 @@ bool Planner::tasksAreTheSame(Task Task1, Task Task2){
 	bool same = true;
 	string descriptionOfTask1 = Task1.getDescription();
 	string descriptionOfTask2 = Task2.getDescription();
-	
+
 	if (descriptionOfTask1 != descriptionOfTask2){
 		same = false;
 	}
@@ -768,7 +768,7 @@ void Planner::clearClashList(){
 //@author A0111361Y
 void Planner::checkListForClashes(){
 	list<Task> ::iterator taskIter1, taskIter2;
-	
+
 	clearClashList();
 
 	for (taskIter1 = All.begin(); taskIter1 != All.end(); ++taskIter1){
