@@ -15,12 +15,9 @@ Log* Log::getInstance(){
 	{
 		theOne = new Log();
 		instanceFlag = true;
-		return theOne;
 	}
-	else
-	{
-		return theOne;
-	}
+
+	return theOne;
 }
 
 //@author A0111361Y
@@ -40,26 +37,24 @@ void Log::addLog(string type, string message){
 	struct tm * curtime = localtime(&_tm);
 	out << type << ": " << message << "; " << asctime(curtime);
 	string text = out.str();
-	_numLines = _numLines + 1;
-	_logList.push_back(text);
-	saveLog();
+
+	saveLog(text);
 
 }
 
 //KARTHIK
-void Log::saveLog(void){
+void Log::saveLog(string text){
 	ofstream outFile;
 
 	if (numOfLinesInFile() > _maxLines){
 		clearLogFile();
-		_numLines++;
 	}
 
+	_numLines = numOfLinesInFile();
+	_numLines++;
 
 	outFile.open("Planner4Life_Log_File.txt", std::ios::app);
-	/*
-	*/
-	outFile << /*_numLines << "." <<*/ _logList[_numLines - 1] << endl;
+	outFile << _numLines << ". " << text;
 
 	outFile.close();
 }
