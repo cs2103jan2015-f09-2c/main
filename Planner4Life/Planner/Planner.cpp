@@ -870,7 +870,9 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 
 	//Both tasks have no date 2 times
 	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 2 && numOfTask2Times == 2){
-		if (taskTimesOverlap(Task1, Task2));
+		if (taskTimesOverlap(Task1, Task2)){
+			isClash = true;
+		}
 	}
 
 	//Task1 has 1 date 1 time and Task2 has 2 dates, 1 time
