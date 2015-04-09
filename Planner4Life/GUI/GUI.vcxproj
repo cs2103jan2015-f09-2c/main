@@ -103,6 +103,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource2.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Planner4LifeGUI.resx">
@@ -113,7 +114,7 @@
     <ResourceCompile Include="GUI.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="P4LIcon.ico" />
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
