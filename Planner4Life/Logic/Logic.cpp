@@ -1,36 +1,35 @@
 #include <stdexcept>
+#include <exception>
 #include "Logic.h"
 #include "Storage.h"
 #include "assert.h"
 
-const string STATUS_MESSAGE_CURRENT_SAVE_ADDRESS = "Tasks will be saved to this address: ";
-const string STATUS_MESSAGE_NEW_SAVE_ADDRESS = "Change save address by typing save followed by file address";
-const string ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
-const string ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
-const string ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
-const string ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
-const string CLEAR_CANCELLED = "Clear cancelled.";
-const string HELP_MESSAGE = "Add\tadd entries\r\n\r\nEdit\tedit task contents\r\n\r\nDelete\tdelete tasks\r\n\r\nClear\tclears the entire planner\r\n\r\nUndo\tundo the previous add, edit or delete\r\n\r\nSearch\tsearch for keywords throughout all \ttasks\n";
+const char* STATUS_MESSAGE_CURRENT_SAVE_ADDRESS = "Tasks will be saved to this address: ";
+const char* STATUS_MESSAGE_NEW_SAVE_ADDRESS = "Change save address by typing save followed by file address";
+const char* ERROR_MESSAGE_INVALID_COMMAND = "Invalid command!";
+const char* ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please enter a command!";
+const char* ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
+const char* ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
+const char* CLEAR_CANCELLED = "Clear cancelled.";
+const char* HELP_MESSAGE = "Add\tadd entries\r\n\r\nEdit\tedit task contents\r\n\r\nDelete\tdelete tasks\r\n\r\nClear\tclears the entire planner\r\n\r\nUndo\tundo the previous add, edit or delete\r\n\r\nSearch\tsearch for keywords throughout all \ttasks\n";
 
 
 Logic::Logic(){
 	myStorage = Storage::getInstanceOfStorage();
 	saveAddress = myStorage->retrieveSaveAddress();
 	status = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
+	
 	string allTasks = myStorage->load();
 	myPlanner.loadData(allTasks);
 }
 
-Logic::~Logic(){
-}
-
 void Logic::processUserInput(string userInput, string currentView) {
-	//Check whether currentView is empty or invalid views 
+	//check whether currentView is empty or invalid views 
 	assert(currentView == "Done" || currentView == "Home" || currentView == "Missed" || currentView == "Upcoming" || currentView == "Help" || currentView == "All" || currentView == "Search");
 
 	try {
 		if (userInput == ""){
-			throw ERROR_MESSAGE_EMPTY_INPUT;
+			throw exception (ERROR_MESSAGE_EMPTY_INPUT);
 		}
 
 		string command = extractCommand(userInput);
@@ -38,12 +37,12 @@ void Logic::processUserInput(string userInput, string currentView) {
 		try {
 			processCommand(command, userInput, currentView);
 		}
-		catch (const string error){
-			status = error;
+		catch (exception const &error){
+			status = error.what();
 		}
 	}
 	catch (const string error) {
-		status = error;
+		throw;
 	}
 
 	updateDisplay(currentView);
@@ -143,7 +142,7 @@ void Logic::processCommand(std::string command, std::string taskDetail, string c
 														processCommandShowDone(currentView);
 													}
 													else {
-														throw ERROR_MESSAGE_INVALID_COMMAND;
+														throw ;
 													}
 													string fileContent = myPlanner.saveDataToString();
 													string feedback = myStorage->save(fileContent); //think of a better way to get rid of this feedback
