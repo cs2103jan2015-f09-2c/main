@@ -697,14 +697,20 @@ bool Task::startDateBeforeEndDate(string startDate, string endDate) {
 	splitDate(startDate, startDay, startMonth, startYear);
 	splitDate(endDate, endDay, endMonth, endYear);
 
-	if (startYear > endYear){
+	//case 1: passed year
+	if (endYear < startYear) {
 		isStartBeforeEnd = false;
 	}
-	else if (startMonth > endMonth){
-		isStartBeforeEnd = false;
-	}
-	else if (startDay > endDay){
-		isStartBeforeEnd = false;
+	//case 2: same year, passed month
+	else if (endYear == startYear) {
+		if (endMonth < startMonth) {
+			isStartBeforeEnd = false;
+		}//case 3: same year, same month, passed day
+		else if (endMonth == startMonth) {
+			if (endDay < startDay) {
+				isStartBeforeEnd = false;
+			}
+		}
 	}
 
 	return isStartBeforeEnd;
