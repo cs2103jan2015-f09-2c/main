@@ -33,7 +33,7 @@ namespace UI {
 		System::Windows::Forms::Button^  missedButton;
 		System::Windows::Forms::Button^  upcomingButton;
 		System::Windows::Forms::Button^  homeButton;
-	private: System::Windows::Forms::Label^  status;
+		System::Windows::Forms::Label^  status;
 
 
 		//constant strings
@@ -212,7 +212,7 @@ namespace UI {
 
 			 //Handler function that takes in user input and directs it to the different Planner operations
 	private: System::Void userInput_Process(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-		string searchCheck;
+		string searchCheck, clearCommand;
 		String^ input = userInput->Text;
 
 		searchCheck = msclr::interop::marshal_as<std::string>(input);
@@ -315,7 +315,11 @@ namespace UI {
 	private: System::Void executeClear() {
 		currentView = VIEWTYPE_HOME;
 		switchView(currentView);
-		processInput(userInput->Text, currentView);
+
+		String^ StrDecision = "clear ";
+		StrDecision = StrDecision + userInput->Text;
+
+		processInput(StrDecision, currentView);
 		clearTrigger = false;
 	}
 
