@@ -298,3 +298,14 @@ string Logic::displayOutcome(){
 string Logic::displayContent(){
 	return display;
 }
+
+//@author A0111314A
+//Function checks the Missed list to see if there are any tasks there. If there are, return true. 
+bool Logic::checkMissedStatus(){
+	bool missedPresent = false;
+	if (!myPlanner.isMissedEmpty()){
+		missedPresent = true;
+	}
+
+	return missedPresent;
+}

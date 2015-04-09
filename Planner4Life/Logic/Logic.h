@@ -42,4 +42,5 @@ public:
 	//void save(string fileName);
 	string displayOutcome();
 	string displayContent();
+	bool checkMissedStatus();
 };

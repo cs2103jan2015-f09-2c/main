@@ -114,6 +114,8 @@ public:
 	string saveDataToString();
 	//load from save file
 	void loadData(string data);
+	//check if missed list is empty
+	bool isMissedEmpty();
 };
 #endif // !PLANNER_H
 

@@ -948,7 +948,7 @@ bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
 
 //THYE JIE/KARTHIK
 bool Planner::isOneTimeTaskBetweenTwoTimesTask(Task Task1, Task Task2){
-	int task1StartTime, task2StartTime, task1EndTime, task2EndTime;
+	int task1StartTime, task2StartTime, task2EndTime;
 	bool isInBetween = false;
 
 	task1StartTime = Task1.getTimeStart();
@@ -1011,7 +1011,7 @@ bool Planner::indexChecker(list<Task>::iterator& iter, int serialNumber, list<Ta
 	bool isValidIndex = true;
 
 	iter = targetList.begin();
-	for (int i = 1; i != serialNumber && i < targetList.size(); i++){
+	for (size_t i = 1; i != serialNumber && i < targetList.size(); i++){
 		iter++;
 		indexCount++;
 	}
@@ -1032,7 +1032,6 @@ Status Returning functions
 //@author A0111361Y FOLLOW KARTHIKS const STRING STANDARDS
 string Planner::descriptionOfTaskToString(Task theTask){
 	ostringstream out;
-	int length;
 	int x = theTask.getTimeStart();
 	out << theTask.getDescription() << " ";
 
@@ -1512,5 +1511,17 @@ string Planner::doneListToString(){
 	}
 	else out << EMPTY_LIST_MESSAGE << endl;
 	return out.str();
+}
+
+//@author A0111314A
+//Function checks if missed list is empty. If it is not, return false.
+bool Planner::isMissedEmpty(){
+	bool missedEmpty = true;
+
+	if (!missedList.empty()){
+		missedEmpty = false;
+	}
+
+	return missedEmpty;
 }
 

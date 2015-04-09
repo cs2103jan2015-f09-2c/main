@@ -81,14 +81,13 @@ namespace UI {
 			// 
 			// displayWindow
 			// 
-			this->displayWindow->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
+			this->displayWindow->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11));
 			this->displayWindow->Location = System::Drawing::Point(10, 12);
 			this->displayWindow->Multiline = true;
 			this->displayWindow->Name = L"displayWindow";
 			this->displayWindow->ReadOnly = true;
 			this->displayWindow->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->displayWindow->Size = System::Drawing::Size(339, 291);
+			this->displayWindow->Size = System::Drawing::Size(496, 291);
 			this->displayWindow->TabIndex = 0;
 			// 
 			// userInput
@@ -99,20 +98,21 @@ namespace UI {
 			});
 			this->userInput->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
 			this->userInput->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
-			this->userInput->Location = System::Drawing::Point(10, 363);
+			this->userInput->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.25F));
+			this->userInput->Location = System::Drawing::Point(10, 355);
 			this->userInput->Name = L"userInput";
-			this->userInput->Size = System::Drawing::Size(339, 20);
+			this->userInput->Size = System::Drawing::Size(494, 21);
 			this->userInput->TabIndex = 1;
 			this->userInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &GUI::userInput_Process);
 			// 
 			// missedButton
 			// 
 			this->missedButton->BackColor = System::Drawing::Color::SteelBlue;
-			this->missedButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->missedButton->Location = System::Drawing::Point(10, 320);
+			this->missedButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Bold));
+			this->missedButton->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->missedButton->Location = System::Drawing::Point(63, 310);
 			this->missedButton->Name = L"missedButton";
-			this->missedButton->Size = System::Drawing::Size(109, 28);
+			this->missedButton->Size = System::Drawing::Size(127, 39);
 			this->missedButton->TabIndex = 2;
 			this->missedButton->Text = L"Missed";
 			this->missedButton->UseVisualStyleBackColor = false;
@@ -121,11 +121,10 @@ namespace UI {
 			// homeButton
 			// 
 			this->homeButton->BackColor = System::Drawing::Color::SteelBlue;
-			this->homeButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->homeButton->Location = System::Drawing::Point(125, 320);
+			this->homeButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Bold));
+			this->homeButton->Location = System::Drawing::Point(196, 310);
 			this->homeButton->Name = L"homeButton";
-			this->homeButton->Size = System::Drawing::Size(109, 28);
+			this->homeButton->Size = System::Drawing::Size(127, 39);
 			this->homeButton->TabIndex = 3;
 			this->homeButton->Text = L"Home";
 			this->homeButton->UseVisualStyleBackColor = false;
@@ -134,11 +133,10 @@ namespace UI {
 			// upcomingButton
 			// 
 			this->upcomingButton->BackColor = System::Drawing::Color::SteelBlue;
-			this->upcomingButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->upcomingButton->Location = System::Drawing::Point(240, 320);
+			this->upcomingButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Bold));
+			this->upcomingButton->Location = System::Drawing::Point(329, 309);
 			this->upcomingButton->Name = L"upcomingButton";
-			this->upcomingButton->Size = System::Drawing::Size(109, 28);
+			this->upcomingButton->Size = System::Drawing::Size(126, 39);
 			this->upcomingButton->TabIndex = 4;
 			this->upcomingButton->Text = L"Upcoming";
 			this->upcomingButton->UseVisualStyleBackColor = false;
@@ -147,15 +145,16 @@ namespace UI {
 			// prompt
 			// 
 			this->prompt->AutoSize = true;
-			this->prompt->Location = System::Drawing::Point(7, 388);
+			this->prompt->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.25F));
+			this->prompt->Location = System::Drawing::Point(7, 383);
 			this->prompt->Name = L"prompt";
-			this->prompt->Size = System::Drawing::Size(135, 13);
+			this->prompt->Size = System::Drawing::Size(169, 16);
 			this->prompt->TabIndex = 5;
 			this->prompt->Text = L"Type \'help\' for the Help List";
 			// 
 			// GUI
 			// 
-			this->ClientSize = System::Drawing::Size(371, 457);
+			this->ClientSize = System::Drawing::Size(518, 457);
 			this->Controls->Add(this->prompt);
 			this->Controls->Add(this->upcomingButton);
 			this->Controls->Add(this->homeButton);
@@ -165,6 +164,7 @@ namespace UI {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
 			this->Name = L"GUI";
+			this->Text = L"Planner4Life";
 			this->Load += gcnew System::EventHandler(this, &GUI::GUI_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -250,6 +250,8 @@ namespace UI {
 
 		plannerLogic->processUserInput(unmanagedInput, unmanagedView);
 
+		missedAlertCheck();
+
 		strOutput = gcnew String(plannerLogic->displayContent().c_str());
 		displayWindow->Text = strOutput;
 		strPrompt = gcnew String(plannerLogic->displayOutcome().c_str());
@@ -329,6 +331,18 @@ namespace UI {
 			missedButton->BackColor = Color::SteelBlue;
 			upcomingButton->BackColor = Color::SteelBlue;
 			homeButton->BackColor = Color::SteelBlue;
+		}
+	}
+
+			 //Function to check if there are any missed tasks. If there are, "Missed" button text becomes red to alert user
+	private: System::Void missedAlertCheck(){
+		bool areMissedTasks = plannerLogic->checkMissedStatus();
+
+		if (areMissedTasks){
+			missedButton->ForeColor = Color::IndianRed;
+		}
+		else{
+			missedButton->ForeColor = System::Drawing::SystemColors::ControlText;
 		}
 	}
 

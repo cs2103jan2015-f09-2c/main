@@ -358,8 +358,6 @@ Recur function
 void Task::recurTask(string details){
 	string frequency;
 	int numOfRecurrence;
-	char delimiter;
-
 
 	istringstream in(details);
 	in >> frequency;						//daily, weekly, monthly or yearly
@@ -401,7 +399,7 @@ void Task::processRecur(string details, string frequency, int numOfRecurrence){
 }
 
 string Task::modifyDetails(string frequency, string details){
-	int index, numOfDates;
+	int numOfDates;
 	string keyword, startDate, endDate, separator, newDateInfo;
 	ostringstream updatedInfo;
 
