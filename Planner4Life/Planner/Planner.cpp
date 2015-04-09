@@ -262,6 +262,7 @@ string Planner::clear(void){
 	
 	All.clear();
 	generateAllOtherList();
+	lastEntry.lastCommand = COMMAND_CLEAR;
 	
 	//logging
 	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
