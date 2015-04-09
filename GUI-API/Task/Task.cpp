@@ -428,11 +428,58 @@ string Task::modifyDetails(string frequency, string details){
 	return details;
 }
 
+int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){
+	int numOfDates, index;
+	
+	istringstream in(dateInfo);
+	index = dateInfo.find("to");			// locate the word to in string
+
+	if (index != string::npos){
+		in >> keyword;
+		in >> startDate;
+		in >> separator;
+		in >> endDate;
+		numOfDates = 2;
+	}
+	else{
+		in >> keyword;
+		in >> endDate;
+		storeEndDate(endDate);
+		numOfDates = 1;
+	}
+
+	return numOfDates;
+}
+
+string Task::extractDateInfo(string details){
+	int index;
+
+	index = details.find("date");
+	details = details.substr(index, details.size() - index);
+
+	//get rid of #impt if exists
+	index = details.find("#");
+	if (index != string::npos){
+		details = details.substr(0, index);
+	}
+
+	//get rid of time if exists
+	index = details.find_first_of(";");			//find first delimiter
+	//	index++;
+	details = details.substr(0, index);
+
+	return details;
+}
+
+
 string Task::insertNewDateInfo(string details, string newDate){
 	int indexDateInfoStart, indexDateInfoEnd;
 	indexDateInfoStart = details.find_first_of(";");
 	indexDateInfoStart++;
 	indexDateInfoEnd = details.find_first_of(";", indexDateInfoStart);
+	if (indexDateInfoEnd == string::npos){
+		indexDateInfoEnd = details.find_first_of("#");
+	}
 	details.replace(indexDateInfoStart, indexDateInfoEnd - indexDateInfoStart, "");		//deleting old date info
 	details.insert(indexDateInfoStart, newDate);
 
@@ -573,48 +620,6 @@ else{
 }
 
 date = mergedDate.str();
-}
-
-int Task::extractDateInfoFields(string dateInfo, string& keyword, string& startDate, string& endDate, string& separator){
-	int numOfDates, index;
-	istringstream in(dateInfo);
-	index = dateInfo.find("to");			// locate the word to in string
-
-	if (index != string::npos){
-		in >> keyword;
-		in >> startDate;
-		in >> separator;
-		in >> endDate;
-		numOfDates = 2;
-	}
-	else{
-		in >> keyword;
-		in >> endDate;
-		storeEndDate(endDate);
-		numOfDates = 1;
-	}
-
-	return numOfDates;
-}
-
-string Task::extractDateInfo(string details){
-	int index;
-
-	index = details.find("date");
-	details = details.substr(index, details.size() - index);
-
-	//get rid of #impt if exists
-	index = details.find("#");
-	if (index != string::npos){
-		details = details.substr(0, index);
-	}
-
-	//get rid of time if exists
-	index = details.find_first_of(";");			//find first delimiter
-	//	index++;
-	details = details.substr(0, index);
-
-	return details;
 }
 
 //@author A0111361Y
