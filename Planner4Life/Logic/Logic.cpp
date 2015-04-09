@@ -13,6 +13,22 @@ const char* ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colo
 const char* CLEAR_CANCELLED = "Clear cancelled.";
 const char* HELP_MESSAGE = "Add\tadd entries\r\n\r\nEdit\tedit task contents\r\n\r\nDelete\tdelete tasks\r\n\r\nClear\tclears the entire planner\r\n\r\nUndo\tundo the previous add, edit or delete\r\n\r\nSearch\tsearch for keywords throughout all \ttasks\n";
 
+const string HOME_VIEW = "Home";
+const string MISSED_VIEW = "Missed";
+const string UPCOMING_VIEW = "Upcoming";
+const string SEARCH_VIEW = "Search";
+const string DONE_VIEW = "Done";
+const string HELP_VIEW = "Help";
+const string ALL_VIEW = "All";
+
+const string COMMAND_ADD = "add";
+const string COMMAND_DELETE = "delete";
+const string COMMAND_EDIT = "edit";
+const string COMMAND_UNDO = "undo";
+const string COMMAND_CLEAR = "clear";
+const string COMMAND_SAVE = "save";
+const string COMMAND_DONE = "done";
+const string COMMAND_SHOW_DONE = "show done";
 
 Logic::Logic(){
 	myStorage = Storage::getInstanceOfStorage();
@@ -25,7 +41,7 @@ Logic::Logic(){
 
 void Logic::processUserInput(string userInput, string currentView) {
 	//check whether currentView is empty or invalid views 
-	assert(currentView == "Done" || currentView == "Home" || currentView == "Missed" || currentView == "Upcoming" || currentView == "Help" || currentView == "All" || currentView == "Search");
+	assert(currentView == DONE_VIEW || currentView == HOME_VIEW || currentView == MISSED_VIEW || currentView == UPCOMING_VIEW || currentView == HELP_VIEW || currentView == ALL_VIEW || currentView == SEARCH_VIEW);
 
 	try {
 		if (userInput == ""){
@@ -41,8 +57,8 @@ void Logic::processUserInput(string userInput, string currentView) {
 			status = error.what();
 		}
 	}
-	catch (const string error) {
-		throw;
+	catch (exception const &error) {
+		status = error.what();
 	}
 
 	updateDisplay(currentView);
@@ -51,6 +67,7 @@ void Logic::processUserInput(string userInput, string currentView) {
 string Logic::extractCommand(string& userInput){
 	string command = "";
 	string taskDetails = "";
+
 	//extract the first word to be the command 
 	if (userInput == "show done" || userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
 		command = userInput;
