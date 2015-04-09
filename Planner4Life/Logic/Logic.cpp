@@ -22,6 +22,7 @@ const string HELP_VIEW = "Help";
 const string ALL_VIEW = "All";
 
 const string COMMAND_ADD = "add";
+const string COMMAND_ALL = "all";
 const string COMMAND_DELETE = "delete";
 const string COMMAND_EDIT = "edit";
 const string COMMAND_UNDO = "undo";
@@ -29,6 +30,11 @@ const string COMMAND_CLEAR = "clear";
 const string COMMAND_SAVE = "save";
 const string COMMAND_DONE = "done";
 const string COMMAND_SHOW_DONE = "show done";
+const string COMMAND_HELP = "help";
+const string COMMAND_LOAD = "load";
+const string COMMAND_SEARCH = "search";
+const string COMMAND_RECUR = "recur";
+
 
 Logic::Logic(){
 	myStorage = Storage::getInstanceOfStorage();
@@ -69,100 +75,101 @@ string Logic::extractCommand(string& userInput){
 	string taskDetails = "";
 
 	//extract the first word to be the command 
-	if (userInput == "show done" || userInput == "clear" || userInput == "save" || userInput == "help" || userInput == "all" || userInput == "undo"){
+	if (userInput == COMMAND_SHOW_DONE || userInput == COMMAND_CLEAR || userInput == COMMAND_SAVE || userInput == COMMAND_HELP|| userInput == COMMAND_ALL || userInput == COMMAND_UNDO){
 		command = userInput;
 		userInput = taskDetails;
 		return command;
 	}
 
 	//update userInput
-	size_t pos = userInput.find_first_of(" ");
-	command = userInput.substr(0, pos);
-	userInput.erase(0, pos + 1);
-	//string newUserInput = userInput.substr(pos + 1, userInput.size() - pos);
-	//userInput = newUserInput;
+	size_t spacePos = userInput.find_first_of(" ");
+	command = userInput.substr(0, spacePos);
+	userInput.erase(0, spacePos + 1);
 	return command;
 }
 
 void Logic::processCommand(std::string command, std::string taskDetail, string currentView) throw (const string) {
 	status = "";
-	if (command == "load"){
+	if (command == COMMAND_LOAD){
 		processCommandLoad(taskDetail);
 	}
 
-	else
-		if (command == "add"){
-			try{
-				processCommandAdd(taskDetail);
-			}
-			catch (const string error) {
-				throw error;
-			}
+	else if (command == COMMAND_ADD){
+		try{
+			processCommandAdd(taskDetail);
 		}
-
-		else
-			if (command == "delete"){
-				try {
-					processCommandDelete(taskDetail, currentView);
-				}
-				catch (const string error) {
-					throw error;
-				}
+		
+		catch (exception const &error) {
+				throw;
 			}
+	}
 
-			else
-				if (command == "edit"){
-					try {
-						processCommandEdit(taskDetail, currentView);
-					}
-					catch (const string error){
-						throw error;
-					}
-				}
+	else if (command == COMMAND_DELETE){
+		try {
+			processCommandDelete(taskDetail, currentView);
+		}
+		
+		catch (exception const &error) {
+			throw;
+		}
+	}
 
-				else
-					if (command == "Y" || command == "N" || command == "y" || command == "n"){
-						processCommandClear(command);
-					}
+	else if (command == COMMAND_EDIT){
+		try {
+			processCommandEdit(taskDetail, currentView);
+		}
+					
+		catch (exception const &error){
+			throw;
+		}
+	}
 
-					else
-						if (command == "search"){
-							processCommandSearch(taskDetail);
-						}
+	else if (command == "Y" || command == "N" || command == "y" || command == "n"){
+		processCommandClear(command);
+	}
 
-						else
-							if (command == "undo"){
-								processCommandUndo();
-							}
-							else
-								if (command == "save") {
-									processCommandSave(taskDetail);
-								}
-								else
-									if (command == "help"){
-										processCommandHelp();
-									}
-									else
-										if (command == "all"){
-											processCommandAll();
-										}
-										else
-											if (command == "recur"){
-												processCommandRecur(taskDetail);
-											}
-											else
-												if (command == "done"){
-													processCommandDone(taskDetail, currentView);
-												}
-												else
-													if (command == "show done"){
-														processCommandShowDone(currentView);
-													}
-													else {
-														throw ;
-													}
-													string fileContent = myPlanner.saveDataToString();
-													string feedback = myStorage->save(fileContent); //think of a better way to get rid of this feedback
+	else if (command == COMMAND_SEARCH){
+		processCommandSearch(taskDetail);
+	}
+
+	else if (command == COMMAND_UNDO){
+		processCommandUndo();
+	}
+							
+	else if (command == COMMAND_SAVE) {
+		processCommandSave(taskDetail);
+	}
+								
+	else if (command == COMMAND_HELP){
+		processCommandHelp();
+	}
+									
+	else if (command == COMMAND_ALL){
+		processCommandAll();
+	}
+							
+    else if (command == COMMAND_RECUR){
+		processCommandRecur(taskDetail);
+	}
+				
+	else if (command == COMMAND_DONE){
+		processCommandDone(taskDetail, currentView);
+	}
+												
+	else if (command == COMMAND_SHOW_DONE){
+		processCommandShowDone(currentView);
+	}
+													
+	else {
+		throw ERROR_MESSAGE_INVALID_COMMAND;
+	}
+	
+	//retrieve content to be saved in txt file
+	string fileContent = myPlanner.saveDataToString();
+
+	//auto save the content after each operation
+	//feedback variable is a dummy variable to store the status of auto save, which is not necessary to be displayed
+	string feedback = myStorage->save(fileContent); 
 }
 
 void Logic::processCommandLoad(string saveAddress){
@@ -176,10 +183,10 @@ void Logic::processCommandLoad(string saveAddress){
 	myPlanner.loadData(allTasks);
 }
 
-void Logic::processCommandSave(string taskDetail) {
+void Logic::processCommandSave(string saveAddress) {
 	string fileContent = myPlanner.saveDataToString();
-	if (!taskDetail.empty()){
-		saveAddress = taskDetail; // need to check whether the save address entered by user is valid
+
+	if (!saveAddress.empty()){
 		status = myStorage->saveWithFileAddress(saveAddress, fileContent);
 	}
 
@@ -191,19 +198,19 @@ void Logic::processCommandSave(string taskDetail) {
 void Logic::processCommandAdd(string taskDetail){
 	Task currentTask;
 	currentTask.addDetails(taskDetail);
+
 	status = myPlanner.addTask(currentTask);
 }
 
 //@author A0111361Y
 void Logic::processCommandRecur(string taskDetail){
-
 	Task currentTask;
 	list<Task> listOfTasks;
 	currentTask.recurTask(taskDetail);
 	listOfTasks = currentTask.getRecurringTasks();
-	list<Task>::iterator iter;
-	for (iter = listOfTasks.begin(); iter != listOfTasks.end(); iter++){
-		string status = myPlanner.addTask((*iter)); //edit this to inform users that recurring tasks added
+	list<Task>::iterator listIter;
+	for (listIter = listOfTasks.begin(); listIter != listOfTasks.end(); listIter++){
+		string status = myPlanner.addTask((*listIter));
 	}
 }
 
