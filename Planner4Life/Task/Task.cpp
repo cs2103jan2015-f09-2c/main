@@ -6,21 +6,11 @@
 
 const string FATAL_ERROR = "Fatal Error!";
 const char* ERROR_MESSAGE_INVALID_INPUT = "Invalid format entered! Please re-enter appropriate entry.";
-const string UPDATE = "UPDATE";
-const string ADD_DETAILS_CASE_0_CALLED = "In addDetails, Case 0 was called";
-const string ADD_DETAILS_CASE_0_SUCCESSFUL = "In addDetails, Case 0 was finished successfully";
-const string ADD_DETAILS_CASE_1_CALLED = "In addDetails, Case 1 was called";
-const string ADD_DETAILS_CASE_1_SUCCESSFUL = "In addDetails, Case 1 was finished successfully";
-const string ADD_DETAILS_CASE_2_CALLED = "In addDetails, Case 2 was called";
-const string ADD_DETAILS_CASE_2_SUCCESSFUL = "In addDetails, Case 2 was finished successfully";
-const string ADD_DETAILS_DESCRIPTION_SUCCESSFUL = "In addDetails(processDescription), Description stored successfully";
-const string ADD_DETAILS_DATE_SUCCESSFUL = "In addDetails(processDate), Date stored successfully";
-const string ADD_DETAILS_DATE_INVALID = "In addDetails(processDate), Date invalid";
-const string ADD_DETAILS_TIME_SUCCESSFUL = "In addDetails(processTime), Time stored successfully";
-const string ADD_DETAILS_TIME_INVALID = "In addDetails(processTime), Time invalid";
-const string RECUR_TASK_ADD_SUCCESSFUL = "Recurring task has been added successfully";
-const string RECUR_TASK_MODIFY_DETAILS_SUCCESSFUL = "Details for recurring task modified successfully";
 const char* ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT = "Invalid date: Number of years to recur exceed Planner limit";
+const string UPDATE = "UPDATE";
+const string ADD_DETAILS_SUCCESSFUL = "addDetails was successful";
+const string RECUR_TASK_ADD_SUCCESSFUL = "recurTask was successful";
+const string SEARCH_TARGET_SUCCESSFUL = "In isSearchTargetPresent, search completed";
 
 using namespace std;
 
@@ -70,19 +60,18 @@ void Task::addDetails(string details){
 		break;
 	default:
 		throw exception(ERROR_MESSAGE_INVALID_INPUT);
+	
+//	 LogData->addLog(UPDATE, ADD_DETAILS_SUCCESSFUL);
 	}
 }
 
 //For the case when there is only description and no other information fields; stores the task details
 void Task::process_NoDelimiter(string details) {
-	LogData->addLog(UPDATE, ADD_DETAILS_CASE_0_CALLED);
 	_description = details;
-	LogData->addLog(UPDATE, ADD_DETAILS_CASE_0_SUCCESSFUL);
 }
 
 //For the case when there is description and one other info field (either date or time) separated by a delimiter; stores the task details
 void Task::process_OneDelimiter(string details) {
-	LogData->addLog(UPDATE, ADD_DETAILS_CASE_1_CALLED);
 	processDescription(details);
 	try{
 		if (details.find(" date") != string::npos){
@@ -98,14 +87,12 @@ void Task::process_OneDelimiter(string details) {
 	catch (exception const& error){
 		throw;
 	}
-	LogData->addLog(UPDATE, ADD_DETAILS_CASE_1_SUCCESSFUL);
 }
 
 //For the case when there is description and 2 other information fields (date and time) separated by delimiters; stores task details
 void Task::process_TwoDelimiter(string details) {
 	int semicolonPos;
 	string durationInfo, dateInfo, timeInfo;
-	LogData->addLog(UPDATE, ADD_DETAILS_CASE_2_CALLED);
 
 	processDescription(details);
 	semicolonPos = details.find(';');
@@ -135,7 +122,6 @@ void Task::process_TwoDelimiter(string details) {
 	}
 	processDate(dateInfo);
 	processTime(timeInfo);
-	LogData->addLog(UPDATE, ADD_DETAILS_CASE_2_SUCCESSFUL);
 }
 
 //Checks if task is important and returns the remainder of user input
@@ -156,7 +142,6 @@ void Task::processDescription(string& details){
 	_description = details.substr(0, descriptionEnd);
 	descriptionEnd++;
 	details = details.substr(descriptionEnd, details.size() - descriptionEnd);				//cut out the description part to be left with the date and/or time part
-	LogData->addLog(UPDATE, ADD_DETAILS_DESCRIPTION_SUCCESSFUL);
 }
 
 //@author A0111314A
@@ -167,10 +152,8 @@ void Task::processTwoDates(string startDate, string endDate){
 			storeStartDate(startDate);
 			storeEndDate(endDate);
 			_numOfDates = 2;
-			LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
 		}
 		else{
-			LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
 			throw exception(ERROR_MESSAGE_INVALID_INPUT);			
 		}
 	}
@@ -188,10 +171,8 @@ void Task::processOneDate(string endDate){
 			storeEndDate(endDate);
 			storeStartDate(endDate);
 			_numOfDates = 1;
-			LogData->addLog(UPDATE, ADD_DETAILS_DATE_SUCCESSFUL);
 		}
 		else{
-			LogData->addLog(UPDATE, ADD_DETAILS_DATE_INVALID);
 			throw exception(ERROR_MESSAGE_INVALID_INPUT);			
 		}
 	}
@@ -264,10 +245,8 @@ void Task::processTime(string timeInfo){
 				storeStartTime(timeStart);
 				storeEndTime(timeEnd);
 				_numOfTimes = 2;
-				LogData->addLog(UPDATE, ADD_DETAILS_TIME_SUCCESSFUL);
 			}
 			else {
-				LogData->addLog(UPDATE, ADD_DETAILS_TIME_INVALID);
 				throw exception(ERROR_MESSAGE_INVALID_INPUT);
 			}
 		}
@@ -283,10 +262,8 @@ void Task::processTime(string timeInfo){
 			if (areValidTimes(timeStart, timeStart)){
 				storeStartTime(timeStart);
 				_numOfTimes = 1;
-				LogData->addLog(UPDATE, ADD_DETAILS_TIME_SUCCESSFUL);
 			}
 			else {
-				LogData->addLog(UPDATE, ADD_DETAILS_TIME_INVALID);
 				throw exception(ERROR_MESSAGE_INVALID_INPUT);
 			}
 		}
@@ -398,7 +375,7 @@ void Task::recurTask(string details){
 
 	processRecur(details, frequency, numOfRecurrence);
 
-	LogData->addLog(UPDATE, RECUR_TASK_ADD_SUCCESSFUL);
+	// LogData->addLog(UPDATE, RECUR_TASK_ADD_SUCCESSFUL);
 }
 
 string Task::extractTaskDetailsFromUserInput(string details){
@@ -461,8 +438,6 @@ string Task::modifyDetails(string frequency, string details){
 	default:
 		break;
 	}
-
-	LogData->addLog(UPDATE, RECUR_TASK_MODIFY_DETAILS_SUCCESSFUL);
 
 	return details;
 }
@@ -872,7 +847,6 @@ Search function
 
 //Checks if the target word is present in the task description
 bool Task::isSearchTargetPresent(string target){
-	LogData->addLog(UPDATE, "In isSearchTargetPresent, search initiated");
 	bool isFound = true;
 	string targetWithUpperCase = target, targetWithLowerCase = target;
 	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
@@ -884,6 +858,6 @@ bool Task::isSearchTargetPresent(string target){
 		isFound = false;
 	}
 
-	LogData->addLog(UPDATE, "In isSearchTargetPresent, search completed");
+	// LogData->addLog(UPDATE, SEARCH_TARGET_SUCCESSFUL);
 	return isFound;
 }

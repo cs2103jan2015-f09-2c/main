@@ -120,7 +120,7 @@ string Planner::addTask(Task newTask){
 	//logging
 	stringstream message;
 	message << LOG_FILE_ADD_TASK_INTRO_MSG << id;
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 
 	return status;
 }
@@ -221,7 +221,7 @@ string Planner::deleteTask(int serialNumber, string nameOfView){
 	//logging
 	stringstream message;
 	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 
 	return status;
 }
@@ -265,7 +265,7 @@ string Planner::clear(void){
 	lastEntry.lastCommand = COMMAND_CLEAR;
 
 	//logging
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
 	status = clearStatusToString();
 
 	return status;
@@ -286,13 +286,13 @@ string Planner::editTask(int serialNumber, string nameOfList, string input){
 	else {
 		lastEdit.deletedTask = lastEntry.lastTask;
 		addTask(newTask);
-		lastEdit.addedTask = newTask;
+		lastEdit.addedTask = lastEntry.lastTask;
 		lastEntry.lastCommand = COMMAND_EDIT;
 
 		generateAllOtherList();
 
 		//logging
-		LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
+		// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
 
 		status = editStatusToString();
 
@@ -343,7 +343,7 @@ string Planner::markDone(int serialNumber, string nameOfList){
 	//logging
 	stringstream message;
 	message << LOG_FILE_MARK_DONE_MSG << idNumber;
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 
 	return status;
 
@@ -639,8 +639,9 @@ string Planner::deleteIndex(int idNumber){
 		}
 	}
 
-	updateLastEntryStructure(COMMAND_DELETE, *deleteTargetIter);
 	Task temp = *deleteTargetIter;
+	updateLastEntryStructure(COMMAND_DELETE, temp);
+	
 	All.erase(deleteTargetIter);
 	status = statusToString(COMMAND_DELETE, temp);
 
@@ -650,7 +651,7 @@ string Planner::deleteIndex(int idNumber){
 	//logging
 	stringstream message;
 	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 
 	return status;
 }
@@ -696,7 +697,7 @@ string Planner::markDoneIndex(int idNumber){
 	//logging
 	stringstream message;
 	message << LOG_FILE_MARK_DONE_MSG << idNumber;
-	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
 
 	return status;
 }
