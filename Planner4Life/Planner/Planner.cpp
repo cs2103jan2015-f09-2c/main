@@ -882,6 +882,61 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task2, Task1);
 	}
 
+
+	//Task1 has 1 date 2 times, Task2 has 1 date 1 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 1){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task1, Task2)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 1 date 1 times, Task2 has 1 date 2 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 2){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task2, Task1)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 2 date 2 times, Task2 has 2 date 1 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 1){
+		if (isTwoDatesTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task1, Task2)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 2 date 1 times, Task2 has 2 date 2 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 1){
+		if (isTwoDatesTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task2, Task1)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 2 date 2 time, task2 has 1 date 2 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (isOneDateTaskbetweenTwoDateTask(Task2, Task1)){
+			if (taskTimesOverlap(Task2, Task1)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 1 date 2 time, task2 has 2 date 2 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
+			if (taskTimesOverlap(Task1, Task2)){
+				isClash = true;
+			}
+		}
+	}
+
 	return isClash;
 }
 
