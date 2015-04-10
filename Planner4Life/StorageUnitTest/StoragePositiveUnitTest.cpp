@@ -79,20 +79,20 @@ public:
 		Assert::IsTrue(actualOutcome);
 	}
 
-	TEST_METHOD(testSave_valid_nonexisting_address_1){
+	TEST_METHOD(testSave_invSvalid_nonexisting_address_1){
 		//file address specified is not used before
 		Storage* myTestStorage;
 		myTestStorage = Storage::getInstanceOfStorage();
 		string saveAddress = "C:\\";
 		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
-		Assert::IsTrue(actualOutcome);
+		Assert::IsFalse(actualOutcome);
 	}
 
 	TEST_METHOD(testSave_valid_nonexisting_address_2){
 		//check whether file address is case sensitive
 		Storage* myTestStorage;
 		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "d:\\";
+		string saveAddress = "d:\\test.txt";
 		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
 		Assert::IsTrue(actualOutcome);
 	}
