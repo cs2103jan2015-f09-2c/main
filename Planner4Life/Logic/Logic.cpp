@@ -1,3 +1,5 @@
+//@author A0115934E
+
 #include <stdexcept>
 #include <exception>
 #include "Logic.h"
@@ -217,6 +219,7 @@ void Logic::processCommandRecur(string taskDetail){
 	}
 }
 
+//@author A0115934E
 void Logic::processCommandDelete(string taskIndex, string currentView) throw (invalid_argument&) {
 	int index = 0;
 

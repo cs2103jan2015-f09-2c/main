@@ -1,3 +1,4 @@
+//@author A0115934E
 #include <fstream>
 #include "Storage.h"
 Storage* Storage::myStorage = NULL;
