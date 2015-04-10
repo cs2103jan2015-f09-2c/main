@@ -205,7 +205,7 @@ namespace TaskUnitTest
 			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300");
 			testTimeStart = testTask.getTimeStart();
 
-			Assert::AreEqual(-1, testTimeStart);
+			Assert::AreEqual(1300, testTimeStart);
 		}
 
 
@@ -428,7 +428,7 @@ namespace TaskUnitTest
 			taskIter = taskList.end();
 			taskIter--;
 			fifthRecurredTaskMonth = (*taskIter).getDateEnd().month;
-			Assert::AreEqual(4, fifthRecurredTaskMonth);
+			Assert::AreEqual(11, fifthRecurredTaskMonth);
 		}
 
 		TEST_METHOD(testRecurTask_Yearly_RecurredFiveTimes_Date_Year){
