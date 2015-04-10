@@ -65,10 +65,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\TaskUnitTest;..\Task;..\SystemTestGUI;..\StorageUnitTest;..\Storage;PlannerUnitTest;..\Planner;..\LogSystem;..\Logic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies />
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -78,11 +81,23 @@
     <ProjectReference Include="..\LogSystem\LogSystem.vcxproj">
       <Project>{8466f661-44b1-4b0f-9bb8-f4bd43bb65b5}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\PlannerUnitTest\PlannerUnitTest.vcxproj">
+      <Project>{c1d062a6-acf4-40b8-9361-9ca31dd4fb12}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Planner\Planner.vcxproj">
       <Project>{4e7229eb-1acc-4e6a-9c06-db68eb72d0f0}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\StorageUnitTest\StorageUnitTest.vcxproj">
+      <Project>{5862bba5-e68b-4cfc-994c-7347b2ce3efe}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Storage\Storage.vcxproj">
       <Project>{8aa83039-3c5f-46a6-b51b-b778dba45b23}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SystemTestGUI\SystemTestGUI.vbproj">
+      <Project>{8d526d46-dd3e-4518-bac7-a3f62a8c9e3f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskUnitTest\TaskUnitTest.vcxproj">
+      <Project>{1eaf42af-3cab-4bca-8845-39d06fc3b825}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Task\Task.vcxproj">
       <Project>{adb5048e-debc-480b-bf16-9a5f7eabf39b}</Project>

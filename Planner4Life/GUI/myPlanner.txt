@@ -1,13 +1,3 @@
-homework 1; date 280215 
-prepare for presentation; date 310315  to 100415 
-doctor's appointment; date 010415 ; time 900
-submit homework 2; date 030415 
-project meeting; date 040415 ; time 1400
-presentation; date 040415 ; time 1900
-movie; date 050415 ; time 1900
-submit homework 3; date 100415 
-meeting with mentor; date 110415 ; time 1000 to 1300
-lunch appointment; date 110415 ; time 1200
-check email for application status; date 150415  to 200415 #impt
-interview for scholarship; date 200415 ; time 1330
-pay bills; date 300415 
+a
+b
+a; date 010101 
