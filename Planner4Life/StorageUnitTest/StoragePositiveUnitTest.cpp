@@ -19,10 +19,10 @@ public:
 		// \\t\est is used to prevent the system from tabbing
 		Storage* myTestStorage;
 		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "D:\\t\estSaveFile.txt";			
+		string saveAddress = "D:\\saveFile.txt";			
 		string expectedContent = "test";
 		string actualOutcome = myTestStorage->saveWithFileAddress(saveAddress, expectedContent);
-		string expectedOutcome = "saved successfully to this address: D:\\t\estSaveFile.txt";
+		string expectedOutcome = "saved successfully to this address: D:\\saveFile.txt";
 		Assert::AreEqual(expectedOutcome, actualOutcome);
 		
 		ifstream read(saveAddress);
@@ -30,6 +30,34 @@ public:
 		getline(read, actualContent);
 		Assert::AreEqual(expectedContent, actualContent);
 	
+	}
+
+	TEST_METHOD(testSave_valid_address){
+		//file address specified does not exist
+		Storage* myTestStorage;
+		myTestStorage = Storage::getInstanceOfStorage();
+		string saveAddress = "D:\\testsave.txt";
+		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
+		Assert::IsTrue(actualOutcome);
+	}
+
+
+	TEST_METHOD(testSave_invalid_address_1){
+		//file address does not have .txt file
+		Storage* myTestStorage;
+		myTestStorage = Storage::getInstanceOfStorage();
+		string saveAddress = "C:\\";
+		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
+		Assert::IsFalse(actualOutcome);
+	}
+
+		TEST_METHOD(testSave_valid_address_2){
+		//check whether file address is case sensitive
+		Storage* myTestStorage;
+		myTestStorage = Storage::getInstanceOfStorage();
+		string saveAddress = "d:\\test.txt";
+		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
+		Assert::IsTrue(actualOutcome);
 	}
 
 	/************************************************************************************************
@@ -40,12 +68,12 @@ public:
 	TEST_METHOD(testLoad_Storage_valid_outcome){
 		//file address specified exist
 		Storage* myTestStorage;
-		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "testSaveFile.txt";
-		string expectedContent = "test\n";
 		string actualContent;
+
+		myTestStorage = Storage::getInstanceOfStorage();
+		string saveAddress = "D:\\saveFile.txt";
 		string actualOutcome = myTestStorage->load(saveAddress, actualContent);
-		string expectedOutcome = "testSaveFile.txt loaded successfully";
+		string expectedOutcome = "D:\\saveFile.txt loaded successfully";
 		Assert::AreEqual(expectedOutcome, actualOutcome);
 	}
 
@@ -53,11 +81,10 @@ public:
 		//file address specified exist
 		Storage* myTestStorage;
 		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "testSaveFile.txt";
+		string saveAddress = "D:\\saveFile.txt";
 		string expectedContent = "test\n";
 		string actualContent;
 		string actualOutcome = myTestStorage->load(saveAddress, actualContent);
-		string expectedOutcome = "testSaveFile.txt loaded successfully";
 		Assert::AreEqual(expectedContent, actualContent);
 	}
 
@@ -70,42 +97,6 @@ public:
 		string actualOutcome = myTestStorage->load(saveAddress, actualContent);
 		string expectedOutcome = "file not found";
 		Assert::AreEqual(expectedOutcome, actualOutcome);
-	}
-
-	TEST_METHOD(testSave_valid_address){
-		//file address specified does not exist
-		Storage* myTestStorage;
-		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "D:\\testsave.txt";
-		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
-		Assert::IsTrue(actualOutcome);
-	}
-
-	TEST_METHOD(testSave_invSvalid_nonexisting_address_1){
-		//file address specified is not used before
-		Storage* myTestStorage;
-		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "C:\\";
-		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
-		Assert::IsFalse(actualOutcome);
-	}
-
-	TEST_METHOD(testSave_valid_nonexisting_address_2){
-		//check whether file address is case sensitive
-		Storage* myTestStorage;
-		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "d:\\test.txt";
-		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
-		Assert::IsTrue(actualOutcome);
-	}
-
-	TEST_METHOD(testSave_valid_nonexisting_address_3){
-		//check whether file name is removed successfully from directory
-		Storage* myTestStorage;
-		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "d:\\filenameTobeRemoved.txt";
-		bool actualOutcome = myTestStorage->isAddressValid(saveAddress);
-		Assert::IsTrue(actualOutcome);
 	}
 	};
 }
