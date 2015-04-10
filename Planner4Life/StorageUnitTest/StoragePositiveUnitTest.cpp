@@ -16,18 +16,20 @@ public:
 
 	TEST_METHOD(testSave_fileAddress){
 		//save content to a valid file address
+		// \\t\est is used to prevent the system from tabbing
 		Storage* myTestStorage;
 		myTestStorage = Storage::getInstanceOfStorage();
-		string saveAddress = "testSaveFile.txt";
+		string saveAddress = "D:\\t\estSaveFile.txt";			
 		string expectedContent = "test";
 		string actualOutcome = myTestStorage->saveWithFileAddress(saveAddress, expectedContent);
-		string expectedOutcome = "saved successfully to this address: testSaveFile.txt";
+		string expectedOutcome = "saved successfully to this address: D:\\t\estSaveFile.txt";
 		Assert::AreEqual(expectedOutcome, actualOutcome);
-
+		
 		ifstream read(saveAddress);
 		string actualContent;
 		getline(read, actualContent);
 		Assert::AreEqual(expectedContent, actualContent);
+	
 	}
 
 	/************************************************************************************************
