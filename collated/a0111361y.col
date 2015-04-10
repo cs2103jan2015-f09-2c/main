@@ -1,0 +1,5766 @@
+//@author: a0111361y
+
+
+
+	/**
+	 * origin: D:\Code\Log.cpp
+	 */
+
+Log* Log::getInstance(){
+	if (!instanceFlag)
+	{
+		theOne = new Log();
+		instanceFlag = true;
+	}
+
+	return theOne;
+}
+
+	// End of segment: D:\Code\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Log.cpp
+	 */
+
+Log::Log(void){
+	_numLines = 0;
+}
+
+	// End of segment: D:\Code\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Log.cpp
+	 */
+
+Log::~Log(){
+}
+
+	// End of segment: D:\Code\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Log.cpp
+	 */
+
+void Log::addLog(string type, string message){
+
+	ostringstream out;
+	time_t _tm = time(NULL);
+	struct tm * curtime = localtime(&_tm);
+	out << type << ": " << message << "; " << asctime(curtime);
+	string text = out.str();
+
+	saveLog(text);
+
+}
+
+//KARTHIK
+void Log::saveLog(string text){
+	ofstream outFile;
+
+	if (numOfLinesInFile() > _maxLines){
+		clearLogFile();
+	}
+
+	_numLines = numOfLinesInFile();
+	_numLines++;
+
+	outFile.open("Planner4Life_Log_File.txt", std::ios::app);
+	outFile << _numLines << ". " << text;
+
+	outFile.close();
+}
+
+//KARTHIK
+int Log::numOfLinesInFile(){
+	int numOfLines = 0;
+	string line;
+	ifstream readFile("Planner4Life_log_File.txt");
+
+	while (getline(readFile, line)){
+		numOfLines++;
+	}
+
+	return numOfLines;
+}
+
+	// End of segment: D:\Code\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Log.cpp
+	 */
+
+void Log::clearLogFile(){
+	ofstream outFile("Planner4Life_Log_File.txt");
+	outFile << "";
+	outFile.close();
+	_numLines = 0;
+}
+
+
+	// End of segment: D:\Code\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Logic.cpp
+	 */
+
+void Logic::processCommandRecur(string taskDetail){
+	Task currentTask;
+	list<Task> listOfTasks;
+	currentTask.recurTask(taskDetail);
+	listOfTasks = currentTask.getRecurringTasks();
+	list<Task>::iterator listIter;
+	for (listIter = listOfTasks.begin(); listIter != listOfTasks.end(); listIter++){
+		string status = myPlanner.addTask((*listIter));
+	}
+}
+
+	// End of segment: D:\Code\Logic.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Task is added to the Planner in this function
+//Before the actual addition of the task, function checks for:
+//duplicates, place to slot in and clashes
+//function ends by generating all the other dependent lists
+string Planner::addTask(Task newTask){
+	int id = getNewId();
+	bool duplicatePresent = false;
+	list<Task>::iterator listIter;
+	bool twoDatePresent = false, oneDatePresent = false;
+
+	newTask.storeIdNumber(id);
+
+	//check for duplicate
+	duplicatePresent = isDuplicatePresent(newTask);
+
+	//check where to slot
+	placeToSlotAddedTask(listIter, newTask);
+	All.insert(listIter, newTask);
+
+	string status;
+	if (duplicatePresent){
+		status = statusToString(DUPLICATE_STATUS, newTask);
+	}
+	else {
+		status = statusToString(COMMAND_ADD, newTask);
+	}
+
+	updateLastEntryStructure(COMMAND_ADD, newTask);
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_ADD_TASK_INTRO_MSG << id;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//check where to slot
+void Planner::placeToSlotAddedTask(list<Task>::iterator& listIter, Task newTask){
+
+	//case 1: when new task has no date and no time
+	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
+		//look for slot at the end of tasks with no date and no time
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getNumOfDates() > 0 || (*listIter).getNumOfTimes() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 2: when new task has no date and has time (either 1 or 2 times)
+	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getTimeStart() > newTask.getTimeStart() || (*listIter).getNumOfDates() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 3:  when new task has more than one date (0,1 or 2 times)
+	else if (newTask.getNumOfDates() >0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getDateStart().year > newTask.getDateStart().year){
+				break;
+			}
+			else if ((*listIter).getDateStart().year == newTask.getDateStart().year){
+				if ((*listIter).getDateStart().month > newTask.getDateStart().month){
+					break;
+				}
+				else if ((*listIter).getDateStart().month == newTask.getDateStart().month){
+					if ((*listIter).getDateStart().day > newTask.getDateStart().day){
+						break;
+					}
+					else if ((*listIter).getDateStart().day == newTask.getDateStart().day){
+						if ((*listIter).getTimeStart() > newTask.getTimeStart()){
+							break;
+						}
+						else if ((*listIter).getTimeStart() == newTask.getTimeStart()){
+							if (((*listIter).getTimeEnd() - (*listIter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then deleted
+string Planner::deleteTask(int serialNumber, string nameOfView){
+	int idNumber;
+	string status;
+	list<Task> ::iterator taskIter;
+
+	if (nameOfView == HOME_LIST){
+		if (indexChecker(taskIter, serialNumber, homeList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else if (nameOfView == MISSED_LIST){
+		if (indexChecker(taskIter, serialNumber, missedList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else if (nameOfView == UPCOMING_LIST){
+		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//The function checks the lastEntry structure for the command and entry,
+//then performs the reverse of the command
+string Planner::undo(void){
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD){
+		int lastEntryID = getNewId() - 1;
+		deleteIndex(lastEntryID);
+	}
+	else if (command == COMMAND_DELETE){
+		addTask(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_EDIT){
+		deleteIndex(lastEdit.addedTask.getIdNumber());
+		addTask(lastEdit.deletedTask);
+	}
+	else {
+		throw ERROR_MESSAGE_INVALID_UNDO;
+	}
+
+	status = undoStatusToString();
+	checkListForClashes();
+	generateAllOtherList();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Clears the All list and generates all other lists
+string Planner::clear(void){
+	string status;
+
+	All.clear();
+	generateAllOtherList();
+	lastEntry.lastCommand = COMMAND_CLEAR;
+
+	//logging
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
+	status = clearStatusToString();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::editTask(int serialNumber, string nameOfList, string input){
+	Task newTask;
+	string validEditCheck;
+	string status;
+
+	newTask.addDetails(input);
+
+	validEditCheck = deleteTask(serialNumber, nameOfList);
+	if (validEditCheck == ERROR_MESSAGE_INVALID_INDEX) {
+		return ERROR_MESSAGE_INVALID_INDEX;														//UNHANDLED EXCEPTION****************************************************************************
+	}
+	else {
+		lastEdit.deletedTask = lastEntry.lastTask;
+		addTask(newTask);
+		lastEdit.addedTask = lastEntry.lastTask;
+		lastEntry.lastCommand = COMMAND_EDIT;
+
+		generateAllOtherList();
+
+		//logging
+		// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
+
+		status = editStatusToString();
+
+		return status;
+	}
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then marked as done
+string Planner::markDone(int serialNumber, string nameOfList){
+	int idNumber = 0;
+	string status;
+	list<Task> ::iterator taskIter;
+
+	if (nameOfList == HOME_LIST){
+		if (indexChecker(taskIter, serialNumber, homeList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else if (nameOfList == MISSED_LIST){
+		if (indexChecker(taskIter, serialNumber, missedList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Function takes in the search target
+//passes the target to every task and checks if the target is present in the task
+//generates a list of all the tasks that return true
+string Planner::generateSearchList(string target){
+	list<Task> ::iterator taskIter;
+	Task targetTask;
+	string status;
+
+	searchList.clear();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		targetTask = *taskIter;
+		if (targetTask.isSearchTargetPresent(target)){
+			searchList.push_back(targetTask);
+		}
+	}
+
+	status = searchStatusToString();
+
+	return status;
+}
+
+/************************************************************************************************
+
+Functions that returns Lists in string form
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//returns the requested list in string form
+string Planner::toString(string nameOfList){
+	//convert the list to a string and return
+	string displayString;
+	if (nameOfList == HOME_LIST){
+		displayString = ListToString(homeList);
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		displayString = ListToString(upcomingList);
+	}
+	else if (nameOfList == MISSED_LIST){
+		displayString = ListToString(missedList);
+	}
+	else if (nameOfList == SEARCH_LIST){
+		displayString = ListToString(searchList);
+	}
+	else if (nameOfList == DONE_LIST){
+		displayString = ListToString(doneList);
+	}
+	else displayString = ERROR_MESSSAGE_INVALID_LIST_NAME;														//UNHANDLED EXCEPTION **********************************************		
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//returns the All list in string form
+string Planner::AllToString(void){
+	ostringstream out;
+	list<Task> ::iterator taskIter;
+	string displayString;
+	taskIter = All.begin();
+	int serialNumber = STARTING_SERIAL_NUMBER;
+
+	if (!All.empty()){
+		for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
+			out << NEWLINE;
+			serialNumber++;
+		}
+	}
+	else {
+		out << EMPTY_LIST_MESSAGE << endl;
+	}
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+/************************************************************************************************
+
+Status Returning Functions
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//returns the status after each command is successfully executed
+string Planner::statusToString(string command, Task theTask){
+	string displayString;
+	if (command == COMMAND_ADD){
+		displayString = addStatusToString(theTask);
+	}
+	else if (command == COMMAND_DELETE){
+		displayString = deleteStatusToString(theTask);
+	}
+	else if (command == COMMAND_EDIT){
+		displayString = editStatusToString();
+	}
+	else if (command == COMMAND_UNDO){
+		displayString = undoStatusToString();
+	}
+	else if (command == COMMAND_CLEAR){
+		displayString = clearStatusToString();
+	}
+	else if (command == COMMAND_SAVE){
+		displayString = saveStatusToString();
+	}
+	else if (command == COMMAND_DONE){
+		displayString = doneStatusToString();
+	}
+	else if (command == DUPLICATE_STATUS){
+		displayString = duplicateStatusToString(theTask);
+	}
+	else displayString = ERROR_MESSSAGE_INVALID_COMMAND;										//	UNHANDLED EXCEPTION*********************************************
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//converts and returns all of the tasks in All to input format
+string Planner::saveDataToString(){
+	ostringstream out;
+	list<Task> ::iterator it;
+	it = All.begin();
+
+	if (!All.empty()){
+
+		for (it = All.begin(); it != All.end(); ++it){
+			out << (*it).getDescription();
+
+			switch ((*it).getNumOfDates()){
+			case 0:
+				break;
+			case 1:
+				out << "; date ";
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+				break;
+			case 2:
+				out << "; date ";
+				if ((*it).getDateStart().day < 10){
+					out << "0" << (*it).getDateStart().day;
+				}
+				else out << (*it).getDateStart().day;
+				if ((*it).getDateStart().month < 10){
+					out << "0" << (*it).getDateStart().month;
+				}
+
+				if ((*it).getDateStart().year < 10){
+					out << "0" << (*it).getDateStart().year << " ";
+				}
+				else out << (*it).getDateStart().year << " ";
+
+				out << " to ";
+
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+
+				break;
+			}
+
+			switch ((*it).getNumOfTimes()){
+			case 0:
+				break;
+			case 1:
+				out << "; time ";
+				out << (*it).getTimeStart();
+				break;
+			case 2:
+				out << "; time ";
+				out << (*it).getTimeStart() << " to ";
+				out << (*it).getTimeEnd();
+				break;
+			default:
+				throw ERROR_MESSAGE_FATAL;
+			}
+
+
+			if ((*it).doneStatus() == true){
+				out << DONE_KEYWORD;
+			}
+
+			if ((*it).getImportance()){
+				out << IMPORTANCE_SYMBOL;
+			}
+
+			out << NEWLINE;
+
+		}
+
+	}
+	else out << "";
+
+	return out.str();
+}
+
+/************************************************************************************************
+
+Load Functions
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//reads in all the tasks from the text file
+//adds in all the tasks into All
+void Planner::loadData(string data){
+	Task* loadTaskPtr;
+	string extractedSingleLine;
+	string doneKeyword = DONE_KEYWORD;
+	bool isTaskMarkedAsDone = false;
+	size_t start = 0, end = 0;
+
+	All.clear();
+
+	while (data.size()>0){
+		end = data.find_first_of("\n");
+		extractedSingleLine = data.substr(start, end - start);
+		if (extractedSingleLine.find(doneKeyword) != std::string::npos){
+			isTaskMarkedAsDone = true;
+			extractedSingleLine = extractedSingleLine.substr(0, extractedSingleLine.size() - 5);
+		}
+		data = data.substr(end + 1, data.size() - end);
+		loadTaskPtr = new Task;
+		(*loadTaskPtr).addDetails(extractedSingleLine);
+		if (isTaskMarkedAsDone){
+			(*loadTaskPtr).markIsDoneAsTrue();
+			isTaskMarkedAsDone = false;
+		}
+
+		addTask(*loadTaskPtr);
+
+		delete loadTaskPtr;
+		loadTaskPtr = NULL;
+	}
+}
+
+/************************************************************************************************
+
+Delete Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//generates and ID to attach to task
+int Planner::getNewId(void){
+
+	static int generatedID;
+	if (All.empty()){
+		generatedID = 10001;
+	}
+	else generatedID++;
+	return generatedID;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::deleteIndex(int idNumber){
+	list<Task> ::iterator taskIter, deleteTargetIter;
+	string status;
+
+	taskIter = All.begin();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			deleteTargetIter = taskIter;
+		}
+	}
+
+	Task temp = *deleteTargetIter;
+	updateLastEntryStructure(COMMAND_DELETE, temp);
+
+	All.erase(deleteTargetIter);
+	status = statusToString(COMMAND_DELETE, temp);
+
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+/************************************************************************************************
+
+"Undo" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Updates the lastEntry Structure
+void Planner::updateLastEntryStructure(string command, Task theTask){
+
+	lastEntry.lastCommand = command;
+	lastEntry.lastTask = theTask;
+}
+
+/************************************************************************************************
+
+"Mark Done" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::markDoneIndex(int idNumber){
+	list<Task> ::iterator taskIter;
+	string status;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			(*taskIter).markIsDoneAsTrue();
+			status = statusToString(COMMAND_DONE, (*taskIter));
+			break;
+		}
+	}
+
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+/************************************************************************************************
+
+Duplicate Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+bool Planner::isDuplicatePresent(Task newTask){
+	list<Task> ::iterator taskIter;
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (tasksAreTheSame(newTask, (*taskIter))){
+			return true;
+		}
+	}
+	return false;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+bool Planner::tasksAreTheSame(Task Task1, Task Task2){
+	bool same = true;
+	string descriptionOfTask1 = Task1.getDescription();
+	string descriptionOfTask2 = Task2.getDescription();
+
+	if (descriptionOfTask1 != descriptionOfTask2){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateStart(), Task2.getDateStart()))){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateEnd(), Task2.getDateEnd()))){
+		same = false;
+	}
+	if (Task1.getImportance() != Task2.getImportance()){
+		same = false;
+	}
+	if (Task1.getTimeEnd() != Task2.getTimeEnd()){
+		same = false;
+	}
+	if (Task1.getTimeStart() != Task2.getTimeStart()){
+		same = false;
+	}
+
+	return same;
+}
+
+/************************************************************************************************
+
+Clash Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+void Planner::clearClashList(){
+	list<Task> ::iterator taskIter;
+
+	taskIter = All.begin();
+	while (taskIter != All.end()){
+		(*taskIter).markClashAsFalse();
+		taskIter++;
+	}
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+void Planner::checkListForClashes(){
+	list<Task> ::iterator taskIter1, taskIter2;
+
+	clearClashList();
+
+	for (taskIter1 = All.begin(); taskIter1 != All.end(); ++taskIter1){
+		for (taskIter2 = taskIter1; taskIter2 != All.end(); ++taskIter2){
+			if (taskIter1 != taskIter2){
+				if (checkTaskForClashes((*taskIter1), (*taskIter2))){
+					(*taskIter1).markClashAsTrue();
+					(*taskIter2).markClashAsTrue();
+				}
+			}
+		}
+	}
+
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::addStatusToString(Task theTask){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_ADD_INTRO;
+	out << descriptionOfTaskToString(theTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::deleteStatusToString(Task theTask){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_DELETE_INTRO;
+	out << descriptionOfTaskToString(theTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::editStatusToString(){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_EDIT_INTRO;
+	out << descriptionOfTaskToString(lastEdit.deletedTask);
+	out << STATUS_TO_STRING_EDIT_MID;
+	out << descriptionOfTaskToString(lastEdit.addedTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::undoStatusToString(){
+	ostringstream out;
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD) {
+		out << addStatusToString(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_DELETE) {
+		out << deleteStatusToString(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_EDIT) {
+		out << editStatusToString();
+	}
+	else{
+		throw ERROR_MESSAGE_INVALID_UNDO;
+	}
+
+	status = out.str();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::clearStatusToString(){
+	return STATUS_TO_STRING_CLEAR_MSG;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::saveStatusToString(){
+	return STATUS_TO_STRING_SAVE_MSG;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::searchStatusToString(){
+	return SEARCH_RESULTS_MSG;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::doneStatusToString(){
+	return STATUS_TO_STRING_DONE_MSG;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::duplicateStatusToString(Task theTask){
+	ostringstream out;
+	string status;
+
+	out << STATUS_TO_STRING_DUPLICATE_MSG;
+	out << descriptionOfTaskToString(theTask);
+	out << NEWLINE;
+
+	status = out.str();
+	return status;
+
+}
+
+/************************************************************************************************
+
+Lists Generating Functions
+
+************************************************************************************************/
+//Private Functions 
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+void Planner::generateAllOtherList(void){
+	clearTheLists();
+	generateTheLists();
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+void Planner::generateDoneList(void){
+	list<Task> ::iterator taskIter;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).doneStatus() == true) {
+			doneList.push_back(*taskIter);
+		}
+	}
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+void Planner::clearTheLists(void){
+	homeList.clear();
+	missedList.clear();
+	upcomingList.clear();
+	doneList.clear();
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+void Planner::generateTheLists(void){
+	generateHomeList();
+	generateMissedList();
+	generateUpcomingList();
+	generateDoneList();
+}
+
+/************************************************************************************************
+
+Generator Logic Functions
+
+************************************************************************************************/
+//Private Functions
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::ListToString(list<Task> targetList){
+	ostringstream out;
+	list<Task> ::iterator taskIter;
+	int serialNumber = STARTING_SERIAL_NUMBER;
+	string displayString;
+
+	taskIter = targetList.begin();
+
+	if (!targetList.empty()){
+		for (taskIter = targetList.begin(); taskIter != targetList.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
+			out << NEWLINE;
+			serialNumber++;
+		}
+	}
+	else out << EMPTY_LIST_MESSAGE << endl;
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Logic\Logic.cpp
+	 */
+
+void Logic::processCommandRecur(string taskDetail){
+	Task currentTask;
+	list<Task> listOfTasks;
+	currentTask.recurTask(taskDetail);
+	listOfTasks = currentTask.getRecurringTasks();
+	list<Task>::iterator listIter;
+	for (listIter = listOfTasks.begin(); listIter != listOfTasks.end(); listIter++){
+		string status = myPlanner.addTask((*listIter));
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Logic\Logic.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+	 */
+
+Log* Log::getInstance(){
+	if (!instanceFlag)
+	{
+		theOne = new Log();
+		instanceFlag = true;
+	}
+
+	return theOne;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+	 */
+
+Log::Log(void){
+	_numLines = 0;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+	 */
+
+Log::~Log(){
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+	 */
+
+void Log::addLog(string type, string message){
+
+	ostringstream out;
+	time_t _tm = time(NULL);
+	struct tm * curtime = localtime(&_tm);
+	out << type << ": " << message << "; " << asctime(curtime);
+	string text = out.str();
+
+	saveLog(text);
+
+}
+
+//KARTHIK
+void Log::saveLog(string text){
+	ofstream outFile;
+
+	if (numOfLinesInFile() > _maxLines){
+		clearLogFile();
+	}
+
+	_numLines = numOfLinesInFile();
+	_numLines++;
+
+	outFile.open("Planner4Life_Log_File.txt", std::ios::app);
+	outFile << _numLines << ". " << text;
+
+	outFile.close();
+}
+
+//KARTHIK
+int Log::numOfLinesInFile(){
+	int numOfLines = 0;
+	string line;
+	ifstream readFile("Planner4Life_log_File.txt");
+
+	while (getline(readFile, line)){
+		numOfLines++;
+	}
+
+	return numOfLines;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+	 */
+
+void Log::clearLogFile(){
+	ofstream outFile("Planner4Life_Log_File.txt");
+	outFile << "";
+	outFile.close();
+	_numLines = 0;
+}
+
+
+	// End of segment: D:\Code\Planner4Life (Debug)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//Task is added to the Planner in this function
+//Before the actual addition of the task, function checks for:
+//duplicates, place to slot in and clashes
+//function ends by generating all the other dependent lists
+string Planner::addTask(Task newTask){
+	int id = getNewId();
+	bool duplicatePresent = false;
+	list<Task>::iterator listIter;
+	bool twoDatePresent = false, oneDatePresent = false;
+
+	newTask.storeIdNumber(id);
+
+	//check for duplicate
+	duplicatePresent = isDuplicatePresent(newTask);
+
+	//check where to slot
+	placeToSlotAddedTask(listIter, newTask);
+	All.insert(listIter, newTask);
+
+	string status;
+	if (duplicatePresent){
+		status = statusToString(DUPLICATE_STATUS, newTask);
+	}
+	else {
+		status = statusToString(COMMAND_ADD, newTask);
+	}
+
+	updateLastEntryStructure(COMMAND_ADD, newTask);
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_ADD_TASK_INTRO_MSG << id;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//check where to slot
+void Planner::placeToSlotAddedTask(list<Task>::iterator& listIter, Task newTask){
+
+	//case 1: when new task has no date and no time
+	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
+		//look for slot at the end of tasks with no date and no time
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getNumOfDates() > 0 || (*listIter).getNumOfTimes() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 2: when new task has no date and has time (either 1 or 2 times)
+	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getTimeStart() > newTask.getTimeStart() || (*listIter).getNumOfDates() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 3:  when new task has more than one date (0,1 or 2 times)
+	else if (newTask.getNumOfDates() >0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getDateStart().year > newTask.getDateStart().year){
+				break;
+			}
+			else if ((*listIter).getDateStart().year == newTask.getDateStart().year){
+				if ((*listIter).getDateStart().month > newTask.getDateStart().month){
+					break;
+				}
+				else if ((*listIter).getDateStart().month == newTask.getDateStart().month){
+					if ((*listIter).getDateStart().day > newTask.getDateStart().day){
+						break;
+					}
+					else if ((*listIter).getDateStart().day == newTask.getDateStart().day){
+						if ((*listIter).getTimeStart() > newTask.getTimeStart()){
+							break;
+						}
+						else if ((*listIter).getTimeStart() == newTask.getTimeStart()){
+							if (((*listIter).getTimeEnd() - (*listIter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then deleted
+string Planner::deleteTask(int serialNumber, string nameOfView){
+	int idNumber;
+	string status;
+	list<Task> ::iterator taskIter;
+
+	if (nameOfView == HOME_LIST){
+		if (indexChecker(taskIter, serialNumber, homeList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else if (nameOfView == MISSED_LIST){
+		if (indexChecker(taskIter, serialNumber, missedList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else if (nameOfView == UPCOMING_LIST){
+		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//The function checks the lastEntry structure for the command and entry,
+//then performs the reverse of the command
+string Planner::undo(void){
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD){
+		int lastEntryID = getNewId() - 1;
+		deleteIndex(lastEntryID);
+	}
+	else if (command == COMMAND_DELETE){
+		addTask(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_EDIT){
+		deleteIndex(lastEdit.addedTask.getIdNumber());
+		addTask(lastEdit.deletedTask);
+	}
+	else {
+		throw ERROR_MESSAGE_INVALID_UNDO;
+	}
+
+	status = undoStatusToString();
+	checkListForClashes();
+	generateAllOtherList();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//Clears the All list and generates all other lists
+string Planner::clear(void){
+	string status;
+
+	All.clear();
+	generateAllOtherList();
+	lastEntry.lastCommand = COMMAND_CLEAR;
+
+	//logging
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
+	status = clearStatusToString();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::editTask(int serialNumber, string nameOfList, string input){
+	Task newTask;
+	string validEditCheck;
+	string status;
+
+	newTask.addDetails(input);
+
+	validEditCheck = deleteTask(serialNumber, nameOfList);
+	if (validEditCheck == ERROR_MESSAGE_INVALID_INDEX) {
+		return ERROR_MESSAGE_INVALID_INDEX;														//UNHANDLED EXCEPTION****************************************************************************
+	}
+	else {
+		lastEdit.deletedTask = lastEntry.lastTask;
+		addTask(newTask);
+		lastEdit.addedTask = lastEntry.lastTask;
+		lastEntry.lastCommand = COMMAND_EDIT;
+
+		generateAllOtherList();
+
+		//logging
+		// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
+
+		status = editStatusToString();
+
+		return status;
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then marked as done
+string Planner::markDone(int serialNumber, string nameOfList){
+	int idNumber = 0;
+	string status;
+	list<Task> ::iterator taskIter;
+
+	if (nameOfList == HOME_LIST){
+		if (indexChecker(taskIter, serialNumber, homeList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else if (nameOfList == MISSED_LIST){
+		if (indexChecker(taskIter, serialNumber, missedList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//Function takes in the search target
+//passes the target to every task and checks if the target is present in the task
+//generates a list of all the tasks that return true
+string Planner::generateSearchList(string target){
+	list<Task> ::iterator taskIter;
+	Task targetTask;
+	string status;
+
+	searchList.clear();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		targetTask = *taskIter;
+		if (targetTask.isSearchTargetPresent(target)){
+			searchList.push_back(targetTask);
+		}
+	}
+
+	status = searchStatusToString();
+
+	return status;
+}
+
+/************************************************************************************************
+
+Functions that returns Lists in string form
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//returns the requested list in string form
+string Planner::toString(string nameOfList){
+	//convert the list to a string and return
+	string displayString;
+	if (nameOfList == HOME_LIST){
+		displayString = ListToString(homeList);
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		displayString = ListToString(upcomingList);
+	}
+	else if (nameOfList == MISSED_LIST){
+		displayString = ListToString(missedList);
+	}
+	else if (nameOfList == SEARCH_LIST){
+		displayString = ListToString(searchList);
+	}
+	else if (nameOfList == DONE_LIST){
+		displayString = ListToString(doneList);
+	}
+	else displayString = ERROR_MESSSAGE_INVALID_LIST_NAME;														//UNHANDLED EXCEPTION **********************************************		
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//returns the All list in string form
+string Planner::AllToString(void){
+	ostringstream out;
+	list<Task> ::iterator taskIter;
+	string displayString;
+	taskIter = All.begin();
+	int serialNumber = STARTING_SERIAL_NUMBER;
+
+	if (!All.empty()){
+		for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
+			out << NEWLINE;
+			serialNumber++;
+		}
+	}
+	else {
+		out << EMPTY_LIST_MESSAGE << endl;
+	}
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+/************************************************************************************************
+
+Status Returning Functions
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//returns the status after each command is successfully executed
+string Planner::statusToString(string command, Task theTask){
+	string displayString;
+	if (command == COMMAND_ADD){
+		displayString = addStatusToString(theTask);
+	}
+	else if (command == COMMAND_DELETE){
+		displayString = deleteStatusToString(theTask);
+	}
+	else if (command == COMMAND_EDIT){
+		displayString = editStatusToString();
+	}
+	else if (command == COMMAND_UNDO){
+		displayString = undoStatusToString();
+	}
+	else if (command == COMMAND_CLEAR){
+		displayString = clearStatusToString();
+	}
+	else if (command == COMMAND_SAVE){
+		displayString = saveStatusToString();
+	}
+	else if (command == COMMAND_DONE){
+		displayString = doneStatusToString();
+	}
+	else if (command == DUPLICATE_STATUS){
+		displayString = duplicateStatusToString(theTask);
+	}
+	else displayString = ERROR_MESSSAGE_INVALID_COMMAND;										//	UNHANDLED EXCEPTION*********************************************
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//converts and returns all of the tasks in All to input format
+string Planner::saveDataToString(){
+	ostringstream out;
+	list<Task> ::iterator it;
+	it = All.begin();
+
+	if (!All.empty()){
+
+		for (it = All.begin(); it != All.end(); ++it){
+			out << (*it).getDescription();
+
+			switch ((*it).getNumOfDates()){
+			case 0:
+				break;
+			case 1:
+				out << "; date ";
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+				break;
+			case 2:
+				out << "; date ";
+				if ((*it).getDateStart().day < 10){
+					out << "0" << (*it).getDateStart().day;
+				}
+				else out << (*it).getDateStart().day;
+				if ((*it).getDateStart().month < 10){
+					out << "0" << (*it).getDateStart().month;
+				}
+
+				if ((*it).getDateStart().year < 10){
+					out << "0" << (*it).getDateStart().year << " ";
+				}
+				else out << (*it).getDateStart().year << " ";
+
+				out << " to ";
+
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+
+				break;
+			}
+
+			switch ((*it).getNumOfTimes()){
+			case 0:
+				break;
+			case 1:
+				out << "; time ";
+				out << (*it).getTimeStart();
+				break;
+			case 2:
+				out << "; time ";
+				out << (*it).getTimeStart() << " to ";
+				out << (*it).getTimeEnd();
+				break;
+			default:
+				throw ERROR_MESSAGE_FATAL;
+			}
+
+
+			if ((*it).doneStatus() == true){
+				out << DONE_KEYWORD;
+			}
+
+			if ((*it).getImportance()){
+				out << IMPORTANCE_SYMBOL;
+			}
+
+			out << NEWLINE;
+
+		}
+
+	}
+	else out << "";
+
+	return out.str();
+}
+
+/************************************************************************************************
+
+Load Functions
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//reads in all the tasks from the text file
+//adds in all the tasks into All
+void Planner::loadData(string data){
+	Task* loadTaskPtr;
+	string extractedSingleLine;
+	string doneKeyword = DONE_KEYWORD;
+	bool isTaskMarkedAsDone = false;
+	size_t start = 0, end = 0;
+
+	All.clear();
+
+	while (data.size()>0){
+		end = data.find_first_of("\n");
+		extractedSingleLine = data.substr(start, end - start);
+		if (extractedSingleLine.find(doneKeyword) != std::string::npos){
+			isTaskMarkedAsDone = true;
+			extractedSingleLine = extractedSingleLine.substr(0, extractedSingleLine.size() - 5);
+		}
+		data = data.substr(end + 1, data.size() - end);
+		loadTaskPtr = new Task;
+		(*loadTaskPtr).addDetails(extractedSingleLine);
+		if (isTaskMarkedAsDone){
+			(*loadTaskPtr).markIsDoneAsTrue();
+			isTaskMarkedAsDone = false;
+		}
+
+		addTask(*loadTaskPtr);
+
+		delete loadTaskPtr;
+		loadTaskPtr = NULL;
+	}
+}
+
+/************************************************************************************************
+
+Delete Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//generates and ID to attach to task
+int Planner::getNewId(void){
+
+	static int generatedID;
+	if (All.empty()){
+		generatedID = 10001;
+	}
+	else generatedID++;
+	return generatedID;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::deleteIndex(int idNumber){
+	list<Task> ::iterator taskIter, deleteTargetIter;
+	string status;
+
+	taskIter = All.begin();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			deleteTargetIter = taskIter;
+		}
+	}
+
+	Task temp = *deleteTargetIter;
+	updateLastEntryStructure(COMMAND_DELETE, temp);
+	
+	All.erase(deleteTargetIter);
+	status = statusToString(COMMAND_DELETE, temp);
+
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+/************************************************************************************************
+
+"Undo" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+//Updates the lastEntry Structure
+void Planner::updateLastEntryStructure(string command, Task theTask){
+
+	lastEntry.lastCommand = command;
+	lastEntry.lastTask = theTask;
+}
+
+/************************************************************************************************
+
+"Mark Done" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::markDoneIndex(int idNumber){
+	list<Task> ::iterator taskIter;
+	string status;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			(*taskIter).markIsDoneAsTrue();
+			status = statusToString(COMMAND_DONE, (*taskIter));
+			break;
+		}
+	}
+
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+/************************************************************************************************
+
+Duplicate Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+bool Planner::isDuplicatePresent(Task newTask){
+	list<Task> ::iterator taskIter;
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (tasksAreTheSame(newTask, (*taskIter))){
+			return true;
+		}
+	}
+	return false;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+bool Planner::tasksAreTheSame(Task Task1, Task Task2){
+	bool same = true;
+	string descriptionOfTask1 = Task1.getDescription();
+	string descriptionOfTask2 = Task2.getDescription();
+
+	if (descriptionOfTask1 != descriptionOfTask2){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateStart(), Task2.getDateStart()))){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateEnd(), Task2.getDateEnd()))){
+		same = false;
+	}
+	if (Task1.getImportance() != Task2.getImportance()){
+		same = false;
+	}
+	if (Task1.getTimeEnd() != Task2.getTimeEnd()){
+		same = false;
+	}
+	if (Task1.getTimeStart() != Task2.getTimeStart()){
+		same = false;
+	}
+
+	return same;
+}
+
+/************************************************************************************************
+
+Clash Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+void Planner::clearClashList(){
+	list<Task> ::iterator taskIter;
+
+	taskIter = All.begin();
+	while (taskIter != All.end()){
+		(*taskIter).markClashAsFalse();
+		taskIter++;
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+void Planner::checkListForClashes(){
+	list<Task> ::iterator taskIter1, taskIter2;
+
+	clearClashList();
+
+	for (taskIter1 = All.begin(); taskIter1 != All.end(); ++taskIter1){
+		for (taskIter2 = taskIter1; taskIter2 != All.end(); ++taskIter2){
+			if (taskIter1 != taskIter2){
+				if (checkTaskForClashes((*taskIter1), (*taskIter2))){
+					(*taskIter1).markClashAsTrue();
+					(*taskIter2).markClashAsTrue();
+				}
+			}
+		}
+	}
+
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::addStatusToString(Task theTask){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_ADD_INTRO;
+	out << descriptionOfTaskToString(theTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::deleteStatusToString(Task theTask){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_DELETE_INTRO;
+	out << descriptionOfTaskToString(theTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::editStatusToString(){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_EDIT_INTRO;
+	out << descriptionOfTaskToString(lastEdit.deletedTask);
+	out << STATUS_TO_STRING_EDIT_MID;
+	out << descriptionOfTaskToString(lastEdit.addedTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::undoStatusToString(){
+	ostringstream out;
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD) {
+		out << addStatusToString(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_DELETE) {
+		out << deleteStatusToString(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_EDIT) {
+		out << editStatusToString();
+	}
+	else{
+		throw ERROR_MESSAGE_INVALID_UNDO;
+	}
+
+	status = out.str();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::clearStatusToString(){
+	return STATUS_TO_STRING_CLEAR_MSG;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::saveStatusToString(){
+	return STATUS_TO_STRING_SAVE_MSG;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::searchStatusToString(){
+	return SEARCH_RESULTS_MSG;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::doneStatusToString(){
+	return STATUS_TO_STRING_DONE_MSG;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::duplicateStatusToString(Task theTask){
+	ostringstream out;
+	string status;
+
+	out << STATUS_TO_STRING_DUPLICATE_MSG;
+	out << descriptionOfTaskToString(theTask);
+	out << NEWLINE;
+
+	status = out.str();
+	return status;
+
+}
+
+/************************************************************************************************
+
+Lists Generating Functions
+
+************************************************************************************************/
+//Private Functions 
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+void Planner::generateAllOtherList(void){
+	clearTheLists();
+	generateTheLists();
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+void Planner::generateDoneList(void){
+	list<Task> ::iterator taskIter;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).doneStatus() == true) {
+			doneList.push_back(*taskIter);
+		}
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+void Planner::clearTheLists(void){
+	homeList.clear();
+	missedList.clear();
+	upcomingList.clear();
+	doneList.clear();
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+void Planner::generateTheLists(void){
+	generateHomeList();
+	generateMissedList();
+	generateUpcomingList();
+	generateDoneList();
+}
+
+/************************************************************************************************
+
+Generator Logic Functions
+
+************************************************************************************************/
+//Private Functions
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+	 */
+
+string Planner::ListToString(list<Task> targetList){
+	ostringstream out;
+	list<Task> ::iterator taskIter;
+	int serialNumber = STARTING_SERIAL_NUMBER;
+	string displayString;
+
+	taskIter = targetList.begin();
+
+	if (!targetList.empty()){
+		for (taskIter = targetList.begin(); taskIter != targetList.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
+			out << NEWLINE;
+			serialNumber++;
+		}
+	}
+	else out << EMPTY_LIST_MESSAGE << endl;
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAdd_oneTask)
+		{
+			Planner testPlanner;
+			Task testTask;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n";
+			testTask.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask);
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAdd_manyTasks)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 3 Time: 1900 \r\n2. Test task 1 Date: 1/2/3 Time: 1100 #impt\r\n3. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100 #impt"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			string actualOutput = testPlanner.AllToString();
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAdd_manyTasks_differentDates_noTime)
+		{
+			Planner testPlanner;
+			string expectedOutput = "1. Test task 3 Date: 2/4/15 \r\n2. Test task 1 Date: 3/4/15 \r\n3. Test task 2 Date: 4/4/15 \r\n";
+			Task testTask1, testTask2, testTask3;
+			testTask1.addDetails("Test task 1; date 030415"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 040415");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 020415"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			string actualOutput = testPlanner.AllToString();
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAdd_floating_Task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			bool doesFunctionWork = false;
+			testTask1.addDetails("Test task 1"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3");
+			testPlanner.addTask(testTask3);
+			string s;
+			s = testPlanner.toString("Home");
+			if (testPlanner.toString("Home") == "1. Test task 1 \r\n2. Test task 2 \r\n3. Test task 3 \r\n"){
+				doesFunctionWork = true;
+			}
+			else{
+				doesFunctionWork = false;
+			}
+
+			Assert::IsTrue(doesFunctionWork);
+		}
+
+		/************************************************************************************************
+
+		"Clear" Unit Test
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testClear)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			bool doesFunctionWork = false;
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.clear();
+			if (testPlanner.AllToString() == "The list is empty\n"){
+				doesFunctionWork = true;
+			}
+			else{
+				doesFunctionWork = false;
+			}
+
+			Assert::IsTrue(doesFunctionWork);
+		}
+		/************************************************************************************************
+
+		"Delete" Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testDelete_Missed_Delete_Task_1)
+		{
+			Planner testPlanner;
+			string expectedOutput = "1. Test task 2 Date: 11/3/15 to 12/3/15 \r\n2. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			Task testTask1, testTask2, testTask3;
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.deleteTask(1, "Missed");
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testDelete_Missed_Delete_Task_2)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.deleteTask(2, "Missed");
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+		/************************************************************************************************
+
+		"Edit" Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testEdit)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 EDITED Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n3. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.editTask(1, "Missed", "Test task 1 EDITED; date 010203; time 1100");
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+		/************************************************************************************************
+
+		"Undo" Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testUndo_Add)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.undo();
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testUndo_Delete)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n3. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.deleteTask(2, "Missed");
+			testPlanner.undo();
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testUndo_Edit)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n3. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.editTask(1, "Missed", "Test task 1 EDITED; date 010203; time 1100");
+			testPlanner.undo();
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+		/************************************************************************************************
+
+		"Load" Unit Tests
+
+		************************************************************************************************/
+
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testLoad_Planner)
+		{
+			Planner testPlanner;
+			string expectedOutput = "1. Test task 3 Time: 1900 \r\n2. Test task 1 Date: 1/2/3 Time: 1100 \r\n3. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			string data;
+			data = "Test task 1; date 010203; time 1100\nTest task 2; date 110315 to 120315\nTest task 3; time 1900\n";
+			testPlanner.loadData(data);
+			string actualOutput = testPlanner.AllToString();
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+		/************************************************************************************************
+
+		"Done" Unit Tests
+
+		************************************************************************************************/
+
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testMark_Done_effect_on_missed_list_1_task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.markDone(2, "Missed");
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testMark_Done_effect_on_done_list_1_task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; date 130315; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.markDone(2, "Missed");
+			string actualOutput = testPlanner.toString("Done");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testMark_Done_effect_on_done_list_2_task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			testTask1.addDetails("Test task 1; date 010203; time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2; date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3; time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.markDone(2, "Missed");
+			testPlanner.markDone(1, "Missed");
+			string actualOutput = testPlanner.toString("Done");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+		/************************************************************************************************
+
+		"Clash" Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\Planner4Life (Debug)\PlannerUnitTest\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+	 */
+
+bool Task::doneStatus(){
+	return _isDone;
+}
+
+/************************************************************************************************
+
+Recur function
+
+************************************************************************************************/
+
+void Task::recurTask(string details){
+	string frequency;
+	int numOfRecurrence;
+
+	istringstream in(details);
+	in >> frequency;						//daily, weekly, monthly or yearly
+	in >> numOfRecurrence;					//no of times to recur
+
+	details = extractTaskDetailsFromUserInput(details);
+
+	processRecur(details, frequency, numOfRecurrence);
+
+	// LogData->addLog(UPDATE, RECUR_TASK_ADD_SUCCESSFUL);
+}
+
+string Task::extractTaskDetailsFromUserInput(string details){
+	int semicolonPos;
+	string taskDetails;
+
+	semicolonPos = details.find_first_of(";");
+
+	try{
+		if (semicolonPos == string::npos){
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	semicolonPos++;
+
+	taskDetails = details.substr(semicolonPos, details.size() - semicolonPos);
+
+	return taskDetails;
+}
+
+void Task::processRecur(string details, string frequency, int numOfRecurrence){
+	Task *recTaskPtr;
+
+	for (int i = 1; i <= numOfRecurrence; i++){
+		recTaskPtr = new Task;
+		(*recTaskPtr).addDetails(details);
+		_recurringTasks.push_back(*recTaskPtr);
+		delete recTaskPtr;
+		recTaskPtr = NULL;
+		details = modifyDetails(frequency, details);
+	}
+}
+
+string Task::modifyDetails(string frequency, string details){
+	int numOfDates;
+	string keyword, startDate, endDate, separator, newDateInfo;
+	ostringstream updatedInfo;
+
+	numOfDates = extractDateInfoFields(details, keyword, startDate, endDate, separator);
+
+	switch (numOfDates){
+	case 1:
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << " " << keyword << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
+		break;
+
+	case 2:
+		startDate = modifyDate(startDate, frequency);
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << " " << keyword << " " << startDate << " " << separator << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
+		break;
+	default:
+		break;
+	}
+
+	return details;
+}
+
+int Task::extractDateInfoFields(string details, string& keyword, string& startDate, string& endDate, string& separator){
+	int numOfDates, index;
+	string dateInfo;
+
+	dateInfo = extractDateInfo(details);
+
+	istringstream in(dateInfo);
+	index = dateInfo.find("to");			// locate the word to in string
+
+	if (index != string::npos){
+		in >> keyword;
+		in >> startDate;
+		in >> separator;
+		in >> endDate;
+		numOfDates = 2;
+	}
+	else{
+		in >> keyword;
+		in >> endDate;
+		storeEndDate(endDate);
+		numOfDates = 1;
+	}
+
+	return numOfDates;
+}
+
+string Task::extractDateInfo(string details){
+	int index;
+
+	index = details.find("date");
+
+	try{
+		if (index == string::npos){
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	details = details.substr(index, details.size() - index);
+
+	//get rid of #impt if exists
+	index = details.find("#");
+	if (index != string::npos){
+		details = details.substr(0, index);
+	}
+
+	//get rid of time if exists
+	index = details.find_first_of(";");			//find first delimiter
+	//	index++;
+	details = details.substr(0, index);
+
+	return details;
+}
+
+
+string Task::insertNewDateInfo(string details, string newDate){
+	int indexDateInfoStart, indexDateInfoEnd;
+	indexDateInfoStart = details.find_first_of(";");
+	indexDateInfoStart++;
+	indexDateInfoEnd = details.find_first_of(";", indexDateInfoStart);
+	if (indexDateInfoEnd == string::npos){
+		indexDateInfoEnd = details.find_first_of("#");
+	}
+	details.replace(indexDateInfoStart, indexDateInfoEnd - indexDateInfoStart, "");		//deleting old date info
+	details.insert(indexDateInfoStart, newDate);
+
+	return details;
+}
+
+string Task::modifyDate(string date, string frequency){
+	string newDate;
+
+	if (frequency == "daily" || frequency == "Daily"){
+		newDate = processDailyRecur(date);
+	}
+	else if (frequency == "weekly" || frequency == "Weekly"){
+		newDate = processWeeklyRecur(date);
+	}
+	else if (frequency == "monthly" || frequency == "Monthly"){
+		newDate = processMonthlyRecur(date);
+	}
+	else if (frequency == "yearly" || frequency == "Yearly"){
+		newDate = processYearlyRecur(date);
+	}
+
+	return newDate;
+}
+
+string Task::processDailyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	if (month == 2){						//case when it is Feb 28th
+		if (day == 28){
+			day = 1;
+			month++;
+		}
+	}
+	else if (is31DayMonth(month)){
+		if (day == 31){						//case when it is
+			if (month == 12){				//31st Dec
+				day = 1;
+				month = 1;
+				year++;
+			}
+			else{							//case when it is 31st but not Dec
+				day = 1;
+				month++;
+			}
+		}
+		else{								//case when it is month with 31 days and it is any day from 1-30
+			day++;
+		}
+	}
+	else{
+		if (day == 30){						//case when it is month with 30 days and day is 30th
+			day = 1;
+			month++;
+		}
+		else{								//case when it is month with 30 days and day is 1-29
+			day++;
+		}
+	}
+
+	mergeDate(date, day, month, year);
+	return date;
+}
+
+string Task::processWeeklyRecur(string date){
+
+	for (int i = 1; i <= 7; i++){				//since each week is 7 days, just loop processDailyRecur 7 times
+		date = processDailyRecur(date);
+	}
+
+	return date;
+}
+
+string Task::processMonthlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	if (month == 12){
+		month = 1;
+		year++;
+	}
+	else{
+		month++;
+	}
+
+	mergeDate(date, day, month, year);
+
+	return date;
+}
+
+string Task::processYearlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	try{
+		if (year + 1 != 100){			//to ensure year is a 2 digit number
+			year++;
+		}
+		else{
+			throw exception(ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	mergeDate(date, day, month, year);
+
+	return date;
+}
+
+void Task::splitDate(string endDate, int& day, int& month, int& year){
+	try {
+		day = stoi(endDate.substr(0, 2));
+		month = stoi(endDate.substr(2, 2));
+		year = stoi(endDate.substr(4, 2));
+	}
+	catch (invalid_argument& error){
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
+	}
+
+}
+
+void Task::mergeDate(string& date, int day, int month, int year){
+	ostringstream mergedDate;
+	if (day < 10){
+		mergedDate << "0" << day;
+	}
+	else{
+		mergedDate << day;
+	}
+
+	if (month < 10){
+		mergedDate << "0" << month;
+	}
+	else{
+		mergedDate << month;
+	}
+
+	if (year < 10){
+		mergedDate << "0" << year;
+	}
+	else{
+		mergedDate << year;
+	}
+
+	date = mergedDate.str();
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+	 */
+
+void Task::markClashAsTrue(){
+	_isClash = true;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+	 */
+
+void Task::markClashAsFalse(){
+	_isClash = false;
+}
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+	 */
+
+bool Task::clashStatus(){
+	if (_isClash == true){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+/************************************************************************************************
+
+Checker Functions
+
+************************************************************************************************/
+
+	// End of segment: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+	 */
+
+bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
+	bool same = true;
+
+	if (Date1.day != Date2.day){
+		same = false;
+	}
+	if (Date1.month != Date2.month){
+		same = false;
+	}
+	if (Date1.year != Date2.year){
+		same = false;
+	}
+
+	return same;
+}
+
+
+bool Task::is31DayMonth(int month){
+	bool is31DayMonth = false;
+
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+		is31DayMonth = true;
+	}
+
+	return is31DayMonth;
+}
+
+/************************************************************************************************
+
+Search function
+
+************************************************************************************************/
+
+//Checks if the target word is present in the task description
+bool Task::isSearchTargetPresent(string target){
+	bool isFound = true;
+	string targetWithUpperCase = target, targetWithLowerCase = target;
+	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
+	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
+
+	if ((_description.find(target) == string::npos) &&
+		(_description.find(targetWithUpperCase) == string::npos) &&		////for search to include the target with first letter in upper case
+		(_description.find(targetWithLowerCase) == string::npos)){		//for search to include the target with first letter in lower case
+		isFound = false;
+	}
+
+	// LogData->addLog(UPDATE, SEARCH_TARGET_SUCCESSFUL);
+	return isFound;
+}
+	// End of segment: D:\Code\Planner4Life (Debug)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Logic\Logic.cpp
+	 */
+
+void Logic::processCommandRecur(string taskDetail){
+	Task currentTask;
+	list<Task> listOfTasks;
+	currentTask.recurTask(taskDetail);
+	listOfTasks = currentTask.getRecurringTasks();
+	list<Task>::iterator listIter;
+	for (listIter = listOfTasks.begin(); listIter != listOfTasks.end(); listIter++){
+		string status = myPlanner.addTask((*listIter));
+	}
+}
+
+void Logic::processCommandDelete(string taskIndex, string currentView) throw (invalid_argument&) {
+	int index = 0;
+
+	try {
+		index = stoi(taskIndex);
+	}
+
+	catch (invalid_argument& error){
+		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
+	}
+
+	status = myPlanner.deleteTask(index, currentView);
+}
+
+void Logic::processCommandDone(string taskIndex, string currentView)throw (invalid_argument&) {
+	int index = 0;
+
+	try {
+		index = stoi(taskIndex);
+	}
+
+	catch (invalid_argument &error){
+		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
+	}
+
+	status = myPlanner.markDone(index, currentView);
+}
+
+void Logic::processCommandEdit(string userInput, string currentView) throw (bad_cast&) {
+	char colon;
+	int taskIndex;
+	string taskDetails;
+	istringstream in(userInput);
+	try {
+		if (!(in >> taskIndex)){
+			throw bad_cast();
+		}
+	}
+
+	catch (bad_cast& error){
+		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
+	}
+
+	try {
+		in >> colon;
+		if (colon != ':'){
+			throw exception(ERROR_MESSAGE_MISSING_COLON);
+		}
+	}
+
+	catch (exception const& error){
+		throw;
+	}
+
+	int sizeToSubstr = userInput.size() - 2;
+	taskDetails = userInput.substr(3, sizeToSubstr);
+	status = myPlanner.editTask(taskIndex, currentView, taskDetails);
+}
+
+void Logic::processCommandClear(string command){
+	if (command == "Y" || command == "y") {
+		status = myPlanner.clear();
+	}
+	else {
+		status = CLEAR_CANCELLED;
+	}
+}
+
+void Logic::processCommandUndo(){
+	status = myPlanner.undo();
+}
+
+void Logic::processCommandSearch(string taskDetail){
+	status = myPlanner.generateSearchList(taskDetail);
+	display = myPlanner.toString(SEARCH_VIEW);
+}
+
+void Logic::processCommandHelp(){
+	display = HELP_MESSAGE;
+	status = "Help window";
+}
+
+void Logic::processCommandShowDone(string currentView){
+	display = myPlanner.toString(currentView);
+	status = "Done list";
+}
+
+void Logic::processCommandAll(){
+	display = myPlanner.AllToString();
+	status = "All list";
+}
+
+void Logic::updateDisplay(string viewType) {
+	if (viewType == HELP_VIEW || viewType == ALL_VIEW || viewType == SEARCH_VIEW){
+		return;
+	}
+
+	display = myPlanner.toString(viewType);
+}
+
+string Logic::displayStatus(){
+	return status;
+}
+
+string Logic::displayContent(){
+	return display;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Logic\Logic.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+	 */
+
+Log* Log::getInstance(){
+	if (!instanceFlag)
+	{
+		theOne = new Log();
+		instanceFlag = true;
+	}
+
+	return theOne;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+	 */
+
+Log::Log(void){
+	_numLines = 0;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+	 */
+
+Log::~Log(){
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+	 */
+
+void Log::addLog(string type, string message){
+
+	ostringstream out;
+	time_t _tm = time(NULL);
+	struct tm * curtime = localtime(&_tm);
+	out << type << ": " << message << "; " << asctime(curtime);
+	string text = out.str();
+
+	saveLog(text);
+
+}
+
+//KARTHIK
+void Log::saveLog(string text){
+	ofstream outFile;
+
+	if (numOfLinesInFile() > _maxLines){
+		clearLogFile();
+	}
+
+	_numLines = numOfLinesInFile();
+	_numLines++;
+
+	outFile.open("Planner4Life_Log_File.txt", std::ios::app);
+	outFile << _numLines << ". " << text;
+
+	outFile.close();
+}
+
+//KARTHIK
+int Log::numOfLinesInFile(){
+	int numOfLines = 0;
+	string line;
+	ifstream readFile("Planner4Life_log_File.txt");
+
+	while (getline(readFile, line)){
+		numOfLines++;
+	}
+
+	return numOfLines;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+	 */
+
+void Log::clearLogFile(){
+	ofstream outFile("Planner4Life_Log_File.txt");
+	outFile << "";
+	outFile.close();
+	_numLines = 0;
+}
+
+
+	// End of segment: D:\Code\Planner4Life(Release)\LogSystem\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//Task is added to the Planner in this function
+//Before the actual addition of the task, function checks for:
+//duplicates, place to slot in and clashes
+//function ends by generating all the other dependent lists
+string Planner::addTask(Task newTask){
+	int id = getNewId();
+	bool duplicatePresent = false;
+	list<Task>::iterator listIter;
+	bool twoDatePresent = false, oneDatePresent = false;
+
+	newTask.storeIdNumber(id);
+
+	//check for duplicate
+	duplicatePresent = isDuplicatePresent(newTask);
+
+	//check where to slot
+	placeToSlotAddedTask(listIter, newTask);
+	All.insert(listIter, newTask);
+
+	string status;
+	if (duplicatePresent){
+		status = statusToString(DUPLICATE_STATUS, newTask);
+	}
+	else {
+		status = statusToString(COMMAND_ADD, newTask);
+	}
+
+	updateLastEntryStructure(COMMAND_ADD, newTask);
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_ADD_TASK_INTRO_MSG << id;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//check where to slot
+void Planner::placeToSlotAddedTask(list<Task>::iterator& listIter, Task newTask){
+
+	//case 1: when new task has no date and no time
+	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
+		//look for slot at the end of tasks with no date and no time
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getNumOfDates() > 0 || (*listIter).getNumOfTimes() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 2: when new task has no date and has time (either 1 or 2 times)
+	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getTimeStart() > newTask.getTimeStart() || (*listIter).getNumOfDates() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 3:  when new task has more than one date (0,1 or 2 times)
+	else if (newTask.getNumOfDates() >0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getDateStart().year > newTask.getDateStart().year){
+				break;
+			}
+			else if ((*listIter).getDateStart().year == newTask.getDateStart().year){
+				if ((*listIter).getDateStart().month > newTask.getDateStart().month){
+					break;
+				}
+				else if ((*listIter).getDateStart().month == newTask.getDateStart().month){
+					if ((*listIter).getDateStart().day > newTask.getDateStart().day){
+						break;
+					}
+					else if ((*listIter).getDateStart().day == newTask.getDateStart().day){
+						if ((*listIter).getTimeStart() > newTask.getTimeStart()){
+							break;
+						}
+						else if ((*listIter).getTimeStart() == newTask.getTimeStart()){
+							if (((*listIter).getTimeEnd() - (*listIter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then deleted
+string Planner::deleteTask(int serialNumber, string nameOfView){
+	int idNumber;
+	string status;
+	list<Task> ::iterator taskIter;
+
+	if (nameOfView == HOME_LIST){
+		if (indexChecker(taskIter, serialNumber, homeList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else if (nameOfView == MISSED_LIST){
+		if (indexChecker(taskIter, serialNumber, missedList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else if (nameOfView == UPCOMING_LIST){
+		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+	}
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//The function checks the lastEntry structure for the command and entry,
+//then performs the reverse of the command
+string Planner::undo(void){
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD){
+		int lastEntryID = getNewId() - 1;
+		deleteIndex(lastEntryID);
+	}
+	else if (command == COMMAND_DELETE){
+		addTask(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_EDIT){
+		deleteIndex(lastEdit.addedTask.getIdNumber());
+		addTask(lastEdit.deletedTask);
+	}
+	else {
+		throw ERROR_MESSAGE_INVALID_UNDO;
+	}
+
+	status = undoStatusToString();
+	checkListForClashes();
+	generateAllOtherList();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//Clears the All list and generates all other lists
+string Planner::clear(void){
+	string status;
+
+	All.clear();
+	generateAllOtherList();
+	lastEntry.lastCommand = COMMAND_CLEAR;
+
+	//logging
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
+	status = clearStatusToString();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::editTask(int serialNumber, string nameOfList, string input){
+	Task newTask;
+	string validEditCheck;
+	string status;
+
+	newTask.addDetails(input);
+
+	validEditCheck = deleteTask(serialNumber, nameOfList);
+	if (validEditCheck == ERROR_MESSAGE_INVALID_INDEX) {
+		return ERROR_MESSAGE_INVALID_INDEX;														//UNHANDLED EXCEPTION****************************************************************************
+	}
+	else {
+		lastEdit.deletedTask = lastEntry.lastTask;
+		addTask(newTask);
+		lastEdit.addedTask = newTask;
+		lastEntry.lastCommand = COMMAND_EDIT;
+
+		generateAllOtherList();
+
+		//logging
+		LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
+
+		status = editStatusToString();
+
+		return status;
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then marked as done
+string Planner::markDone(int serialNumber, string nameOfList){
+	int idNumber = 0;
+	string status;
+	list<Task> ::iterator taskIter;
+
+	if (nameOfList == HOME_LIST){
+		if (indexChecker(taskIter, serialNumber, homeList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else if (nameOfList == MISSED_LIST){
+		if (indexChecker(taskIter, serialNumber, missedList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
+			throw ERROR_MESSAGE_INVALID_INDEX;
+		}
+		else {
+			idNumber = (*taskIter).getIdNumber();
+			status = markDoneIndex(idNumber);
+		}
+	}
+	else{
+		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	}
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//Function takes in the search target
+//passes the target to every task and checks if the target is present in the task
+//generates a list of all the tasks that return true
+string Planner::generateSearchList(string target){
+	list<Task> ::iterator taskIter;
+	Task targetTask;
+	string status;
+
+	searchList.clear();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		targetTask = *taskIter;
+		if (targetTask.isSearchTargetPresent(target)){
+			searchList.push_back(targetTask);
+		}
+	}
+
+	status = searchStatusToString();
+
+	return status;
+}
+
+/************************************************************************************************
+
+Functions that returns Lists in string form
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//returns the requested list in string form
+string Planner::toString(string nameOfList){
+	//convert the list to a string and return
+	string displayString;
+	if (nameOfList == HOME_LIST){
+		displayString = ListToString(homeList);
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		displayString = ListToString(upcomingList);
+	}
+	else if (nameOfList == MISSED_LIST){
+		displayString = ListToString(missedList);
+	}
+	else if (nameOfList == SEARCH_LIST){
+		displayString = ListToString(searchList);
+	}
+	else if (nameOfList == DONE_LIST){
+		displayString = ListToString(doneList);
+	}
+	else displayString = ERROR_MESSSAGE_INVALID_LIST_NAME;														//UNHANDLED EXCEPTION **********************************************		
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//returns the All list in string form
+string Planner::AllToString(void){
+	ostringstream out;
+	list<Task> ::iterator taskIter;
+	string displayString;
+	taskIter = All.begin();
+	int serialNumber = STARTING_SERIAL_NUMBER;
+
+	if (!All.empty()){
+		for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
+			out << NEWLINE;
+			serialNumber++;
+		}
+	}
+	else {
+		out << EMPTY_LIST_MESSAGE << endl;
+	}
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+/************************************************************************************************
+
+Status Returning Functions
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//returns the status after each command is successfully executed
+string Planner::statusToString(string command, Task theTask){
+	string displayString;
+	if (command == COMMAND_ADD){
+		displayString = addStatusToString(theTask);
+	}
+	else if (command == COMMAND_DELETE){
+		displayString = deleteStatusToString(theTask);
+	}
+	else if (command == COMMAND_EDIT){
+		displayString = editStatusToString();
+	}
+	else if (command == COMMAND_UNDO){
+		displayString = undoStatusToString();
+	}
+	else if (command == COMMAND_CLEAR){
+		displayString = clearStatusToString();
+	}
+	else if (command == COMMAND_SAVE){
+		displayString = saveStatusToString();
+	}
+	else if (command == COMMAND_DONE){
+		displayString = doneStatusToString();
+	}
+	else if (command == DUPLICATE_STATUS){
+		displayString = duplicateStatusToString(theTask);
+	}
+	else displayString = ERROR_MESSSAGE_INVALID_COMMAND;										//	UNHANDLED EXCEPTION*********************************************
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//converts and returns all of the tasks in All to input format
+string Planner::saveDataToString(){
+	ostringstream out;
+	list<Task> ::iterator it;
+	it = All.begin();
+
+	if (!All.empty()){
+
+		for (it = All.begin(); it != All.end(); ++it){
+			out << (*it).getDescription();
+
+			switch ((*it).getNumOfDates()){
+			case 0:
+				break;
+			case 1:
+				out << "; date ";
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+				break;
+			case 2:
+				out << "; date ";
+				if ((*it).getDateStart().day < 10){
+					out << "0" << (*it).getDateStart().day;
+				}
+				else out << (*it).getDateStart().day;
+				if ((*it).getDateStart().month < 10){
+					out << "0" << (*it).getDateStart().month;
+				}
+
+				if ((*it).getDateStart().year < 10){
+					out << "0" << (*it).getDateStart().year << " ";
+				}
+				else out << (*it).getDateStart().year << " ";
+
+				out << " to ";
+
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+
+				break;
+			}
+
+			switch ((*it).getNumOfTimes()){
+			case 0:
+				break;
+			case 1:
+				out << "; time ";
+				out << (*it).getTimeStart();
+				break;
+			case 2:
+				out << "; time ";
+				out << (*it).getTimeStart() << " to ";
+				out << (*it).getTimeEnd();
+				break;
+			default:
+				throw ERROR_MESSAGE_FATAL;
+			}
+
+
+			if ((*it).doneStatus() == true){
+				out << DONE_KEYWORD;
+			}
+
+			if ((*it).getImportance()){
+				out << IMPORTANCE_SYMBOL;
+			}
+
+			out << NEWLINE;
+
+		}
+
+	}
+	else out << "";
+
+	return out.str();
+}
+
+/************************************************************************************************
+
+Load Functions
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//reads in all the tasks from the text file
+//adds in all the tasks into All
+void Planner::loadData(string data){
+	Task* loadTaskPtr;
+	string extractedSingleLine;
+	string doneKeyword = DONE_KEYWORD;
+	bool isTaskMarkedAsDone = false;
+	size_t start = 0, end = 0;
+
+	All.clear();
+
+	while (data.size()>0){
+		end = data.find_first_of("\n");
+		extractedSingleLine = data.substr(start, end - start);
+		if (extractedSingleLine.find(doneKeyword) != std::string::npos){
+			isTaskMarkedAsDone = true;
+			extractedSingleLine = extractedSingleLine.substr(0, extractedSingleLine.size() - 5);
+		}
+		data = data.substr(end + 1, data.size() - end);
+		loadTaskPtr = new Task;
+		(*loadTaskPtr).addDetails(extractedSingleLine);
+		if (isTaskMarkedAsDone){
+			(*loadTaskPtr).markIsDoneAsTrue();
+			isTaskMarkedAsDone = false;
+		}
+
+		addTask(*loadTaskPtr);
+
+		delete loadTaskPtr;
+		loadTaskPtr = NULL;
+	}
+}
+
+/************************************************************************************************
+
+Delete Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//generates and ID to attach to task
+int Planner::getNewId(void){
+
+	static int generatedID;
+	if (All.empty()){
+		generatedID = 10001;
+	}
+	else generatedID++;
+	return generatedID;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::deleteIndex(int idNumber){
+	list<Task> ::iterator taskIter, deleteTargetIter;
+	string status;
+
+	taskIter = All.begin();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			deleteTargetIter = taskIter;
+		}
+	}
+
+	updateLastEntryStructure(COMMAND_DELETE, *deleteTargetIter);
+	Task temp = *deleteTargetIter;
+	All.erase(deleteTargetIter);
+	status = statusToString(COMMAND_DELETE, temp);
+
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+/************************************************************************************************
+
+"Undo" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+//Updates the lastEntry Structure
+void Planner::updateLastEntryStructure(string command, Task theTask){
+
+	lastEntry.lastCommand = command;
+	lastEntry.lastTask = theTask;
+}
+
+/************************************************************************************************
+
+"Mark Done" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::markDoneIndex(int idNumber){
+	list<Task> ::iterator taskIter;
+	string status;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			(*taskIter).markIsDoneAsTrue();
+			status = statusToString(COMMAND_DONE, (*taskIter));
+			break;
+		}
+	}
+
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+/************************************************************************************************
+
+Duplicate Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+bool Planner::isDuplicatePresent(Task newTask){
+	list<Task> ::iterator taskIter;
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (tasksAreTheSame(newTask, (*taskIter))){
+			return true;
+		}
+	}
+	return false;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+bool Planner::tasksAreTheSame(Task Task1, Task Task2){
+	bool same = true;
+	string descriptionOfTask1 = Task1.getDescription();
+	string descriptionOfTask2 = Task2.getDescription();
+
+	if (descriptionOfTask1 != descriptionOfTask2){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateStart(), Task2.getDateStart()))){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateEnd(), Task2.getDateEnd()))){
+		same = false;
+	}
+	if (Task1.getImportance() != Task2.getImportance()){
+		same = false;
+	}
+	if (Task1.getTimeEnd() != Task2.getTimeEnd()){
+		same = false;
+	}
+	if (Task1.getTimeStart() != Task2.getTimeStart()){
+		same = false;
+	}
+
+	return same;
+}
+
+/************************************************************************************************
+
+Clash Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+void Planner::clearClashList(){
+	list<Task> ::iterator taskIter;
+
+	taskIter = All.begin();
+	while (taskIter != All.end()){
+		(*taskIter).markClashAsFalse();
+		taskIter++;
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+void Planner::checkListForClashes(){
+	list<Task> ::iterator taskIter1, taskIter2;
+
+	clearClashList();
+
+	for (taskIter1 = All.begin(); taskIter1 != All.end(); ++taskIter1){
+		for (taskIter2 = taskIter1; taskIter2 != All.end(); ++taskIter2){
+			if (taskIter1 != taskIter2){
+				if (checkTaskForClashes((*taskIter1), (*taskIter2))){
+					(*taskIter1).markClashAsTrue();
+					(*taskIter2).markClashAsTrue();
+				}
+			}
+		}
+	}
+
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::addStatusToString(Task theTask){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_ADD_INTRO;
+	out << descriptionOfTaskToString(theTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::deleteStatusToString(Task theTask){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_DELETE_INTRO;
+	out << descriptionOfTaskToString(theTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::editStatusToString(){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_EDIT_INTRO;
+	out << descriptionOfTaskToString(lastEdit.deletedTask);
+	out << STATUS_TO_STRING_EDIT_MID;
+	out << descriptionOfTaskToString(lastEdit.addedTask);
+
+	return out.str();
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::undoStatusToString(){
+	ostringstream out;
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD) {
+		out << addStatusToString(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_DELETE) {
+		out << deleteStatusToString(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_EDIT) {
+		out << editStatusToString();
+	}
+	else{
+		throw ERROR_MESSAGE_INVALID_UNDO;
+	}
+
+	status = out.str();
+
+	return status;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::clearStatusToString(){
+	return STATUS_TO_STRING_CLEAR_MSG;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::saveStatusToString(){
+	return STATUS_TO_STRING_SAVE_MSG;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::searchStatusToString(){
+	return SEARCH_RESULTS_MSG;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::doneStatusToString(){
+	return STATUS_TO_STRING_DONE_MSG;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::duplicateStatusToString(Task theTask){
+	ostringstream out;
+	string status;
+
+	out << STATUS_TO_STRING_DUPLICATE_MSG;
+	out << descriptionOfTaskToString(theTask);
+	out << NEWLINE;
+
+	status = out.str();
+	return status;
+
+}
+
+/************************************************************************************************
+
+Lists Generating Functions
+
+************************************************************************************************/
+//Private Functions 
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+void Planner::generateAllOtherList(void){
+	clearTheLists();
+	generateTheLists();
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+void Planner::generateDoneList(void){
+	list<Task> ::iterator taskIter;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).doneStatus() == true) {
+			doneList.push_back(*taskIter);
+		}
+	}
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+void Planner::clearTheLists(void){
+	homeList.clear();
+	missedList.clear();
+	upcomingList.clear();
+	doneList.clear();
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+void Planner::generateTheLists(void){
+	generateHomeList();
+	generateMissedList();
+	generateUpcomingList();
+	generateDoneList();
+}
+
+/************************************************************************************************
+
+Generator Logic Functions
+
+************************************************************************************************/
+//Private Functions
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+	 */
+
+string Planner::ListToString(list<Task> targetList){
+	ostringstream out;
+	list<Task> ::iterator taskIter;
+	int serialNumber = STARTING_SERIAL_NUMBER;
+	string displayString;
+
+	taskIter = targetList.begin();
+
+	if (!targetList.empty()){
+		for (taskIter = targetList.begin(); taskIter != targetList.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
+			out << NEWLINE;
+			serialNumber++;
+		}
+	}
+	else out << EMPTY_LIST_MESSAGE << endl;
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Planner\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Task\Task.cpp
+	 */
+
+bool Task::doneStatus(){
+	return _isDone;
+}
+
+/************************************************************************************************
+
+Recur function
+
+************************************************************************************************/
+
+void Task::recurTask(string details){
+	string frequency;
+	int numOfRecurrence;
+
+	istringstream in(details);
+	in >> frequency;						//daily, weekly, monthly or yearly
+	in >> numOfRecurrence;					//no of times to recur
+
+	details = extractTaskDetailsFromUserInput(details);
+
+	processRecur(details, frequency, numOfRecurrence);
+
+	LogData->addLog(UPDATE, RECUR_TASK_ADD_SUCCESSFUL);
+}
+
+string Task::extractTaskDetailsFromUserInput(string details){
+	int semicolonPos;
+	string taskDetails;
+
+	semicolonPos = details.find_first_of(";");
+
+	try{
+		if (semicolonPos == string::npos){
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	semicolonPos++;
+
+	taskDetails = details.substr(semicolonPos, details.size() - semicolonPos);
+
+	return taskDetails;
+}
+
+void Task::processRecur(string details, string frequency, int numOfRecurrence){
+	Task *recTaskPtr;
+
+	for (int i = 1; i <= numOfRecurrence; i++){
+		recTaskPtr = new Task;
+		(*recTaskPtr).addDetails(details);
+		_recurringTasks.push_back(*recTaskPtr);
+		delete recTaskPtr;
+		recTaskPtr = NULL;
+		details = modifyDetails(frequency, details);
+	}
+}
+
+string Task::modifyDetails(string frequency, string details){
+	int numOfDates;
+	string keyword, startDate, endDate, separator, newDateInfo;
+	ostringstream updatedInfo;
+
+	numOfDates = extractDateInfoFields(details, keyword, startDate, endDate, separator);
+
+	switch (numOfDates){
+	case 1:
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << " " << keyword << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
+		break;
+
+	case 2:
+		startDate = modifyDate(startDate, frequency);
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << " " << keyword << " " << startDate << " " << separator << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
+		break;
+	default:
+		break;
+	}
+
+	LogData->addLog(UPDATE, RECUR_TASK_MODIFY_DETAILS_SUCCESSFUL);
+
+	return details;
+}
+
+int Task::extractDateInfoFields(string details, string& keyword, string& startDate, string& endDate, string& separator){
+	int numOfDates, index;
+	string dateInfo;
+
+	dateInfo = extractDateInfo(details);
+
+	istringstream in(dateInfo);
+	index = dateInfo.find("to");			// locate the word to in string
+
+	if (index != string::npos){
+		in >> keyword;
+		in >> startDate;
+		in >> separator;
+		in >> endDate;
+		numOfDates = 2;
+	}
+	else{
+		in >> keyword;
+		in >> endDate;
+		storeEndDate(endDate);
+		numOfDates = 1;
+	}
+
+	return numOfDates;
+}
+
+string Task::extractDateInfo(string details){
+	int index;
+
+	index = details.find("date");
+
+	try{
+		if (index == string::npos){
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	details = details.substr(index, details.size() - index);
+
+	//get rid of #impt if exists
+	index = details.find("#");
+	if (index != string::npos){
+		details = details.substr(0, index);
+	}
+
+	//get rid of time if exists
+	index = details.find_first_of(";");			//find first delimiter
+	//	index++;
+	details = details.substr(0, index);
+
+	return details;
+}
+
+
+string Task::insertNewDateInfo(string details, string newDate){
+	int indexDateInfoStart, indexDateInfoEnd;
+	indexDateInfoStart = details.find_first_of(";");
+	indexDateInfoStart++;
+	indexDateInfoEnd = details.find_first_of(";", indexDateInfoStart);
+	if (indexDateInfoEnd == string::npos){
+		indexDateInfoEnd = details.find_first_of("#");
+	}
+	details.replace(indexDateInfoStart, indexDateInfoEnd - indexDateInfoStart, "");		//deleting old date info
+	details.insert(indexDateInfoStart, newDate);
+
+	return details;
+}
+
+string Task::modifyDate(string date, string frequency){
+	string newDate;
+
+	if (frequency == "daily" || frequency == "Daily"){
+		newDate = processDailyRecur(date);
+	}
+	else if (frequency == "weekly" || frequency == "Weekly"){
+		newDate = processWeeklyRecur(date);
+	}
+	else if (frequency == "monthly" || frequency == "Monthly"){
+		newDate = processMonthlyRecur(date);
+	}
+	else if (frequency == "yearly" || frequency == "Yearly"){
+		newDate = processYearlyRecur(date);
+	}
+
+	return newDate;
+}
+
+string Task::processDailyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	if (month == 2){						//case when it is Feb 28th
+		if (day == 28){
+			day = 1;
+			month++;
+		}
+	}
+	else if (is31DayMonth(month)){
+		if (day == 31){						//case when it is
+			if (month == 12){				//31st Dec
+				day = 1;
+				month = 1;
+				year++;
+			}
+			else{							//case when it is 31st but not Dec
+				day = 1;
+				month++;
+			}
+		}
+		else{								//case when it is month with 31 days and it is any day from 1-30
+			day++;
+		}
+	}
+	else{
+		if (day == 30){						//case when it is month with 30 days and day is 30th
+			day = 1;
+			month++;
+		}
+		else{								//case when it is month with 30 days and day is 1-29
+			day++;
+		}
+	}
+
+	mergeDate(date, day, month, year);
+	return date;
+}
+
+string Task::processWeeklyRecur(string date){
+
+	for (int i = 1; i <= 7; i++){				//since each week is 7 days, just loop processDailyRecur 7 times
+		date = processDailyRecur(date);
+	}
+
+	return date;
+}
+
+string Task::processMonthlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	if (month == 12){
+		month = 1;
+		year++;
+	}
+	else{
+		month++;
+	}
+
+	mergeDate(date, day, month, year);
+
+	return date;
+}
+
+string Task::processYearlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	try{
+		if (year + 1 != 100){			//to ensure year is a 2 digit number
+			year++;
+		}
+		else{
+			throw exception(ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	mergeDate(date, day, month, year);
+
+	return date;
+}
+
+void Task::splitDate(string endDate, int& day, int& month, int& year){
+	try {
+		day = stoi(endDate.substr(0, 2));
+		month = stoi(endDate.substr(2, 2));
+		year = stoi(endDate.substr(4, 2));
+	}
+	catch (invalid_argument& error){
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
+	}
+
+}
+
+void Task::mergeDate(string& date, int day, int month, int year){
+	ostringstream mergedDate;
+	if (day < 10){
+		mergedDate << "0" << day;
+	}
+	else{
+		mergedDate << day;
+	}
+
+	if (month < 10){
+		mergedDate << "0" << month;
+	}
+	else{
+		mergedDate << month;
+	}
+
+	if (year < 10){
+		mergedDate << "0" << year;
+	}
+	else{
+		mergedDate << year;
+	}
+
+	date = mergedDate.str();
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Task\Task.cpp
+	 */
+
+void Task::markClashAsTrue(){
+	_isClash = true;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Task\Task.cpp
+	 */
+
+void Task::markClashAsFalse(){
+	_isClash = false;
+}
+
+	// End of segment: D:\Code\Planner4Life(Release)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Task\Task.cpp
+	 */
+
+bool Task::clashStatus(){
+	if (_isClash == true){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+/************************************************************************************************
+
+Checker Functions
+
+************************************************************************************************/
+
+	// End of segment: D:\Code\Planner4Life(Release)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4Life(Release)\Task\Task.cpp
+	 */
+
+bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
+	bool same = true;
+
+	if (Date1.day != Date2.day){
+		same = false;
+	}
+	if (Date1.month != Date2.month){
+		same = false;
+	}
+	if (Date1.year != Date2.year){
+		same = false;
+	}
+
+	return same;
+}
+
+
+bool Task::is31DayMonth(int month){
+	bool is31DayMonth = false;
+
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+		is31DayMonth = true;
+	}
+
+	return is31DayMonth;
+}
+
+/************************************************************************************************
+
+Search function
+
+************************************************************************************************/
+
+//Checks if the target word is present in the task description
+bool Task::isSearchTargetPresent(string target){
+	LogData->addLog(UPDATE, "In isSearchTargetPresent, search initiated");
+	bool isFound = true;
+	string targetWithUpperCase = target, targetWithLowerCase = target;
+	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
+	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
+
+	if ((_description.find(target) == string::npos) &&
+		(_description.find(targetWithUpperCase) == string::npos) &&		////for search to include the target with first letter in upper case
+		(_description.find(targetWithLowerCase) == string::npos)){		//for search to include the target with first letter in lower case
+		isFound = false;
+	}
+
+	LogData->addLog(UPDATE, "In isSearchTargetPresent, search completed");
+	return isFound;
+}
+	// End of segment: D:\Code\Planner4Life(Release)\Task\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+bool Task::doneStatus(){
+	return _isDone;
+}
+
+/************************************************************************************************
+
+Recur function
+
+************************************************************************************************/
+
+void Task::recurTask(string details){
+	string frequency;
+	int numOfRecurrence;
+
+	istringstream in(details);
+	in >> frequency;						//daily, weekly, monthly or yearly
+	in >> numOfRecurrence;					//no of times to recur
+
+	details = extractTaskDetailsFromUserInput(details);
+
+	processRecur(details, frequency, numOfRecurrence);
+
+	// LogData->addLog(UPDATE, RECUR_TASK_ADD_SUCCESSFUL);
+}
+
+string Task::extractTaskDetailsFromUserInput(string details){
+	int semicolonPos;
+	string taskDetails;
+
+	semicolonPos = details.find_first_of(";");
+
+	try{
+		if (semicolonPos == string::npos){
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	semicolonPos++;
+
+	taskDetails = details.substr(semicolonPos, details.size() - semicolonPos);
+
+	return taskDetails;
+}
+
+void Task::processRecur(string details, string frequency, int numOfRecurrence){
+	Task *recTaskPtr;
+
+	for (int i = 1; i <= numOfRecurrence; i++){
+		recTaskPtr = new Task;
+		(*recTaskPtr).addDetails(details);
+		_recurringTasks.push_back(*recTaskPtr);
+		delete recTaskPtr;
+		recTaskPtr = NULL;
+		details = modifyDetails(frequency, details);
+	}
+}
+
+string Task::modifyDetails(string frequency, string details){
+	int numOfDates;
+	string keyword, startDate, endDate, separator, newDateInfo;
+	ostringstream updatedInfo;
+
+	numOfDates = extractDateInfoFields(details, keyword, startDate, endDate, separator);
+
+	switch (numOfDates){
+	case 1:
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << " " << keyword << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
+		break;
+
+	case 2:
+		startDate = modifyDate(startDate, frequency);
+		endDate = modifyDate(endDate, frequency);
+		updatedInfo << " " << keyword << " " << startDate << " " << separator << " " << endDate;
+		newDateInfo = updatedInfo.str();
+		details = insertNewDateInfo(details, newDateInfo);
+		break;
+	default:
+		break;
+	}
+
+	return details;
+}
+
+int Task::extractDateInfoFields(string details, string& keyword, string& startDate, string& endDate, string& separator){
+	int numOfDates, index;
+	string dateInfo;
+
+	dateInfo = extractDateInfo(details);
+
+	istringstream in(dateInfo);
+	index = dateInfo.find("to");			// locate the word to in string
+
+	if (index != string::npos){
+		in >> keyword;
+		in >> startDate;
+		in >> separator;
+		in >> endDate;
+		numOfDates = 2;
+	}
+	else{
+		in >> keyword;
+		in >> endDate;
+		storeEndDate(endDate);
+		numOfDates = 1;
+	}
+
+	return numOfDates;
+}
+
+string Task::extractDateInfo(string details){
+	int index;
+
+	index = details.find("date");
+
+	try{
+		if (index == string::npos){
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	details = details.substr(index, details.size() - index);
+
+	//get rid of #impt if exists
+	index = details.find("#");
+	if (index != string::npos){
+		details = details.substr(0, index);
+	}
+
+	//get rid of time if exists
+	index = details.find_first_of(";");			//find first delimiter
+	//	index++;
+	details = details.substr(0, index);
+
+	return details;
+}
+
+
+string Task::insertNewDateInfo(string details, string newDate){
+	int indexDateInfoStart, indexDateInfoEnd;
+	indexDateInfoStart = details.find_first_of(";");
+	indexDateInfoStart++;
+	indexDateInfoEnd = details.find_first_of(";", indexDateInfoStart);
+	if (indexDateInfoEnd == string::npos){
+		indexDateInfoEnd = details.find_first_of("#");
+	}
+	details.replace(indexDateInfoStart, indexDateInfoEnd - indexDateInfoStart, "");		//deleting old date info
+	details.insert(indexDateInfoStart, newDate);
+
+	return details;
+}
+
+string Task::modifyDate(string date, string frequency){
+	string newDate;
+
+	if (frequency == "daily" || frequency == "Daily"){
+		newDate = processDailyRecur(date);
+	}
+	else if (frequency == "weekly" || frequency == "Weekly"){
+		newDate = processWeeklyRecur(date);
+	}
+	else if (frequency == "monthly" || frequency == "Monthly"){
+		newDate = processMonthlyRecur(date);
+	}
+	else if (frequency == "yearly" || frequency == "Yearly"){
+		newDate = processYearlyRecur(date);
+	}
+
+	return newDate;
+}
+
+string Task::processDailyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	if (month == 2){						//case when it is Feb 28th
+		if (day == 28){
+			day = 1;
+			month++;
+		}
+	}
+	else if (is31DayMonth(month)){
+		if (day == 31){						//case when it is
+			if (month == 12){				//31st Dec
+				day = 1;
+				month = 1;
+				year++;
+			}
+			else{							//case when it is 31st but not Dec
+				day = 1;
+				month++;
+			}
+		}
+		else{								//case when it is month with 31 days and it is any day from 1-30
+			day++;
+		}
+	}
+	else{
+		if (day == 30){						//case when it is month with 30 days and day is 30th
+			day = 1;
+			month++;
+		}
+		else{								//case when it is month with 30 days and day is 1-29
+			day++;
+		}
+	}
+
+	mergeDate(date, day, month, year);
+	return date;
+}
+
+string Task::processWeeklyRecur(string date){
+
+	for (int i = 1; i <= 7; i++){				//since each week is 7 days, just loop processDailyRecur 7 times
+		date = processDailyRecur(date);
+	}
+
+	return date;
+}
+
+string Task::processMonthlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	if (month == 12){
+		month = 1;
+		year++;
+	}
+	else{
+		month++;
+	}
+
+	mergeDate(date, day, month, year);
+
+	return date;
+}
+
+string Task::processYearlyRecur(string date){
+	int day, month, year;
+	splitDate(date, day, month, year);
+
+	try{
+		if (year + 1 != 100){			//to ensure year is a 2 digit number
+			year++;
+		}
+		else{
+			throw exception(ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	mergeDate(date, day, month, year);
+
+	return date;
+}
+
+void Task::splitDate(string endDate, int& day, int& month, int& year){
+	try {
+		day = stoi(endDate.substr(0, 2));
+		month = stoi(endDate.substr(2, 2));
+		year = stoi(endDate.substr(4, 2));
+	}
+	catch (invalid_argument& error){
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
+	}
+
+}
+
+void Task::mergeDate(string& date, int day, int month, int year){
+	ostringstream mergedDate;
+	if (day < 10){
+		mergedDate << "0" << day;
+	}
+	else{
+		mergedDate << day;
+	}
+
+	if (month < 10){
+		mergedDate << "0" << month;
+	}
+	else{
+		mergedDate << month;
+	}
+
+	if (year < 10){
+		mergedDate << "0" << year;
+	}
+	else{
+		mergedDate << year;
+	}
+
+	date = mergedDate.str();
+}
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+void Task::markClashAsTrue(){
+	_isClash = true;
+}
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+void Task::markClashAsFalse(){
+	_isClash = false;
+}
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+bool Task::clashStatus(){
+	if (_isClash == true){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+/************************************************************************************************
+
+Checker Functions
+
+************************************************************************************************/
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
+	bool same = true;
+
+	if (Date1.day != Date2.day){
+		same = false;
+	}
+	if (Date1.month != Date2.month){
+		same = false;
+	}
+	if (Date1.year != Date2.year){
+		same = false;
+	}
+
+	return same;
+}
+
+
+bool Task::is31DayMonth(int month){
+	bool is31DayMonth = false;
+
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+		is31DayMonth = true;
+	}
+
+	return is31DayMonth;
+}
+
+/************************************************************************************************
+
+Search function
+
+************************************************************************************************/
+
+//Checks if the target word is present in the task description
+bool Task::isSearchTargetPresent(string target){
+	bool isFound = true;
+	string targetWithUpperCase = target, targetWithLowerCase = target;
+	targetWithUpperCase[0] = toupper(targetWithUpperCase[0]);
+	targetWithLowerCase[0] = tolower(targetWithLowerCase[0]);
+
+	if ((_description.find(target) == string::npos) &&
+		(_description.find(targetWithUpperCase) == string::npos) &&		////for search to include the target with first letter in upper case
+		(_description.find(targetWithLowerCase) == string::npos)){		//for search to include the target with first letter in lower case
+		isFound = false;
+	}
+
+	// LogData->addLog(UPDATE, SEARCH_TARGET_SUCCESSFUL);
+	return isFound;
+}
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
