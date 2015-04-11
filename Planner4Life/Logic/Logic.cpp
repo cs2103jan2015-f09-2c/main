@@ -13,7 +13,7 @@ const char* ERROR_MESSAGE_EMPTY_INPUT = "There was no input entered! Please ente
 const char* ERROR_MESSAGE_INVALID_SERIAL_NO = "Invalid serial number! Serial number should be a positive integer.";
 const char* ERROR_MESSAGE_MISSING_COLON = "Colon is missing. Please enter a colon after the serial number";
 const char* CLEAR_CANCELLED = "Clear cancelled.";
-const char* HELP_MESSAGE = "Add\tadd entries\r\n\r\nEdit\tedit task contents\r\n\r\nDelete\tdelete tasks\r\n\r\nClear\tclears the entire planner\r\n\r\nUndo\tundo the previous add, edit or delete\r\n\r\nSearch\tsearch for keywords throughout all \ttasks\n";
+const char* HELP_MESSAGE = "Commands and their functions\r\n\r\nadd\tAdd entries\r\n\r\nedit\tEdit task contents\r\n\r\ndelete\tDelete tasks\r\n\r\nclear\tClears the entire planner\r\n\r\nundo\tUndo the previous add, edit or delete\r\n\r\nrecur\tAdd recurring tasks\r\n\r\nsearch\tSearch for keywords throughout all tasks\n";
 
 const string HOME_VIEW = "Home";
 const string MISSED_VIEW = "Missed";

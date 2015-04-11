@@ -7,6 +7,7 @@
 const string FATAL_ERROR = "Fatal Error!";
 const char* ERROR_MESSAGE_INVALID_INPUT = "Invalid format entered! Please re-enter appropriate entry.";
 const char* ERROR_MESSAGE_RECUR_NO_YEAR_EXCEED_LIMIT = "Invalid date: Number of years to recur exceed Planner limit";
+const char* ERROR_MESSAGE_RECUR_MAX_LIMIT_REACHED = "num of recurrence is more than 30. try a smaller number";
 const string UPDATE = "UPDATE";
 const string ADD_DETAILS_SUCCESSFUL = "addDetails was successful";
 const string RECUR_TASK_ADD_SUCCESSFUL = "recurTask was successful";
@@ -370,6 +371,18 @@ void Task::recurTask(string details){
 	istringstream in(details);
 	in >> frequency;						//daily, weekly, monthly or yearly
 	in >> numOfRecurrence;					//no of times to recur
+	
+	try{
+		if (numOfRecurrence <= 30){
+			
+		}
+		else {
+			throw exception(ERROR_MESSAGE_RECUR_MAX_LIMIT_REACHED);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
 
 	details = extractTaskDetailsFromUserInput(details);
 
