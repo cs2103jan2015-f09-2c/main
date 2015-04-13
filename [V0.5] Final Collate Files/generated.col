@@ -1,0 +1,119 @@
+//@author: generated
+
+
+
+	/**
+	 * origin: D:\Code\Planner4LifeGUI.h
+	 */
+
+
+#pragma region Windows Form Designer generated code
+		void InitializeComponent(void)
+		{
+			this->displayWindow = (gcnew System::Windows::Forms::TextBox());
+			this->userInput = (gcnew System::Windows::Forms::TextBox());
+			this->missedButton = (gcnew System::Windows::Forms::Button());
+			this->homeButton = (gcnew System::Windows::Forms::Button());
+			this->upcomingButton = (gcnew System::Windows::Forms::Button());
+			this->status = (gcnew System::Windows::Forms::Label());
+			this->SuspendLayout();
+			// 
+			// displayWindow
+			// 
+			this->displayWindow->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11));
+			this->displayWindow->Location = System::Drawing::Point(10, 12);
+			this->displayWindow->Multiline = true;
+			this->displayWindow->Name = L"displayWindow";
+			this->displayWindow->ReadOnly = true;
+			this->displayWindow->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
+			this->displayWindow->Size = System::Drawing::Size(496, 291);
+			this->displayWindow->TabIndex = 0;
+			// 
+			// userInput
+			// 
+			this->userInput->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(10) {
+				L"add", L"delete", L"edit",
+					L"clear", L"exit", L"search", L"done", L"show done", L"undo", L"help"
+			});
+			this->userInput->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
+			this->userInput->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
+			this->userInput->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.25F));
+			this->userInput->Location = System::Drawing::Point(10, 355);
+			this->userInput->Name = L"userInput";
+			this->userInput->Size = System::Drawing::Size(494, 21);
+			this->userInput->TabIndex = 1;
+			this->userInput->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &GUI::userInput_Process);
+			// 
+			// missedButton
+			// 
+			this->missedButton->BackColor = System::Drawing::Color::SteelBlue;
+			this->missedButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Bold));
+			this->missedButton->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->missedButton->Location = System::Drawing::Point(63, 310);
+			this->missedButton->Name = L"missedButton";
+			this->missedButton->Size = System::Drawing::Size(127, 39);
+			this->missedButton->TabIndex = 2;
+			this->missedButton->Text = L"Missed";
+			this->missedButton->UseVisualStyleBackColor = false;
+			this->missedButton->Click += gcnew System::EventHandler(this, &GUI::executeMissed);
+			// 
+			// homeButton
+			// 
+			this->homeButton->BackColor = System::Drawing::Color::SteelBlue;
+			this->homeButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Bold));
+			this->homeButton->Location = System::Drawing::Point(196, 310);
+			this->homeButton->Name = L"homeButton";
+			this->homeButton->Size = System::Drawing::Size(127, 39);
+			this->homeButton->TabIndex = 3;
+			this->homeButton->Text = L"Home";
+			this->homeButton->UseVisualStyleBackColor = false;
+			this->homeButton->Click += gcnew System::EventHandler(this, &GUI::executeHome);
+			// 
+			// upcomingButton
+			// 
+			this->upcomingButton->BackColor = System::Drawing::Color::SteelBlue;
+			this->upcomingButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Bold));
+			this->upcomingButton->Location = System::Drawing::Point(329, 309);
+			this->upcomingButton->Name = L"upcomingButton";
+			this->upcomingButton->Size = System::Drawing::Size(126, 39);
+			this->upcomingButton->TabIndex = 4;
+			this->upcomingButton->Text = L"Upcoming";
+			this->upcomingButton->UseVisualStyleBackColor = false;
+			this->upcomingButton->Click += gcnew System::EventHandler(this, &GUI::executeUpcoming);
+			// 
+			// status
+			// 
+			this->status->AutoSize = true;
+			this->status->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.25F));
+			this->status->Location = System::Drawing::Point(7, 383);
+			this->status->Name = L"status";
+			this->status->Size = System::Drawing::Size(169, 16);
+			this->status->TabIndex = 5;
+			this->status->Text = L"Type \'help\' for the Help List";
+			// 
+			// GUI
+			// 
+			this->ClientSize = System::Drawing::Size(518, 457);
+			this->Controls->Add(this->status);
+			this->Controls->Add(this->upcomingButton);
+			this->Controls->Add(this->homeButton);
+			this->Controls->Add(this->missedButton);
+			this->Controls->Add(this->userInput);
+			this->Controls->Add(this->displayWindow);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->MaximizeBox = false;
+			this->Name = L"GUI";
+			this->Text = L"Planner4Life";
+			this->Load += gcnew System::EventHandler(this, &GUI::GUI_Load);
+			this->ResumeLayout(false);
+			this->PerformLayout();
+
+		}
+#pragma endregion
+
+	// End of segment: D:\Code\Planner4LifeGUI.h
+
+
+
+
+

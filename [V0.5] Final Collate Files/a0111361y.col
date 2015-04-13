@@ -1,0 +1,1545 @@
+//@author: a0111361y
+
+
+
+	/**
+	 * origin: D:\Code\Log.cpp
+	 */
+
+Log* Log::getInstance(){
+	if (!_instanceFlag)
+	{
+		theOne = new Log();
+		_instanceFlag = true;
+	}
+
+	return theOne;
+}
+
+Log::Log(void){
+	_numLines = 0;
+}
+
+Log::~Log(){
+}
+
+void Log::addLog(string type, string message){
+	ostringstream out;
+	time_t _tm = time(NULL);
+	struct tm * curtime = localtime(&_tm);
+
+	out << type << ": " << message << "; " << asctime(curtime);
+	string text = out.str();
+
+	saveLog(text);
+
+}
+
+void Log::clearLogFile(){
+	ofstream outFile(DEFAULT_LOGFILE_LOCATION);
+
+	outFile << "";
+	outFile.close();
+	_numLines = 0;
+}
+
+	// End of segment: D:\Code\Log.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Logic.cpp
+	 */
+
+void Logic::processCommandRecur(string taskDetail){
+	Task currentTask;
+	list<Task> listOfRecurringTasks;
+
+	currentTask.recurTask(taskDetail);
+	listOfRecurringTasks = currentTask.getRecurringTasks();
+
+	list<Task>::iterator listIter;
+
+	for (listIter = listOfRecurringTasks.begin(); listIter != listOfRecurringTasks.end(); listIter++){
+		string status = _myPlanner.addTask((*listIter));
+	}
+}
+
+	// End of segment: D:\Code\Logic.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Task is added to the Planner in this function
+//Before the actual addition of the task, function checks for:
+//duplicates, place to slot in and clashes
+//function ends by generating all the other dependent lists
+string Planner::addTask(Task newTask){
+	int id = getNewId();
+	bool duplicatePresent = false;
+	list<Task>::iterator listIter;
+	bool twoDatePresent = false, oneDatePresent = false;
+
+	newTask.storeIdNumber(id);
+
+	//check for duplicate
+	duplicatePresent = isDuplicatePresent(newTask);
+
+	//check where to slot
+	placeToSlotAddedTask(listIter, newTask);
+	All.insert(listIter, newTask);
+
+	string status;
+	if (duplicatePresent){
+		status = statusToString(DUPLICATE_STATUS, newTask);
+	}
+	else {
+		status = statusToString(COMMAND_ADD, newTask);
+	}
+
+	updateLastEntryStructure(COMMAND_ADD, newTask);
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_ADD_TASK_INTRO_MSG << id;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+
+//check where to slot
+void Planner::placeToSlotAddedTask(list<Task>::iterator& listIter, Task newTask){
+
+	//case 1: when new task has no date and no time
+	if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() == 0){
+		//look for slot at the end of tasks with no date and no time
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getNumOfDates() > 0 || (*listIter).getNumOfTimes() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 2: when new task has no date and has time (either 1 or 2 times)
+	else if (newTask.getNumOfDates() == 0 && newTask.getNumOfTimes() > 0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getTimeStart() > newTask.getTimeStart() || (*listIter).getNumOfDates() > 0){
+				break;
+			}
+		}
+	}
+
+	//case 3:  when new task has more than one date (0,1 or 2 times)
+	else if (newTask.getNumOfDates() >0){
+		for (listIter = All.begin(); listIter != All.end(); ++listIter){
+			if ((*listIter).getDateStart().year > newTask.getDateStart().year){
+				break;
+			}
+			else if ((*listIter).getDateStart().year == newTask.getDateStart().year){
+				if ((*listIter).getDateStart().month > newTask.getDateStart().month){
+					break;
+				}
+				else if ((*listIter).getDateStart().month == newTask.getDateStart().month){
+					if ((*listIter).getDateStart().day > newTask.getDateStart().day){
+						break;
+					}
+					else if ((*listIter).getDateStart().day == newTask.getDateStart().day){
+						if ((*listIter).getTimeStart() > newTask.getTimeStart()){
+							break;
+						}
+						else if ((*listIter).getTimeStart() == newTask.getTimeStart()){
+							if (((*listIter).getTimeEnd() - (*listIter).getTimeStart()) > (newTask.getTimeEnd() - newTask.getTimeStart())){
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then deleted
+string Planner::deleteTask(int serialNumber, string nameOfView){
+	int idNumber;
+	string status;
+
+	list<Task> ::iterator taskIter;
+	try{
+		if (nameOfView == HOME_LIST){
+			indexChecker(taskIter, serialNumber, homeList);
+
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+		else if (nameOfView == MISSED_LIST){
+			indexChecker(taskIter, serialNumber, missedList);
+
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+		else if (nameOfView == UPCOMING_LIST){
+			indexChecker(taskIter, serialNumber, upcomingList);
+
+			idNumber = (*taskIter).getIdNumber();
+			status = deleteIndex(idNumber);
+		}
+		else{
+			throw exception(ERROR_MESSSAGE_INVALID_LIST_NAME);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+
+//The function checks the lastEntry structure for the command and entry,
+//then performs the reverse of the command
+string Planner::undo(void){
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD){
+		int lastEntryID = getNewId() - 1;
+		deleteIndex(lastEntryID);
+	}
+	else if (command == COMMAND_DELETE){
+		addTask(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_EDIT){
+		deleteIndex(lastEdit.addedTask.getIdNumber());
+		addTask(lastEdit.deletedTask);
+	}
+	else {
+		throw exception(ERROR_MESSAGE_INVALID_UNDO);
+	}
+
+	status = undoStatusToString();
+	checkListForClashes();
+	generateAllOtherList();
+
+	return status;
+}
+
+
+//Clears the All list and generates all other lists
+string Planner::clear(void){
+	string status;
+
+	All.clear();
+	assert(All.empty());
+	generateAllOtherList();
+	lastEntry.lastCommand = COMMAND_CLEAR;
+	
+	//logging
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_CLEAR_TASK_MSG);
+	status = clearStatusToString();
+
+	return status;
+}
+
+//Edit works by taking in the new edited version of the task
+// and deleting the existing task
+string Planner::editTask(int serialNumber, string nameOfList, string input){
+	Task newTask;
+	string validEditCheck;
+	string status;
+
+	newTask.addDetails(input);
+
+	validEditCheck = deleteTask(serialNumber, nameOfList);
+	if (validEditCheck == ERROR_MESSAGE_INVALID_INDEX) {
+		return ERROR_MESSAGE_INVALID_INDEX;														//UNHANDLED EXCEPTION****************************************************************************
+	}
+	else {
+		lastEdit.deletedTask = lastEntry.lastTask;
+		addTask(newTask);
+		lastEdit.addedTask = lastEntry.lastTask;
+		lastEntry.lastCommand = COMMAND_EDIT;
+
+		generateAllOtherList();
+
+		//logging
+		// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_EDIT_TASK_MSG);
+
+		status = editStatusToString();
+
+		return status;
+	}
+}
+
+
+//The view is taken in with the serial number
+//ID number of the task is retrieved using the view and serial number
+//Corresponding ID number is then marked as done
+string Planner::markDone(int serialNumber, string nameOfList){
+	int idNumber = 0;
+	string status;
+	list<Task> ::iterator taskIter;
+
+	if (nameOfList == HOME_LIST){
+		indexChecker(taskIter, serialNumber, homeList);
+		
+		idNumber = (*taskIter).getIdNumber();
+		assert(idNumber != 0);
+		status = markDoneIndex(idNumber);
+	}
+	else if (nameOfList == MISSED_LIST){
+		indexChecker(taskIter, serialNumber, missedList);
+
+		idNumber = (*taskIter).getIdNumber();
+		assert(idNumber != 0);
+		status = markDoneIndex(idNumber);
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		indexChecker(taskIter, serialNumber, upcomingList);
+
+		idNumber = (*taskIter).getIdNumber();
+		assert(idNumber != 0);
+		status = markDoneIndex(idNumber);
+	}
+	else{
+		throw exception(ERROR_MESSSAGE_INVALID_LIST_NAME);
+	}
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Function takes in the search target
+//passes the target to every task and checks if the target is present in the task
+//generates a list of all the tasks that return true
+string Planner::generateSearchList(string target){
+	list<Task> ::iterator taskIter;
+	Task targetTask;
+	string status;
+	
+	searchList.clear();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		targetTask = *taskIter;
+		if (targetTask.isSearchTargetPresent(target)){
+			searchList.push_back(targetTask);
+		}
+	}
+
+	status = searchStatusToString();
+
+	return status;
+}
+
+/************************************************************************************************
+
+Functions that returns Lists in string form
+
+************************************************************************************************/
+//Public Functions
+
+//returns the requested list in string form
+string Planner::toString(string nameOfList){
+	//convert the list to a string and return
+	string displayString;
+	if (nameOfList == HOME_LIST){
+		displayString = ListToString(homeList);
+	}
+	else if (nameOfList == UPCOMING_LIST){
+		displayString = ListToString(upcomingList);
+	}
+	else if (nameOfList == MISSED_LIST){
+		displayString = ListToString(missedList);
+	}
+	else if (nameOfList == SEARCH_LIST){
+		displayString = ListToString(searchList);
+	}
+	else if (nameOfList == DONE_LIST){
+		displayString = ListToString(doneList);
+	}
+	else displayString = ERROR_MESSSAGE_INVALID_LIST_NAME;														//UNHANDLED EXCEPTION **********************************************		
+
+	return displayString;
+}
+
+//returns the All list in string form
+string Planner::AllToString(void){
+	ostringstream out;
+	list<Task> ::iterator taskIter;
+	string displayString;
+	taskIter = All.begin();
+	int serialNumber = STARTING_SERIAL_NUMBER;
+	assert(serialNumber > 0);
+	if (!All.empty()){
+		for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
+			out << NEWLINE;
+			serialNumber++;
+		}
+	}
+	else {
+		out << EMPTY_LIST_MESSAGE << endl;
+	}
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+/************************************************************************************************
+
+Status Returning Functions
+
+************************************************************************************************/
+//Public Functions
+
+
+//returns the status after each command is successfully executed
+string Planner::statusToString(string command, Task theTask){
+	string displayString;
+	if (command == COMMAND_ADD){
+		displayString = addStatusToString(theTask);
+	}
+	else if (command == COMMAND_DELETE){
+		displayString = deleteStatusToString(theTask);
+	}
+	else if (command == COMMAND_EDIT){
+		displayString = editStatusToString();
+	}
+	else if (command == COMMAND_UNDO){
+		displayString = undoStatusToString();
+	}
+	else if (command == COMMAND_CLEAR){
+		displayString = clearStatusToString();
+	}
+	else if (command == COMMAND_SAVE){
+		displayString = saveStatusToString();
+	}
+	else if (command == COMMAND_DONE){
+		displayString = doneStatusToString();
+	}
+	else if (command == DUPLICATE_STATUS){
+		displayString = duplicateStatusToString(theTask);
+	}
+	else displayString = ERROR_MESSSAGE_INVALID_COMMAND;										//	UNHANDLED EXCEPTION*********************************************
+
+	return displayString;
+}
+
+
+//converts and returns all of the tasks in All to input format
+string Planner::saveDataToString(){
+	ostringstream out;
+	list<Task> ::iterator it;
+	it = All.begin();
+
+	if (!All.empty()){
+
+		for (it = All.begin(); it != All.end(); ++it){
+			out << (*it).getDescription();
+
+			switch ((*it).getNumOfDates()){
+			case 0:
+				break;
+			case 1:
+				out << "; date ";
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+				break;
+			case 2:
+				out << "; date ";
+				if ((*it).getDateStart().day < 10){
+					out << "0" << (*it).getDateStart().day;
+				}
+				else out << (*it).getDateStart().day;
+				if ((*it).getDateStart().month < 10){
+					out << "0" << (*it).getDateStart().month;
+				}
+
+				if ((*it).getDateStart().year < 10){
+					out << "0" << (*it).getDateStart().year << " ";
+				}
+				else out << (*it).getDateStart().year << " ";
+
+				out << " to ";
+
+				if ((*it).getDateEnd().day < 10){
+					out << "0" << (*it).getDateEnd().day;
+				}
+				else out << (*it).getDateEnd().day;
+				if ((*it).getDateEnd().month < 10){
+					out << "0" << (*it).getDateEnd().month;
+				}
+				if ((*it).getDateEnd().year < 10){
+					out << "0" << (*it).getDateEnd().year << " ";
+				}
+				else out << (*it).getDateEnd().year << " ";
+
+				break;
+			}
+
+			switch ((*it).getNumOfTimes()){
+			case 0:
+				break;
+			case 1:
+				out << "; time ";
+				out << (*it).getTimeStart();
+				break;
+			case 2:
+				out << "; time ";
+				out << (*it).getTimeStart() << " to ";
+				out << (*it).getTimeEnd();
+				break;
+			default:
+				throw exception(ERROR_MESSAGE_FATAL);
+			}
+
+
+			if ((*it).doneStatus() == true){
+				out << DONE_KEYWORD;
+			}
+
+			if ((*it).getImportance()){
+				out << IMPORTANCE_SYMBOL;
+			}
+
+			out << NEWLINE;
+
+		}
+
+	}
+	else out << "";
+
+	return out.str();
+}
+
+/************************************************************************************************
+
+Load Functions
+
+************************************************************************************************/
+//Public Functions
+
+
+//reads in all the tasks from the text file
+//adds in all the tasks into All
+void Planner::loadData(string data){
+	Task* loadTaskPtr;
+	string extractedSingleLine;
+	string doneKeyword = DONE_KEYWORD;
+	bool isTaskMarkedAsDone = false;
+	size_t start = 0, end = 0;
+
+	All.clear();
+
+	while (data.size()>0){
+		end = data.find_first_of("\n");
+		extractedSingleLine = data.substr(start, end - start);
+		if (extractedSingleLine.find(doneKeyword) != std::string::npos){
+			isTaskMarkedAsDone = true;
+			extractedSingleLine = extractedSingleLine.substr(0, extractedSingleLine.size() - 5);
+		}
+		data = data.substr(end + 1, data.size() - end);
+		loadTaskPtr = new Task;
+		(*loadTaskPtr).addDetails(extractedSingleLine);
+		if (isTaskMarkedAsDone){
+			(*loadTaskPtr).markIsDoneAsTrue();
+			isTaskMarkedAsDone = false;
+		}
+
+		addTask(*loadTaskPtr);
+
+		delete loadTaskPtr;
+		loadTaskPtr = NULL;
+	}
+}
+
+/************************************************************************************************
+
+Delete Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+
+//generates and ID to attach to task
+int Planner::getNewId(void){
+
+	static int generatedID;
+	if (All.empty()){
+		generatedID = 10001;
+	}
+	else generatedID++;
+	return generatedID;
+}
+
+//deletes task from the All list using the idNumber
+string Planner::deleteIndex(int idNumber){
+	list<Task> ::iterator taskIter, deleteTargetIter;
+	string status;
+
+	taskIter = All.begin();
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			deleteTargetIter = taskIter;
+		}
+	}
+
+	Task temp = *deleteTargetIter;
+	updateLastEntryStructure(COMMAND_DELETE, temp);
+
+	All.erase(deleteTargetIter);
+	status = statusToString(COMMAND_DELETE, temp);
+
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_DELETE_TASK_INTRO_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+/************************************************************************************************
+
+"Undo" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+
+//Updates the lastEntry Structure
+void Planner::updateLastEntryStructure(string command, Task theTask){
+
+	lastEntry.lastCommand = command;
+	lastEntry.lastTask = theTask;
+}
+
+/************************************************************************************************
+
+"Mark Done" Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+string Planner::markDoneIndex(int idNumber){
+	list<Task> ::iterator taskIter;
+	string status;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).getIdNumber() == idNumber){
+			(*taskIter).markIsDoneAsTrue();
+			status = statusToString(COMMAND_DONE, (*taskIter));
+			break;
+		}
+	}
+
+	checkListForClashes();
+	generateAllOtherList();
+
+	//logging
+	stringstream message;
+	message << LOG_FILE_MARK_DONE_MSG << idNumber;
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, message.str());
+
+	return status;
+}
+
+/************************************************************************************************
+
+Duplicate Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+
+bool Planner::isDuplicatePresent(Task newTask){
+	list<Task> ::iterator taskIter;
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (tasksAreTheSame(newTask, (*taskIter))){
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Planner::tasksAreTheSame(Task Task1, Task Task2){
+	bool same = true;
+	string descriptionOfTask1 = Task1.getDescription();
+	string descriptionOfTask2 = Task2.getDescription();
+
+	if (descriptionOfTask1 != descriptionOfTask2){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateStart(), Task2.getDateStart()))){
+		same = false;
+	}
+	if (!(Task1.areDatesTheSame(Task1.getDateEnd(), Task2.getDateEnd()))){
+		same = false;
+	}
+	if (Task1.getImportance() != Task2.getImportance()){
+		same = false;
+	}
+	if (Task1.getTimeEnd() != Task2.getTimeEnd()){
+		same = false;
+	}
+	if (Task1.getTimeStart() != Task2.getTimeStart()){
+		same = false;
+	}
+
+	return same;
+}
+
+/************************************************************************************************
+
+Clash Helper Functions
+
+************************************************************************************************/
+//Private Functions
+
+
+void Planner::clearClashList(){
+	list<Task> ::iterator taskIter;
+
+	taskIter = All.begin();
+	while (taskIter != All.end()){
+		(*taskIter).markClashAsFalse();
+		taskIter++;
+	}
+}
+
+
+void Planner::checkListForClashes(){
+	list<Task> ::iterator taskIter1, taskIter2;
+
+	clearClashList();
+
+	for (taskIter1 = All.begin(); taskIter1 != All.end(); ++taskIter1){
+		for (taskIter2 = taskIter1; taskIter2 != All.end(); ++taskIter2){
+			if (taskIter1 != taskIter2){
+				if (checkTaskForClashes((*taskIter1), (*taskIter2))){
+					(*taskIter1).markClashAsTrue();
+					(*taskIter2).markClashAsTrue();
+				}
+			}
+		}
+	}
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::descriptionOfTaskToString(Task theTask){
+	ostringstream out;
+	string displayString;
+
+	out << theTask.getDescription() << " ";
+
+	switch (theTask.getNumOfDates()){
+	case 0:
+		break;
+	case 1:
+		out << "Date: ";
+		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year;
+		out << " ";
+		break;
+	case 2:
+		out << "Date: ";
+		out << theTask.getDateStart().day << "/" << theTask.getDateStart().month << "/" << theTask.getDateStart().year;
+		out << " to ";
+		out << theTask.getDateEnd().day << "/" << theTask.getDateEnd().month << "/" << theTask.getDateEnd().year;
+		out << " ";
+		break;
+	}
+
+	switch (theTask.getNumOfTimes()){
+	case 0:
+		break;
+	case 1:
+		out << "Time: ";
+		out << setfill('0') << setw(4) << theTask.getTimeStart();
+		out << " ";
+		break;
+	case 2:
+		out << "Time: ";
+		out << setfill('0') << setw(4) << theTask.getTimeStart();
+		out << " to ";
+		out << setfill('0') << setw(4) << theTask.getTimeEnd();
+		out << " ";
+		break;
+	default:
+		throw exception(ERROR_MESSAGE_FATAL);
+	}
+
+
+
+	if (theTask.getImportance()){
+		out << IMPORTANCE_SYMBOL;
+	}
+
+	if (theTask.clashStatus() == true){
+		out << CLASH_KEYWORD;
+	}
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+
+string Planner::addStatusToString(Task theTask){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_ADD_INTRO;
+	out << descriptionOfTaskToString(theTask);
+
+	return out.str();
+}
+
+
+string Planner::deleteStatusToString(Task theTask){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_DELETE_INTRO;
+	out << descriptionOfTaskToString(theTask);
+
+	return out.str();
+}
+
+
+string Planner::editStatusToString(){
+	ostringstream out;
+
+	out << STATUS_TO_STRING_EDIT_INTRO;
+	out << descriptionOfTaskToString(lastEdit.deletedTask);
+	out << STATUS_TO_STRING_EDIT_MID;
+	out << descriptionOfTaskToString(lastEdit.addedTask);
+
+	return out.str();
+}
+
+
+string Planner::undoStatusToString(){
+	ostringstream out;
+	string status;
+	string command = lastEntry.lastCommand;
+
+	if (command == COMMAND_ADD) {
+		out << addStatusToString(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_DELETE) {
+		out << deleteStatusToString(lastEntry.lastTask);
+	}
+	else if (command == COMMAND_EDIT) {
+		out << editStatusToString();
+	}
+	else{
+		throw exception(ERROR_MESSAGE_INVALID_UNDO);
+	}
+
+	status = out.str();
+
+	return status;
+}
+
+
+string Planner::clearStatusToString(){
+	return STATUS_TO_STRING_CLEAR_MSG;
+}
+
+
+string Planner::saveStatusToString(){
+	return STATUS_TO_STRING_SAVE_MSG;
+}
+
+
+string Planner::searchStatusToString(){
+	return SEARCH_RESULTS_MSG;
+}
+
+
+string Planner::doneStatusToString(){
+	return STATUS_TO_STRING_DONE_MSG;
+}
+
+
+string Planner::duplicateStatusToString(Task theTask){
+	ostringstream out;
+	string status;
+
+	out << STATUS_TO_STRING_DUPLICATE_MSG;
+	out << descriptionOfTaskToString(theTask);
+	out << NEWLINE;
+
+	status = out.str();
+	return status;
+
+}
+
+/************************************************************************************************
+
+Lists Generating Functions
+
+************************************************************************************************/
+//Private Functions 
+
+void Planner::generateAllOtherList(void){
+	clearTheLists();
+	generateTheLists();
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+void Planner::generateDoneList(void){
+	list<Task> ::iterator taskIter;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if ((*taskIter).doneStatus() == true) {
+			doneList.push_back(*taskIter);
+		}
+	}
+}
+
+
+void Planner::clearTheLists(void){
+	homeList.clear();
+	missedList.clear();
+	upcomingList.clear();
+	doneList.clear();
+}
+
+
+void Planner::generateTheLists(void){
+	generateHomeList();
+	generateMissedList();
+	generateUpcomingList();
+	generateDoneList();
+}
+
+/************************************************************************************************
+
+Generator Logic Functions
+
+************************************************************************************************/
+//Private Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+string Planner::ListToString(list<Task> targetList){
+	ostringstream out;
+	list<Task> ::iterator taskIter;
+	int serialNumber = STARTING_SERIAL_NUMBER;
+	string displayString;
+
+	taskIter = targetList.begin();
+
+	if (!targetList.empty()){
+		for (taskIter = targetList.begin(); taskIter != targetList.end(); ++taskIter){
+			out << serialNumber;
+			out << ". ";
+			out << descriptionOfTaskToString(*(taskIter));
+			out << NEWLINE;
+			serialNumber++;
+		}
+	}
+	else out << EMPTY_LIST_MESSAGE << endl;
+
+	displayString = out.str();
+
+	return displayString;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAdd_oneTask)
+		{
+			Planner testPlanner;
+			Task testTask;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n";
+			testTask.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask);
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAdd_manyTasks)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 3 Time: 1900 \r\n2. Test task 1 Date: 1/2/3 Time: 1100 #impt\r\n3. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100 #impt"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			string actualOutput = testPlanner.AllToString();
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAdd_manyTasks_differentDates_noTime)
+		{
+			Planner testPlanner;
+			string expectedOutput = "1. Test task 3 Date: 2/4/15 \r\n2. Test task 1 Date: 3/4/15 \r\n3. Test task 2 Date: 4/4/15 \r\n";
+			Task testTask1, testTask2, testTask3;
+			testTask1.addDetails("Test task 1, date 030415"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 040415");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, date 020415"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			string actualOutput = testPlanner.AllToString();
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAdd_floating_Task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			bool doesFunctionWork = false;
+			testTask1.addDetails("Test task 1"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3");
+			testPlanner.addTask(testTask3);
+			string s;
+			s = testPlanner.toString("Home");
+			if (testPlanner.toString("Home") == "1. Test task 1 \r\n2. Test task 2 \r\n3. Test task 3 \r\n"){
+				doesFunctionWork = true;
+			}
+			else{
+				doesFunctionWork = false;
+			}
+
+			Assert::IsTrue(doesFunctionWork);
+		}
+
+		/************************************************************************************************
+
+		"Clear" Unit Test
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testClear)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string testDisplayString, hardcodedDisplayString = "There are no tasks here\n";
+			bool doesFunctionWork = false;
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.clear();
+			testDisplayString = testPlanner.AllToString();
+
+			Assert::AreEqual(hardcodedDisplayString, testDisplayString);
+		}
+		/************************************************************************************************
+
+		"Delete" Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testDelete_Missed_Delete_Task_1)
+		{
+			Planner testPlanner;
+			string expectedOutput = "1. Test task 2 Date: 11/3/15 to 12/3/15 \r\n2. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			Task testTask1, testTask2, testTask3;
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, date 130315, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.deleteTask(1, "Missed");
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testDelete_Missed_Delete_Task_2)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, date 130315, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.deleteTask(2, "Missed");
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+		/************************************************************************************************
+
+		"Edit" Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testEdit)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 EDITED Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n3. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, date 130315, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.editTask(1, "Missed", "Test task 1 EDITED, date 010203, time 1100");
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+		/************************************************************************************************
+
+		"Undo" Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testUndo_Add)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.undo();
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testUndo_Delete)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n3. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, date 130315, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.deleteTask(2, "Missed");
+			testPlanner.undo();
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testUndo_Edit)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n3. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, date 130315, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.editTask(1, "Missed", "Test task 1 EDITED; date 010203, time 1100");
+			testPlanner.undo();
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+		/************************************************************************************************
+
+		"Load" Unit Tests
+
+		************************************************************************************************/
+
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testLoad_Planner)
+		{
+			Planner testPlanner;
+			string expectedOutput = "1. Test task 3 Time: 1900 \r\n2. Test task 1 Date: 1/2/3 Time: 1100 \r\n3. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			string data;
+			data = "Test task 1, date 010203, time 1100\nTest task 2, date 110315 to 120315\nTest task 3, time 1900\n";
+			testPlanner.loadData(data);
+			string actualOutput = testPlanner.AllToString();
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+		/************************************************************************************************
+
+		"Done" Unit Tests
+
+		************************************************************************************************/
+
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testMark_Done_effect_on_missed_list_1_task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 3 Date: 13/3/15 Time: 1900 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, date 130315, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.markDone(2, "Missed");
+			string actualOutput = testPlanner.toString("Missed");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testMark_Done_effect_on_done_list_1_task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, date 130315, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.markDone(2, "Missed");
+			string actualOutput = testPlanner.toString("Done");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testMark_Done_effect_on_done_list_2_task)
+		{
+			Planner testPlanner;
+			Task testTask1, testTask2, testTask3;
+			string expectedOutput = "1. Test task 1 Date: 1/2/3 Time: 1100 \r\n2. Test task 2 Date: 11/3/15 to 12/3/15 \r\n";
+			testTask1.addDetails("Test task 1, date 010203, time 1100"); //assume Task.addDetail works
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 110315 to 120315");
+			testPlanner.addTask(testTask2);
+			testTask3.addDetails("Test task 3, time 1900"); //assume Task.addDetail works
+			testPlanner.addTask(testTask3);
+			testPlanner.markDone(2, "Missed");
+			testPlanner.markDone(1, "Missed");
+			string actualOutput = testPlanner.toString("Done");
+			Assert::AreEqual(expectedOutput, actualOutput);
+		}
+
+		/************************************************************************************************
+
+		"Clash" Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+//Return status of task. true it is marked as done
+bool Task::doneStatus(){
+	return _isDone;
+}
+
+/************************************************************************************************
+
+									Functions for recur
+
+************************************************************************************************/
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+//if task clashes with anther task in system, task is marked as true
+void Task::markClashAsTrue(){
+	_isClash = true;
+}
+
+//if a task is no longer clashing this is used to change the clash status
+void Task::markClashAsFalse(){
+	_isClash = false;
+}
+
+/************************************************************************************************
+
+				Information field checker functions (exception handling)
+
+************************************************************************************************/
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+//returns status of clash
+bool Task::clashStatus(){
+	if (_isClash == true){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+//returns true if the dates are exactly the same
+bool Task::areDatesTheSame(taskDate Date1, taskDate Date2){
+	bool same = true;
+
+	if (Date1.day != Date2.day){
+		same = false;
+	}
+	if (Date1.month != Date2.month){
+		same = false;
+	}
+	if (Date1.year != Date2.year){
+		same = false;
+	}
+
+	return same;
+}
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+

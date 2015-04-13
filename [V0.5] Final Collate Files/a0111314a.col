@@ -1,0 +1,1325 @@
+//@author: a0111314a
+
+
+
+	/**
+	 * origin: D:\Code\CodedUITest1.vb
+	 */
+
+    'Test for a series of additions with different information fields
+    <TestMethod()>
+    Public Sub systemTest_add()
+
+        Me.UIMap.addTest_details_date_time_clash()
+        Me.UIMap.assert_addTest_details_date_time_clash()
+
+    End Sub
+    'Test for delete function on entries in home view. Assert correct display result
+    <TestMethod()>
+    Public Sub systemTest_delete_home()
+
+        Me.UIMap.delete_test_in_home()
+        Me.UIMap.assert_delete_test_in_home()
+
+    End Sub
+    'Test for edit function on entries in home view. Assert correct prompt
+    <TestMethod()>
+    Public Sub systemTest_edit_prompt()
+
+        Me.UIMap.edit_test_in_home()
+        Me.UIMap.assert_edit_test_prompt()
+
+    End Sub
+    'Test for combination of functions: undo and edit in missed view. Assert correct prompt
+    <TestMethod()>
+    Public Sub systemTest_undo_edit_prompt()
+
+        Me.UIMap.systemTest_missed_alert_undo_edit()
+        Me.UIMap.assert_prompt_systemTest_missed_alert_undo_edit()
+
+
+    End Sub
+    'Test for combination of functions: undo and edit in missed view. Assert correct display
+    <TestMethod()>
+    Public Sub systemTest_undo_edit_display()
+
+        Me.UIMap.systemTest_missed_alert_undo_edit()
+        Me.UIMap.assert_display_missed_alert_undo_edit()
+
+    End Sub
+#Region "Additional test attributes"
+        '
+        ' You can use the following additional attributes as you write your tests:
+        '
+        '' Use TestInitialize to run code before running each test
+        '<TestInitialize()> Public Sub MyTestInitialize()
+        '    '
+        '    ' To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
+        '    '
+        'End Sub
+
+        '' Use TestCleanup to run code after each test has run
+        '<TestCleanup()> Public Sub MyTestCleanup()
+        '    '
+        '    ' To generate code for this test, select "Generate Code for Coded UI Test" from the shortcut menu and select one of the menu items.
+        '    '
+        'End Sub
+
+#End Region
+
+        '''<summary>
+        '''Gets or sets the test context which provides
+        '''information about and functionality for the current test run.
+        '''</summary>
+        Public Property TestContext() As TestContext
+            Get
+                Return testContextInstance
+            End Get
+            Set(ByVal value As TestContext)
+                testContextInstance = Value
+            End Set
+        End Property
+
+        Private testContextInstance As TestContext
+
+    Public ReadOnly Property UIMap As SystemTestGUI.UIMap
+        Get
+            If (Me.map Is Nothing) Then
+                Me.map = New SystemTestGUI.UIMap()
+            End If
+
+            Return Me.map
+        End Get
+    End Property
+    Private map As SystemTestGUI.UIMap
+End Class
+
+	// End of segment: D:\Code\CodedUITest1.vb
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Logic.cpp
+	 */
+
+//Function checks the Missed list to see if there are any tasks there. If there are, return true. 
+bool Logic::checkMissedStatus(){
+	bool missedPresent = false;
+
+	if (!_myPlanner.isMissedEmpty()){
+		missedPresent = true;
+	}
+
+	return missedPresent;
+}
+	// End of segment: D:\Code\Logic.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//variable currentDate is initialized to the system date when Planner4Life is opened
+Planner::Planner(){
+	time_t currentTime = time(0);
+	struct tm * now = localtime(&currentTime);			//get local time
+	currentDate.year = (now->tm_year - 100);	//last 2 digits of year
+	currentDate.month = (now->tm_mon + 1);		//month: jan = 1, feb = 2 etc
+	currentDate.day = (now->tm_mday);
+
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_PLANNER_CREATION_MSG);
+}
+
+/************************************************************************************************
+
+Command Functions
+
+************************************************************************************************/
+//Public Functions
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Function checks if an index is valid (exists and has been assigned to a task) and returns true if it is
+void Planner::indexChecker(list<Task>::iterator& taskIter, int serialNumber, list<Task>& targetList){
+	int indexCount = STARTING_SERIAL_NUMBER;
+	bool isValidIndex = true;
+
+	taskIter = targetList.begin();
+	for (size_t i = 1; i != serialNumber && i < targetList.size(); i++){
+		taskIter++;
+		indexCount++;
+	}
+
+	try{
+		if (indexCount != serialNumber || targetList.empty()) {
+			throw exception(ERROR_MESSAGE_INVALID_INDEX);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Function generates an iterator that goes through all tasks and checks if it belongs in HomeList. 
+//if yes, it pushes it into the list. 
+void Planner::generateHomeList(void){
+	list<Task> ::iterator taskIter;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (isHome(currentDate, taskIter)) {
+			homeList.push_back(*taskIter);
+		}
+	}
+}
+
+
+//Function generates an iterator that goes through all tasks and checks if it belongs in UpcomingList. 
+//if yes, it pushes it into the list. 
+void Planner::generateUpcomingList(void){
+	list<Task> ::iterator taskIter;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (isUpcoming(currentDate, taskIter)) {
+			upcomingList.push_back(*taskIter);
+		}
+	}
+}
+
+
+//Function generates an iterator that goes through all tasks and checks if it belongs in MissedList. 
+//if yes, it pushes it into the list. 
+void Planner::generateMissedList(void){
+	list<Task> ::iterator taskIter;
+
+	for (taskIter = All.begin(); taskIter != All.end(); ++taskIter){
+		if (isMissed(currentDate, taskIter)) {
+			missedList.push_back(*taskIter);
+		}
+	}
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Function checks if task should be included in Home view and returns true if it is.
+bool Planner::isHome(taskDate currentDate, list<Task>::iterator taskIter) {
+	bool isWithinHome = false;
+	int startDay, startMonth, startYear;
+	int endDay, endMonth, endYear;
+
+	startDay = (*taskIter).getDateStart().day;
+	startMonth = (*taskIter).getDateStart().month;
+	startYear = (*taskIter).getDateEnd().year;
+	endDay = (*taskIter).getDateEnd().day;
+	endMonth = (*taskIter).getDateEnd().month;
+	endYear = (*taskIter).getDateEnd().year;
+
+	//case 1: accept if start date is within the next 7 days
+	if (checkHomeDate(currentDate, startDay, startMonth, startYear)){
+		isWithinHome = true;
+	}
+
+	//case 2: accept if end date is within the next 7 days
+	if (checkHomeDate(currentDate, endDay, endMonth, endYear)){
+		isWithinHome = true;
+	}
+
+	//case 3: floating task
+	if ((*taskIter).getNumOfDates() == 0) {
+		isWithinHome = true;
+	}
+
+	//case 4: reject if task is done
+	if ((*taskIter).doneStatus()){
+		isWithinHome = false;
+	}
+
+	return isWithinHome;
+}
+
+//Function checks that task date is within 7 days of current date. Assume 30 days in a month
+bool Planner::checkHomeDate(taskDate currentDate, int day, int month, int year){
+	bool isWithinHome = false;
+
+	//case 1: currentDate + 7 days = same month, same year
+	if (currentDate.day <= 23) {
+		if (month == currentDate.month) {
+			if (day <= (currentDate.day + 7) && day >= currentDate.day) {
+				if (year == currentDate.year) {
+					isWithinHome = true;
+				}
+			}
+		}
+	}
+
+	//case 2: currentDate + 7 days = next month, task = current month, not in december
+	else if (month == currentDate.month) {
+		if (year == currentDate.year) {
+			if (day <= 30 && day >= currentDate.day) {
+				isWithinHome = true;
+			}
+		}
+	}
+
+	//case 3:  currentDate + 7 days = next month, task = next month, not december
+	else if (month == (currentDate.month + 1)) {
+		if (year == currentDate.year) {
+			if (day < (7 - (30 - currentDate.day))) {
+				isWithinHome = true;
+			}
+		}
+	}
+
+	//case 4: current date + 7 days = next month, december
+	else if (year == (currentDate.year + 1)) {
+		if (month == 1) {
+			if (day < (7 - (30 - currentDate.day))) {
+				isWithinHome = true;
+			}
+		}
+	}
+
+	return isWithinHome;
+}
+
+
+//Function checks if tsk should be in Missed view and returns true if it is
+bool Planner::isMissed(taskDate currentDate, list<Task>::iterator taskIter) {
+	bool isWithinMissed = false;
+	int endDay, endMonth, endYear;
+
+	endDay = (*taskIter).getDateEnd().day;
+	endMonth = (*taskIter).getDateEnd().month;
+	endYear = (*taskIter).getDateEnd().year;
+
+	//case 1: reject if date has not passed
+	if (checkMissedDate(currentDate, endDay, endMonth, endYear)){
+		isWithinMissed = true;
+	}
+
+	//case 2: reject floating tasks
+	if ((*taskIter).getNumOfDates() == 0) {
+		isWithinMissed = false;
+	}
+
+	//case 3: reject tasks that are already done
+	if ((*taskIter).doneStatus()){
+		isWithinMissed = false;
+	}
+
+	return isWithinMissed;
+}
+
+
+//Function checks if task date has passed
+bool Planner::checkMissedDate(taskDate currentDate, int endDay, int endMonth, int endYear){
+	bool isWithinMissed = false;
+
+	//case 1: accept if passed year
+	if (endYear < currentDate.year) {
+		isWithinMissed = true;
+	}
+
+	//case 2: accept if same year, passed month
+	else if (endYear == currentDate.year) {
+		if (endMonth < currentDate.month) {
+			isWithinMissed = true;
+
+		}//case 3: accept if same year, same month, passed day
+		else if (endMonth == currentDate.month) {
+			if (endDay < currentDate.day) {
+				isWithinMissed = true;
+			}
+		}
+	}
+
+	return isWithinMissed;
+}
+
+
+//Function checks if task should be in Upcoming view and returns true if it is.
+bool Planner::isUpcoming(taskDate currentDate, list<Task>::iterator taskIter){
+	bool isWithinUpcoming = true;
+
+	//case 1: reject if task is in home
+	if (isHome(currentDate, taskIter)){
+		isWithinUpcoming = false;
+	}
+
+	//case 2: reject if task is in missed
+	if (isMissed(currentDate, taskIter)){
+		isWithinUpcoming = false;
+	}
+
+	//case 3: reject floating tasks
+	if ((*taskIter).getNumOfDates() == 0) {
+		isWithinUpcoming = false;
+	}
+
+	//case 4: reject tasks that are already done
+	if ((*taskIter).doneStatus()){
+		isWithinUpcoming = false;
+	}
+
+	return isWithinUpcoming;
+}
+
+/************************************************************************************************
+
+List Returning Functions
+
+************************************************************************************************/
+//Private Functions
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner.cpp
+	 */
+
+//Function checks if missed list is empty. If it is not, return false.
+bool Planner::isMissedEmpty(){
+	bool missedEmpty = true;
+
+	if (!missedList.empty()){
+		missedEmpty = false;
+	}
+
+	return missedEmpty;
+}
+
+	// End of segment: D:\Code\Planner.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4LifeGUI.h
+	 */
+
+	private:
+
+		//UI operation elements
+		Logic* _plannerLogic;
+		String^ _currentView;
+		bool _clearTrigger;
+
+		//GUI elements
+		System::Windows::Forms::TextBox^  displayWindow;
+		System::Windows::Forms::TextBox^  userInput;
+		System::Windows::Forms::Button^  missedButton;
+		System::Windows::Forms::Button^  upcomingButton;
+		System::Windows::Forms::Button^  homeButton;
+		System::Windows::Forms::Label^  status;
+
+		//constant strings
+		String^ VIEWTYPE_HOME = "Home";
+		String^ VIEWTYPE_UPCOMING = "Upcoming";
+		String^ VIEWTYPE_MISSED = "Missed";
+		String^ VIEWTYPE_HELP = "Help";
+		String^ VIEWTYPE_ALL = "All";
+		String^ VIEWTYPE_DONE = "Done";
+		String^ VIEWTYPE_SEARCH = "Search";
+
+		String^ COMMAND_HOME = "home";
+		String^ COMMAND_UPCOMING = "upcoming";
+		String^ COMMAND_MISSED = "missed";
+		String^ COMMAND_HELP = "help";
+		String^ COMMAND_ALL = "all";
+		String^ COMMAND_SHOW_DONE = "show done";
+		String^ COMMAND_SEARCH = "search";
+		String^ COMMAND_EXIT = "exit";
+		String^ COMMAND_CLEAR = "clear";
+		String^ COMMAND_Y = "Y";
+		String^ COMMAND_N = "N";
+		String^ COMMAND_y = "y";
+		String^ COMMAND_n = "n";
+		String^ STATUS_CLEAR_PROMPT = "Are you sure you want to clear? Enter <Y> to confirm or <N> to cancel";
+
+		//Designer variable.
+		System::ComponentModel::Container ^components;
+
+	public:
+		GUI(void){
+			InitializeComponent();
+			//Add the constructor code here
+			_plannerLogic = new Logic;
+			_currentView = VIEWTYPE_HOME;
+			_clearTrigger = false;
+		}
+
+	protected:
+		/// Clean up any resources being used.
+		~GUI(){
+			if (components)	{
+				delete components;
+				delete _plannerLogic;
+				delete _currentView;
+			}
+		}
+
+	// End of segment: D:\Code\Planner4LifeGUI.h
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Planner4LifeGUI.h
+	 */
+
+		/************************************************************************************************
+
+												Initialization
+
+		************************************************************************************************/
+
+		//Function to initialize beginning state of Planner4Life to home screen with loadFile prompt
+	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
+		string strStatus = _plannerLogic->displayStatus();
+
+		executeHome(sender, e);
+		status->Text = gcnew String(strStatus.c_str());
+		missedAlertCheck();
+	}
+
+		/************************************************************************************************
+
+											 GUI control functions
+
+		************************************************************************************************/
+
+			 //Handler function that takes in user input and directs it to the different GUI operations
+	private: System::Void userInput_Process(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+		string searchCheck, clearCommand;
+		String^ input = userInput->Text;
+
+		searchCheck = msclr::interop::marshal_as<std::string>(input);
+
+		if (e->KeyCode == Keys::Enter) {
+			e->Handled = true;
+
+			if (input == COMMAND_HOME) {
+				executeHome(sender, e);
+			}
+			else if (input == COMMAND_MISSED) {
+				executeMissed(sender, e);
+			}
+			else if (input == COMMAND_UPCOMING) {
+				executeUpcoming(sender, e);
+			}
+			else if (input == COMMAND_HELP) {
+				executeHelp();
+			}
+			else if (input == COMMAND_SHOW_DONE) {
+				executeDone();
+			}
+			else if (input == COMMAND_ALL) {
+				executeAll();
+			}
+			else if (input == COMMAND_EXIT) {
+				executeExit();
+			}
+			else if (input == COMMAND_CLEAR) {
+				activateCleartrigger();
+			}
+			else if ((input == COMMAND_Y || input == COMMAND_N || input == COMMAND_y || input == COMMAND_n) && _clearTrigger == true) {
+				executeClear();
+			}
+			else if (searchCheck.find("search") != string::npos) {
+				executeSearch();
+			}
+			else {
+				processInput(input, _currentView);
+			}
+
+			userInput->Text = "";
+		}
+	}
+
+			 // Parent function to process all user input, pass to Logic and receive a return display and user prompt. All user input goes through 
+			 // this function, but some specific commands (ie search, show done) require setup of UI state before processing. Their functions 
+			 // are listed below
+	private: System::Void processInput(String^ managedInput, String^ managedView) {
+
+		assert(managedView == VIEWTYPE_HOME || managedView == VIEWTYPE_MISSED || managedView == VIEWTYPE_UPCOMING || managedView == VIEWTYPE_ALL || 
+			managedView == VIEWTYPE_DONE || managedView == VIEWTYPE_HELP || managedView == VIEWTYPE_SEARCH);
+
+		String^ StrDisplay;
+		String^ StrStatus;
+		string strDisplay, strStatus;
+		string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
+		string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
+
+		_plannerLogic->processUserInput(unmanagedInput, unmanagedView);
+		missedAlertCheck();
+
+		strDisplay = _plannerLogic->displayContent();
+		strStatus = _plannerLogic->displayStatus();
+
+		StrDisplay = gcnew String(strDisplay.c_str());
+		displayWindow->Text = StrDisplay;
+		StrStatus = gcnew String(strStatus.c_str());
+		status->Text = StrStatus;
+	}
+
+			 //Function to execute 'help' command'
+	private: System::Void executeHelp() {
+		_currentView = VIEWTYPE_HELP;
+		processInput(userInput->Text, _currentView);
+		colourSwitch(_currentView);
+	}
+
+			 //Function to execute 'show done' command
+	private: System::Void executeDone() {
+		_currentView = VIEWTYPE_DONE;
+		processInput(userInput->Text, _currentView);
+		colourSwitch(_currentView);
+	}
+
+			 // Function to execute 'all' command
+	private: System::Void executeAll() {
+		_currentView = VIEWTYPE_ALL;
+		processInput(userInput->Text, _currentView);
+		colourSwitch(_currentView);
+	}
+
+			 //Function to execute 'exit' command
+	private: System::Void executeExit() {
+		Application::Exit();
+	}
+
+			 //Function to set up preliminary action for 'clear' operation - warns user and sets the UI state to allow 'clear' command
+	private: System::Void activateCleartrigger() {
+
+		assert(_clearTrigger == false);
+
+		status->Text = STATUS_CLEAR_PROMPT;
+		_clearTrigger = true;
+	}
+
+			 //Function to execute 'clear' operation. appends clear command together with confirmation response and passes to Logic. 
+			 //Thereafter resets UI state to disallow immediate 'clear' on command. 
+	private: System::Void executeClear() {
+
+		assert(_clearTrigger == true);
+
+		_currentView = VIEWTYPE_HOME;
+		switchView(_currentView);
+
+		String^ StrDecision = "clear ";
+		StrDecision = StrDecision + userInput->Text;
+
+		processInput(StrDecision, _currentView);
+		_clearTrigger = false;
+	}
+
+			 //Function to execute 'search' operation
+	private: System::Void executeSearch() {
+		_currentView = VIEWTYPE_SEARCH;
+		processInput(userInput->Text, _currentView);
+		colourSwitch(_currentView);
+	}
+
+			 /************************************************************************************************
+
+			 GUI view functions
+
+			 ************************************************************************************************/
+
+			 //Function to control the colour of buttons depending on the view type. Views that are not Home, Upcoming or Missed
+			 // are not specially highlighted.
+	private: System::Void colourSwitch(String^ _currentView) {
+
+		assert(_currentView == VIEWTYPE_HOME || _currentView == VIEWTYPE_MISSED || _currentView == VIEWTYPE_UPCOMING || _currentView == VIEWTYPE_ALL ||
+			_currentView == VIEWTYPE_DONE || _currentView == VIEWTYPE_HELP || _currentView == VIEWTYPE_SEARCH);
+
+		if (_currentView == VIEWTYPE_HOME) {
+			homeButton->BackColor = Color::LightSkyBlue;
+			missedButton->BackColor = Color::SteelBlue;
+			upcomingButton->BackColor = Color::SteelBlue;
+		}
+		else if (_currentView == VIEWTYPE_UPCOMING) {
+			upcomingButton->BackColor = Color::LightSkyBlue;
+			missedButton->BackColor = Color::SteelBlue;
+			homeButton->BackColor = Color::SteelBlue;
+		}
+		else if (_currentView == VIEWTYPE_MISSED) {
+			missedButton->BackColor = Color::LightSkyBlue;
+			upcomingButton->BackColor = Color::SteelBlue;
+			homeButton->BackColor = Color::SteelBlue;
+		}
+		else {
+			missedButton->BackColor = Color::SteelBlue;
+			upcomingButton->BackColor = Color::SteelBlue;
+			homeButton->BackColor = Color::SteelBlue;
+		}
+	}
+
+			 //Function to check if there are any missed tasks. If there are, "Missed" button text becomes red to alert user
+	private: System::Void missedAlertCheck(){
+		bool areMissedTasks = _plannerLogic->checkMissedStatus();
+
+		if (areMissedTasks){
+			missedButton->ForeColor = Color::IndianRed;
+		}
+		else{
+			missedButton->ForeColor = SystemColors::ControlText;
+		}
+	}
+
+			 //Function to switch the view type of the GUI between Home, Upcoming and Missed. differes from processInput in that it does not 
+			 //perform any processing
+	private: System::Void switchView(String^ viewType) {
+		string unmanagedView = msclr::interop::marshal_as<std::string>(viewType);
+
+		_plannerLogic->updateDisplay(unmanagedView);
+
+		string strDisplay = _plannerLogic->displayContent();
+		displayWindow->Text = gcnew String(strDisplay.c_str());
+		colourSwitch(_currentView);
+	}
+
+			 //Function to execute view change to Home view
+	private: System::Void executeHome(System::Object^  sender, System::EventArgs^  e) {
+		_currentView = VIEWTYPE_HOME;
+		switchView(_currentView);
+		status->Text = VIEWTYPE_HOME;
+	}
+
+			 //Function to execute view change to Upcoming view
+	private: System::Void executeUpcoming(System::Object^  sender, System::EventArgs^  e) {
+		_currentView = VIEWTYPE_UPCOMING;
+		switchView(_currentView);
+		status->Text = VIEWTYPE_UPCOMING;
+	}
+
+			 //Function to execute view change to Missed view
+	private: System::Void executeMissed(System::Object^  sender, System::EventArgs^  e) {
+		_currentView = VIEWTYPE_MISSED;
+		switchView(_currentView);
+		status->Text = VIEWTYPE_MISSED;
+	}
+	};
+}
+	// End of segment: D:\Code\Planner4LifeGUI.h
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testClash_2date2time) {
+			Planner testPlanner;
+			Task testTask1, testTask2;
+			string finalOutput, hardcodedOutput;
+
+			testTask1.addDetails("Test task 1, date 050415 to 070415, time 1100 to 1300");
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 050415 to 070415, time 1000 to 1200");
+			testPlanner.addTask(testTask2);
+			finalOutput = testPlanner.toString("Missed");
+			hardcodedOutput = "1. Test task 2 Date: 5/4/15 to 7/4/15 Time: 1000 to 1200  TASK CLASH !!!\r\n2. Test task 1 Date: 5/4/15 to 7/4/15 Time: 1100 to 1300  TASK CLASH !!!\r\n";
+
+			Assert::AreEqual(hardcodedOutput, finalOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testClash_2date1time) {
+			Planner testPlanner;
+			Task testTask1, testTask2;
+			string finalOutput, hardcodedOutput;
+
+			testTask1.addDetails("Test task 1, date 050415 to 070415, time 1200");
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 050415 to 070415, time 1200");
+			testPlanner.addTask(testTask2);
+			finalOutput = testPlanner.toString("Missed");
+			hardcodedOutput = "1. Test task 1 Date: 5/4/15 to 7/4/15 Time: 1200  TASK CLASH !!!\r\n2. Test task 2 Date: 5/4/15 to 7/4/15 Time: 1200  TASK CLASH !!!\r\n";
+
+			Assert::AreEqual(hardcodedOutput, finalOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testClash_1date1time) {
+			Planner testPlanner;
+			Task testTask1, testTask2;
+			string finalOutput, hardcodedOutput;
+
+			testTask1.addDetails("Test task 1, date 070415, time 1200");
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 070415, time 1200");
+			testPlanner.addTask(testTask2);
+			finalOutput = testPlanner.toString("Missed");
+			hardcodedOutput = "1. Test task 1 Date: 7/4/15 Time: 1200  TASK CLASH !!!\r\n2. Test task 2 Date: 7/4/15 Time: 1200  TASK CLASH !!!\r\n";
+
+			Assert::AreEqual(hardcodedOutput, finalOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testClash_1date2time) {
+			Planner testPlanner;
+			Task testTask1, testTask2;
+			bool doesFunctionWork;
+			string finalOutput, hardcodedOutput;
+
+			testTask1.addDetails("Test task 1, date 070415, time 1000 to 1200");
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 070415, time 1100 to 1300");
+			testPlanner.addTask(testTask2);
+			finalOutput = testPlanner.toString("Missed");
+			hardcodedOutput = "1. Test task 1 Date: 7/4/15 Time: 1000 to 1200  TASK CLASH !!!\r\n2. Test task 2 Date: 7/4/15 Time: 1100 to 1300  TASK CLASH !!!\r\n";
+			Assert::AreEqual(hardcodedOutput, finalOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testClash_12date1time) {
+			Planner testPlanner;
+			Task testTask1, testTask2;
+			bool doesFunctionWork;
+			string finalOutput, hardcodedOutput;
+
+			testTask1.addDetails("Test task 1, date 060415, time 1200");
+			testTask2.addDetails("Test task 2, date 050415 to 070415, time 1200");
+			testPlanner.addTask(testTask1);
+			testPlanner.addTask(testTask2);
+
+			finalOutput = testPlanner.toString("Missed");
+			hardcodedOutput = "1. Test task 2 Date: 5/4/15 to 7/4/15 Time: 1200  TASK CLASH !!!\r\n2. Test task 1 Date: 6/4/15 Time: 1200  TASK CLASH !!!\r\n";
+			Assert::AreEqual(hardcodedOutput, finalOutput);
+		}
+
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\PlannerPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testClash_12date2time) {
+			Planner testPlanner;
+			Task testTask1, testTask2;
+			bool doesFunctionWork;
+			string finalOutput, hardcodedOutput;
+
+			testTask1.addDetails("Test task 1, date 060415, time 1000 to 1200");
+			testPlanner.addTask(testTask1);
+			testTask2.addDetails("Test task 2, date 050415 to 070415, time 1100 to 1300");
+			testPlanner.addTask(testTask2);
+
+			finalOutput = testPlanner.toString("Missed");
+			hardcodedOutput = "1. Test task 2 Date: 5/4/15 to 7/4/15 Time: 1100 to 1300  TASK CLASH !!!\r\n2. Test task 1 Date: 6/4/15 Time: 1000 to 1200  TASK CLASH !!!\r\n";
+			Assert::AreEqual(hardcodedOutput, finalOutput);
+
+		}
+	};
+}
+	// End of segment: D:\Code\PlannerPositiveUnitTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+//Function processes input that contains a start and end date. Also checks if date is valid before storing and setting _numOfDates.
+void Task::processTwoDates(string startDate, string endDate){
+	try{
+		if (areValidDates(startDate, endDate)){
+			storeStartDate(startDate);
+			storeEndDate(endDate);
+			_numOfDates = 2;
+		}
+		else{
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+}
+
+//Function processes input that contains only one date. Same date is stored in start and end date variables for consistency. 
+// Also checks if date is valid before storing and setting _numOfDates.
+void Task::processOneDate(string endDate){
+	try{
+		if (areValidDates(endDate, endDate)){
+			storeEndDate(endDate);
+			storeStartDate(endDate);
+			_numOfDates = 1;
+		}
+		else{
+			throw exception(ERROR_MESSAGE_INVALID_INPUT);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
+
+}
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+//Takes in start time as a string, checks validity, and converts it to integer before storing into relevant attributes in Task object
+void Task::storeStartTime(string time) {
+
+	try {
+		_timeStart = stoi(time);
+	}
+	catch (invalid_argument& error){
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
+	}
+
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, TIME_ADDED);
+}
+
+//Takes in end time as a string, checks validity, and converts it to integer before storing into relevant attributes in Task object
+void Task::storeEndTime(string time) {
+	try {
+		_timeEnd = stoi(time);
+	}
+	catch (invalid_argument& error){
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
+	}
+
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, TIME_ADDED);
+}
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\Task.cpp
+	 */
+
+//Parent function for date validity checking. Checks for date length, relative start and end dates and valid date figures. 
+bool Task::areValidDates(string startDate, string endDate){
+	bool areDatesValid = false;
+
+	if (correctDateLength(startDate) && correctDateLength(endDate)){
+		if (isValidDate(startDate) && isValidDate(endDate)){
+			if (startDateBeforeEndDate(startDate, endDate)){
+				areDatesValid = true;
+			}
+		}
+	}
+
+	return areDatesValid;
+}
+
+//Function to check for valid date length (6 digit format)
+bool Task::correctDateLength(string date){
+	bool isCorrectDateLength = false;
+
+	if (date.size() == 6){
+		isCorrectDateLength = true;
+	}
+	return isCorrectDateLength;
+}
+
+//Function to check that entered start date comes before entered end date.
+bool Task::startDateBeforeEndDate(string startDate, string endDate) {
+	bool isStartBeforeEnd = true;
+	int startDay, startMonth, startYear;
+	int endDay, endMonth, endYear;
+
+	splitDate(startDate, startDay, startMonth, startYear);
+	splitDate(endDate, endDay, endMonth, endYear);
+
+	//case 1: passed year
+	if (endYear < startYear) {
+		isStartBeforeEnd = false;
+	}
+	//case 2: same year, passed month
+	else if (endYear == startYear) {
+		if (endMonth < startMonth) {
+			isStartBeforeEnd = false;
+		}//case 3: same year, same month, passed day
+		else if (endMonth == startMonth) {
+			if (endDay < startDay) {
+				isStartBeforeEnd = false;
+			}
+		}
+	}
+
+	return isStartBeforeEnd;
+}
+
+//Function to check that date is valid in calendar (max 31 days, 12 months etc)
+bool Task::isValidDate(string date) {
+	bool dateIsValid = false;
+	int day, month, year;
+
+	splitDate(date, day, month, year);
+
+	//every case
+	if (day >= 1 && day <= 31){
+		if (month >= 1 && month <= 12){
+			dateIsValid = true;
+		}
+	}
+
+	//case for february
+	if (month == 2){
+		if (day > 28){
+			dateIsValid = false;
+		}
+	}
+
+	return dateIsValid;
+}
+
+//Function to check validity of start and end times. Checks for valid integer values and relative start and end times.
+bool Task::areValidTimes(string timeStart, string timeEnd){
+	bool areTimesValid = false;
+	int intTimeStart, intTimeEnd;
+
+	try {
+		intTimeStart = stoi(timeStart);
+		intTimeEnd = stoi(timeEnd);
+	}
+	catch (invalid_argument& error){
+		throw exception(ERROR_MESSAGE_INVALID_INPUT);
+	}
+
+	if (isValidTime(intTimeStart) && (isValidTime(intTimeEnd))){
+		if (startTimeBeforeEndTime(intTimeStart, intTimeEnd)){
+			areTimesValid = true;
+		}
+	}
+
+	return areTimesValid;
+}
+
+// Function that checks that time entered is between 0000 and 2359. 2400 is considered as 0000
+bool Task::isValidTime(int time){
+	bool timeIsValid = false;
+
+	if (time >= 0 && time <= 2359){
+		timeIsValid = true;
+	}
+
+	return timeIsValid;
+}
+
+//Function that checks that designated start time is before designated end time
+bool Task::startTimeBeforeEndTime(int startTime, int endTime){
+	bool isStartTimeBeforeEndTime = false;
+
+	if (startTime <= endTime){
+		isStartTimeBeforeEndTime = true;
+	}
+
+	return isStartTimeBeforeEndTime;
+}
+
+	// End of segment: D:\Code\Task.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Code\TaskPositiveUnitTest.cpp
+	 */
+
+		TEST_METHOD(testAddDetails_Description_normal){
+			Task testTask;
+			string testControlDescription = "Meeting in school", testDescription;
+
+			testTask.addDetails("Meeting in school, date 270315 to 290315, time 1300 to 1500");
+			testDescription = testTask.getDescription();
+
+			Assert::AreEqual(testControlDescription, testDescription);
+		}
+
+		TEST_METHOD(testAddDetails_Description_whitespace){
+			Task testTask;
+			string testControlDescription = "  ", testDescription;
+
+			testTask.addDetails("  , date 270315 to 290315, time 1300 to 1500");
+			testDescription = testTask.getDescription();
+
+			Assert::AreEqual(testControlDescription, testDescription);
+		}
+
+		TEST_METHOD(testAddDetails_Description_blankDelimiter){
+			Task testTask;
+			string testControlDescription = "", testDescription;
+
+			testTask.addDetails(", date 270315 to 290315, time 1300 to 1500");
+			testDescription = testTask.getDescription();
+
+			Assert::AreEqual(testControlDescription, testDescription);
+		}
+
+		/************************************************************************************************
+
+													Date Unit Tests
+
+		************************************************************************************************/
+
+		TEST_METHOD(testStoreStartDate_Date_startDay){
+			taskDate dateStartControl;
+			Task testTask;
+			int testTaskDay;
+
+			dateStartControl.day = 15;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
+			testTaskDay = testTask.getDateStart().day;
+
+			Assert::AreEqual(dateStartControl.day, testTaskDay);
+		}
+
+		TEST_METHOD(testStoreStartDate_Date_startMonth){
+			taskDate dateStartControl;
+			Task testTask;
+			int testTaskMonth;
+
+			dateStartControl.month = 3;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
+			testTaskMonth = testTask.getDateStart().month;
+
+			Assert::AreEqual(dateStartControl.month, testTaskMonth);
+		}
+
+		TEST_METHOD(testStoreStartDate_Date_startYear){
+			taskDate dateStartControl;
+			Task testTask;
+
+			dateStartControl.year = 15;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
+
+			Assert::AreEqual(dateStartControl.year, testTask.getDateStart().year);
+		}
+
+		TEST_METHOD(testStoreEndDate_Date_EndDay){
+			taskDate dateEndControl;
+			Task testTask;
+
+			dateEndControl.day = 16;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
+
+			Assert::AreEqual(dateEndControl.day, testTask.getDateEnd().day);
+		}
+
+		TEST_METHOD(testStoreEndDate_Date_EndMonth){
+			taskDate dateEndControl;
+			Task testTask;
+
+			dateEndControl.month = 4;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
+
+			Assert::AreEqual(dateEndControl.month, testTask.getDateEnd().month);
+		}
+
+		TEST_METHOD(testStoreEndDate_Date_EndYear){
+			taskDate dateEndControl;
+			Task testTask;
+
+			dateEndControl.year = 16;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
+
+			Assert::AreEqual(dateEndControl.year, testTask.getDateEnd().year);
+		}
+
+		TEST_METHOD(testProcessDate_Date_oneDate){
+			Task testTask;
+			bool isOneDate = false;
+
+			testTask.addDetails("Meeting in school, date 150315, time 1300 to 1500");
+
+			if (testTask.getNumOfDates() == 1){
+				isOneDate = true;
+			}
+
+			Assert::IsTrue(isOneDate);
+		}
+
+		TEST_METHOD(testProcessDate_Date_noDate){
+			Task testTask;
+			bool isNoDate;
+
+			testTask.addDetails("Meeting in school, time 1300 to 1500");
+
+			if (testTask.getDateStart().year == -1 && testTask.getDateStart().month == -1 && testTask.getDateStart().day == -1){
+				if (testTask.getDateEnd().year == -1 && testTask.getDateEnd().month == -1 && testTask.getDateEnd().day == -1){
+					isNoDate = true;
+				}
+			}
+
+			Assert::IsTrue(isNoDate);
+		}
+
+		/************************************************************************************************
+
+													Time Unit Tests
+
+		************************************************************************************************/
+
+		TEST_METHOD(testProcessTime_twoTime_timeStart){
+			Task testTask;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
+
+			Assert::AreEqual(1300, testTask.getTimeStart());
+		}
+
+		TEST_METHOD(testProcessTime_twoTime_timeEnd){
+			Task testTask;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
+
+			Assert::AreEqual(1500, testTask.getTimeEnd());
+		}
+
+		TEST_METHOD(testProcessTime_oneTime_timeStart){
+			Task testTask;
+			int testTimeStart;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300");
+			testTimeStart = testTask.getTimeStart();
+
+			Assert::AreEqual(1300, testTimeStart);
+		}
+
+		TEST_METHOD(testProcessTime_oneTime_timeEnd){
+			Task testTask;
+			int testTimeEnd;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300");
+			testTimeEnd = testTask.getTimeEnd();
+
+			Assert::AreEqual(-1, testTimeEnd);
+		}
+
+
+		TEST_METHOD(testProcessTime_noTime_timeStart){
+			Task testTask;
+			int testTimeStart;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300");
+			testTimeStart = testTask.getTimeStart();
+
+			Assert::AreEqual(1300, testTimeStart);
+		}
+
+
+		TEST_METHOD(testProcessTime_noTime_timeEnd){
+			Task testTask;
+			int testTimeEnd;
+
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300");
+			testTimeEnd = testTask.getTimeEnd();
+
+			Assert::AreEqual(-1, testTimeEnd);
+		}
+
+		/************************************************************************************************
+
+												Search Unit Tests
+
+		************************************************************************************************/
+
+	// End of segment: D:\Code\TaskPositiveUnitTest.cpp
+
+
+
+
+
