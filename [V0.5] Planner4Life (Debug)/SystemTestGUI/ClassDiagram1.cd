@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SystemTestGUI.CodedUITest1" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEACAAAAAAAAAAACAAAAAACAAAIAAAAAAAAQAAAA=</HashCode>
+      <FileName>CodedUITest1.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SystemTestGUI.SystemTestGUI.UIMap" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAEAgIAAACAAAEBQAAhAAAAAIAAAAAAAAEAJAAAAA=</HashCode>
+      <FileName>UIMap.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SystemTestGUI.SystemTestGUI.add_details_time_date_imptParams" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAABAAAAAAAAAAAAABgAQAAAAAwAAAAAAAYBAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SystemTestGUI.SystemTestGUI.assert_delete_test_in_homeExpectedValues" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SystemTestGUI.SystemTestGUI.delete_test_in_homeParams" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAABAAAAAAAAAAAAABAAQAAAAAwAAAAAAAIBAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SystemTestGUI.SystemTestGUI.UIPlanner4LifeWindow" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAgAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SystemTestGUI.SystemTestGUI.UIUserInputWindow" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAgAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SystemTestGUI.SystemTestGUI.UIDisplayWindowWindow" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAEAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SystemTestGUI.SystemTestGUI.assert_add_details_time_date_imptExpectedValues" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>UIMap.vb</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
