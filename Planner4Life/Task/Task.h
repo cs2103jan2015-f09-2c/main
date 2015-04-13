@@ -7,10 +7,10 @@
 
 using namespace std;
 
-struct taskDate{
+struct taskDate{		// date fields are in 2-digit format i.e. 010415
 	int day = -1;
 	int month = -1;
-	int year = -1;					//2 digits only
+	int year = -1;	
 };
 
 class Task{
@@ -71,11 +71,13 @@ private:
 
 public:
 	Task();
-	~Task();
+	~Task();	
 
+	//Functions to add Task details
 	void addDetails(string);
 	void recurTask(string);
-	bool isSearchTargetPresent(string);
+
+	//Getter functions for Task variables
 	string getDescription();
 	int getTimeStart();
 	int getTimeEnd();
@@ -86,13 +88,16 @@ public:
 	int getIdNumber();
 	int getNumOfDates();
 	int getNumOfTimes();
-	void storeIdNumber(int);
-	void markIsDoneAsTrue();
 	list<Task> getRecurringTasks();
 	bool areDatesTheSame(taskDate, taskDate);
+	bool isSearchTargetPresent(string);
+
+	//Public operations on Task variables
+	void storeIdNumber(int);
+	void markIsDoneAsTrue();
+	bool clashStatus();
 	void markClashAsTrue();
 	void markClashAsFalse();
-	bool clashStatus();
 };
 #endif
 

@@ -37,30 +37,40 @@ private:
 
 	//Time Structure
 	taskDate currentDate;
+
 	//add helper function
 	void placeToSlotAddedTask(list<Task>::iterator& listIter, Task newTask);
+
 	// delete helper functions
 	int getNewId(void);
 	string deleteIndex(int idNumber);
+
 	//undo helper functons
 	void updateLastEntryStructure(string, Task);
+
 	// mark done helper function
 	string markDoneIndex(int idNumber);
+
 	//check duplicate helper function
 	bool isDuplicatePresent(Task newTask);
 	bool tasksAreTheSame(Task Task1, Task Task2);
+
 	//Clash Helper Functions
-	//bool isClashPresent(Task newTask);
 	void clearClashList();
 	void checkListForClashes();
+	bool isDatesClash(Task, Task);
+	bool isTwoDateTasksOverlapping(Task, Task);
+	bool task2EndDateOverlapTask1StartDate(taskDate, taskDate, taskDate, taskDate);
+	bool task1EndDateOverlapTask2StartDate(taskDate, taskDate, taskDate, taskDate);
+	bool isTask1StartBeforeOrSameAsTask2Start(taskDate, taskDate);
+	bool isTimesClash(Task, Task);
+	bool isTask1EndAfterTask2Start(taskDate, taskDate);
 	bool checkTaskForClashes(Task Task1, Task Task2);
-	bool isClashTaskSingleDateTimeTaskDoubleDateTime(Task, Task);
 	bool isTwoDatesTasksSameDates(Task, Task);
 	bool isOneDateTasksSameDates(Task, Task);
 	bool isOneDateTaskbetweenTwoDateTask(Task, Task);
-	bool taskTimesOverlap(Task, Task);
-	bool isOneTimeTaskBetweenTwoTimesTask(Task, Task);
-	bool indexChecker(list<Task>::iterator&, int, list<Task>&);
+	void indexChecker(list<Task>::iterator&, int, list<Task>&);
+
 	//status returning functions
 	string descriptionOfTaskToString(Task theTask);
 	string addStatusToString(Task theTask);
@@ -72,6 +82,7 @@ private:
 	string searchStatusToString();
 	string doneStatusToString();
 	string duplicateStatusToString(Task theTask);
+
 	//list generating functions
 	void generateAllOtherList(void);
 	void generateHomeList(void);
@@ -80,12 +91,14 @@ private:
 	void generateDoneList(void);
 	void clearTheLists(void);
 	void generateTheLists(void);
+
 	// Generator Logic Functions
 	bool isHome(taskDate, list<Task>::iterator);
 	bool checkHomeDate(taskDate, int, int, int);
 	bool isMissed(taskDate, list<Task>::iterator);
 	bool checkMissedDate(taskDate, int, int, int);
 	bool isUpcoming(taskDate, list<Task>::iterator);
+
 	// List returning functions
 	string ListToString(list<Task>);
 
@@ -96,6 +109,7 @@ private:
 public:
 	// Initialization 
 	Planner();
+
 	//Command Functions
 	string addTask(Task content);
 	string deleteTask(int serialNumber, string nameOfList);
@@ -104,14 +118,18 @@ public:
 	string editTask(int serialNumber, string nameOfList, string input);
 	string markDone(int serialNumber, string nameOfList);
 	string generateSearchList(string target);
+
 	// Functions that returns Lists in string form
 	string toString(string nameOfList);
 	string AllToString(void);
+
 	//string of status returning function
 	string statusToString(string command, Task theTask);
 	string saveDataToString();
+
 	//load from save file
 	void loadData(string data);
+
 	//check if missed list is empty
 	bool isMissedEmpty();
 };

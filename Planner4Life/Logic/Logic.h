@@ -12,13 +12,14 @@ using namespace std;
 
 class Logic{
 private:
-	string status;
-	string display;
-	string saveAddress;
-	Planner myPlanner;
-	Storage* myStorage;
+	string _status;
+	string _display;
+	string _saveAddress;
+	Planner _myPlanner;
+	Storage* _myStorage;
 
-	string extractCommand(std::string&);
+	//Functions to handle and extract specific commands
+	string extractCommand(string&);
 	void processCommand(string, string, string);
 	void processCommandAdd(string);
 	void processCommandDelete(string, string);
@@ -37,9 +38,15 @@ private:
 public:
 	Logic();
 	~Logic();
+
+	//Functions to process user input
 	void processUserInput(string, string);
+
+	//Functions that updates and returns status and planner content strings
 	void updateDisplay(string);
 	string displayStatus();
 	string displayContent();
+
+	//Functions to check if any tasks have been missed
 	bool checkMissedStatus();
 };

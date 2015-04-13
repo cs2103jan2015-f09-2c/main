@@ -7,21 +7,17 @@
 
 using namespace std;
 
-const string STATUS_MESSAGE_SAVED_SUCCESSFULLY = "saved successfully to this address: ";
-const string DEFAULT_FILE_NAME = "myPlanner.txt";
-const string STATUS_MESSAGE_FILE_NOT_FOUND = "file not found";
-const string STATUS_MESSAGE_INVALID_FILE_ADDRESS = "invalid save address";
-const string STATUS_MESSAGE_LOADED_SUCCESSFULLY = " loaded successfully";
-
 class Storage{
 private:
+	Storage();
+	~Storage();
+
 	string fileContent;
 	string fileAddress;
-	//string fileName;
 	list<string> listOfFileAddress;
-	Storage();
 	static Storage* myStorage;
-	const string myList = "saveLocationList.txt";
+	string myList;
+
 	void retrieveList();
 	bool isListEmpty() const;
 	string retrieveFirstAddress();
@@ -34,7 +30,6 @@ private:
 
 public:
 	static Storage* getInstanceOfStorage();
-	~Storage();
 	string retrieveSaveAddress();
 	string saveWithFileAddress(string, string);
 	string save(string);

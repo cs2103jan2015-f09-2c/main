@@ -1,7 +1,29 @@
 //@author A0115934E
 #include <fstream>
 #include "Storage.h"
+
+const string STATUS_MESSAGE_SAVED_SUCCESSFULLY = "saved successfully to this address: ";
+const string DEFAULT_FILE_NAME = "myPlanner.txt";
+const string SAVELOCATION_LIST_ADDRESS = "saveLocationList.txt";
+const string STATUS_MESSAGE_FILE_NOT_FOUND = "file not found";
+const string STATUS_MESSAGE_INVALID_FILE_ADDRESS = "invalid save address";
+const string STATUS_MESSAGE_LOADED_SUCCESSFULLY = " loaded successfully";
+
 Storage* Storage::myStorage = NULL;
+
+Storage::Storage(){
+	myList = SAVELOCATION_LIST_ADDRESS;
+	retrieveList();
+	if (!listOfFileAddress.empty()){
+		fileAddress = retrieveFirstAddress();
+	}
+	else {
+		fileAddress = DEFAULT_FILE_NAME;
+	}
+}
+
+Storage::~Storage(){
+}
 
 void Storage::retrieveList(){
 	ifstream read(myList);
@@ -10,21 +32,6 @@ void Storage::retrieveList(){
 	while (getline(read, address)){
 		listOfFileAddress.push_back(address);
 	}
-}
-
-Storage::Storage(){
-	retrieveList();
-	if (!listOfFileAddress.empty()){
-		fileAddress = retrieveFirstAddress();
-	}
-
-	else {
-		fileAddress = DEFAULT_FILE_NAME;
-	}
-}
-
-
-Storage::~Storage(){
 }
 
 Storage* Storage::getInstanceOfStorage(){
@@ -40,17 +47,18 @@ bool Storage::isListEmpty() const {
 }
 
 string Storage::retrieveFirstAddress(){
-	list<string>::iterator iter = listOfFileAddress.begin();
-	fileAddress = *iter;
+	list<string>::iterator addressIter = listOfFileAddress.begin();
+	fileAddress = *addressIter;
 	return fileAddress;
 }
 
 string Storage::saveWithFileAddress(string saveAddress, string content){
 	//check if the address is in the list
 	bool doesExist = false;
-	doesExist = doesAddressAlrdExist(saveAddress);
 	bool isValid = false;
 	string status;
+
+	doesExist = doesAddressAlrdExist(saveAddress);
 
 	//if a file address exists in the list, it is a valid address
 	if (doesExist) {
@@ -65,11 +73,9 @@ string Storage::saveWithFileAddress(string saveAddress, string content){
 			listOfFileAddress.push_front(saveAddress);
 			updateMyList();
 		}
-
 		fileAddress = saveAddress;
 		status = save(content);
 	}
-
 	else{
 		status = STATUS_MESSAGE_INVALID_FILE_ADDRESS;
 	}
@@ -111,6 +117,7 @@ string Storage::extractDirectoryFolder(string &saveAddress){
 bool Storage::isFileNameValid(string fileName){
 	bool isValid = false;
 	size_t txtPosition = fileName.find(".txt");
+
 	if (txtPosition != string::npos){
 		isValid = true;
 	}
@@ -121,6 +128,7 @@ bool Storage::isFileNameValid(string fileName){
 string Storage::save(string content){
 	updateContent(content);
 	ofstream write(fileAddress);
+
 	write << fileContent;
 	write.close();
 	string status = STATUS_MESSAGE_SAVED_SUCCESSFULLY + fileAddress;
@@ -173,6 +181,7 @@ string Storage::load(){
 
 string Storage::load(string saveAddress, string& allTasks){
 	bool doesExist = doesAddressAlrdExist(saveAddress);
+
 	if (!doesExist){
 		return STATUS_MESSAGE_FILE_NOT_FOUND;
 	}

@@ -7,15 +7,15 @@ class Log
 private:
 	Log();
 	~Log();
-	static bool instanceFlag;
+
+	static bool _instanceFlag;
 	static Log *theOne;
 	vector<string> _logList;
 	int _numLines;
-	int _maxLines = 1000;
+	int MAX_LINES = 1000;
+
 	void saveLog(string);
 	int numOfLinesInFile();
-	//void loadLog();
-
 
 public:
 	static Log* getInstance();

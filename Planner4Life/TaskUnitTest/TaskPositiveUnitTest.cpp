@@ -20,7 +20,7 @@ namespace TaskUnitTest
 			Task testTask;
 			string testControlDescription = "Meeting in school", testDescription;
 
-			testTask.addDetails("Meeting in school; date 270315 to 290315; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 270315 to 290315, time 1300 to 1500");
 			testDescription = testTask.getDescription();
 
 			Assert::AreEqual(testControlDescription, testDescription);
@@ -30,7 +30,7 @@ namespace TaskUnitTest
 			Task testTask;
 			string testControlDescription = "  ", testDescription;
 
-			testTask.addDetails("  ; date 270315 to 290315; time 1300 to 1500");
+			testTask.addDetails("  , date 270315 to 290315, time 1300 to 1500");
 			testDescription = testTask.getDescription();
 
 			Assert::AreEqual(testControlDescription, testDescription);
@@ -40,7 +40,7 @@ namespace TaskUnitTest
 			Task testTask;
 			string testControlDescription = "", testDescription;
 
-			testTask.addDetails("; date 270315 to 290315; time 1300 to 1500");
+			testTask.addDetails(", date 270315 to 290315, time 1300 to 1500");
 			testDescription = testTask.getDescription();
 
 			Assert::AreEqual(testControlDescription, testDescription);
@@ -59,7 +59,7 @@ namespace TaskUnitTest
 
 			dateStartControl.day = 15;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
 			testTaskDay = testTask.getDateStart().day;
 
 			Assert::AreEqual(dateStartControl.day, testTaskDay);
@@ -72,7 +72,7 @@ namespace TaskUnitTest
 
 			dateStartControl.month = 3;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
 			testTaskMonth = testTask.getDateStart().month;
 
 			Assert::AreEqual(dateStartControl.month, testTaskMonth);
@@ -84,7 +84,7 @@ namespace TaskUnitTest
 
 			dateStartControl.year = 15;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
 
 			Assert::AreEqual(dateStartControl.year, testTask.getDateStart().year);
 		}
@@ -95,7 +95,7 @@ namespace TaskUnitTest
 
 			dateEndControl.day = 16;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
 
 			Assert::AreEqual(dateEndControl.day, testTask.getDateEnd().day);
 		}
@@ -106,7 +106,7 @@ namespace TaskUnitTest
 
 			dateEndControl.month = 4;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
 
 			Assert::AreEqual(dateEndControl.month, testTask.getDateEnd().month);
 		}
@@ -117,7 +117,7 @@ namespace TaskUnitTest
 
 			dateEndControl.year = 16;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
 
 			Assert::AreEqual(dateEndControl.year, testTask.getDateEnd().year);
 		}
@@ -126,7 +126,7 @@ namespace TaskUnitTest
 			Task testTask;
 			bool isOneDate = false;
 
-			testTask.addDetails("Meeting in school; date 150315; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315, time 1300 to 1500");
 
 			if (testTask.getNumOfDates() == 1){
 				isOneDate = true;
@@ -139,7 +139,7 @@ namespace TaskUnitTest
 			Task testTask;
 			bool isNoDate;
 
-			testTask.addDetails("Meeting in school; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, time 1300 to 1500");
 
 			if (testTask.getDateStart().year == -1 && testTask.getDateStart().month == -1 && testTask.getDateStart().day == -1){
 				if (testTask.getDateEnd().year == -1 && testTask.getDateEnd().month == -1 && testTask.getDateEnd().day == -1){
@@ -164,7 +164,7 @@ namespace TaskUnitTest
 		TEST_METHOD(testProcessTime_twoTime_timeStart){
 			Task testTask;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
 
 			Assert::AreEqual(1300, testTask.getTimeStart());
 		}
@@ -172,7 +172,7 @@ namespace TaskUnitTest
 		TEST_METHOD(testProcessTime_twoTime_timeEnd){
 			Task testTask;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300 to 1500");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300 to 1500");
 
 			Assert::AreEqual(1500, testTask.getTimeEnd());
 		}
@@ -181,7 +181,7 @@ namespace TaskUnitTest
 			Task testTask;
 			int testTimeStart;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300");
 			testTimeStart = testTask.getTimeStart();
 
 			Assert::AreEqual(1300, testTimeStart);
@@ -191,7 +191,7 @@ namespace TaskUnitTest
 			Task testTask;
 			int testTimeEnd;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300");
 			testTimeEnd = testTask.getTimeEnd();
 
 			Assert::AreEqual(-1, testTimeEnd);
@@ -202,7 +202,7 @@ namespace TaskUnitTest
 			Task testTask;
 			int testTimeStart;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300");
 			testTimeStart = testTask.getTimeStart();
 
 			Assert::AreEqual(1300, testTimeStart);
@@ -213,7 +213,7 @@ namespace TaskUnitTest
 			Task testTask;
 			int testTimeEnd;
 
-			testTask.addDetails("Meeting in school; date 150315 to 160416; time 1300");
+			testTask.addDetails("Meeting in school, date 150315 to 160416, time 1300");
 			testTimeEnd = testTask.getTimeEnd();
 
 			Assert::AreEqual(-1, testTimeEnd);
@@ -225,12 +225,12 @@ namespace TaskUnitTest
 
 		************************************************************************************************/
 
-		//@author karthik
+		//@author A0111061E
 		TEST_METHOD(testSearchTarget_targetPresent){
 			Task testTask;
 			string searchTarget = "meeting";
 
-			testTask.addDetails("Meeting with Prof; date 270315; time 1400");
+			testTask.addDetails("Meeting with Prof, date 270315, time 1400");
 
 			Assert::IsTrue(testTask.isSearchTargetPresent(searchTarget));
 		}
@@ -239,7 +239,7 @@ namespace TaskUnitTest
 			Task testTask;
 			string searchTarget = "class";
 
-			testTask.addDetails("Meeting with Prof; date 270315; time 1400");
+			testTask.addDetails("Meeting with Prof, date 270315, time 1400");
 
 			Assert::IsFalse(testTask.isSearchTargetPresent(searchTarget));
 		}
@@ -253,7 +253,7 @@ namespace TaskUnitTest
 			Task testTask;
 			int numOfTimesRecurred;
 
-			testTask.recurTask("daily 5; Project meeting; date 250415; time 1500");
+			testTask.recurTask("daily 5, Project meeting, date 250415, time 1500");
 			numOfTimesRecurred = testTask.getRecurringTasks().size();
 
 			Assert::AreEqual(5, numOfTimesRecurred);
@@ -269,7 +269,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskDay;
 			list<Task> taskList;
 
-			testTask.recurTask("daily 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("daily 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -284,7 +284,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskMonth;
 			list<Task> taskList;
 
-			testTask.recurTask("daily 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("daily 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -299,7 +299,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskYear;
 			list<Task> taskList;
 
-			testTask.recurTask("daily 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("daily 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -315,7 +315,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskDay;
 			list<Task> taskList;
 
-			testTask.recurTask("monthly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("monthly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -330,7 +330,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskMonth;
 			list<Task> taskList;
 
-			testTask.recurTask("monthly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("monthly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -345,7 +345,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskYear;
 			list<Task> taskList;
 
-			testTask.recurTask("monthly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("monthly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -361,7 +361,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskDay;
 			list<Task> taskList;
 
-			testTask.recurTask("weekly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("weekly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -376,7 +376,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskMonth;
 			list<Task> taskList;
 
-			testTask.recurTask("weekly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("weekly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -391,7 +391,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskYear;
 			list<Task> taskList;
 
-			testTask.recurTask("weekly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("weekly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -407,7 +407,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskDay;
 			list<Task> taskList;
 
-			testTask.recurTask("yearly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("yearly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -422,7 +422,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskMonth;
 			list<Task> taskList;
 
-			testTask.recurTask("yearly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("yearly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -437,7 +437,7 @@ namespace TaskUnitTest
 			int fifthRecurredTaskYear;
 			list<Task> taskList;
 
-			testTask.recurTask("yearly 5; Project meeting; date 281115; time 1500");
+			testTask.recurTask("yearly 5, Project meeting, date 281115, time 1500");
 			list<Task>::iterator taskIter;
 			taskList = testTask.getRecurringTasks();
 			taskIter = taskList.end();
@@ -445,6 +445,5 @@ namespace TaskUnitTest
 			fifthRecurredTaskYear = (*taskIter).getDateEnd().year;
 			Assert::AreEqual(19, fifthRecurredTaskYear);
 		}
-
 	};
 }

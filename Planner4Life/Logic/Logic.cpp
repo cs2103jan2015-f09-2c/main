@@ -39,12 +39,12 @@ const string COMMAND_RECUR = "recur";
 
 
 Logic::Logic(){
-	myStorage = Storage::getInstanceOfStorage();
-	saveAddress = myStorage->retrieveSaveAddress();
-	status = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
+	_myStorage = Storage::getInstanceOfStorage();
+	_saveAddress = _myStorage->retrieveSaveAddress();
+	_status = STATUS_MESSAGE_CURRENT_SAVE_ADDRESS + _saveAddress + "\n" + STATUS_MESSAGE_NEW_SAVE_ADDRESS;
 	
-	string allTasks = myStorage->load();
-	myPlanner.loadData(allTasks);
+	string allTasks = _myStorage->load();
+	_myPlanner.loadData(allTasks);
 }
 
 Logic::~Logic(){
@@ -65,11 +65,11 @@ void Logic::processUserInput(string userInput, string currentView) {
 			processCommand(command, userInput, currentView);
 		}
 		catch (exception const &error){
-			status = error.what();
+			_status = error.what();
 		}
 	}
 	catch (exception const &error) {
-		status = error.what();
+		_status = error.what();
 	}
 
 	updateDisplay(currentView);
@@ -93,162 +93,149 @@ string Logic::extractCommand(string& userInput){
 	return command;
 }
 
-void Logic::processCommand(std::string command, std::string taskDetail, string currentView) throw (const string) {
-	status = "";
+void Logic::processCommand(std::string command, std::string taskDetail, string currentView) {
+	_status = "";
+
 	if (command == COMMAND_LOAD){
 		processCommandLoad(taskDetail);
 	}
-
 	else if (command == COMMAND_ADD){
 		try{
 			processCommandAdd(taskDetail);
-		}
-		
+		}		
 		catch (exception const &error) {
 				throw;
 			}
 	}
-
 	else if (command == COMMAND_DELETE){
 		try {
 			processCommandDelete(taskDetail, currentView);
-		}
-		
+		}		
 		catch (exception const &error) {
 			throw;
 		}
 	}
-
 	else if (command == COMMAND_EDIT){
 		try {
 			processCommandEdit(taskDetail, currentView);
-		}
-					
+		}					
 		catch (exception const &error){
 			throw;
 		}
 	}
-
 	else if (command == COMMAND_CLEAR){
 		processCommandClear(taskDetail);
 	}
-
 	else if (command == COMMAND_SEARCH){
 		processCommandSearch(taskDetail);
 	}
-
 	else if (command == COMMAND_UNDO){
 		processCommandUndo();
-	}
-							
+	}							
 	else if (command == COMMAND_SAVE) {
 		processCommandSave(taskDetail);
-	}
-								
+	}								
 	else if (command == COMMAND_HELP){
 		processCommandHelp();
-	}
-									
+	}									
 	else if (command == COMMAND_ALL){
 		processCommandAll();
-	}
-							
+	}							
     else if (command == COMMAND_RECUR){
 		processCommandRecur(taskDetail);
-	}
-				
+	}				
 	else if (command == COMMAND_DONE){
 		processCommandDone(taskDetail, currentView);
-	}
-												
+	}												
 	else if (command == COMMAND_SHOW_DONE){
 		processCommandShowDone(currentView);
-	}
-													
+	}													
 	else {
 		throw exception(ERROR_MESSAGE_INVALID_COMMAND);
 	}
 	
 	//retrieve content to be saved in txt file
-	string fileContent = myPlanner.saveDataToString();
+	string fileContent = _myPlanner.saveDataToString();
 
 	//auto save the content after each operation
 	//feedback variable is a dummy variable to store the status of auto save, which is not necessary to be displayed
-	string feedback = myStorage->save(fileContent); 
+	string feedback = _myStorage->save(fileContent); 
 }
 
 void Logic::processCommandLoad(string saveAddress){
 	string allTasks;
-	status = myStorage->load(saveAddress, allTasks);
+
+	_status = _myStorage->load(saveAddress, allTasks);
 
 	if (allTasks.empty()){
 		return;
 	}
 
-	myPlanner.loadData(allTasks);
+	_myPlanner.loadData(allTasks);
 }
 
 void Logic::processCommandSave(string saveAddress) {
-	string fileContent = myPlanner.saveDataToString();
+	string fileContent = _myPlanner.saveDataToString();
 
 	if (!saveAddress.empty()){
-		status = myStorage->saveWithFileAddress(saveAddress, fileContent);
+		_status = _myStorage->saveWithFileAddress(saveAddress, fileContent);
 	}
-
 	else {
-		status = myStorage->save(fileContent);
+		_status = _myStorage->save(fileContent);
 	}
 }
 
 void Logic::processCommandAdd(string taskDetail){
 	Task currentTask;
+
 	currentTask.addDetails(taskDetail);
 
-	status = myPlanner.addTask(currentTask);
+	_status = _myPlanner.addTask(currentTask);
 }
 
 //@author A0111361Y
 void Logic::processCommandRecur(string taskDetail){
 	Task currentTask;
-	list<Task> listOfTasks;
+	list<Task> listOfRecurringTasks;
+
 	currentTask.recurTask(taskDetail);
-	listOfTasks = currentTask.getRecurringTasks();
+	listOfRecurringTasks = currentTask.getRecurringTasks();
+
 	list<Task>::iterator listIter;
-	for (listIter = listOfTasks.begin(); listIter != listOfTasks.end(); listIter++){
-		string status = myPlanner.addTask((*listIter));
+
+	for (listIter = listOfRecurringTasks.begin(); listIter != listOfRecurringTasks.end(); listIter++){
+		string status = _myPlanner.addTask((*listIter));
 	}
 }
 
 //@author A0115934E
-void Logic::processCommandDelete(string taskIndex, string currentView) throw (invalid_argument&) {
+void Logic::processCommandDelete(string taskIndex, string currentView) {
 	int index = 0;
 
 	try {
 		index = stoi(taskIndex);
 	}
-
 	catch (invalid_argument& error){
 		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
 	}
 
-	status = myPlanner.deleteTask(index, currentView);
+	_status = _myPlanner.deleteTask(index, currentView);
 }
 
-void Logic::processCommandDone(string taskIndex, string currentView)throw (invalid_argument&) {
+void Logic::processCommandDone(string taskIndex, string currentView) {
 	int index = 0;
 
 	try {
 		index = stoi(taskIndex);
 	}
-
 	catch (invalid_argument &error){
 		throw exception (ERROR_MESSAGE_INVALID_SERIAL_NO);
 	}
 
-	status = myPlanner.markDone(index, currentView);
+	_status = _myPlanner.markDone(index, currentView);
 }
 
-void Logic::processCommandEdit(string userInput, string currentView) throw (bad_cast&) {
+void Logic::processCommandEdit(string userInput, string currentView) {
 	char colon;
 	int taskIndex;
 	string taskDetails;
@@ -258,7 +245,6 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 			throw bad_cast();
 		}
 	}
-
 	catch (bad_cast& error){
 		throw exception(ERROR_MESSAGE_INVALID_SERIAL_NO);
 	}
@@ -269,63 +255,62 @@ void Logic::processCommandEdit(string userInput, string currentView) throw (bad_
 			throw exception(ERROR_MESSAGE_MISSING_COLON);
 		}
 	}
-
 	catch (exception const& error){
 		throw;
 	}
 
-	int sizeToSubstr = userInput.size() - 2;
-	taskDetails = userInput.substr(3, sizeToSubstr);
-	status = myPlanner.editTask(taskIndex, currentView, taskDetails);
+	int sizeOfSubstr = userInput.size() - 2;
+	taskDetails = userInput.substr(3, sizeOfSubstr);
+	_status = _myPlanner.editTask(taskIndex, currentView, taskDetails);
 }
 
 void Logic::processCommandClear(string command){
 	if (command == "Y" || command == "y") {
-		status = myPlanner.clear();
+		_status = _myPlanner.clear();
 	}
 	else {
-		status = CLEAR_CANCELLED;
+		_status = CLEAR_CANCELLED;
 	}
 }
 
 void Logic::processCommandUndo(){
-	status = myPlanner.undo();
+	_status = _myPlanner.undo();
 }
 
 void Logic::processCommandSearch(string taskDetail){
-	status = myPlanner.generateSearchList(taskDetail);
-	display = myPlanner.toString(SEARCH_VIEW);
+	_status = _myPlanner.generateSearchList(taskDetail);
+	_display = _myPlanner.toString(SEARCH_VIEW);
 }
 
 void Logic::processCommandHelp(){
-	display = HELP_MESSAGE;
-	status = "Help window";
+	_display = HELP_MESSAGE;
+	_status = HELP_VIEW;
 }
 
 void Logic::processCommandShowDone(string currentView){
-	display = myPlanner.toString(currentView);
-	status = "Done list";
+	_display = _myPlanner.toString(currentView);
+	_status = DONE_VIEW;
 }
 
 void Logic::processCommandAll(){
-	display = myPlanner.AllToString();
-	status = "All list";
+	_display = _myPlanner.AllToString();
+	_status = ALL_VIEW;
 }
 
 void Logic::updateDisplay(string viewType) {
-	if (viewType == HELP_VIEW || viewType == ALL_VIEW || viewType == SEARCH_VIEW){
+	if (viewType == HELP_VIEW || viewType == ALL_VIEW || viewType == SEARCH_VIEW || viewType == DONE_VIEW){
 		return;
 	}
 
-	display = myPlanner.toString(viewType);
+	_display = _myPlanner.toString(viewType);
 }
 
 string Logic::displayStatus(){
-	return status;
+	return _status;
 }
 
 string Logic::displayContent(){
-	return display;
+	return _display;
 }
 
 //@author A0111314A
@@ -333,7 +318,7 @@ string Logic::displayContent(){
 bool Logic::checkMissedStatus(){
 	bool missedPresent = false;
 
-	if (!myPlanner.isMissedEmpty()){
+	if (!_myPlanner.isMissedEmpty()){
 		missedPresent = true;
 	}
 

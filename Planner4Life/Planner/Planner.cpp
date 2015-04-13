@@ -31,13 +31,14 @@ const string LOG_FILE_CLEAR_TASK_MSG = "Delete ID : ";
 const string LOG_FILE_EDIT_TASK_MSG = "Edit Taken Place ";
 const string LOG_FILE_SAVE_MSG = "File Save Operation";
 const string LOG_FILE_MARK_DONE_MSG = "The item is marked as done";
+const string LOG_FILE_PLANNER_CREATION_MSG = "An instance of Planner has been created";
 
-const string ERROR_MESSAGE_FATAL = "Fatal Error !!";
-const string ERROR_MESSSAGE_INVALID_LIST_NAME = "Error!! Name of list is invalid!!";
-const string ERROR_MESSSAGE_INVALID_FILE_NAME = "Error!! Name of file is invalid!!";
-const string ERROR_MESSSAGE_INVALID_COMMAND = "Error!! Command is invalid!!";
-const string ERROR_MESSAGE_INVALID_INDEX = "Invalid index!";
-const string ERROR_MESSAGE_INVALID_UNDO = "Nothing to undo!";
+const char* ERROR_MESSAGE_FATAL = "Fatal Error !!";
+const char* ERROR_MESSSAGE_INVALID_LIST_NAME = "Error!! Name of list is invalid!!";
+const char* ERROR_MESSSAGE_INVALID_FILE_NAME = "Error!! Name of file is invalid!!";
+const char* ERROR_MESSSAGE_INVALID_COMMAND = "Error!! Command is invalid!!";
+const char* ERROR_MESSAGE_INVALID_INDEX = "Invalid index!";
+const char* ERROR_MESSAGE_INVALID_UNDO = "Nothing to undo!";
 
 const string EMPTY_LIST_MESSAGE = "There are no tasks here";
 const string NO_RESULTS_MESSAGE = "No results found!";
@@ -76,6 +77,8 @@ Planner::Planner(){
 	currentDate.year = (now->tm_year - 100);	//last 2 digits of year
 	currentDate.month = (now->tm_mon + 1);		//month: jan = 1, feb = 2 etc
 	currentDate.day = (now->tm_mday);
+
+	// LogData->addLog(LOG_FILE_UPDATE_KEY_WORD, LOG_FILE_PLANNER_CREATION_MSG);
 }
 
 /************************************************************************************************
@@ -186,36 +189,31 @@ string Planner::deleteTask(int serialNumber, string nameOfView){
 	int idNumber;
 	string status;
 	list<Task> ::iterator taskIter;
+	try{
+		if (nameOfView == HOME_LIST){
+			indexChecker(taskIter, serialNumber, homeList);
 
-	if (nameOfView == HOME_LIST){
-		if (indexChecker(taskIter, serialNumber, homeList) == false){
-			throw ERROR_MESSAGE_INVALID_INDEX;
-		}
-		else {
 			idNumber = (*taskIter).getIdNumber();
 			status = deleteIndex(idNumber);
 		}
-	}
-	else if (nameOfView == MISSED_LIST){
-		if (indexChecker(taskIter, serialNumber, missedList) == false){
-			throw ERROR_MESSAGE_INVALID_INDEX;
-		}
-		else {
+		else if (nameOfView == MISSED_LIST){
+			indexChecker(taskIter, serialNumber, missedList);
+
 			idNumber = (*taskIter).getIdNumber();
 			status = deleteIndex(idNumber);
 		}
-	}
-	else if (nameOfView == UPCOMING_LIST){
-		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
-			throw ERROR_MESSAGE_INVALID_INDEX;
-		}
-		else {
+		else if (nameOfView == UPCOMING_LIST){
+			indexChecker(taskIter, serialNumber, upcomingList);
+
 			idNumber = (*taskIter).getIdNumber();
 			status = deleteIndex(idNumber);
 		}
+		else{
+			throw exception(ERROR_MESSSAGE_INVALID_LIST_NAME);
+		}
 	}
-	else{
-		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+	catch (exception const& error){
+		throw;
 	}
 
 	//logging
@@ -245,7 +243,7 @@ string Planner::undo(void){
 		addTask(lastEdit.deletedTask);
 	}
 	else {
-		throw ERROR_MESSAGE_INVALID_UNDO;
+		throw exception(ERROR_MESSAGE_INVALID_UNDO);
 	}
 
 	status = undoStatusToString();
@@ -310,34 +308,25 @@ string Planner::markDone(int serialNumber, string nameOfList){
 	list<Task> ::iterator taskIter;
 
 	if (nameOfList == HOME_LIST){
-		if (indexChecker(taskIter, serialNumber, homeList) == false){
-			throw ERROR_MESSAGE_INVALID_INDEX;
-		}
-		else {
-			idNumber = (*taskIter).getIdNumber();
-			status = markDoneIndex(idNumber);
-		}
+		indexChecker(taskIter, serialNumber, homeList);
+		
+		idNumber = (*taskIter).getIdNumber();
+		status = markDoneIndex(idNumber);
 	}
 	else if (nameOfList == MISSED_LIST){
-		if (indexChecker(taskIter, serialNumber, missedList) == false){
-			throw ERROR_MESSAGE_INVALID_INDEX;
-		}
-		else {
-			idNumber = (*taskIter).getIdNumber();
-			status = markDoneIndex(idNumber);
-		}
+		indexChecker(taskIter, serialNumber, missedList);
+
+		idNumber = (*taskIter).getIdNumber();
+		status = markDoneIndex(idNumber);
 	}
 	else if (nameOfList == UPCOMING_LIST){
-		if (indexChecker(taskIter, serialNumber, upcomingList) == false){
-			throw ERROR_MESSAGE_INVALID_INDEX;
-		}
-		else {
-			idNumber = (*taskIter).getIdNumber();
-			status = markDoneIndex(idNumber);
-		}
+		indexChecker(taskIter, serialNumber, upcomingList);
+
+		idNumber = (*taskIter).getIdNumber();
+		status = markDoneIndex(idNumber);
 	}
 	else{
-		throw ERROR_MESSSAGE_INVALID_LIST_NAME;
+		throw exception(ERROR_MESSSAGE_INVALID_LIST_NAME);
 	}
 
 	//logging
@@ -347,6 +336,28 @@ string Planner::markDone(int serialNumber, string nameOfList){
 
 	return status;
 
+}
+
+//@author A0111314A
+//Function checks if an index is valid (exists and has been assigned to a task) and returns true if it is
+void Planner::indexChecker(list<Task>::iterator& taskIter, int serialNumber, list<Task>& targetList){
+	int indexCount = STARTING_SERIAL_NUMBER;
+	bool isValidIndex = true;
+
+	taskIter = targetList.begin();
+	for (size_t i = 1; i != serialNumber && i < targetList.size(); i++){
+		taskIter++;
+		indexCount++;
+	}
+
+	try{
+		if (indexCount != serialNumber || targetList.empty()) {
+			throw exception(ERROR_MESSAGE_INVALID_INDEX);
+		}
+	}
+	catch (exception const& error){
+		throw;
+	}
 }
 
 //@author A0111361Y
@@ -545,7 +556,7 @@ string Planner::saveDataToString(){
 				out << (*it).getTimeEnd();
 				break;
 			default:
-				throw ERROR_MESSAGE_FATAL;
+				throw exception(ERROR_MESSAGE_FATAL);
 			}
 
 
@@ -785,6 +796,9 @@ void Planner::checkListForClashes(){
 
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 //@author A0111061E
 bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	bool isClash = false;
@@ -799,172 +813,25 @@ bool Planner::checkTaskForClashes(Task Task1, Task Task2){
 	task2StartTime = Task2.getTimeStart();
 
 
-	//Floating tasks and tasks with no times specified
-	if ((numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 0 && numOfTask2Times == 0) || (numOfTask1Times == 0 || numOfTask2Times == 0)){
+	//Floating tasks and tasks with no times specified, Assume no clash
+	if (numOfTask1Times == 0 || numOfTask2Times == 0){
 		isClash = false;
 	}
 
-	//Both tasks have 2 dates and 1 time
-	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
-		if (isTwoDatesTasksSameDates(Task1, Task2)){
-			if (task1StartTime == task2StartTime){
-				isClash = true;
-			}
-		}
+	//No date specified, assumed no clash.
+	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0){
+		isClash = false;
 	}
 
-	//Both tasks have 2 dates 2 times
-	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
-		if (isTwoDatesTasksSameDates(Task1, Task2)){
-			if (taskTimesOverlap(Task1, Task2)){
-				isClash = true;
-			}
-		}
-	}
-
-	//Both tasks have 1 date 1 time
-	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 1){
-		if (isOneDateTasksSameDates(Task1, Task2)){
-			if (task1StartTime == task2StartTime){
-				isClash = true;
-			}
-		}
-	}
-
-	//Both tasks have 1 date 2 times
-	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
-		if (isOneDateTasksSameDates(Task1, Task2)){
-			if (taskTimesOverlap(Task1, Task2)){
-				isClash = true;
-			}
-		}
-	}
-
-	//Both tasks have no date 1 time
-	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 1 && numOfTask2Times == 1){
-		if (task1StartTime == task2StartTime){
-			isClash = true;
-		}
-	}
-
-	//Both tasks have no date 2 times
-	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 2 && numOfTask2Times == 2){
-		if (taskTimesOverlap(Task1, Task2)){
-			isClash = true;
-		}
-	}
-
-	//Task1 has 1 date 1 time and Task2 has 2 dates, 1 time
-	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
-		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
-			if (task1StartTime == task2StartTime){
-				isClash = true;
-			}
-		}
-	}
-
-	//opposite of above: Task1 has 2 dates 1 time, task2 has 1 date and 1 time
-	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 1){
-		if (isOneDateTaskbetweenTwoDateTask(Task2, Task1)){
-			if (task1StartTime == task2StartTime){
-				isClash = true;
-			}
-		}
-	}
-
-	//Task1 has 1 date 1 time and Task2 has 2 dates, 2 time
-	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 2){
-		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task1, Task2);
-	}
-
-	//opp of above: Task1 has 2 dates 2 times, task2 has 1 date 1 time
-	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 1){
-		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task2, Task1);
-	}
-
-
-	//Task1 has 1 date 2 times, Task2 has 1 date 1 time
-	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 1){
-		if (isOneDateTasksSameDates(Task1, Task2)){
-			if (taskTimesOverlap(Task1, Task2)){
-				isClash = true;
-			}
-		}
-	}
-
-	//Task1 has 1 date 1 times, Task2 has 1 date 2 time
-	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 2){
-		if (isOneDateTasksSameDates(Task1, Task2)){
-			if (taskTimesOverlap(Task2, Task1)){
-				isClash = true;
-			}
-		}
-	}
-
-	//Task1 has 2 date 2 times, Task2 has 2 date 1 time
-	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 1){
-		if (isTwoDatesTasksSameDates(Task1, Task2)){
-			if (taskTimesOverlap(Task1, Task2)){
-				isClash = true;
-			}
-		}
-	}
-
-	//Task1 has 2 date 1 times, Task2 has 2 date 2 time
-	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 1){
-		if (isTwoDatesTasksSameDates(Task1, Task2)){
-			if (taskTimesOverlap(Task2, Task1)){
-				isClash = true;
-			}
-		}
-	}
-
-	//Task1 has 2 date 2 time, task2 has 1 date 2 time
-	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
-		if (isOneDateTaskbetweenTwoDateTask(Task2, Task1)){
-			if (taskTimesOverlap(Task2, Task1)){
-				isClash = true;
-			}
-		}
-	}
-
-	//Task1 has 1 date 2 time, task2 has 2 date 2 time
-	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
-		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
-			if (taskTimesOverlap(Task1, Task2)){
-				isClash = true;
-			}
-		}
-	}
-
-	return isClash;
-}
-
-//@author A0111061E
-bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2){
-	bool isClash = false;
-
-	if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
-		if (isOneTimeTaskBetweenTwoTimesTask(Task1, Task2)){
+	else if (isDatesClash(Task1, Task2)){
+		if (isTimesClash(Task1, Task2)){
 			isClash = true;
 		}
 	}
 
 	return isClash;
-}
 
-//@author A0111061E
-bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
-	bool areEqual = false;
 
-	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
-		if (Task1.getDateStart().month == Task2.getDateStart().month && Task1.getDateEnd().month == Task2.getDateEnd().month) {
-			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day){
-				areEqual = true;
-			}
-		}
-	}
-	return areEqual;
 }
 
 //@author A0111061E
@@ -982,52 +849,171 @@ bool Planner::isOneDateTasksSameDates(Task Task1, Task Task2){
 	return dateIsEqual;
 }
 
-//@author A0111061E
-bool Planner::isOneTimeTaskBetweenTwoTimesTask(Task Task1, Task Task2){
-	int task1StartTime, task2StartTime, task2EndTime;
-	bool isInBetween = false;
+bool Planner::isDatesClash(Task Task1, Task Task2){
+	int numOfTask1Dates, numOfTask2Dates;
+	bool isClash = false;
 
-	task1StartTime = Task1.getTimeStart();
-	task2StartTime = Task2.getTimeStart();
-	task2EndTime = Task2.getTimeEnd();
+	numOfTask1Dates = Task1.getNumOfDates();
+	numOfTask2Dates = Task2.getNumOfDates();
 
-	if (task1StartTime < task2EndTime && task1StartTime >= task2StartTime){
-		isInBetween = true;
+	if (numOfTask1Dates == 1 && numOfTask2Dates == 1){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			isClash = true;
+		}
 	}
-	return isInBetween;
+
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2){
+		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
+			isClash = true;
+		}
+	}
+
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1){
+		if (isOneDateTaskbetweenTwoDateTask(Task2, Task1)){
+			isClash = true;
+		}
+	}
+
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2){
+		if (isTwoDateTasksOverlapping(Task1, Task2)){
+			isClash = true;
+		}
+	}
+
+	return isClash;
+}
+
+bool Planner::isTwoDateTasksOverlapping(Task Task1, Task Task2){
+	bool isClash = false;
+	taskDate task1StartDate, task1EndDate, task2StartDate, task2EndDate;
+
+	task1StartDate = Task1.getDateStart();
+	task1EndDate = Task1.getDateEnd();
+	task2StartDate = Task2.getDateStart();
+	task2EndDate = Task2.getDateEnd();
+
+	if (isTwoDatesTasksSameDates(Task1, Task2)){
+		isClash = true;
+	}
+	else if (task1EndDateOverlapTask2StartDate(task1StartDate, task1EndDate, task2StartDate, task2EndDate) || task2EndDateOverlapTask1StartDate(task1StartDate, task1EndDate, task2StartDate, task2EndDate)){
+		isClash = true;
+	}
+
+	return isClash;
+}
+
+bool Planner::task2EndDateOverlapTask1StartDate(taskDate task1StartDate, taskDate task1EndDate, taskDate task2StartDate, taskDate task2EndDate){
+	bool isOverlap = false;
+
+	if (isTask1EndAfterTask2Start(task2EndDate, task1StartDate) && isTask1StartBeforeOrSameAsTask2Start(task2EndDate, task1EndDate)){
+		isOverlap = true;
+	}
+
+	return isOverlap;
+}
+
+bool Planner::task1EndDateOverlapTask2StartDate(taskDate task1StartDate, taskDate task1EndDate, taskDate task2StartDate, taskDate task2EndDate){
+	bool isOverlap = false;
+
+	if (isTask1EndAfterTask2Start(task1EndDate, task2StartDate) && isTask1StartBeforeOrSameAsTask2Start(task1StartDate, task2StartDate)){
+		isOverlap = true;
+	}
+
+	return isOverlap;
+}
+
+bool Planner::isTask1EndAfterTask2Start(taskDate task1EndDate, taskDate task2StartDate){
+	bool isAfter = false;
+
+	if (task2StartDate.year < task1EndDate.year) {
+		isAfter = true;
+	}
+
+	else if (task2StartDate.year == task1EndDate.year) {
+		if (task2StartDate.month < task1EndDate.month) {
+			isAfter = true;
+		}
+	}
+
+	else if (task2StartDate.month == task1EndDate.month) {
+		if (task2StartDate.day < task1EndDate.day) {
+			isAfter = true;
+		}
+	}
+
+	return isAfter;
+}
+
+bool Planner::isTask1StartBeforeOrSameAsTask2Start(taskDate task1StartDate, taskDate task2StartDate){
+	bool isBefore = false;
+
+	if (task1StartDate.year <= task2StartDate.year) {
+		isBefore = true;
+	}
+
+	else if (task1StartDate.year == task2StartDate.year) {
+		if (task1StartDate.month <= task2StartDate.month) {
+			isBefore = true;
+		}
+	}
+
+	else if (task1StartDate.month == task2StartDate.month) {
+		if (task1StartDate.day <= task2StartDate.day) {
+			isBefore = true;
+		}
+	}
+
+	return isBefore;
 }
 
 //@author A0111061E
-bool Planner::taskTimesOverlap(Task Task1, Task Task2){
-	int task1StartTime, task2StartTime, task1EndTime, task2EndTime;
-	bool isOverlap = false;
+bool Planner::isTwoDatesTasksSameDates(Task Task1, Task Task2){
+	bool isEqual = false;
+
+	if (Task1.getDateStart().year == Task2.getDateStart().year && Task1.getDateEnd().year == Task2.getDateEnd().year) {
+		if (Task1.getDateStart().month == Task2.getDateStart().month && Task1.getDateEnd().month == Task2.getDateEnd().month) {
+			if (Task1.getDateStart().day == Task2.getDateStart().day && Task1.getDateEnd().day == Task2.getDateEnd().day){
+				isEqual = true;
+			}
+		}
+	}
+	return isEqual;
+}
+
+//@author A0111061E
+bool Planner::isTimesClash(Task Task1, Task Task2){
+	int task1StartTime, task1EndTime, task1NumOfTimes, task2StartTime, task2EndTime, task2NumOfTimes;
+	bool isClash = false;
 
 	task1StartTime = Task1.getTimeStart();
-	task2StartTime = Task2.getTimeStart();
 	task1EndTime = Task1.getTimeEnd();
+	task1NumOfTimes = Task1.getNumOfTimes();
+	task2StartTime = Task2.getTimeStart();
 	task2EndTime = Task2.getTimeEnd();
+	task2NumOfTimes = Task2.getNumOfTimes();
 
-	if ((task1EndTime > task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime < task2EndTime && task1EndTime >= task2EndTime)){
-		isOverlap = true;
+	if (task1NumOfTimes == 1 && task2NumOfTimes == 1){
+		if (task1StartTime == task2StartTime){
+			isClash = true;
+		}
 	}
-	return isOverlap;
+
+	else if ((task1EndTime > task2StartTime && task1StartTime <= task2StartTime) || (task1StartTime < task2EndTime && task1EndTime >= task2EndTime)){
+		isClash = true;
+	}
+
+	return isClash;
 }
 
 //@author A0111061E
 bool Planner::isOneDateTaskbetweenTwoDateTask(Task Task1, Task Task2){
 	bool isInBetween = false;
 	taskDate task1StartDate, task1EndDate, task2StartDate, task2EndDate;
-	int task1StartTime, task1EndTime, task2StartTime, task2EndTime;
 
 	task1StartDate = Task1.getDateStart();
 	task1EndDate = Task1.getDateEnd();
-	task1StartTime = Task1.getTimeStart();
-	task1EndTime = Task1.getTimeEnd();
-
 	task2StartDate = Task2.getDateStart();
 	task2EndDate = Task2.getDateEnd();
-	task2StartTime = Task2.getTimeStart();
-	task2EndTime = Task2.getTimeEnd();
 
 	if (task1EndDate.year <= task2EndDate.year && task1EndDate.year >= task2StartDate.year) {
 		if (task1EndDate.month <= task2EndDate.month && task1EndDate.month >= task2StartDate.month) {
@@ -1038,25 +1024,6 @@ bool Planner::isOneDateTaskbetweenTwoDateTask(Task Task1, Task Task2){
 	}
 
 	return isInBetween;
-}
-
-//@author A0111314A
-//Function checks if an index is valid (exists and has been assigned to a task) and returns true if it is
-bool Planner::indexChecker(list<Task>::iterator& taskIter, int serialNumber, list<Task>& targetList){
-	int indexCount = STARTING_SERIAL_NUMBER;
-	bool isValidIndex = true;
-
-	taskIter = targetList.begin();
-	for (size_t i = 1; i != serialNumber && i < targetList.size(); i++){
-		taskIter++;
-		indexCount++;
-	}
-
-	if (indexCount != serialNumber || targetList.empty()) {
-		isValidIndex = false;
-	}
-
-	return isValidIndex;
 }
 
 /************************************************************************************************
@@ -1106,7 +1073,7 @@ string Planner::descriptionOfTaskToString(Task theTask){
 		out << " ";
 		break;
 	default:
-		throw ERROR_MESSAGE_FATAL;
+		throw exception(ERROR_MESSAGE_FATAL);
 	}
 
 
@@ -1172,7 +1139,7 @@ string Planner::undoStatusToString(){
 		out << editStatusToString();
 	}
 	else{
-		throw ERROR_MESSAGE_INVALID_UNDO;
+		throw exception(ERROR_MESSAGE_INVALID_UNDO);
 	}
 
 	status = out.str();
@@ -1506,3 +1473,191 @@ bool Planner::isMissedEmpty(){
 	return missedEmpty;
 }
 
+//@author A0111061E-unused
+/*bool Planner::checkTaskForClashes(Task Task1, Task Task2){
+	bool isClash = false;
+	int numOfTask1Times, numOfTask2Times, numOfTask1Dates, numOfTask2Dates, task1StartTime, task2StartTime;
+
+	numOfTask1Times = Task1.getNumOfTimes();
+	numOfTask2Times = Task2.getNumOfTimes();
+	numOfTask1Dates = Task1.getNumOfDates();
+	numOfTask2Dates = Task2.getNumOfDates();
+
+	task1StartTime = Task1.getTimeStart();
+	task2StartTime = Task2.getTimeStart();
+
+
+	//Floating tasks and tasks with no times specified
+	if ((numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 0 && numOfTask2Times == 0) || (numOfTask1Times == 0 || numOfTask2Times == 0)){
+		isClash = false;
+	}
+
+	//Both tasks have 2 dates and 1 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isTwoDatesTasksSameDates(Task1, Task2)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
+			}
+		}
+	}
+
+	//Both tasks have 2 dates 2 times
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (isTwoDatesTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task1, Task2)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Both tasks have 1 date 1 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
+			}
+		}
+	}
+
+	//Both tasks have 1 date 2 times
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task1, Task2)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Both tasks have no date 1 time
+	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (task1StartTime == task2StartTime){
+			isClash = true;
+		}
+	}
+
+	//Both tasks have no date 2 times
+	else if (numOfTask1Dates == 0 && numOfTask2Dates == 0 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (taskTimesOverlap(Task1, Task2)){
+			isClash = true;
+		}
+	}
+
+	//Task1 has 1 date 1 time and Task2 has 2 dates, 1 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
+			}
+		}
+	}
+
+	//opposite of above: Task1 has 2 dates 1 time, task2 has 1 date and 1 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 1){
+		if (isOneDateTaskbetweenTwoDateTask(Task2, Task1)){
+			if (task1StartTime == task2StartTime){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 1 date 1 time and Task2 has 2 dates, 2 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 1 && numOfTask2Times == 2){
+		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task1, Task2);
+	}
+
+	//opp of above: Task1 has 2 dates 2 times, task2 has 1 date 1 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 1){
+		isClash = isClashTaskSingleDateTimeTaskDoubleDateTime(Task2, Task1);
+	}
+
+
+	//Task1 has 1 date 2 times, Task2 has 1 date 1 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 1){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task1, Task2)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 1 date 1 times, Task2 has 1 date 2 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 1 && numOfTask1Times == 1 && numOfTask2Times == 2){
+		if (isOneDateTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task2, Task1)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 2 date 2 times, Task2 has 2 date 1 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 1){
+		if (isTwoDatesTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task1, Task2)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 2 date 1 times, Task2 has 2 date 2 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 1){
+		if (isTwoDatesTasksSameDates(Task1, Task2)){
+			if (taskTimesOverlap(Task2, Task1)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 2 date 2 time, task2 has 1 date 2 time
+	else if (numOfTask1Dates == 2 && numOfTask2Dates == 1 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (isOneDateTaskbetweenTwoDateTask(Task2, Task1)){
+			if (taskTimesOverlap(Task2, Task1)){
+				isClash = true;
+			}
+		}
+	}
+
+	//Task1 has 1 date 2 time, task2 has 2 date 2 time
+	else if (numOfTask1Dates == 1 && numOfTask2Dates == 2 && numOfTask1Times == 2 && numOfTask2Times == 2){
+		if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
+			if (taskTimesOverlap(Task1, Task2)){
+				isClash = true;
+			}
+		}
+	}
+
+	return isClash;
+}	
+
+/*
+
+
+//@author A0111061E
+bool Planner::isOneTimeTaskBetweenTwoTimesTask(Task Task1, Task Task2){
+int task1StartTime, task2StartTime, task2EndTime;
+bool isInBetween = false;
+
+task1StartTime = Task1.getTimeStart();
+task2StartTime = Task2.getTimeStart();
+task2EndTime = Task2.getTimeEnd();
+
+if (task1StartTime < task2EndTime && task1StartTime >= task2StartTime){
+isInBetween = true;
+}
+return isInBetween;
+}
+
+//@author A0111061E
+bool Planner::isClashTaskSingleDateTimeTaskDoubleDateTime(Task Task1, Task Task2){
+bool isClash = false;
+
+if (isOneDateTaskbetweenTwoDateTask(Task1, Task2)){
+if (isOneTimeTaskBetweenTwoTimesTask(Task1, Task2)){
+isClash = true;
+}
+}
+
+return isClash;
+}					
+
+
+*/

@@ -10,18 +10,17 @@
 using namespace System;
 using namespace System::Drawing;
 using namespace System::Collections;
-using namespace System::ComponentModel;
 using namespace System::Windows::Forms;
+using namespace System::ComponentModel;
 using namespace System::Data;
 using namespace std;
 
 namespace UI {
-	/// Summary for GUI
 	public ref class GUI : public System::Windows::Forms::Form {
 
 		//@author A0111314A
-
 	private:
+
 		//UI operation elements
 		Logic* _plannerLogic;
 		String^ _currentView;
@@ -34,7 +33,6 @@ namespace UI {
 		System::Windows::Forms::Button^  upcomingButton;
 		System::Windows::Forms::Button^  homeButton;
 		System::Windows::Forms::Label^  status;
-
 
 		//constant strings
 		String^ VIEWTYPE_HOME = "Home";
@@ -60,7 +58,7 @@ namespace UI {
 		String^ COMMAND_n = "n";
 		String^ STATUS_CLEAR_PROMPT = "Are you sure you want to clear? Enter <Y> to confirm or <N> to cancel";
 
-		/// Required designer variable.
+		//Designer variable.
 		System::ComponentModel::Container ^components;
 
 	public:
@@ -189,12 +187,12 @@ namespace UI {
 #pragma endregion
 
 		//@author A0111314A
-
 		/************************************************************************************************
 
-		Initialization
+												Initialization
 
 		************************************************************************************************/
+
 		//Function to initialize beginning state of Planner4Life to home screen with loadFile prompt
 	private: System::Void GUI_Load(System::Object^  sender, System::EventArgs^  e) {
 		string strStatus = _plannerLogic->displayStatus();
@@ -204,13 +202,13 @@ namespace UI {
 		missedAlertCheck();
 	}
 
-			 /************************************************************************************************
+		/************************************************************************************************
 
-			 GUI control functions
+											 GUI control functions
 
-			 ************************************************************************************************/
+		************************************************************************************************/
 
-			 //Handler function that takes in user input and directs it to the different Planner operations
+			 //Handler function that takes in user input and directs it to the different GUI operations
 	private: System::Void userInput_Process(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 		string searchCheck, clearCommand;
 		String^ input = userInput->Text;
@@ -258,20 +256,25 @@ namespace UI {
 		}
 	}
 
-			 // Parent function to take in all other user input, pass to Logic and return display and user prompt. All user input goes through 
-			 // this function, but some specific commads (ie search, show done) require setup of UI state before processing. Their functions 
+			 // Parent function to process all user input, pass to Logic and receive a return display and user prompt. All user input goes through 
+			 // this function, but some specific commands (ie search, show done) require setup of UI state before processing. Their functions 
 			 // are listed below
 	private: System::Void processInput(String^ managedInput, String^ managedView) {
+
+		assert(managedView == VIEWTYPE_HOME || managedView == VIEWTYPE_MISSED || managedView == VIEWTYPE_UPCOMING || managedView == VIEWTYPE_ALL || 
+			managedView == VIEWTYPE_DONE || managedView == VIEWTYPE_HELP || managedView == VIEWTYPE_SEARCH);
+
 		String^ StrDisplay;
 		String^ StrStatus;
+		string strDisplay, strStatus;
 		string unmanagedInput = msclr::interop::marshal_as<std::string>(managedInput);
 		string unmanagedView = msclr::interop::marshal_as<std::string>(managedView);
 
 		_plannerLogic->processUserInput(unmanagedInput, unmanagedView);
 		missedAlertCheck();
 
-		string strDisplay = _plannerLogic->displayContent();
-		string strStatus = _plannerLogic->displayStatus();
+		strDisplay = _plannerLogic->displayContent();
+		strStatus = _plannerLogic->displayStatus();
 
 		StrDisplay = gcnew String(strDisplay.c_str());
 		displayWindow->Text = StrDisplay;
@@ -307,12 +310,19 @@ namespace UI {
 
 			 //Function to set up preliminary action for 'clear' operation - warns user and sets the UI state to allow 'clear' command
 	private: System::Void activateCleartrigger() {
+
+		assert(_clearTrigger == false);
+
 		status->Text = STATUS_CLEAR_PROMPT;
 		_clearTrigger = true;
 	}
 
-			 //Function to execute 'clear' operation. Thereafter resets UI state to disallow immediate 'clear' on command. 
+			 //Function to execute 'clear' operation. appends clear command together with confirmation response and passes to Logic. 
+			 //Thereafter resets UI state to disallow immediate 'clear' on command. 
 	private: System::Void executeClear() {
+
+		assert(_clearTrigger == true);
+
 		_currentView = VIEWTYPE_HOME;
 		switchView(_currentView);
 
@@ -339,6 +349,10 @@ namespace UI {
 			 //Function to control the colour of buttons depending on the view type. Views that are not Home, Upcoming or Missed
 			 // are not specially highlighted.
 	private: System::Void colourSwitch(String^ _currentView) {
+
+		assert(_currentView == VIEWTYPE_HOME || _currentView == VIEWTYPE_MISSED || _currentView == VIEWTYPE_UPCOMING || _currentView == VIEWTYPE_ALL ||
+			_currentView == VIEWTYPE_DONE || _currentView == VIEWTYPE_HELP || _currentView == VIEWTYPE_SEARCH);
+
 		if (_currentView == VIEWTYPE_HOME) {
 			homeButton->BackColor = Color::LightSkyBlue;
 			missedButton->BackColor = Color::SteelBlue;
@@ -373,7 +387,8 @@ namespace UI {
 		}
 	}
 
-			 //Function to switch the view type of the GUI between Home, Upcoming and Missed.
+			 //Function to switch the view type of the GUI between Home, Upcoming and Missed. differes from processInput in that it does not 
+			 //perform any processing
 	private: System::Void switchView(String^ viewType) {
 		string unmanagedView = msclr::interop::marshal_as<std::string>(viewType);
 
